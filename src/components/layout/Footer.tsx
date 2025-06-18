@@ -1,0 +1,46 @@
+import React from 'react';
+import { useTheme } from '../../hooks/useTheme';
+
+const Footer: React.FC = () => {
+    const { themeClasses } = useTheme();
+
+    return (
+        <footer className={`mt-16 border-t py-8 ${themeClasses.footer}`}>
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center">
+                    <p className={`text-sm mb-4 ${themeClasses.textSubtle}`}>
+                        STOCK HUB - ALL RIGHTS RESERVED ©
+                    </p>
+                    <nav className="flex flex-wrap justify-center gap-6 text-sm">
+                        <a
+                            href="#"
+                            className={`${themeClasses.textSubtle} hover:text-purple-500 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 rounded`}
+                        >
+                            Mentions Légales
+                        </a>
+                        <a
+                            href="#"
+                            className={`${themeClasses.textSubtle} hover:text-purple-500 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 rounded`}
+                        >
+                            Politique de Confidentialité
+                        </a>
+                        <a
+                            href="#"
+                            className={`${themeClasses.textSubtle} hover:text-purple-500 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 rounded`}
+                        >
+                            CGU
+                        </a>
+                        <a
+                            href="#"
+                            className={`${themeClasses.textSubtle} hover:text-purple-500 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 rounded`}
+                        >
+                            Politique de Cookies
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;
