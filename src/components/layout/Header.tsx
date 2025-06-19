@@ -1,10 +1,13 @@
-import React from 'react';
-import { Bell, Sun, Moon, User } from 'lucide-react';
-import { useTheme } from '../../hooks/useTheme';
-import Button from '../ui/Button';
+"use client"
 
-const Header: React.FC = () => {
-    const { theme, themeClasses, toggleTheme } = useTheme();
+import { Bell, Sun, Moon, User } from "lucide-react"
+import { Button } from "@/components/common/Button"
+import { useTheme } from "@/hooks/useTheme"
+import { getThemeClasses } from "@/utils/theme"
+
+export function Header() {
+    const { theme, toggleTheme } = useTheme()
+    const themeClasses = getThemeClasses(theme)
 
     return (
         <header className={`sticky top-0 z-50 ${themeClasses.header} backdrop-blur-xl border-b`}>
@@ -28,7 +31,7 @@ const Header: React.FC = () => {
                             }`}
                             aria-label="Notifications"
                         >
-                            <Bell className="w-5 h-5" />
+                            <Bell className={`w-5 h-5 ${themeClasses.text}`} />
                             <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                 3
               </span>
@@ -41,22 +44,12 @@ const Header: React.FC = () => {
                             }`}
                             aria-label="Changer le thème"
                         >
-                            {theme === "dark" ? (
-                                <Sun className="w-5 h-5" />
-                            ) : (
-                                <Moon className="w-5 h-5" />
-                            )}
+                            {theme === "dark" ? <Sun className={`w-5 h-5 ${themeClasses.text}`} /> : <Moon className={`w-5 h-5 ${themeClasses.text}`} />}
                         </button>
 
                         <div className="flex items-center gap-3">
-              <span className={`text-sm ${themeClasses.textMuted}`}>
-                Sandrine Cipolla
-              </span>
-                            <Button
-                                variant="primary"
-                                size="sm"
-                                icon={User}
-                            >
+                            <span className={`text-sm ${themeClasses.textMuted}`}>Sandrine Cipolla</span>
+                            <Button variant="primary" size="sm" icon={User}>
                                 Logout
                             </Button>
                         </div>
@@ -64,7 +57,5 @@ const Header: React.FC = () => {
                 </div>
             </div>
         </header>
-    );
-};
-
-export default Header;
+    )
+}

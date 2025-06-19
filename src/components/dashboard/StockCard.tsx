@@ -1,71 +1,66 @@
-import React from 'react';
-import { Eye, Edit3, Trash2 } from 'lucide-react';
-import { StockItem } from '../../types';
-import { useTheme } from '../../hooks/useTheme';
-import Card from '../ui/Card';
-import Button from '../ui/Button';
-import { getStatusBadge } from '../ui/Badge';
+"use client"
+
+import { Eye, Edit3, Trash2 } from "lucide-react"
+import { Card } from "@/components/common/Card"
+import { Badge } from "@/components/common/Badge"
+import { Button } from "@/components/common/Button"
+import { useTheme } from "@/hooks/useTheme"
+import { getThemeClasses } from "@/utils/theme"
+import type { Stock, StockStatus, BadgeVariant } from "@/types"
 
 interface StockCardProps {
-    stock: StockItem;
-    index: number;
-    isLoaded: boolean;
+    stock: Stock
+    index: number
+    isLoaded: boolean
 }
 
-const StockCard: React.FC<StockCardProps> = ({ stock, index, isLoaded }) => {
-    const { theme, themeClasses } = useTheme();
+export function StockCard({ stock, index, isLoaded }: StockCardProps) {
+    const { theme } = useTheme()
+    const themeClasses = getThemeClasses(theme)
+
+    const getStatusBadge = (status: StockStatus) => {
+        const statusMap: Record<StockStatus, { variant: BadgeVariant; label: string }> = {
+            optimal: { variant: "success", label: "Optimal" },
+            low: { variant: "warning", label: "Faible" },
+            critical: { variant: "danger", label: "Critique" },
+        }
+        const { variant, label } = statusMap[status]
+        return <Badge variant={variant}>{label}</Badge>
+    }
 
     return (
         <div
             className={`transform transition-all duration-500 ${
-                isLoaded
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-8 opacity-0"
+                isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
             }`}
             style={{ transitionDelay: `${index * 150}ms` }}
         >
-            <Card className="">
-                {/* Indicateur de statut - barre simple */}
+            <Card className="relative">
+                {/* Indicateur de statut */}
                 <div
                     className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${
-                        stock.status === "optimal"
-                            ? "bg-emerald-400"
-                            : stock.status === "low"
-                                ? "bg-amber-400"
-                                : "bg-red-400"
+                        stock.status === "optimal" ? "bg-emerald-400" : stock.status === "low" ? "bg-amber-400" : "bg-red-400"
                     }`}
-                ></div>
+                />
 
                 {/* Header avec nom et statut */}
                 <div className="flex items-start justify-between mb-4 pt-2">
                     <div>
-                        <h3 className="text-lg font-semibold">{stock.name}</h3>
-                        <p className={`text-sm ${themeClasses.textSubtle}`}>
-                            Mis à jour il y a {stock.lastUpdate}
-                        </p>
+                        <h3 className={`text-lg font-semibold ${themeClasses.text}`}>{stock.name}</h3>
+                        <p className={`text-sm ${themeClasses.textSubtle}`}>Mis à jour il y a {stock.lastUpdate}</p>
                     </div>
-                    {(["optimal", "low", "critical"].includes(stock.status) ? getStatusBadge(stock.status) : null)}
+                    {getStatusBadge(stock.status)}
                 </div>
 
                 {/* Métriques */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="text-center">
                         <div className="text-2xl font-bold">{stock.quantity}</div>
-                        <div
-                            className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}
-                        >
-                            Quantité
-                        </div>
+                        <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}>Quantité</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-2xl font-bold">
-                            €{stock.value.toLocaleString()}
-                        </div>
-                        <div
-                            className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}
-                        >
-                            Valeur
-                        </div>
+                        <div className="text-2xl font-bold">€{stock.value.toLocaleString()}</div>
+                        <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}>Valeur</div>
                     </div>
                 </div>
 
@@ -80,12 +75,7 @@ const StockCard: React.FC<StockCardProps> = ({ stock, index, isLoaded }) => {
                     >
                         Détails
                     </Button>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        icon={Edit3}
-                        aria-label={`Modifier ${stock.name}`}
-                    />
+                    <Button variant="ghost" size="sm" icon={Edit3} aria-label={`Modifier ${stock.name}`} />
                     <Button
                         variant="ghost"
                         size="sm"
@@ -100,7 +90,5 @@ const StockCard: React.FC<StockCardProps> = ({ stock, index, isLoaded }) => {
                 </div>
             </Card>
         </div>
-    );
-};
-
-export default StockCard;
+    )
+}

@@ -1,16 +1,17 @@
-import React from 'react';
-import { useTheme } from '../../hooks/useTheme';
+"use client"
 
-const Footer: React.FC = () => {
-    const { themeClasses } = useTheme();
+import { useTheme } from "@/hooks/useTheme"
+import { getThemeClasses } from "@/utils/theme"
+
+export function Footer() {
+    const { theme } = useTheme()
+    const themeClasses = getThemeClasses(theme)
 
     return (
         <footer className={`mt-16 border-t py-8 ${themeClasses.footer}`}>
             <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center">
-                    <p className={`text-sm mb-4 ${themeClasses.textSubtle}`}>
-                        STOCK HUB - ALL RIGHTS RESERVED ©
-                    </p>
+                    <p className={`text-sm mb-4 ${themeClasses.textSubtle}`}>STOCK HUB - ALL RIGHTS RESERVED ©</p>
                     <nav className="flex flex-wrap justify-center gap-6 text-sm">
                         <a
                             href="#"
@@ -40,7 +41,5 @@ const Footer: React.FC = () => {
                 </div>
             </div>
         </footer>
-    );
-};
-
-export default Footer;
+    )
+}
