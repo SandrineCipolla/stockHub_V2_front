@@ -83,7 +83,7 @@ export function Header() {
                         >
                             <Bell className={`w-4 h-4 sm:w-5 sm:h-5 ${themeClasses.text}`} aria-hidden="true" />
                             <span
-                                className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
+                                className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-800 text-white text-xs rounded-full flex items-center justify-center"
                                 aria-label="3 notifications non lues"
                             >
                                 3

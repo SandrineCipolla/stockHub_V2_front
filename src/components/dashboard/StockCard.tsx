@@ -62,7 +62,7 @@ export function StockCard({ stock, index, isLoaded }: StockCardProps) {
                     className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${
                         stock.status === "optimal" ? "bg-emerald-400" : stock.status === "low" ? "bg-amber-400" : "bg-red-400"
                     }`}
-                    aria-hidden="true"
+
                 />
 
                 {/* Header avec nom et statut */}

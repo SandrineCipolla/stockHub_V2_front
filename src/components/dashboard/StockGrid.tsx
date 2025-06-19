@@ -100,7 +100,6 @@ export function StockGrid({ stocks, isLoaded, id }: StockGridProps) {
                 <div
                     className="text-center py-12"
                     role="status"
-                    aria-live="polite"
                 >
                     <p className="text-gray-500">Aucun stock trouvé</p>
                 </div>
