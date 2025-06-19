@@ -57,7 +57,8 @@ export function StockGrid({ stocks, isLoaded, id }: StockGridProps) {
 
     return (
         <section
-            className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+            aria-label="Liste des stocks disponibles, navigable avec le clavier"
             id={id}
         >
             {stocks.map((stock, index) => (

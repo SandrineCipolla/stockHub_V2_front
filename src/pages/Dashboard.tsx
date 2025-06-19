@@ -282,8 +282,9 @@ export function Dashboard() {
             <Header />
             <NavigationSection />
 
-            <main className="max-w-7xl mx-auto px-6 py-8" role="main" id="main-content">
-                {/* Métriques principales */}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8" role="main" id="main-content">
+
+            {/* Métriques principales */}
                 <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     {mockMetrics.map((metric) => (
                         <MetricsCard key={metric.id} metric={metric} />
@@ -313,9 +314,11 @@ export function Dashboard() {
                         variant="ghost"
                         icon={Download}
                         aria-label="Exporter la liste des stocks récents au format CSV"
+                        onClick={() => console.log('Export CSV')}
                     >
                         Exporter
                     </Button>
+
                 </div>
 
                 {/* ✅ AMÉLIORÉ : Grid des stocks avec ID pour skip link */}

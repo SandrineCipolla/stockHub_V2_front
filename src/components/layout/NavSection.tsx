@@ -55,32 +55,39 @@ export function NavigationSection() {
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-row gap-3 flex-wrap justify-start">
                         <Button
                             variant="primary"
                             icon={Plus}
                             aria-label="Ajouter un nouveau stock à l'inventaire"
                             onClick={() => console.log('➕ Ajouter stock')}
+                            className="w-auto max-w-[150px]"
                         >
-                            Ajouter un Stock
+                            <span className="hidden md:hidden lg:inline">Ajouter un Stock</span>
                         </Button>
+
                         <Button
                             variant="secondary"
                             icon={BarChart3}
                             aria-label="Générer et télécharger un rapport détaillé des stocks"
                             onClick={() => console.log('📊 Rapport détaillé')}
+                            className="w-auto max-w-[150px]"
                         >
-                            Rapport Détaillé
+                            <span className="hidden md:hidden lg:inline">Rapport Détaillé</span>
                         </Button>
+
                         <Button
                             variant="secondary"
                             icon={Search}
                             aria-label="Ouvrir la page de recherche avancée de stocks"
                             onClick={() => console.log('🔍 Recherche avancée')}
+                            className="w-auto max-w-[150px]"
                         >
-                            Recherche Avancée
+                            <span className="hidden md:hidden lg:inline">Recherche Avancée</span>
                         </Button>
                     </div>
+
+
                 </div>
             </div>
         </section>

@@ -49,8 +49,8 @@ export function MetricsCard({ metric }: MetricsCardProps) {
     };
 
     return (
-        <Card>
-            <div className="flex items-center justify-between mb-4">
+        <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <div className={`p-3 rounded-xl ${getIconBackground(metric.color, theme)}`}>
                     <Icon className={`w-6 h-6 ${getIconColor(metric.color, theme)}`} aria-hidden="true" />
                 </div>
@@ -72,7 +72,8 @@ export function MetricsCard({ metric }: MetricsCardProps) {
                     {metric.change}
                 </span>
             </div>
-            <div className={`text-3xl font-bold mb-1 ${themeClasses.text}`}>{metric.value}</div>
+            <div className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-1 ${themeClasses.text}`}>{metric.value}</div>
+
             <div className={`text-sm ${themeClasses.textSubtle}`}>{metric.label}</div>  {/* ✅ CORRIGÉ : Thème dynamique */}
         </Card>
     )
