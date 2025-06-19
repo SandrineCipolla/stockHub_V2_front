@@ -1,7 +1,7 @@
-import { StockItem } from '../types';
+import { Stock } from '@/types';
 
 // Données de stock mockées
-export const stockData: StockItem[] = [
+export const stockData: Stock[] = [
     {
         id: 1,
         name: "MyFirstStock",
