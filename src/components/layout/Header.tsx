@@ -57,9 +57,9 @@ export function Header() {
                             <span className="text-sm sm:text-base">SH</span>
                         </div>
                         {/* ✅ Titre responsive */}
-                        <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent">
+                        <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent">
                             StockHub
-                        </h1>
+                        </div>
                     </button>
 
                     {/* ✅ RESPONSIVE : Actions utilisateur Mobile First */}
