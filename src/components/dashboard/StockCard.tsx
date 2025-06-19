@@ -1,4 +1,3 @@
-// STOCKCARD.TSX AMÉLIORÉ - Remplace le contenu de src/components/dashboard/StockCard.tsx par :
 
 "use client"
 

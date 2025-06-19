@@ -1,4 +1,3 @@
-// HEADER.TSX RESPONSIVE CORRIGÉ - Remplace le contenu de src/components/layout/Header.tsx par :
 
 "use client"
 

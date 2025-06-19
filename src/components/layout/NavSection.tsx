@@ -1,4 +1,3 @@
-// NAVIGATIONSECTION.TSX AVEC HOME NAVIGABLE - Remplace le contenu de src/components/layout/NavigationSection.tsx par :
 
 "use client"
 
