@@ -1,0 +1,397 @@
+import { useState, useCallback, useMemo } from 'react';
+import type {SearchFilters, Stock, StockStatus} from '@/types';
+import { useAsyncAction, createFrontendError, useLocalStorageState } from './useFrontendState';
+
+// ===== DONNÉES MOCK TYPÉES =====
+const INITIAL_STOCKS: Stock[] = [
+    {
+        id: 1,
+        name: "MyFirstStock",
+        quantity: 156,
+        value: 2450,
+        status: "optimal",
+        lastUpdate: "2h"
+    },
+    {
+        id: 2,
+        name: "MonTest",
+        quantity: 89,
+        value: 1780,
+        status: "optimal",
+        lastUpdate: "1h"
+    },
+    {
+        id: 3,
+        name: "StockVide",
+        quantity: 3,
+        value: 150,
+        status: "low",
+        lastUpdate: "30min"
+    },
+    {
+        id: 4,
+        name: "Stock Critique",
+        quantity: 0,
+        value: 0,
+        status: "critical",
+        lastUpdate: "5min"
+    }
+];
+
+// ===== TYPES POUR ACTIONS STOCKS =====
+export interface CreateStockData {
+    name: string;
+    quantity: number;
+    value: number;
+    description?: string;
+    category?: string;
+}
+
+export interface UpdateStockData extends Partial<CreateStockData> {
+    id: number;
+}
+
+// ===== HOOK PRINCIPAL POUR GESTION DES STOCKS =====
+export const useStocks = () => {
+    // Persistance dans localStorage avec gestion d'erreurs
+    const {
+        value: stocks,
+        setValue: setStocks,
+        loading: storageLoading,
+        error: storageError
+    } = useLocalStorageState<Stock[]>('stocks', INITIAL_STOCKS);
+
+    const [filters, setFilters] = useState<SearchFilters>({});
+
+    // ===== ACTIONS AVEC GESTION D'ERREURS =====
+
+    // Charger les stocks (simulé)
+    const loadStocksAction = useAsyncAction(
+        async (): Promise<Stock[]> => {
+            // Simulation d'un chargement
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            if (!stocks || stocks.length === 0) {
+                throw new Error('Aucun stock trouvé');
+            }
+
+            return stocks;
+        },
+        { simulateDelay: 0 } // Délai déjà dans la fonction
+    );
+
+    // Créer un stock
+    const createStockAction = useAsyncAction(
+        async (stockData: CreateStockData): Promise<Stock> => {
+            // Validation
+            if (!stockData.name.trim()) {
+                throw createFrontendError(
+                    'Le nom du stock est obligatoire',
+                    'validation',
+                    { field: 'name' },
+                    'name'
+                );
+            }
+
+            if (stockData.quantity < 0) {
+                throw createFrontendError(
+                    'La quantité ne peut pas être négative',
+                    'validation',
+                    { field: 'quantity' },
+                    'quantity'
+                );
+            }
+
+            if (stockData.value < 0) {
+                throw createFrontendError(
+                    'La valeur ne peut pas être négative',
+                    'validation',
+                    { field: 'value' },
+                    'value'
+                );
+            }
+
+            // Vérifier si le nom existe déjà
+            if (stocks?.some(stock => stock.name.toLowerCase() === stockData.name.toLowerCase())) {
+                throw createFrontendError(
+                    'Un stock avec ce nom existe déjà',
+                    'validation',
+                    { field: 'name' },
+                    'name'
+                );
+            }
+
+            // Calculer le statut automatiquement
+            const status: StockStatus =
+                stockData.quantity === 0 ? 'critical' :
+                    stockData.quantity < 10 ? 'low' : 'optimal';
+
+            const newStock: Stock = {
+                id: Math.max(...(stocks || []).map(s => s.id), 0) + 1,
+                ...stockData,
+                status,
+                lastUpdate: 'maintenant'
+            };
+
+            // Simulation de sauvegarde
+            await new Promise(resolve => setTimeout(resolve, 600));
+
+            // Mettre à jour la liste
+            const updatedStocks = [...(stocks || []), newStock];
+            setStocks(updatedStocks);
+
+            return newStock;
+        },
+        {
+            onSuccess: () => {
+                console.log('✅ Stock créé avec succès');
+            },
+            simulateDelay: 0
+        }
+    );
+
+    // Mettre à jour un stock
+    const updateStockAction = useAsyncAction(
+        async (updateData: UpdateStockData): Promise<Stock> => {
+            if (!stocks) {
+                throw createFrontendError('Liste des stocks non disponible', 'unknown');
+            }
+
+            const existingStock = stocks.find(s => s.id === updateData.id);
+            if (!existingStock) {
+                throw createFrontendError(
+                    `Stock avec l'ID ${updateData.id} introuvable`,
+                    'validation'
+                );
+            }
+
+            // Validation des champs modifiés
+            if (updateData.name && !updateData.name.trim()) {
+                throw createFrontendError(
+                    'Le nom du stock ne peut pas être vide',
+                    'validation',
+                    { field: 'name' },
+                    'name'
+                );
+            }
+
+            if (updateData.quantity !== undefined && updateData.quantity < 0) {
+                throw createFrontendError(
+                    'La quantité ne peut pas être négative',
+                    'validation',
+                    { field: 'quantity' },
+                    'quantity'
+                );
+            }
+
+            // Calculer le nouveau statut si la quantité change
+            const newQuantity = updateData.quantity ?? existingStock.quantity;
+            const newStatus: StockStatus =
+                newQuantity === 0 ? 'critical' :
+                    newQuantity < 10 ? 'low' : 'optimal';
+
+            const updatedStock: Stock = {
+                ...existingStock,
+                ...updateData,
+                status: newStatus,
+                lastUpdate: 'maintenant'
+            };
+
+            // Simulation de sauvegarde
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Mettre à jour la liste
+            const updatedStocks = stocks.map(stock =>
+                stock.id === updateData.id ? updatedStock : stock
+            );
+            setStocks(updatedStocks);
+
+            return updatedStock;
+        },
+        { simulateDelay: 0 }
+    );
+
+    // Supprimer un stock
+    const deleteStockAction = useAsyncAction(
+        async (stockId: number): Promise<void> => {
+            if (!stocks) {
+                throw createFrontendError('Liste des stocks non disponible', 'unknown');
+            }
+
+            const stockExists = stocks.some(s => s.id === stockId);
+            if (!stockExists) {
+                throw createFrontendError(
+                    `Stock avec l'ID ${stockId} introuvable`,
+                    'validation'
+                );
+            }
+
+            // Simulation de suppression
+            await new Promise(resolve => setTimeout(resolve, 400));
+
+            // Mettre à jour la liste
+            const updatedStocks = stocks.filter(stock => stock.id !== stockId);
+            setStocks(updatedStocks);
+        },
+        { simulateDelay: 0 }
+    );
+
+    // Supprimer plusieurs stocks
+    const deleteMultipleStocksAction = useAsyncAction(
+        async (stockIds: number[]): Promise<void> => {
+            if (!stocks) {
+                throw createFrontendError('Liste des stocks non disponible', 'unknown');
+            }
+
+            if (stockIds.length === 0) {
+                throw createFrontendError('Aucun stock sélectionné', 'validation');
+            }
+
+            // Vérifier que tous les stocks existent
+            const missingIds = stockIds.filter(id => !stocks.some(s => s.id === id));
+            if (missingIds.length > 0) {
+                throw createFrontendError(
+                    `Stocks introuvables: ${missingIds.join(', ')}`,
+                    'validation'
+                );
+            }
+
+            // Simulation de suppression en lot
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Mettre à jour la liste
+            const updatedStocks = stocks.filter(stock => !stockIds.includes(stock.id));
+            setStocks(updatedStocks);
+        },
+        { simulateDelay: 0 }
+    );
+
+    // ===== COMPUTED VALUES =====
+
+    // Stocks filtrés
+    const filteredStocks = useMemo(() => {
+        if (!stocks) return [];
+
+        return stocks.filter(stock => {
+            // Filtre par nom/recherche
+            if (filters.query) {
+                const query = filters.query.toLowerCase();
+                if (!stock.name.toLowerCase().includes(query)) {
+                    return false;
+                }
+            }
+
+            // Filtre par statut
+            if (filters.status && filters.status.length > 0) {
+                if (!filters.status.includes(stock.status)) {
+                    return false;
+                }
+            }
+
+            // Filtre par valeur min/max
+            if (filters.minValue !== undefined && stock.value < filters.minValue) {
+                return false;
+            }
+            return !(filters.maxValue !== undefined && stock.value > filters.maxValue);
+
+
+        });
+    }, [stocks, filters]);
+
+    // Statistiques
+    const stats = useMemo(() => {
+        if (!stocks) return null;
+
+        return {
+            total: stocks.length,
+            optimal: stocks.filter(s => s.status === 'optimal').length,
+            low: stocks.filter(s => s.status === 'low').length,
+            critical: stocks.filter(s => s.status === 'critical').length,
+            totalValue: stocks.reduce((sum, stock) => sum + stock.value, 0),
+            averageValue: stocks.length > 0 ? stocks.reduce((sum, stock) => sum + stock.value, 0) / stocks.length : 0
+        };
+    }, [stocks]);
+
+    // ===== FONCTIONS UTILITAIRES =====
+
+    const getStockById = useCallback((id: number): Stock | undefined => {
+        return stocks?.find(stock => stock.id === id);
+    }, [stocks]);
+
+    const resetFilters = useCallback(() => {
+        setFilters({});
+    }, []);
+
+    const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
+        setFilters((prev: any) => ({ ...prev, ...newFilters }));
+    }, []);
+
+    // ===== RETURN OBJECT =====
+    return {
+        // Données
+        stocks: filteredStocks,
+        allStocks: stocks || [],
+        stats,
+        filters,
+
+        // Actions avec états de chargement
+        loadStocks: loadStocksAction.execute,
+        createStock: createStockAction.execute,
+        updateStock: updateStockAction.execute,
+        deleteStock: deleteStockAction.execute,
+        deleteMultipleStocks: deleteMultipleStocksAction.execute,
+
+        // États de chargement (par action)
+        isLoading: {
+            load: loadStocksAction.isLoading,
+            create: createStockAction.isLoading,
+            update: updateStockAction.isLoading,
+            delete: deleteStockAction.isLoading,
+            deleteMultiple: deleteMultipleStocksAction.isLoading,
+            storage: storageLoading
+        },
+
+        // Erreurs (par action)
+        errors: {
+            load: loadStocksAction.error,
+            create: createStockAction.error,
+            update: updateStockAction.error,
+            delete: deleteStockAction.error,
+            deleteMultiple: deleteMultipleStocksAction.error,
+            storage: storageError
+        },
+
+        // États globaux
+        hasAnyError: !!(
+            loadStocksAction.error ||
+            createStockAction.error ||
+            updateStockAction.error ||
+            deleteStockAction.error ||
+            deleteMultipleStocksAction.error ||
+            storageError
+        ),
+
+        isAnyLoading: (
+            loadStocksAction.isLoading ||
+            createStockAction.isLoading ||
+            updateStockAction.isLoading ||
+            deleteStockAction.isLoading ||
+            deleteMultipleStocksAction.isLoading ||
+            storageLoading
+        ),
+
+        // Utilitaires
+        getStockById,
+        updateFilters,
+        resetFilters,
+
+        // Reset des erreurs par action
+        resetErrors: {
+            load: loadStocksAction.reset,
+            create: createStockAction.reset,
+            update: updateStockAction.reset,
+            delete: deleteStockAction.reset,
+            deleteMultiple: deleteMultipleStocksAction.reset
+        }
+    };
+};

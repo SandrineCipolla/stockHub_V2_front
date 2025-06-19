@@ -17,31 +17,36 @@ export function StockGrid({ stocks, isLoaded, id }: StockGridProps) {
         const maxIndex = stocks.length - 1;
 
         switch(e.key) {
-            case 'ArrowRight':
+            case 'ArrowRight': {
                 e.preventDefault();
                 const nextIndex = Math.min(index + 1, maxIndex);
                 stockRefs.current[nextIndex]?.focus();
                 break;
-            case 'ArrowLeft':
+            }
+            case 'ArrowLeft': {
                 e.preventDefault();
                 const prevIndex = Math.max(index - 1, 0);
                 stockRefs.current[prevIndex]?.focus();
                 break;
-            case 'ArrowDown':
+            }
+            case 'ArrowDown': {
                 e.preventDefault();
                 const downIndex = Math.min(index + cols, maxIndex);
                 stockRefs.current[downIndex]?.focus();
                 break;
-            case 'ArrowUp':
+            }
+            case 'ArrowUp': {
                 e.preventDefault();
                 const upIndex = Math.max(index - cols, 0);
                 stockRefs.current[upIndex]?.focus();
                 break;
+            }
             case 'Enter':
-            case ' ':
+            case ' ': {
                 e.preventDefault();
                 handleStockDetails(stocks[index]);
                 break;
+            }
         }
     };
 
