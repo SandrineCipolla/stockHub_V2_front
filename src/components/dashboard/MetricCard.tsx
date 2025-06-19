@@ -42,6 +42,11 @@ export function MetricsCard({ metric }: MetricsCardProps) {
                                 ? "text-red-400"
                                 : "text-red-600"
                     }`}
+                    aria-label={
+                        metric.changeType === "increase"
+                            ? "Augmentation de produits"
+                            : "Diminution de produits"
+                    }
                 >
           <TrendingUp className={`w-3 h-3 ${metric.changeType === "decrease" ? "rotate-180" : ""}`} />
                     {metric.changeType === "increase" ? "+" : ""}

@@ -94,7 +94,7 @@ export function Dashboard() {
             <Header />
             <NavigationSection />
 
-            <main className="max-w-7xl mx-auto px-6 py-8">
+            <main className="max-w-7xl mx-auto px-6 py-8" role={"main"}>
                 {/* Métriques principales */}
                 <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     {mockMetrics.map((metric) => (
@@ -118,7 +118,7 @@ export function Dashboard() {
                 {/* Section titre stocks */}
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-white">Mes Stocks Récents</h2>
-                    <Button variant="ghost" icon={Download}>
+                    <Button variant="ghost" icon={Download} aria-label="Télécharger">
                         Exporter
                     </Button>
                 </div>

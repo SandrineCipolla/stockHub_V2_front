@@ -10,7 +10,7 @@ export function Header() {
     const themeClasses = getThemeClasses(theme)
 
     return (
-        <header className={`sticky top-0 z-50 ${themeClasses.header} backdrop-blur-xl border-b`}>
+        <header className={`sticky top-0 z-50 ${themeClasses.header} backdrop-blur-xl border-b`} role="banner">
             <div className="max-w-7xl mx-auto px-6 py-4">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
@@ -29,10 +29,13 @@ export function Header() {
                             className={`relative p-2 rounded-lg transition-colors ${
                                 theme === "dark" ? "hover:bg-white/10" : "hover:bg-gray-100"
                             }`}
-                            aria-label="Notifications"
+                            aria-label="Voir les notifications"
                         >
                             <Bell className={`w-5 h-5 ${themeClasses.text}`} />
-                            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
+                                  aria-label="Nombre de notifications non lues"
+                            >
+
                 3
               </span>
                         </button>
@@ -49,7 +52,7 @@ export function Header() {
 
                         <div className="flex items-center gap-3">
                             <span className={`text-sm ${themeClasses.textMuted}`}>Sandrine Cipolla</span>
-                            <Button variant="primary" size="sm" icon={User}>
+                            <Button variant="primary" size="sm" icon={User} aria-label="Se déconnecter de l'application">
                                 Logout
                             </Button>
                         </div>

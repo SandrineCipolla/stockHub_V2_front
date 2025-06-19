@@ -10,6 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children?: ReactNode
     icon?: ElementType
     className?: string
+    "aria-label": string;
 }
 
 export function Button({
@@ -18,6 +19,7 @@ export function Button({
                            children,
                            icon: Icon,
                            className = "",
+                           "aria-label": ariaLabel,
                            ...props
                        }: ButtonProps) {
     const { theme } = useTheme()
@@ -44,7 +46,9 @@ export function Button({
     }
 
     return (
-        <button className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`} {...props}>
+        <button className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
+                aria-label={ariaLabel}
+                {...props}>
             {Icon && <Icon className="w-4 h-4" />}
             {children}
         </button>

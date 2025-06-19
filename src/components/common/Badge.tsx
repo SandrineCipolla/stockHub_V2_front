@@ -25,5 +25,7 @@ export function Badge({ variant, children }: BadgeProps) {
             theme === "dark" ? "bg-red-500/20 text-red-400 border-red-500/30" : "bg-red-100 text-red-700 border-red-300",
     }
 
-    return <span className={`px-3 py-1 rounded-full text-xs font-medium border ${variants[variant]}`}>{children}</span>
+    return <span className={`px-3 py-1 rounded-full text-xs font-medium border ${variants[variant]}`} role="status"
+                 aria-live="polite"
+    >{children}</span>
 }

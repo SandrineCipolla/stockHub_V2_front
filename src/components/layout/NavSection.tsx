@@ -26,13 +26,13 @@ export function NavigationSection() {
                     </div>
 
                     <div className="flex flex-wrap gap-3">
-                        <Button variant="primary" icon={Plus}>
+                        <Button variant="primary" icon={Plus} aria-label="Ajouter un nouveau stock à l'inventaire">
                             Ajouter un Stock
                         </Button>
-                        <Button variant="secondary" icon={BarChart3}>
+                        <Button variant="secondary" icon={BarChart3} aria-label="Générer un rapport détaillé des stocks">
                             Rapport Détaillé
                         </Button>
-                        <Button variant="secondary" icon={Search}>
+                        <Button variant="secondary" icon={Search} aria-label="Faire une recherche">
                             Recherche Avancée
                         </Button>
                     </div>
