@@ -1,4 +1,4 @@
-// HEADER.TSX RESPONSIVE MOBILE FIRST - Remplace le contenu de src/components/layout/Header.tsx par :
+// HEADER.TSX RESPONSIVE CORRIGÉ - Remplace le contenu de src/components/layout/Header.tsx par :
 
 "use client"
 
@@ -22,8 +22,16 @@ export function Header() {
         setTimeout(() => setThemeChangeAnnouncement(''), 3000);
     };
 
+    // ✅ Ces console.log sont juste pour TESTER les interactions
+    // Tu peux les remplacer par ta vraie logique plus tard
     const handleLogoClick = () => {
-        console.log('🏠 Retour à l\'accueil');
+        console.log('🏠 Clic sur logo - ici tu ajouteras router.push("/")');
+        // Exemple : router.push('/') pour aller à l'accueil
+    };
+
+    const handleNotifications = () => {
+        console.log('🔔 Clic notifications - ici tu ouvriras le panneau notifications');
+        // Exemple : setShowNotifications(true)
     };
 
     return (
@@ -59,6 +67,7 @@ export function Header() {
 
                         {/* ✅ Notifications avec taille responsive */}
                         <button
+                            onClick={handleNotifications}  // ✅ AJOUTÉ pour tester
                             className={`
                                 relative p-1.5 sm:p-2 rounded-lg transition-colors
                                 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
@@ -68,7 +77,7 @@ export function Header() {
                             onKeyDown={(e) => {
                                 if (['Enter', ' '].includes(e.key)) {
                                     e.preventDefault();
-                                    console.log('🔔 Ouverture notifications');
+                                    handleNotifications();
                                 }
                             }}
                         >
@@ -112,21 +121,20 @@ export function Header() {
 
                         {/* ✅ RESPONSIVE : Utilisateur adaptatif Mobile First */}
                         <div className="flex items-center gap-2 sm:gap-3">
-                            {/* ✅ NOUVEAU : Nom caché sur mobile, visible sur sm+ */}
+                            {/* ✅ Nom caché sur mobile, visible sur sm+ */}
                             <span className={`hidden sm:block text-sm ${themeClasses.textMuted}`}>
                                 Sandrine Cipolla
                             </span>
 
-                            {/* ✅ NOUVEAU : Bouton logout responsive */}
+                            {/* ✅ CORRIGÉ : Bouton logout avec icône User existante */}
                             <Button
                                 variant="primary"
                                 size="sm"
-                                icon={User}
-                                className="px-2 sm:px-3"  // Padding adaptatif
+                                icon={User}  // ✅ Ton icône User existante
+                                className="px-2 sm:px-3"
                                 aria-label="Se déconnecter de l'application StockHub"
                             >
-                                {/* ✅ Texte adaptatif : icône seule sur mobile, texte sur desktop */}
-                                <span className="sm:hidden" aria-hidden="true">👤</span>
+                                {/* ✅ CORRIGÉ : Pas d'emoji, juste texte conditionnel */}
                                 <span className="hidden sm:inline">Logout</span>
                             </Button>
                         </div>
