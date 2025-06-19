@@ -1,3 +1,5 @@
+// STOCKCARD.TSX AMÉLIORÉ - Remplace le contenu de src/components/dashboard/StockCard.tsx par :
+
 "use client"
 
 import { Eye, Edit3, Trash2 } from "lucide-react"
@@ -28,6 +30,25 @@ export function StockCard({ stock, index, isLoaded }: StockCardProps) {
         return <Badge variant={variant}>{label}</Badge>
     }
 
+    // ✅ NOUVEAU : Gestionnaires d'actions
+    const handleViewDetails = () => {
+        console.log('👁️ Voir détails:', stock.name);
+        // Ici tu ajouteras ta logique de navigation vers les détails
+        // Exemple : router.push(`/stocks/${stock.id}`)
+    };
+
+    const handleEdit = () => {
+        console.log('✏️ Modifier:', stock.name);
+        // Ici tu ajouteras ta logique de modification
+        // Exemple : router.push(`/stocks/${stock.id}/edit`)
+    };
+
+    const handleDelete = () => {
+        console.log('🗑️ Supprimer:', stock.name);
+        // Ici tu ajouteras ta logique de suppression
+        // Exemple : showConfirmDialog() puis API call
+    };
+
     return (
         <div
             className={`transform transition-all duration-500 ${
@@ -41,12 +62,13 @@ export function StockCard({ stock, index, isLoaded }: StockCardProps) {
                     className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${
                         stock.status === "optimal" ? "bg-emerald-400" : stock.status === "low" ? "bg-amber-400" : "bg-red-400"
                     }`}
+                    aria-hidden="true"
                 />
 
                 {/* Header avec nom et statut */}
                 <div className="flex items-start justify-between mb-4 pt-2">
                     <div>
-                        <h3 className={`text-lg font-semibold ${themeClasses.text}`}>{stock.name}</h3>
+                        <h4 className={`text-lg font-semibold ${themeClasses.text}`}>{stock.name}</h4>
                         <p className={`text-sm ${themeClasses.textSubtle}`}>Mis à jour il y a {stock.lastUpdate}</p>
                     </div>
                     {getStatusBadge(stock.status)}
@@ -55,27 +77,34 @@ export function StockCard({ stock, index, isLoaded }: StockCardProps) {
                 {/* Métriques */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="text-center">
-                        <div className="text-2xl font-bold">{stock.quantity}</div>
+                        <div className={`text-2xl font-bold ${themeClasses.text}`}>{stock.quantity}</div>
                         <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}>Quantité</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-2xl font-bold">€{stock.value.toLocaleString()}</div>
+                        <div className={`text-2xl font-bold ${themeClasses.text}`}>€{stock.value.toLocaleString()}</div>
                         <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}>Valeur</div>
                     </div>
                 </div>
 
-                {/* Actions */}
+                {/* ✅ AMÉLIORÉ : Actions avec gestionnaires et aria-labels détaillés */}
                 <div className="flex gap-2">
                     <Button
                         variant="ghost"
                         size="sm"
                         className="flex-1"
                         icon={Eye}
-                        aria-label={`Voir les détails de ${stock.name}`}
+                        onClick={handleViewDetails}
+                        aria-label={`Consulter les détails complets du stock ${stock.name}`}
                     >
                         Détails
                     </Button>
-                    <Button variant="ghost" size="sm" icon={Edit3} aria-label={`Modifier ${stock.name}`} />
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={Edit3}
+                        onClick={handleEdit}
+                        aria-label={`Modifier les informations du stock ${stock.name}`}
+                    />
                     <Button
                         variant="ghost"
                         size="sm"
@@ -85,7 +114,8 @@ export function StockCard({ stock, index, isLoaded }: StockCardProps) {
                                 : "text-red-600 hover:text-red-700 hover:bg-red-100"
                         }
                         icon={Trash2}
-                        aria-label={`Supprimer ${stock.name}`}
+                        onClick={handleDelete}
+                        aria-label={`Supprimer définitivement le stock ${stock.name} de l'inventaire`}
                     />
                 </div>
             </Card>
