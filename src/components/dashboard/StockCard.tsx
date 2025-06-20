@@ -1,10 +1,10 @@
 import React from 'react';
-import { Eye, Edit3, Trash2 } from 'lucide-react';
-import { Card } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
-import { Badge } from '@/components/common/Badge';
-import { useTheme } from '@/hooks/useTheme';
-import type { Stock, StockStatus } from '@/types';
+import {Edit3, Eye, Trash2} from 'lucide-react';
+import {Card} from '@/components/common/Card';
+import {Button} from '@/components/common/Button';
+import {Badge} from '@/components/common/Badge';
+import {useTheme} from '@/hooks/useTheme.ts';
+import type {Stock, StockStatus} from '@/types';
 
 // Types pour les props du composant
 interface StockCardProps {

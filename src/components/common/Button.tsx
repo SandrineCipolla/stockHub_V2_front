@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTheme} from '@/hooks/useTheme';
+import {useTheme} from '@/hooks/useTheme.ts';
 import type {ButtonSize, ButtonVariant} from '@/types';
 
 // Types pour les props du composant

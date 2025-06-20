@@ -14,7 +14,7 @@ import {Card} from '@/components/common/Card';
 
 import {useStocks} from '@/hooks/useStocks';
 import {useDataExport} from '@/hooks/useFrontendState';
-import {useTheme} from '@/hooks/useTheme';
+import {useTheme} from '@/hooks/useTheme.ts';
 
 export const Dashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');

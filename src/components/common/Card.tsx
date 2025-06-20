@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@/hooks/useTheme';
+import {useTheme} from '@/hooks/useTheme.ts';
 
 // Types pour les props du composant
 interface CardProps {

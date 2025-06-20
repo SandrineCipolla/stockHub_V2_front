@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTheme } from '@/hooks/useTheme';
-import type { BadgeVariant } from '@/types';
+import {useTheme} from '@/hooks/useTheme.ts';
+import type {BadgeVariant} from '@/types';
 
 // Types pour les props du composant
 interface BadgeProps {

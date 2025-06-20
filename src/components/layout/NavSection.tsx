@@ -1,6 +1,6 @@
 import React from 'react';
-import { Home, ChevronRight } from 'lucide-react';
-import { useTheme } from '@/hooks/useTheme';
+import {ChevronRight, Home} from 'lucide-react';
+import {useTheme} from '@/hooks/useTheme.ts';
 
 // Types pour les éléments de breadcrumb
 interface BreadcrumbItem {

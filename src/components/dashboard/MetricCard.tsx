@@ -1,7 +1,7 @@
 import React from 'react';
 import {AlertTriangle, Package, TrendingUp} from 'lucide-react';
 import {Card} from '@/components/common/Card';
-import {useTheme} from '@/hooks/useTheme';
+import {useTheme} from '@/hooks/useTheme.ts';
 
 
 // Types pour les props du composant

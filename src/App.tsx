@@ -1,6 +1,7 @@
 import "./index.css"
 import {Dashboard} from "@/pages/Dashboard.tsx";
-import {ThemeProvider} from "@/hooks/useTheme.tsx";
+import {ThemeProvider} from "@/components/providers/ThemeProvider.tsx";
+
 
 function App() {
     return (

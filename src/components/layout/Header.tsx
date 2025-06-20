@@ -1,7 +1,7 @@
 import React from 'react';
-import { Sun, Moon, Bell, User } from 'lucide-react';
-import { Button } from '@/components/common/Button';
-import { useTheme } from '@/hooks/useTheme';
+import {Bell, Moon, Sun, User} from 'lucide-react';
+import {Button} from '@/components/common/Button';
+import {useTheme} from '@/hooks/useTheme.ts';
 
 // Types pour les props du composant
 interface HeaderProps {
