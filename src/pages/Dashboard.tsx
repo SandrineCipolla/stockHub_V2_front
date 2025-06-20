@@ -59,7 +59,7 @@ export const Dashboard: React.FC = () => {
 
         const initializeData = async () => {
             try {
-                await loadStocksRef.current(); 
+                await loadStocksRef.current();
                 if (mounted) {
                     setIsLoaded(true);
                 }
@@ -237,6 +237,9 @@ export const Dashboard: React.FC = () => {
                 <section className="mb-8" role="search" aria-labelledby="search-heading">
                     <h2 id="search-heading" className="sr-only">Recherche de produits</h2>
                     <div className="relative max-w-md">
+                        <label htmlFor="search-input" className="sr-only">
+                            Rechercher un produit
+                        </label>
                         <Input
                             id="search-input"
                             type="text"
