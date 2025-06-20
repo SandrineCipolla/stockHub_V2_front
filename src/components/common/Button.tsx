@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTheme } from '@/hooks/useTheme';
-import type { ButtonVariant, ButtonSize } from '@/types';
+import {useTheme} from '@/hooks/useTheme';
+import type {ButtonSize, ButtonVariant} from '@/types';
 
 // Types pour les props du composant
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -10,6 +10,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     loading?: boolean;
     children?: React.ReactNode;
 }
+
+// // Test d'utilisation invalide (à commenter pour éviter les erreurs)
+// const InvalidButtonUsage = () => (
+//   <Button variant="invalid" size="xl"> {/* ❌ Erreurs attendues */}
+//     Click me
+//   </Button>
+// );
 
 export const Button: React.FC<ButtonProps> = ({
                                                   variant = 'primary',

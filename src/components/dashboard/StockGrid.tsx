@@ -1,6 +1,6 @@
 import React from 'react';
-import { StockCard } from './StockCard';
-import type { Stock } from '@/types';
+import {StockCard} from './StockCard';
+import type {Stock} from '@/types';
 
 // Types pour les props du composant
 interface StockGridProps {
@@ -40,9 +40,9 @@ export const StockGrid: React.FC<StockGridProps> = ({
                     stock={stock}
                     index={index}
                     isLoaded={isLoaded}
-                    onView={onView}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
+                    {...(onView && { onView })}         // Seulement si défini
+                    {...(onEdit && { onEdit })}         // Seulement si défini
+                    {...(onDelete && { onDelete })}     // Seulement si défini
                     isUpdating={isUpdating}
                     isDeleting={isDeleting}
                 />

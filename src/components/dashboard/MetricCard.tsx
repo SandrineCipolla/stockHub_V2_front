@@ -1,7 +1,7 @@
 import React from 'react';
-import { Package, TrendingUp, AlertTriangle } from 'lucide-react';
-import { Card } from '@/components/common/Card';
-import { useTheme } from '@/hooks/useTheme';
+import {AlertTriangle, Package, TrendingUp} from 'lucide-react';
+import {Card} from '@/components/common/Card';
+import {useTheme} from '@/hooks/useTheme';
 
 
 // Types pour les props du composant
@@ -67,7 +67,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     };
 
     return (
-        <Card className={className} aria-labelledby={id || undefined} role="region">
+        <Card className={className} aria-labelledby={id} role="region">
             <div className="flex items-center justify-between mb-4">
                 <div
                     className={`p-3 rounded-xl ${getIconBackground(color)}`}

@@ -169,3 +169,10 @@ export interface AsyncState<T> {
     data: T | null;
     error: ApiError | null;
 }
+
+// // Test : ces déclarations DOIVENT produire des erreurs TypeScript
+// const invalidStock: Stock = {
+//   id: "string", // ❌ Erreur attendue - doit être number
+//   name: 123,    // ❌ Erreur attendue - doit être string
+//   status: "invalid" // ❌ Erreur attendue - valeur non autorisée
+// };

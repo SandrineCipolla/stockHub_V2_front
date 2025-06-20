@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useCallback, useState} from 'react';
 
 
 // ===== TYPES POUR ERREURS FRONT-END =====
@@ -115,9 +115,10 @@ export const useAsyncAction = <T, P extends any[] = []>(
             return result;
         } catch (error) {
             const frontendError = createFrontendError(
-                error instanceof Error ? error.message : 'Une erreur est survenue',
-                'unknown',
-                { originalError: error }
+                'unknown',     // ← type en 1er
+                error instanceof Error ? error.message : 'Une erreur est survenue', // ← message en 2ème
+                undefined,     // ← field (optionnel)
+                { originalError: error }  // ← details
             );
 
             frontendState.setError(frontendError);
@@ -134,18 +135,24 @@ export const useAsyncAction = <T, P extends any[] = []>(
 
 // ===== FONCTION UTILITAIRE POUR CRÉER DES ERREURS =====
 export const createFrontendError = (
+    type: FrontendErrorType,
     message: string,
-    type: FrontendErrorType = 'unknown',
-    details?: Record<string, unknown>,
-    field?: string
-): FrontendError => ({
-    id: Math.random().toString(36).substring(2, 9),
-    type,
-    message,
-    field,
-    timestamp: new Date(),
-    details
-});
+    field?: string,                    // ✅ Peut ne pas être fourni
+    details?: Record<string, unknown>  // ✅ Peut ne pas être fourni
+): FrontendError => {
+    const error: FrontendError = {
+        id: Math.random().toString(36).substring(2, 9),
+        type,
+        message,
+        timestamp: new Date()
+    };
+
+    // ✅ Ajout conditionnel
+    if (field) error.field = field;
+    if (details) error.details = details;
+
+    return error;
+};
 
 // ===== HOOK POUR VALIDATION DE FORMULAIRES =====
 export interface ValidationRule<T> {
@@ -169,10 +176,10 @@ export const useFormValidation = <T extends Record<string, any>>(
         for (const rule of rules) {
             if (!rule.validator(value)) {
                 fieldErrors.push(createFrontendError(
-                    rule.message,
                     'validation',
+                    rule.message,
+                    String(field),
                     { field: String(field), value },
-                    String(field)
                 ));
             }
         }
@@ -255,16 +262,20 @@ export const useFileHandler = () => {
 
         if (file.size > maxSize) {
             return createFrontendError(
-                'Le fichier est trop volumineux (max 10MB)',
                 'file_upload',
+                'Le fichier est trop volumineux (max 10MB)',
+                undefined,
                 { fileName: file.name, size: file.size }
+
+
             );
         }
 
         if (!allowedTypes.includes(file.type)) {
             return createFrontendError(
-                'Type de fichier non autorisé',
                 'file_upload',
+                'Type de fichier non autorisé',
+                undefined,
                 { fileName: file.name, type: file.type }
             );
         }
@@ -297,8 +308,9 @@ export const useFileHandler = () => {
                 fileState.setError(error as FrontendError);
             } else {
                 fileState.setError(createFrontendError(
-                    'Erreur lors du traitement des fichiers',
                     'file_upload',
+                    'Erreur lors du traitement des fichiers',
+                    undefined,
                     { error }
                 ));
             }
@@ -326,8 +338,8 @@ export const useDataExport = () => {
         try {
             if (data.length === 0) {
                 throw createFrontendError(
+                    'export',
                     'Aucune donnée à exporter',
-                    'export'
                 );
             }
 
@@ -365,8 +377,9 @@ export const useDataExport = () => {
                 exportState.setError(error as FrontendError);
             } else {
                 exportState.setError(createFrontendError(
-                    'Erreur lors de l\'export',
                     'export',
+                    'Erreur lors de l\'export',
+                    undefined,
                     { error }
                 ));
             }
@@ -395,8 +408,9 @@ export const useLocalStorageState = <T>(
             storageState.setData(valueToStore);
         } catch (error) {
             storageState.setError(createFrontendError(
-                'Impossible de sauvegarder dans le stockage local',
                 'storage',
+                'Impossible de sauvegarder dans le stockage local',
+                undefined,
                 { key, error }
             ));
         }
@@ -408,8 +422,9 @@ export const useLocalStorageState = <T>(
             storageState.setData(initialValue);
         } catch (error) {
             storageState.setError(createFrontendError(
-                'Impossible de supprimer du stockage local',
                 'storage',
+                'Impossible de supprimer du stockage local',
+                undefined,
                 { key, error }
             ));
         }
@@ -425,8 +440,9 @@ export const useLocalStorageState = <T>(
             }
         } catch (error) {
             storageState.setError(createFrontendError(
-                'Impossible de lire depuis le stockage local',
                 'storage',
+                'Impossible de lire depuis le stockage local',
+                undefined,
                 { key, error }
             ));
         }
