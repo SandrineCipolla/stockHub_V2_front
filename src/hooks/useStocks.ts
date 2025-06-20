@@ -1,6 +1,6 @@
-import { useState, useCallback, useMemo } from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import type {SearchFilters, Stock, StockStatus} from '@/types';
-import { useAsyncAction, createFrontendError, useLocalStorageState } from './useFrontendState';
+import {createFrontendError, useAsyncAction, useLocalStorageState} from './useFrontendState';
 
 // ===== DONNÉES MOCK TYPÉES =====
 const INITIAL_STOCKS: Stock[] = [
@@ -65,9 +65,9 @@ export const useStocks = () => {
 
     // ===== ACTIONS AVEC GESTION D'ERREURS =====
 
-    // Charger les stocks (simulé)
+    // Charger les stocks (simulé) - FIX: useCallback pour éviter re-création
     const loadStocksAction = useAsyncAction(
-        async (): Promise<Stock[]> => {
+        useCallback(async (): Promise<Stock[]> => {
             // Simulation d'un chargement
             await new Promise(resolve => setTimeout(resolve, 800));
 
@@ -76,48 +76,51 @@ export const useStocks = () => {
             }
 
             return stocks;
-        },
-        { simulateDelay: 0 } // Délai déjà dans la fonction
+        }, [stocks]), // Dépendance stable
+        { simulateDelay: 0 }
     );
 
-    // Créer un stock
+    // Créer un stock - FIX: useCallback avec dépendances stables
     const createStockAction = useAsyncAction(
-        async (stockData: CreateStockData): Promise<Stock> => {
+        useCallback(async (stockData: CreateStockData): Promise<Stock> => {
             // Validation
             if (!stockData.name.trim()) {
                 throw createFrontendError(
-                    'Le nom du stock est obligatoire',
                     'validation',
+                    'Le nom du stock est obligatoire',
+                    'name',
                     { field: 'name' },
-                    'name'
+
                 );
             }
 
             if (stockData.quantity < 0) {
                 throw createFrontendError(
-                    'La quantité ne peut pas être négative',
                     'validation',
+                    'La quantité ne peut pas être négative',
+                    'quantity',
                     { field: 'quantity' },
-                    'quantity'
+
                 );
             }
 
             if (stockData.value < 0) {
                 throw createFrontendError(
-                    'La valeur ne peut pas être négative',
                     'validation',
+                    'La valeur ne peut pas être négative',
+                    'value',
                     { field: 'value' },
-                    'value'
+
                 );
             }
 
             // Vérifier si le nom existe déjà
             if (stocks?.some(stock => stock.name.toLowerCase() === stockData.name.toLowerCase())) {
                 throw createFrontendError(
-                    'Un stock avec ce nom existe déjà',
                     'validation',
+                    'Un stock avec ce nom existe déjà',
+                    'name',
                     { field: 'name' },
-                    'name'
                 );
             }
 
@@ -141,7 +144,7 @@ export const useStocks = () => {
             setStocks(updatedStocks);
 
             return newStock;
-        },
+        }, [stocks, setStocks]), // Dépendances stables
         {
             onSuccess: () => {
                 console.log('✅ Stock créé avec succès');
@@ -150,37 +153,42 @@ export const useStocks = () => {
         }
     );
 
-    // Mettre à jour un stock
+    // Mettre à jour un stock - FIX: useCallback avec dépendances stables
     const updateStockAction = useAsyncAction(
-        async (updateData: UpdateStockData): Promise<Stock> => {
+        useCallback(async (updateData: UpdateStockData): Promise<Stock> => {
             if (!stocks) {
-                throw createFrontendError('Liste des stocks non disponible', 'unknown');
+                throw createFrontendError(
+                    'unknown',
+                    'Liste des stocks non disponible', );
             }
 
             const existingStock = stocks.find(s => s.id === updateData.id);
             if (!existingStock) {
                 throw createFrontendError(
+                    'validation',
                     `Stock avec l'ID ${updateData.id} introuvable`,
-                    'validation'
+
                 );
             }
 
             // Validation des champs modifiés
             if (updateData.name && !updateData.name.trim()) {
                 throw createFrontendError(
-                    'Le nom du stock ne peut pas être vide',
                     'validation',
+                    'Le nom du stock ne peut pas être vide',
+                    'name',
                     { field: 'name' },
-                    'name'
+
                 );
             }
 
             if (updateData.quantity !== undefined && updateData.quantity < 0) {
                 throw createFrontendError(
-                    'La quantité ne peut pas être négative',
                     'validation',
+                    'La quantité ne peut pas être négative',
+                    'quantity',
                     { field: 'quantity' },
-                    'quantity'
+
                 );
             }
 
@@ -207,22 +215,26 @@ export const useStocks = () => {
             setStocks(updatedStocks);
 
             return updatedStock;
-        },
+        }, [stocks, setStocks]), // Dépendances stables
         { simulateDelay: 0 }
     );
 
-    // Supprimer un stock
+    // Supprimer un stock - FIX: useCallback avec dépendances stables
     const deleteStockAction = useAsyncAction(
-        async (stockId: number): Promise<void> => {
+        useCallback(async (stockId: number): Promise<void> => {
             if (!stocks) {
-                throw createFrontendError('Liste des stocks non disponible', 'unknown');
+                throw createFrontendError(
+                    'unknown',
+                    'Liste des stocks non disponible'
+                );
             }
 
             const stockExists = stocks.some(s => s.id === stockId);
             if (!stockExists) {
                 throw createFrontendError(
+                    'validation',
                     `Stock avec l'ID ${stockId} introuvable`,
-                    'validation'
+
                 );
             }
 
@@ -232,27 +244,34 @@ export const useStocks = () => {
             // Mettre à jour la liste
             const updatedStocks = stocks.filter(stock => stock.id !== stockId);
             setStocks(updatedStocks);
-        },
+        }, [stocks, setStocks]), // Dépendances stables
         { simulateDelay: 0 }
     );
 
-    // Supprimer plusieurs stocks
+    // Supprimer plusieurs stocks - FIX: useCallback avec dépendances stables
     const deleteMultipleStocksAction = useAsyncAction(
-        async (stockIds: number[]): Promise<void> => {
+        useCallback(async (stockIds: number[]): Promise<void> => {
             if (!stocks) {
-                throw createFrontendError('Liste des stocks non disponible', 'unknown');
+                throw createFrontendError(
+                    'unknown',
+                    'Liste des stocks non disponible'
+                );
             }
 
             if (stockIds.length === 0) {
-                throw createFrontendError('Aucun stock sélectionné', 'validation');
+                throw createFrontendError(
+                    'validation',
+                    'Aucun stock sélectionné'
+                );
             }
 
             // Vérifier que tous les stocks existent
             const missingIds = stockIds.filter(id => !stocks.some(s => s.id === id));
             if (missingIds.length > 0) {
                 throw createFrontendError(
+                    'validation',
                     `Stocks introuvables: ${missingIds.join(', ')}`,
-                    'validation'
+
                 );
             }
 
@@ -262,13 +281,13 @@ export const useStocks = () => {
             // Mettre à jour la liste
             const updatedStocks = stocks.filter(stock => !stockIds.includes(stock.id));
             setStocks(updatedStocks);
-        },
+        }, [stocks, setStocks]), // Dépendances stables
         { simulateDelay: 0 }
     );
 
     // ===== COMPUTED VALUES =====
 
-    // Stocks filtrés
+    // Stocks filtrés - FIX: useMemo avec dépendances correctes
     const filteredStocks = useMemo(() => {
         if (!stocks) return [];
 
@@ -293,12 +312,10 @@ export const useStocks = () => {
                 return false;
             }
             return !(filters.maxValue !== undefined && stock.value > filters.maxValue);
-
-
         });
-    }, [stocks, filters]);
+    }, [stocks, filters]); // Dépendances stables
 
-    // Statistiques
+    // Statistiques - FIX: useMemo avec dépendances correctes
     const stats = useMemo(() => {
         if (!stocks) return null;
 
@@ -310,9 +327,9 @@ export const useStocks = () => {
             totalValue: stocks.reduce((sum, stock) => sum + stock.value, 0),
             averageValue: stocks.length > 0 ? stocks.reduce((sum, stock) => sum + stock.value, 0) / stocks.length : 0
         };
-    }, [stocks]);
+    }, [stocks]); // Dépendance stable
 
-    // ===== FONCTIONS UTILITAIRES =====
+    // ===== FONCTIONS UTILITAIRES - FIX: useCallback pour éviter re-création =====
 
     const getStockById = useCallback((id: number): Stock | undefined => {
         return stocks?.find(stock => stock.id === id);
@@ -323,8 +340,15 @@ export const useStocks = () => {
     }, []);
 
     const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
-        setFilters((prev: any) => ({ ...prev, ...newFilters }));
+        setFilters(prev => ({ ...prev, ...newFilters }));
     }, []);
+
+    // ===== ACTIONS EXPORTÉES AVEC useCallback =====
+    const loadStocks = useCallback(() => loadStocksAction.execute(), [loadStocksAction]);
+    const createStock = useCallback((data: CreateStockData) => createStockAction.execute(data), [createStockAction]);
+    const updateStock = useCallback((data: UpdateStockData) => updateStockAction.execute(data), [updateStockAction]);
+    const deleteStock = useCallback((id: number) => deleteStockAction.execute(id), [deleteStockAction]);
+    const deleteMultipleStocks = useCallback((ids: number[]) => deleteMultipleStocksAction.execute(ids), [deleteMultipleStocksAction]);
 
     // ===== RETURN OBJECT =====
     return {
@@ -335,11 +359,11 @@ export const useStocks = () => {
         filters,
 
         // Actions avec états de chargement
-        loadStocks: loadStocksAction.execute,
-        createStock: createStockAction.execute,
-        updateStock: updateStockAction.execute,
-        deleteStock: deleteStockAction.execute,
-        deleteMultipleStocks: deleteMultipleStocksAction.execute,
+        loadStocks,
+        createStock,
+        updateStock,
+        deleteStock,
+        deleteMultipleStocks,
 
         // États de chargement (par action)
         isLoading: {

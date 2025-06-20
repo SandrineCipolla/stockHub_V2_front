@@ -1,3 +1,5 @@
+import React from "react";
+
 export type Theme = "dark" | "light"
 
 export type StockStatus = "optimal" | "low" | "critical"
@@ -82,10 +84,37 @@ export interface AccessibleComponentProps extends BaseComponentProps {
     role?: string;
 }
 
+// Types pour les breadcrumbs
+export interface BreadcrumbItem {
+    label: string;
+    href?: string;
+    current?: boolean;
+    icon?: React.ElementType;
+}
+
+// Types pour les liens
+export interface FooterLink {
+    label: string;
+    href: string;
+    external?: boolean;
+}
+
+// Types pour les métriques
+export interface MetricCardData {
+    id: string;
+    label: string;
+    value: string | number;
+    change: number;
+    changeType: 'increase' | 'decrease';
+    icon: 'package' | 'alert-triangle' | 'trending-up';
+    color: 'success' | 'warning' | 'info';
+}
+
 // Constantes typées
 export const STOCK_STATUSES = ['optimal', 'low', 'critical'] as const;
 export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost'] as const;
 export const BUTTON_SIZES = ['sm', 'md', 'lg'] as const;
+export const BADGE_VARIANTS = ['success', 'warning', 'danger'] as const;
 export const THEMES = ['light', 'dark'] as const;
 
 // Type guards
@@ -96,3 +125,54 @@ export const isStockStatus = (status: string): status is StockStatus => {
 export const isTheme = (theme: string): theme is Theme => {
     return THEMES.includes(theme as Theme);
 };
+
+export const isButtonVariant = (variant: string): variant is ButtonVariant => {
+    return BUTTON_VARIANTS.includes(variant as ButtonVariant);
+};
+
+// Utility types
+export type RequiredKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
+export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type WithId<T> = T & { readonly id: string | number };
+
+// Types pour les événements
+export interface StockEvent {
+    readonly id: string;
+    stockId: number;
+    type: 'created' | 'updated' | 'deleted' | 'low_stock' | 'critical_stock';
+    timestamp: Date;
+    userId: string;
+    details: Record<string, unknown>;
+}
+
+// Types pour les erreurs API
+export interface ApiError {
+    readonly code: string;
+    message: string;
+    details?: Record<string, unknown>;
+    timestamp: Date;
+    statusCode?: number;
+}
+
+// Types pour la validation
+export interface ValidationError {
+    field: string;
+    message: string;
+    code: 'required' | 'invalid' | 'min' | 'max' | 'pattern';
+}
+
+// Types pour les états asynchrones
+export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+
+export interface AsyncState<T> {
+    status: LoadingState;
+    data: T | null;
+    error: ApiError | null;
+}
+
+// // Test : ces déclarations DOIVENT produire des erreurs TypeScript
+// const invalidStock: Stock = {
+//   id: "string", // ❌ Erreur attendue - doit être number
+//   name: 123,    // ❌ Erreur attendue - doit être string
+//   status: "invalid" // ❌ Erreur attendue - valeur non autorisée
+// };
