@@ -1,103 +1,101 @@
-"use client"
+import React from 'react';
+import { Package, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Card } from '@/components/common/Card';
+import { useTheme } from '@/hooks/useTheme';
 
-import { Package, AlertTriangle, TrendingUp } from "lucide-react"
-import { Card } from "@/components/common/Card"
-import { useTheme } from "@/hooks/useTheme"
-import { getIconBackground, getIconColor, getThemeClasses } from "@/utils/theme"
-import type { MetricData } from "@/types"
 
-interface MetricsCardProps {
-    metric: MetricData
+// Types pour les props du composant
+interface MetricCardProps {
+    id: string;
+    label: string;
+    value: string | number;
+    change: number;
+    changeType: 'increase' | 'decrease';
+    icon: 'package' | 'alert-triangle' | 'trending-up';
+    color: 'success' | 'warning' | 'info';
+    className?: string;
 }
 
-export function MetricsCard({ metric }: MetricsCardProps) {
-    const { theme } = useTheme()
-    const themeClasses = getThemeClasses(theme)
+// Mapping des icônes
+const iconMap = {
+    'package': Package,
+    'alert-triangle': AlertTriangle,
+    'trending-up': TrendingUp,
+} as const;
 
-    const getIcon = (iconName: string) => {
-        switch (iconName) {
-            case "package":
-                return Package
-            case "alert-triangle":
-                return AlertTriangle
-            case "trending-up":
-                return TrendingUp
-            default:
-                return Package
-        }
-    }
+export const MetricCard: React.FC<MetricCardProps> = ({
+                                                          id,
+                                                          label,
+                                                          value,
+                                                          change,
+                                                          changeType,
+                                                          icon,
+                                                          color,
+                                                          className = ''
+                                                      }) => {
+    const { theme } = useTheme();
+    const IconComponent = iconMap[icon];
 
-    const Icon = getIcon(metric.icon)
-
-    // ✅ Messages descriptifs pour aria-label
-    const getChangeMessage = () => {
-        const changeText = metric.changeType === "increase" ? "Augmentation" : "Diminution";
-        const valueText = Math.abs(metric.change).toString();
-
-        switch (metric.id) {
-            case "total-products":
-                return `${changeText} de ${valueText} produits ce mois`;
-            case "low-stock":
-                return `${changeText} de ${valueText} stocks faibles ce mois`;
-            case "growth":
-                return `Croissance de ${valueText} pourcent ce mois`;
-            default:
-                return `${changeText} de ${valueText}`;
-        }
+    // Fonctions utilitaires pour les styles
+    const getIconBackground = (type: 'success' | 'warning' | 'info'): string => {
+        const backgrounds = {
+            success: theme === 'dark' ? 'bg-emerald-500/20' : 'bg-emerald-100',
+            warning: theme === 'dark' ? 'bg-amber-500/20' : 'bg-amber-100',
+            info: theme === 'dark' ? 'bg-blue-500/20' : 'bg-blue-100',
+        };
+        return backgrounds[type];
     };
 
-    // ✅ NOUVEAU : Message complet pour la carte
-    const getCardAriaLabel = () => {
-        return `Métrique ${metric.label}: ${metric.value}. ${getChangeMessage()}`;
+    const getIconColor = (type: 'success' | 'warning' | 'info'): string => {
+        const colors = {
+            success: theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600',
+            warning: theme === 'dark' ? 'text-amber-400' : 'text-amber-600',
+            info: theme === 'dark' ? 'text-blue-400' : 'text-blue-600',
+        };
+        return colors[type];
+    };
+
+    const getChangeColor = (type: 'increase' | 'decrease'): string => {
+        if (type === 'increase') {
+            return theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600';
+        }
+        return theme === 'dark' ? 'text-red-400' : 'text-red-600';
+    };
+
+    const themeClasses = {
+        textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
     };
 
     return (
-        <Card
-            className="p-4 sm:p-6"
-            as="article"  // ✅ AJOUTÉ : Élément sémantique
-            aria-label={getCardAriaLabel()}  // ✅ AJOUTÉ : Description complète
-        >
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <Card className={className} aria-labelledby={id || undefined} role="region">
+            <div className="flex items-center justify-between mb-4">
                 <div
-                    className={`p-3 rounded-xl ${getIconBackground(metric.color, theme)}`}
-                    aria-hidden="true"  // ✅ AJOUTÉ : Décoration pure
+                    className={`p-3 rounded-xl ${getIconBackground(color)}`}
+                    aria-hidden="true"
                 >
-                    <Icon className={`w-6 h-6 ${getIconColor(metric.color, theme)}`} aria-hidden="true" />
+                    <IconComponent className={`w-6 h-6 ${getIconColor(color)}`} />
                 </div>
                 <span
-                    className={`text-sm flex items-center gap-1 ${
-                        metric.changeType === "increase"
-                            ? getIconColor("success", theme)
-                            : theme === "dark"
-                                ? "text-red-400"
-                                : "text-red-600"
-                    }`}
-                    aria-label={getChangeMessage()}
+                    className={`text-sm flex items-center gap-1 ${getChangeColor(changeType)}`}
+                    aria-label={`Évolution ${changeType === 'increase' ? 'positive' : 'négative'}: ${changeType === 'increase' ? '+' : '-'}${change}`}
                 >
-                    <TrendingUp
-                        className={`w-3 h-3 ${metric.changeType === "decrease" ? "rotate-180" : ""}`}
-                        aria-hidden="true"
-                    />
-                    {metric.changeType === "increase" ? "+" : ""}
-                    {metric.change}
-                </span>
+          <TrendingUp
+              className={`w-3 h-3 ${changeType === 'decrease' ? 'rotate-180' : ''}`}
+              aria-hidden="true"
+          />
+                    {changeType === 'increase' ? '+' : '-'}{change}
+        </span>
             </div>
-
-            {/* ✅ AMÉLIORÉ : Valeur avec aria-label explicite */}
             <div
-                className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-1 ${themeClasses.text}`}
-                aria-label={`Valeur actuelle: ${metric.value}`}
+                className="text-3xl font-bold mb-1"
+                id={id}
+                aria-label={`${label}: ${value}`}
             >
-                {metric.value}
+                {value}
             </div>
-
-            {/* ✅ AMÉLIORÉ : Label avec ID pour référence */}
-            <div
-                className={`text-sm ${themeClasses.textSubtle}`}
-                id={`metric-${metric.id}-label`}
-            >
-                {metric.label}
+            <div className={`text-sm ${themeClasses.textSubtle}`}>
+                {label}
             </div>
         </Card>
-    )
-}
+    );
+};

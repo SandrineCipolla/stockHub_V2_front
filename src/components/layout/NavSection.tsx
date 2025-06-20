@@ -1,94 +1,81 @@
+import React from 'react';
+import { Home, ChevronRight } from 'lucide-react';
+import { useTheme } from '@/hooks/useTheme';
 
-"use client"
+// Types pour les éléments de breadcrumb
+interface BreadcrumbItem {
+    label: string;
+    href?: string;
+    current?: boolean;
+    icon?: React.ElementType;
+}
 
-import { Home, ChevronRight, Plus, BarChart3, Search } from "lucide-react"
-import { Button } from "@/components/common/Button"
-import { useTheme } from "@/hooks/useTheme"
-import { getThemeClasses } from "@/utils/theme"
+// Types pour les props du composant
+interface NavSectionProps {
+    children: React.ReactNode;
+    breadcrumbs?: BreadcrumbItem[];
+    className?: string;
+}
 
-export function NavigationSection() {
-    const { theme } = useTheme()
-    const themeClasses = getThemeClasses(theme)
+export const NavSection: React.FC<NavSectionProps> = ({
+                                                          children,
+                                                          breadcrumbs = [
+                                                              { icon: Home, href: '/', label: 'Accueil' },
+                                                              { label: 'Dashboard', current: true }
+                                                          ],
+                                                          className = ''
+                                                      }) => {
+    const { theme } = useTheme();
 
-    // ✅ NOUVEAU : Gestionnaire pour icône Home
-    const handleHomeClick = () => {
-        console.log('🏠 Navigation vers accueil');
-        // Ici tu ajouteras ta logique de navigation vers l'accueil
-        // Exemple : router.push('/')
+    const themeClasses = {
+        navSection: theme === 'dark'
+            ? 'bg-gradient-to-r from-purple-900/30 to-purple-800/20'
+            : 'bg-gradient-to-r from-purple-100/80 to-purple-50',
     };
 
     return (
-        <section className={themeClasses.navSection}>
+        <section className={`${themeClasses.navSection} ${className}`}>
             <div className="max-w-7xl mx-auto px-6 py-8">
-
-                {/* ✅ AMÉLIORÉ : Breadcrumb avec Home navigable */}
+                {/* Breadcrumb conforme RGAA */}
                 <nav
-                    className={`flex items-center gap-2 text-sm mb-6 ${themeClasses.text}`}
+                    className="flex items-center gap-2 text-sm mb-6"
                     aria-label="Fil d'Ariane"
-                    role="navigation"
                 >
-                    <button
-                        onClick={handleHomeClick}
-                        onKeyDown={(e) => {
-                            if (['Enter', ' '].includes(e.key)) {
-                                e.preventDefault();
-                                handleHomeClick();
-                            }
-                        }}
-                        className="p-1 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors hover:bg-white/10"
-                        aria-label="Retourner à la page d'accueil"
-                    >
-                        <Home className="w-4 h-4" />
-                    </button>
-                    <ChevronRight className="w-4 h-4 opacity-50" aria-hidden="true" />
-                    <span className="font-medium">Dashboard</span>
+                    <ol className="flex items-center gap-2">
+                        {breadcrumbs.map((item, index) => (
+                            <React.Fragment key={index}>
+                                <li className="flex items-center gap-2">
+                                    {item.icon && (
+                                        <item.icon className="w-4 h-4" aria-hidden="true" />
+                                    )}
+                                    {item.href && !item.current ? (
+                                        <a
+                                            href={item.href}
+                                            className="hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded"
+                                        >
+                                            {item.label}
+                                        </a>
+                                    ) : (
+                                        <span
+                                            className={item.current ? "font-medium" : ""}
+                                            aria-current={item.current ? "page" : undefined}
+                                        >
+                      {item.label}
+                    </span>
+                                    )}
+                                </li>
+                                {index < breadcrumbs.length - 1 && (
+                                    <li aria-hidden="true">
+                                        <ChevronRight className="w-4 h-4 opacity-50" />
+                                    </li>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </ol>
                 </nav>
 
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                    <div>
-                        <h2 className={`text-3xl font-bold mb-2 ${themeClasses.text}`}>
-                            Tableau de Bord
-                        </h2>
-                        <p className={themeClasses.textMuted}>
-                            Bienvenue dans votre espace de gestion de stocks intelligent
-                        </p>
-                    </div>
-
-                    <div className="flex flex-row gap-3 flex-wrap justify-start">
-                        <Button
-                            variant="primary"
-                            icon={Plus}
-                            aria-label="Ajouter un nouveau stock à l'inventaire"
-                            onClick={() => console.log('➕ Ajouter stock')}
-                            className="w-auto max-w-[150px]"
-                        >
-                            <span className="hidden md:hidden lg:inline">Ajouter un Stock</span>
-                        </Button>
-
-                        <Button
-                            variant="secondary"
-                            icon={BarChart3}
-                            aria-label="Générer et télécharger un rapport détaillé des stocks"
-                            onClick={() => console.log('📊 Rapport détaillé')}
-                            className="w-auto max-w-[150px]"
-                        >
-                            <span className="hidden md:hidden lg:inline">Rapport Détaillé</span>
-                        </Button>
-
-                        <Button
-                            variant="secondary"
-                            icon={Search}
-                            aria-label="Ouvrir la page de recherche avancée de stocks"
-                            onClick={() => console.log('🔍 Recherche avancée')}
-                            className="w-auto max-w-[150px]"
-                        >
-                            <span className="hidden md:hidden lg:inline">Recherche Avancée</span>
-                        </Button>
-                    </div>
-
-
-                </div>
+                {children}
             </div>
         </section>
-    )
-}
+    );
+};
