@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 
 // ===== TYPES POUR ERREURS FRONT-END =====
@@ -394,65 +394,151 @@ export const useDataExport = () => {
 };
 
 // ===== HOOK POUR LOCAL STORAGE AVEC GESTION D'ERREURS =====
+// export const useLocalStorageState = <T>(
+//     key: string,
+//     initialValue: T
+// ) => {
+//     const storageState = useFrontendState<T>(initialValue);
+//
+//     const setValue = useCallback((value: T | ((prev: T) => T)): void => {
+//         try {
+//             const valueToStore = value instanceof Function ? value(storageState.data || initialValue) : value;
+//
+//             localStorage.setItem(key, JSON.stringify(valueToStore));
+//             storageState.setData(valueToStore);
+//         } catch (error) {
+//             storageState.setError(createFrontendError(
+//                 'storage',
+//                 'Impossible de sauvegarder dans le stockage local',
+//                 undefined,
+//                 { key, error }
+//             ));
+//         }
+//     }, [key, storageState, initialValue]);
+//
+//     const removeValue = useCallback((): void => {
+//         try {
+//             localStorage.removeItem(key);
+//             storageState.setData(initialValue);
+//         } catch (error) {
+//             storageState.setError(createFrontendError(
+//                 'storage',
+//                 'Impossible de supprimer du stockage local',
+//                 undefined,
+//                 { key, error }
+//             ));
+//         }
+//     }, [key, storageState, initialValue]);
+//
+//     // Initialiser depuis localStorage
+//     React.useEffect(() => {
+//         try {
+//             const item = localStorage.getItem(key);
+//             if (item) {
+//                 const parsed = JSON.parse(item);
+//                 storageState.setData(parsed);
+//             }
+//         } catch (error) {
+//             storageState.setError(createFrontendError(
+//                 'storage',
+//                 'Impossible de lire depuis le stockage local',
+//                 undefined,
+//                 { key, error }
+//             ));
+//         }
+//     }, [key, storageState]);
+//
+//     return {
+//         value: storageState.data,
+//         setValue,
+//         removeValue,
+//         loading: storageState.loading,
+//         error: storageState.error
+//     };
+// };
 export const useLocalStorageState = <T>(
     key: string,
     initialValue: T
 ) => {
-    const storageState = useFrontendState<T>(initialValue);
+    // Fonction pour lire depuis localStorage de façon synchrone
+    const getStoredValue = useCallback((): T => {
+        try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : initialValue;
+        } catch (error) {
+            console.warn(`Erreur lors de la lecture du localStorage pour la clé "${key}":`, error);
+            return initialValue;
+        }
+    }, [key, initialValue]);
 
+    // Initialiser avec la valeur du localStorage ou la valeur par défaut
+    const [storedValue, setStoredValue] = useState<T>(getStoredValue);
+    const [error, setError] = useState<FrontendError | null>(null);
+
+    // Fonction pour mettre à jour la valeur
     const setValue = useCallback((value: T | ((prev: T) => T)): void => {
         try {
-            const valueToStore = value instanceof Function ? value(storageState.data || initialValue) : value;
+            const valueToStore = value instanceof Function ? value(storedValue) : value;
 
+            setStoredValue(valueToStore);
             localStorage.setItem(key, JSON.stringify(valueToStore));
-            storageState.setData(valueToStore);
+            setError(null); // Clear previous errors
         } catch (error) {
-            storageState.setError(createFrontendError(
+            const frontendError = createFrontendError(
                 'storage',
                 'Impossible de sauvegarder dans le stockage local',
                 undefined,
                 { key, error }
-            ));
+            );
+            setError(frontendError);
         }
-    }, [key, storageState, initialValue]);
+    }, [key, storedValue]);
 
+    // Fonction pour supprimer la valeur
     const removeValue = useCallback((): void => {
         try {
             localStorage.removeItem(key);
-            storageState.setData(initialValue);
+            setStoredValue(initialValue);
+            setError(null);
         } catch (error) {
-            storageState.setError(createFrontendError(
+            const frontendError = createFrontendError(
                 'storage',
                 'Impossible de supprimer du stockage local',
                 undefined,
                 { key, error }
-            ));
+            );
+            setError(frontendError);
         }
-    }, [key, storageState, initialValue]);
+    }, [key, initialValue]);
 
-    // Initialiser depuis localStorage
-    React.useEffect(() => {
-        try {
-            const item = localStorage.getItem(key);
-            if (item) {
-                const parsed = JSON.parse(item);
-                storageState.setData(parsed);
+    // Écouter les changements de localStorage depuis d'autres onglets
+    useEffect(() => {
+        const handleStorageChange = (e: StorageEvent) => {
+            if (e.key === key) {
+                try {
+                    const newValue = e.newValue ? JSON.parse(e.newValue) : initialValue;
+                    setStoredValue(newValue);
+                    setError(null);
+                } catch (error) {
+                    const frontendError = createFrontendError(
+                        'storage',
+                        'Erreur lors de la synchronisation du stockage local',
+                        undefined,
+                        { key, error }
+                    );
+                    setError(frontendError);
+                }
             }
-        } catch (error) {
-            storageState.setError(createFrontendError(
-                'storage',
-                'Impossible de lire depuis le stockage local',
-                undefined,
-                { key, error }
-            ));
-        }
-    }, [key, storageState]);
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, [key, initialValue]);
 
     return {
-        value: storageState.data,
+        value: storedValue,
         setValue,
         removeValue,
-        loading: storageState.loading,
-        error: storageState.error
+        error
     };
 };

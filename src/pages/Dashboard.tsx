@@ -176,20 +176,31 @@ export const Dashboard: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-3" role="toolbar" aria-label="Actions principales">
+                    <div className="flex flex-row gap-3 flex-wrap justify-start" role="toolbar" aria-label="Actions principales">
                         <Button
                             variant="primary"
                             icon={Plus}
                             onClick={handleCreateStock}
                             loading={isLoading.create}
+                            aria-label="Ajouter un nouveau stock à l'inventaire"
+                            className="w-auto max-w-[150px]"
                         >
-                            Ajouter un Stock
+                            <span className="hidden md:hidden lg:inline">Ajouter un Stock</span>
                         </Button>
-                        <Button variant="secondary" icon={BarChart3}>
-                            Rapport Détaillé
+                        <Button variant="secondary"
+                                icon={BarChart3}
+                                aria-label="Générer et télécharger un rapport détaillé des stocks"
+                                onClick={() => console.log('📊 Rapport détaillé')}
+                                className="w-auto max-w-[150px]"
+                        >
+                            <span className="hidden md:hidden lg:inline">Rapport Détaillé</span>
                         </Button>
-                        <Button variant="secondary" icon={Search}>
-                            Recherche Avancée
+                        <Button variant="secondary"
+                                icon={Search}
+                                aria-label="Ouvrir la page de recherche avancée de stocks"
+                                onClick={() => console.log('🔍 Recherche avancée')}
+                        >
+                            <span className="hidden md:hidden lg:inline">Recherche Avancée</span>
                         </Button>
                     </div>
                 </div>
@@ -321,6 +332,8 @@ export const Dashboard: React.FC = () => {
                                 icon={Plus}
                                 onClick={handleCreateStock}
                                 loading={isLoading.create}
+                                className="lg:hidden"
+                                aria-label="Ajouter un stock"
                             >
                                 Ajouter un Stock
                             </Button>
