@@ -1,4 +1,4 @@
-import { Stock } from '@/types';
+import {Stock} from '@/types';
 
 // Données de stock mockées
 export const stockData: Stock[] = [
@@ -37,32 +37,32 @@ export const stockData: Stock[] = [
 ];
 
 // Statistiques métrique
-export const metricsData = [
-    {
-        id: 1,
-        title: "Total Produits",
-        value: "248",
-        change: "+8",
-        isPositive: true,
-        iconType: "success" as const,
-        icon: "Package"
-    },
-    {
-        id: 2,
-        title: "Stock Faible",
-        value: "12",
-        change: "-3",
-        isPositive: false,
-        iconType: "warning" as const,
-        icon: "AlertTriangle"
-    },
-    {
-        id: 3,
-        title: "Ce mois",
-        value: "+15%",
-        change: "+2%",
-        isPositive: true,
-        iconType: "info" as const,
-        icon: "TrendingUp"
-    }
-];
+// export const metricsData = [
+//     {
+//         id: 1,
+//         title: "Total Produits",
+//         value: "248",
+//         change: "+8",
+//         isPositive: true,
+//         iconType: "success" as const,
+//         icon: "Package"
+//     },
+//     {
+//         id: 2,
+//         title: "Stock Faible",
+//         value: "12",
+//         change: "-3",
+//         isPositive: false,
+//         iconType: "warning" as const,
+//         icon: "AlertTriangle"
+//     },
+//     {
+//         id: 3,
+//         title: "Ce mois",
+//         value: "+15%",
+//         change: "+2%",
+//         isPositive: true,
+//         iconType: "info" as const,
+//         icon: "TrendingUp"
+//     }
+// ];

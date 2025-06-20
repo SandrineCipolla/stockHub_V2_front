@@ -59,7 +59,7 @@ export const Dashboard: React.FC = () => {
 
         const initializeData = async () => {
             try {
-                await loadStocksRef.current(); // ✅ Utiliser la ref
+                await loadStocksRef.current(); 
                 if (mounted) {
                     setIsLoaded(true);
                 }
@@ -73,10 +73,10 @@ export const Dashboard: React.FC = () => {
         return () => {
             mounted = false;
         };
-    }, []); // ✅ Pas de warning ESLint maintenant
+    }, []);
 
 
-    // Mettre à jour les filtres avec useCallback et dépendance stable
+
     const handleSearchChange = useCallback((value: string) => {
         setSearchTerm(value);
         updateFilters({ query: value });

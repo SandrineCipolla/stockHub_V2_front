@@ -50,6 +50,6 @@
   },
   "include": [
     "src/**/*",
-    "ARCHITECTURE.md"
+    "documentation/V2/ARCHITECTURE.md"
   ]
 }

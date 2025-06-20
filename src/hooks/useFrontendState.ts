@@ -108,15 +108,15 @@ export const useAsyncAction = <T, P extends unknown[] = []>(
                 await new Promise(resolve => setTimeout(resolve, simulateDelay));
             }
 
-            const result = await Promise.resolve(action(...args));
+            const result = await action(...args);
 
             frontendState.setData(result);
             onSuccess?.(result);
             return result;
         } catch (error) {
             const frontendError = createFrontendError(
-                'unknown',     // ← type en 1er
-                error instanceof Error ? error.message : 'Une erreur est survenue', // ← message en 2ème
+                'unknown',     // ← type
+                error instanceof Error ? error.message : 'Une erreur est survenue', // ← message
                 undefined,     // ← field (optionnel)
                 { originalError: error }  // ← details
             );
@@ -137,8 +137,8 @@ export const useAsyncAction = <T, P extends unknown[] = []>(
 export const createFrontendError = (
     type: FrontendErrorType,
     message: string,
-    field?: string,                    // ✅ Peut ne pas être fourni
-    details?: Record<string, unknown>  // ✅ Peut ne pas être fourni
+    field?: string,
+    details?: Record<string, unknown>
 ): FrontendError => {
     const error: FrontendError = {
         id: Math.random().toString(36).substring(2, 9),
@@ -147,7 +147,7 @@ export const createFrontendError = (
         timestamp: new Date()
     };
 
-    // ✅ Ajout conditionnel
+
     if (field) error.field = field;
     if (details) error.details = details;
 
@@ -155,175 +155,175 @@ export const createFrontendError = (
 };
 
 // ===== HOOK POUR VALIDATION DE FORMULAIRES =====
-export interface ValidationRule<T> {
-    validator: (value: T) => boolean;
-    message: string;
-}
+// export interface ValidationRule<T> {
+//     validator: (value: T) => boolean;
+//     message: string;
+// }
 
-export const useFormValidation = <T extends Record<string, unknown>>(
-    initialData: T,
-    validationRules: Partial<Record<keyof T, ValidationRule<T[keyof T]>[]>>
-) => {
-    const [formData, setFormData] = useState<T>(initialData);
-    const [errors, setErrors] = useState<Record<keyof T, FrontendError[]>>({} as Record<keyof T, FrontendError[]>);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const validateField = useCallback((field: keyof T, value: T[keyof T]): FrontendError[] => {
-        const rules = validationRules[field];
-        if (!rules) return [];
-
-        const fieldErrors: FrontendError[] = [];
-        for (const rule of rules) {
-            if (!rule.validator(value)) {
-                fieldErrors.push(createFrontendError(
-                    'validation',
-                    rule.message,
-                    String(field),
-                    { field: String(field), value },
-                ));
-            }
-        }
-        return fieldErrors;
-    }, [validationRules]);
-
-    const updateField = useCallback((field: keyof T, value: T[keyof T]): void => {
-        setFormData(prev => ({ ...prev, [field]: value }));
-
-        // Validation en temps réel
-        const fieldErrors = validateField(field, value);
-        setErrors(prev => ({ ...prev, [field]: fieldErrors }));
-    }, [validateField]);
-
-    const validateAll = useCallback((): boolean => {
-        const allErrors: Record<keyof T, FrontendError[]> = {} as Record<keyof T, FrontendError[]>;
-        let hasErrors = false;
-
-        for (const field in formData) {
-            const fieldErrors = validateField(field, formData[field]);
-            allErrors[field] = fieldErrors;
-            if (fieldErrors.length > 0) hasErrors = true;
-        }
-
-        setErrors(allErrors);
-        return !hasErrors;
-    }, [formData, validateField]);
-
-    const submit = useCallback(async (
-        onSubmit: (data: T) => Promise<void> | void
-    ): Promise<boolean> => {
-        setIsSubmitting(true);
-
-        try {
-            const isValid = validateAll();
-            if (!isValid) {
-                setIsSubmitting(false);
-                return false;
-            }
-
-            await Promise.resolve(onSubmit(formData));
-            setIsSubmitting(false);
-            return true;
-        } catch (error) {
-            setIsSubmitting(false);
-            throw error;
-        }
-    }, [formData, validateAll]);
-
-    const reset = useCallback((): void => {
-        setFormData(initialData);
-        setErrors({} as Record<keyof T, FrontendError[]>);
-        setIsSubmitting(false);
-    }, [initialData]);
-
-    const hasErrors = Object.values(errors).some(fieldErrors => fieldErrors.length > 0);
-    const getFieldError = (field: keyof T): string | undefined =>
-        errors[field]?.[0]?.message;
-
-    return {
-        formData,
-        errors,
-        isSubmitting,
-        hasErrors,
-        updateField,
-        validateAll,
-        submit,
-        reset,
-        getFieldError
-    };
-};
-
-// ===== HOOK POUR GESTION DE FICHIERS =====
-export const useFileHandler = () => {
-    const fileState = useFrontendState<File[]>([]);
-
-    const validateFile = useCallback((file: File): FrontendError | null => {
-        const maxSize = 10 * 1024 * 1024; // 10MB
-        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/csv'];
-
-        if (file.size > maxSize) {
-            return createFrontendError(
-                'file_upload',
-                'Le fichier est trop volumineux (max 10MB)',
-                undefined,
-                { fileName: file.name, size: file.size }
-
-
-            );
-        }
-
-        if (!allowedTypes.includes(file.type)) {
-            return createFrontendError(
-                'file_upload',
-                'Type de fichier non autorisé',
-                undefined,
-                { fileName: file.name, type: file.type }
-            );
-        }
-
-        return null;
-    }, []);
-
-    const handleFiles = useCallback(async (files: FileList | File[]): Promise<File[]> => {
-        fileState.setLoading(true);
-
-        try {
-            const fileArray = Array.from(files);
-            const validFiles: File[] = [];
-
-            for (const file of fileArray) {
-                const error = validateFile(file);
-                if (error) {
-                    throw error;
-                }
-                validFiles.push(file);
-            }
-
-            // Simuler un délai de traitement
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            fileState.setData(validFiles);
-            return validFiles;
-        } catch (error) {
-            if (error instanceof Object && 'type' in error) {
-                fileState.setError(error as FrontendError);
-            } else {
-                fileState.setError(createFrontendError(
-                    'file_upload',
-                    'Erreur lors du traitement des fichiers',
-                    undefined,
-                    { error }
-                ));
-            }
-            return [];
-        }
-    }, [fileState, validateFile]);
-
-    return {
-        ...fileState,
-        handleFiles,
-        validateFile
-    };
-};
+// export const useFormValidation = <T extends Record<string, unknown>>(
+//     initialData: T,
+//     validationRules: Partial<Record<keyof T, ValidationRule<T[keyof T]>[]>>
+// ) => {
+//     const [formData, setFormData] = useState<T>(initialData);
+//     const [errors, setErrors] = useState<Record<keyof T, FrontendError[]>>({} as Record<keyof T, FrontendError[]>);
+//     const [isSubmitting, setIsSubmitting] = useState(false);
+//
+//     const validateField = useCallback((field: keyof T, value: T[keyof T]): FrontendError[] => {
+//         const rules = validationRules[field];
+//         if (!rules) return [];
+//
+//         const fieldErrors: FrontendError[] = [];
+//         for (const rule of rules) {
+//             if (!rule.validator(value)) {
+//                 fieldErrors.push(createFrontendError(
+//                     'validation',
+//                     rule.message,
+//                     String(field),
+//                     { field: String(field), value },
+//                 ));
+//             }
+//         }
+//         return fieldErrors;
+//     }, [validationRules]);
+//
+//     const updateField = useCallback((field: keyof T, value: T[keyof T]): void => {
+//         setFormData(prev => ({ ...prev, [field]: value }));
+//
+//         // Validation en temps réel
+//         const fieldErrors = validateField(field, value);
+//         setErrors(prev => ({ ...prev, [field]: fieldErrors }));
+//     }, [validateField]);
+//
+//     const validateAll = useCallback((): boolean => {
+//         const allErrors: Record<keyof T, FrontendError[]> = {} as Record<keyof T, FrontendError[]>;
+//         let hasErrors = false;
+//
+//         for (const field in formData) {
+//             const fieldErrors = validateField(field, formData[field]);
+//             allErrors[field] = fieldErrors;
+//             if (fieldErrors.length > 0) hasErrors = true;
+//         }
+//
+//         setErrors(allErrors);
+//         return !hasErrors;
+//     }, [formData, validateField]);
+//
+//     const submit = useCallback(async (
+//         onSubmit: (data: T) => Promise<void> | void
+//     ): Promise<boolean> => {
+//         setIsSubmitting(true);
+//
+//         try {
+//             const isValid = validateAll();
+//             if (!isValid) {
+//                 setIsSubmitting(false);
+//                 return false;
+//             }
+//
+//             await Promise.resolve(onSubmit(formData));
+//             setIsSubmitting(false);
+//             return true;
+//         } catch (error) {
+//             setIsSubmitting(false);
+//             throw error;
+//         }
+//     }, [formData, validateAll]);
+//
+//     const reset = useCallback((): void => {
+//         setFormData(initialData);
+//         setErrors({} as Record<keyof T, FrontendError[]>);
+//         setIsSubmitting(false);
+//     }, [initialData]);
+//
+//     const hasErrors = Object.values(errors).some(fieldErrors => fieldErrors.length > 0);
+//     const getFieldError = (field: keyof T): string | undefined =>
+//         errors[field]?.[0]?.message;
+//
+//     return {
+//         formData,
+//         errors,
+//         isSubmitting,
+//         hasErrors,
+//         updateField,
+//         validateAll,
+//         submit,
+//         reset,
+//         getFieldError
+//     };
+// };
+//
+// // ===== HOOK POUR GESTION DE FICHIERS =====
+// export const useFileHandler = () => {
+//     const fileState = useFrontendState<File[]>([]);
+//
+//     const validateFile = useCallback((file: File): FrontendError | null => {
+//         const maxSize = 10 * 1024 * 1024; // 10MB
+//         const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/csv'];
+//
+//         if (file.size > maxSize) {
+//             return createFrontendError(
+//                 'file_upload',
+//                 'Le fichier est trop volumineux (max 10MB)',
+//                 undefined,
+//                 { fileName: file.name, size: file.size }
+//
+//
+//             );
+//         }
+//
+//         if (!allowedTypes.includes(file.type)) {
+//             return createFrontendError(
+//                 'file_upload',
+//                 'Type de fichier non autorisé',
+//                 undefined,
+//                 { fileName: file.name, type: file.type }
+//             );
+//         }
+//
+//         return null;
+//     }, []);
+//
+//     const handleFiles = useCallback(async (files: FileList | File[]): Promise<File[]> => {
+//         fileState.setLoading(true);
+//
+//         try {
+//             const fileArray = Array.from(files);
+//             const validFiles: File[] = [];
+//
+//             for (const file of fileArray) {
+//                 const error = validateFile(file);
+//                 if (error) {
+//                     throw error;
+//                 }
+//                 validFiles.push(file);
+//             }
+//
+//             // Simuler un délai de traitement
+//             await new Promise(resolve => setTimeout(resolve, 500));
+//
+//             fileState.setData(validFiles);
+//             return validFiles;
+//         } catch (error) {
+//             if (error instanceof Object && 'type' in error) {
+//                 fileState.setError(error as FrontendError);
+//             } else {
+//                 fileState.setError(createFrontendError(
+//                     'file_upload',
+//                     'Erreur lors du traitement des fichiers',
+//                     undefined,
+//                     { error }
+//                 ));
+//             }
+//             return [];
+//         }
+//     }, [fileState, validateFile]);
+//
+//     return {
+//         ...fileState,
+//         handleFiles,
+//         validateFile
+//     };
+// };
 
 // ===== HOOK POUR EXPORT DE DONNÉES =====
 export const useDataExport = () => {
