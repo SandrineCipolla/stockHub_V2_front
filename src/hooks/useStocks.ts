@@ -344,7 +344,7 @@ export const useStocks = () => {
     }, []);
 
     // ===== ACTIONS EXPORTÉES AVEC useCallback =====
-    const loadStocks = useCallback(() => loadStocksAction.execute(), [loadStocksAction.execute]);
+    const loadStocks = useCallback(() => loadStocksAction.execute(), [loadStocksAction]);
     const createStock = useCallback((data: CreateStockData) => createStockAction.execute(data), [createStockAction.execute]);
     const updateStock = useCallback((data: UpdateStockData) => updateStockAction.execute(data), [updateStockAction.execute]);
     const deleteStock = useCallback((id: number) => deleteStockAction.execute(id), [deleteStockAction.execute]);
