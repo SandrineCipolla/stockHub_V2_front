@@ -1,270 +1,342 @@
-"use client"
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {BarChart3, Download, Plus, Search,} from 'lucide-react';
 
-import { useState, useEffect, useRef } from "react"
-import { Search, Download } from "lucide-react"
+// Import de tes composants existants
+import {Header} from '@/components/layout/Header';
+import {NavSection} from '@/components/layout/NavSection';
+import {Footer} from '@/components/layout/Footer';
+import {MetricCard} from '@/components/dashboard/MetricCard';
+import {StockGrid} from '@/components/dashboard/StockGrid';
+import {Button} from '@/components/common/Button';
+import {Input} from '@/components/common/Input';
+import {Card} from '@/components/common/Card';
 
-import type { Stock, MetricData } from "@/types"
-import {Header} from "@/components/layout/Header.tsx";
-import { NavigationSection } from "@/components/layout/NavSection";
-import {MetricsCard} from "@/components/dashboard/MetricCard.tsx";
-import {Input} from "@/components/common/Input.tsx";
-import {Button} from "@/components/common/Button.tsx";
-import {StockGrid} from "@/components/dashboard/StockGrid.tsx";
-import {Footer} from "@/components/layout/Footer.tsx";
-import { useTheme } from "@/hooks/useTheme";
-import {getThemeClasses} from "@/utils/theme.ts";
 
-const mockStocks: Stock[] = [
-    {
-        id: 1,
-        name: "MyFirstStock",
-        quantity: 156,
-        value: 2450,
-        status: "optimal",
-        lastUpdate: "2h",
-    },
-    {
-        id: 2,
-        name: "MonTest",
-        quantity: 89,
-        value: 1780,
-        status: "optimal",
-        lastUpdate: "1h",
-    },
-    {
-        id: 3,
-        name: "StockVide",
-        quantity: 3,
-        value: 150,
-        status: "low",
-        lastUpdate: "30min",
-    },
-    {
-        id: 4,
-        name: "Stock Critique",
-        quantity: 0,
-        value: 0,
-        status: "critical",
-        lastUpdate: "5min",
-    },
-]
+import {useStocks} from '@/hooks/useStocks';
+import {useDataExport} from '@/hooks/useFrontendState';
+import {useTheme} from '@/hooks/useTheme.ts';
 
-const mockMetrics: MetricData[] = [
-    {
-        id: "total-products",
-        label: "Total Produits",
-        value: 248,
-        change: 8,
-        changeType: "increase",
-        icon: "package",
-        color: "success",
-    },
-    {
-        id: "low-stock",
-        label: "Stock Faible",
-        value: 12,
-        change: -3,
-        changeType: "decrease",
-        icon: "alert-triangle",
-        color: "warning",
-    },
-    {
-        id: "growth",
-        label: "Ce mois",
-        value: "+15%",
-        change: 2,
-        changeType: "increase",
-        icon: "trending-up",
-        color: "info",
-    },
-]
+export const Dashboard: React.FC = () => {
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-// ✅ Skip Links améliorés
-const SkipLinks = () => (
-    <div className="sr-only focus-within:not-sr-only">
-        <a
-            href="#main-content"
-            className="absolute top-4 left-4 bg-purple-600 text-white px-4 py-2 rounded z-50 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        >
-            Aller au contenu principal
-        </a>
-        <a
-            href="#stock-list"
-            className="absolute top-4 left-48 bg-purple-600 text-white px-4 py-2 rounded z-50 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        >
-            Aller à la liste des stocks
-        </a>
-    </div>
-);
 
-export function Dashboard() {
     const { theme } = useTheme();
-    const themeClasses = getThemeClasses(theme);
-    const [searchTerm, setSearchTerm] = useState("")
-    const [isLoaded, setIsLoaded] = useState(false)
-    // 🔴 AJOUT : État pour les notifications accessibles
-    const [notification, setNotification] = useState("")
 
-    const searchInputRef = useRef<HTMLInputElement>(null);
+    const {
+        stocks,
+        stats,
+        loadStocks,
+        createStock,
+        updateStock,
+        deleteStock,
+        updateFilters,
+        resetFilters,
+        getStockById,
+        isLoading,
+        errors,
+        hasAnyError,
+        isAnyLoading,
+        resetErrors
+    } = useStocks();
+
+    const { exportToCsv, isLoading: isExporting } = useDataExport();
+
+    const loadStocksRef = useRef(loadStocks);
+    loadStocksRef.current = loadStocks;
+
+    // Classes CSS basées sur le thème
+    const themeClasses = {
+        background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
+        text: theme === 'dark' ? 'text-white' : 'text-gray-900',
+        textMuted: theme === 'dark' ? 'text-gray-300' : 'text-gray-600',
+        textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
+    };
+
 
     useEffect(() => {
-        setIsLoaded(true)
-        // 🔴 AJOUT : Annoncer le chargement
-        setNotification("Tableau de bord chargé, 248 produits disponibles")
-        setTimeout(() => setNotification(""), 3000)
-    }, [])
+        let mounted = true;
 
-    // Raccourci global Ctrl+K pour recherche
-    useEffect(() => {
-        const handleGlobalKeyDown = (e: KeyboardEvent) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                searchInputRef.current?.focus();
-                setNotification("Focus placé sur la recherche")
-                setTimeout(() => setNotification(""), 2000)
+        const initializeData = async () => {
+            try {
+                await loadStocksRef.current(); // ✅ Utiliser la ref
+                if (mounted) {
+                    setIsLoaded(true);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
             }
         };
 
-        window.addEventListener('keydown', handleGlobalKeyDown);
-        return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-    }, []);
+        initializeData();
 
-    // 🔴 AMÉLIORÉ : Gestionnaire pour la recherche avec notifications
-    const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        switch(e.key) {
-            case 'Escape':
-                setSearchTerm('');
-                e.currentTarget.blur();
-                setNotification("Recherche effacée")
-                setTimeout(() => setNotification(""), 2000)
-                break;
-            case 'Enter':
-                e.preventDefault();
-                const resultCount = mockStocks.filter(stock =>
-                    stock.name.toLowerCase().includes(searchTerm.toLowerCase())
-                ).length;
-                setNotification(`${resultCount} résultats trouvés pour "${searchTerm}"`)
-                setTimeout(() => setNotification(""), 3000)
-                break;
-        }
-    };
+        return () => {
+            mounted = false;
+        };
+    }, []); // ✅ Pas de warning ESLint maintenant
 
-    // 🔴 AMÉLIORÉ : Gestionnaire de changement de recherche
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value);
-        if (e.target.value.length > 2) {
-            const resultCount = mockStocks.filter(stock =>
-                stock.name.toLowerCase().includes(e.target.value.toLowerCase())
-            ).length;
-            setNotification(`${resultCount} résultats en temps réel`)
-            setTimeout(() => setNotification(""), 1500)
+
+    // Mettre à jour les filtres avec useCallback et dépendance stable
+    const handleSearchChange = useCallback((value: string) => {
+        setSearchTerm(value);
+        updateFilters({ query: value });
+    }, [updateFilters]);
+
+    // Gestionnaires d'événements avec useCallback
+    const handleExport = useCallback(async (): Promise<void> => {
+        if (stocks.length === 0) return;
+
+        const stocksForExport = stocks.map(stock => ({ ...stock })) as Record<string, unknown>[];
+
+        const success = await exportToCsv(stocksForExport, 'stocks-export.csv');
+        if (success) {
+            console.log('Export réussi');
         }
-    };
+    }, [stocks, exportToCsv]);
+
+    const handleCreateStock = useCallback(async (): Promise<void> => {
+        const result = await createStock({
+            name: 'Nouveau Stock',
+            quantity: 50,
+            value: 1000,
+            description: 'Stock créé depuis le dashboard'
+        });
+
+        if (result) {
+            console.log('Stock créé:', result);
+        }
+    }, [createStock]);
+
+    const handleDeleteStock = useCallback(async (stockId: number): Promise<void> => {
+        await deleteStock(stockId);
+    }, [deleteStock]);
+
+    const handleUpdateStock = useCallback(async (stockId: number): Promise<void> => {
+        const currentStock = getStockById(stockId);
+        if (currentStock) {
+            await updateStock({
+                id: stockId,
+                quantity: currentStock.quantity + 10
+            });
+        }
+    }, [getStockById, updateStock]);
+
+    const handleViewStock = useCallback((stockId: number): void => {
+        console.log('Voir détails:', getStockById(stockId));
+    }, [getStockById]);
+
+    const handleResetFilters = useCallback(() => {
+        setSearchTerm('');
+        resetFilters();
+    }, [resetFilters]);
+
+    // Affichage d'erreur globale
+    if (hasAnyError) {
+        return (
+            <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text} flex items-center justify-center`}>
+                <Card className="max-w-md">
+                    <h2 className="text-xl font-bold text-red-500 mb-4">Erreur</h2>
+                    <div className="space-y-2 mb-4">
+                        {errors.load && <p className="text-sm text-red-400">Chargement: {errors.load.message}</p>}
+                        {errors.create && <p className="text-sm text-red-400">Création: {errors.create.message}</p>}
+                        {errors.update && <p className="text-sm text-red-400">Mise à jour: {errors.update.message}</p>}
+                        {errors.delete && <p className="text-sm text-red-400">Suppression: {errors.delete.message}</p>}
+                        {errors.storage && <p className="text-sm text-red-400">Stockage: {errors.storage.message}</p>}
+                    </div>
+                    <div className="flex gap-2">
+                        <Button onClick={() => window.location.reload()}>
+                            Recharger
+                        </Button>
+                        <Button variant="secondary" onClick={() => {
+                            resetErrors.load();
+                            resetErrors.create();
+                            resetErrors.update();
+                            resetErrors.delete();
+                        }}>
+                            Réessayer
+                        </Button>
+                    </div>
+                </Card>
+            </div>
+        );
+    }
 
     return (
-        <div className={`min-h-screen ${themeClasses.background}`}>
-            {/* 🔴 AJOUT : Titre principal de page caché mais présent pour les lecteurs d'écran */}
-            <h1 className="sr-only">StockHub - Tableau de bord de gestion des stocks</h1>
+        <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
 
-            <SkipLinks />
             <Header />
-            <NavigationSection />
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8" id="main-content">
-                {/* 🔴 AMÉLIORÉ : Section métriques avec titre et description */}
-                <section aria-labelledby="metrics-heading" className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <h2 id="metrics-heading" className="sr-only">Indicateurs clés de performance</h2>
-                    {mockMetrics.map((metric) => (
-                        <MetricsCard key={metric.id} metric={metric} />
-                    ))}
+            {/* Navigation Section */}
+            <NavSection>
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                    <div>
+                        <h1 className="text-3xl font-bold mb-2">Tableau de Bord</h1>
+                        <p className={themeClasses.textMuted}>
+                            Bienvenue dans votre espace de gestion de stocks intelligent
+                        </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3" role="toolbar" aria-label="Actions principales">
+                        <Button
+                            variant="primary"
+                            icon={Plus}
+                            onClick={handleCreateStock}
+                            loading={isLoading.create}
+                        >
+                            Ajouter un Stock
+                        </Button>
+                        <Button variant="secondary" icon={BarChart3}>
+                            Rapport Détaillé
+                        </Button>
+                        <Button variant="secondary" icon={Search}>
+                            Recherche Avancée
+                        </Button>
+                    </div>
+                </div>
+            </NavSection>
+
+            {/* Main Content avec id pour skip link */}
+            <main id="main-content" className="max-w-7xl mx-auto px-6 py-8" role="main">
+
+                {/* Métriques principales utilisant MetricCard */}
+                <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" aria-labelledby="metrics-heading">
+                    <h2 id="metrics-heading" className="sr-only">Métriques principales</h2>
+
+                    <MetricCard
+                        id="total-products"
+                        label="Total Produits"
+                        value={stats?.total || 0}
+                        change={stats?.optimal || 0}
+                        changeType="increase"
+                        icon="package"
+                        color="success"
+                    />
+
+                    <MetricCard
+                        id="low-stock"
+                        label="Stock Faible"
+                        value={stats?.low || 0}
+                        change={stats?.critical || 0}
+                        changeType="decrease"
+                        icon="alert-triangle"
+                        color="warning"
+                    />
+
+                    <MetricCard
+                        id="total-value"
+                        label="Valeur Totale"
+                        value={`€${stats?.totalValue?.toLocaleString() || 0}`}
+                        change={Math.round((stats?.averageValue || 0) / 10)}
+                        changeType="increase"
+                        icon="trending-up"
+                        color="info"
+                    />
                 </section>
 
-                {/* 🔴 AMÉLIORÉ : Section recherche avec titre et aide contextuelle */}
-                <section aria-labelledby="search-heading" className="mb-8">
-                    <h2 id="search-heading" className="sr-only">Recherche dans l'inventaire</h2>
-                    <div className="max-w-md">
-                        <label htmlFor="product-search" className="sr-only">
-                            Rechercher un produit par nom ou référence
-                        </label>
+                {/* Recherche accessible */}
+                <section className="mb-8" role="search" aria-labelledby="search-heading">
+                    <h2 id="search-heading" className="sr-only">Recherche de produits</h2>
+                    <div className="relative max-w-md">
                         <Input
-                            id="product-search"
-                            ref={searchInputRef}
+                            id="search-input"
                             type="text"
-                            placeholder="Rechercher un produit... (Ctrl+K)"
+                            placeholder="Rechercher un produit..."
                             value={searchTerm}
-                            onChange={handleSearchChange}
-                            onKeyDown={handleSearchKeyDown}
+                            onChange={(e) => handleSearchChange(e.target.value)}
                             icon={Search}
-                            aria-label="Rechercher un produit par nom ou référence. Utilisez Ctrl+K pour accéder rapidement, Échap pour effacer, Entrée pour valider"
                             aria-describedby="search-help"
                         />
                         <div id="search-help" className="sr-only">
-                            Tapez au moins 3 caractères pour voir les résultats en temps réel.
-                            Utilisez les flèches pour naviguer dans les résultats.
+                            Tapez le nom, la catégorie ou le SKU du produit que vous recherchez
                         </div>
                     </div>
                 </section>
 
-                {/* 🔴 AMÉLIORÉ : Section titre stocks avec structure sémantique */}
-                <section aria-labelledby="stocks-heading">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 id="stocks-heading" className="text-2xl font-bold text-white">
-                            Mes Stocks Récents
-                        </h2>
-                        <Button
-                            variant="ghost"
-                            icon={Download}
-                            aria-label="Exporter la liste des stocks récents au format CSV"
-                            aria-describedby="export-help"
-                            onClick={() => {
-                                console.log('Export CSV')
-                                setNotification("Export des stocks en cours...")
-                                setTimeout(() => setNotification("Export terminé"), 2000)
-                            }}
-                        >
-                            Exporter
-                        </Button>
-                        <div id="export-help" className="sr-only">
-                            Télécharge un fichier CSV contenant tous les stocks affichés
+                {/* Section titre stocks */}
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold">Mes Stocks Récents ({stocks.length})</h2>
+                    <Button
+                        variant="ghost"
+                        icon={Download}
+                        onClick={handleExport}
+                        loading={isExporting}
+                        disabled={stocks.length === 0}
+                        aria-describedby="export-help"
+                    >
+                        Exporter
+                    </Button>
+                    <div id="export-help" className="sr-only">
+                        Exporter la liste des stocks au format CSV
+                    </div>
+                </div>
+
+                {/* Loading state accessible */}
+                {isAnyLoading && (
+                    <div className="flex justify-center py-12" role="status" aria-live="polite">
+                        <div className="flex items-center gap-3">
+                            <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+                            <span className={themeClasses.textMuted}>
+                {isLoading.load && 'Chargement des stocks...'}
+                                {isLoading.create && 'Création en cours...'}
+                                {isLoading.update && 'Mise à jour...'}
+                                {isLoading.delete && 'Suppression...'}
+                                {isLoading.storage && 'Sauvegarde...'}
+              </span>
                         </div>
                     </div>
+                )}
 
-                    {/* 🔴 AMÉLIORÉ : Grid des stocks avec compteur et filtrage */}
-                    <div aria-live="polite" aria-label={`${mockStocks.filter(stock =>
-                        searchTerm.length < 3 || stock.name.toLowerCase().includes(searchTerm.toLowerCase())
-                    ).length} stocks affichés sur ${mockStocks.length} au total`}>
-                        <StockGrid
-                            stocks={mockStocks.filter(stock =>
-                                searchTerm.length < 3 || stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+                {/* Grid des stocks  StockGrid */}
+                {!isAnyLoading && (
+                    <StockGrid
+                        stocks={stocks}
+                        isLoaded={isLoaded}
+                        onView={handleViewStock}
+                        onEdit={handleUpdateStock}
+                        onDelete={handleDeleteStock}
+                        isUpdating={isLoading.update}
+                        isDeleting={isLoading.delete}
+                    />
+                )}
+
+                {/* État vide accessible */}
+                {!isAnyLoading && stocks.length === 0 && (
+                    <div className="text-center py-12" role="region" aria-live="polite">
+                        <div className="w-16 h-16 mx-auto mb-4 opacity-50">
+                            📦
+                        </div>
+                        <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
+                        <p className={themeClasses.textMuted}>
+                            {searchTerm
+                                ? `Aucun résultat pour "${searchTerm}". Essayez un autre terme.`
+                                : 'Commencez par ajouter votre premier stock.'
+                            }
+                        </p>
+                        <div className="mt-4 flex gap-2 justify-center">
+                            <Button
+                                variant="primary"
+                                icon={Plus}
+                                onClick={handleCreateStock}
+                                loading={isLoading.create}
+                            >
+                                Ajouter un Stock
+                            </Button>
+                            {searchTerm && (
+                                <Button
+                                    variant="secondary"
+                                    onClick={handleResetFilters}
+                                >
+                                    Effacer les filtres
+                                </Button>
                             )}
-                            isLoaded={isLoaded}
-                            id="stock-list"
-                        />
+                        </div>
                     </div>
-                </section>
+                )}
+
+
             </main>
-
+            
             <Footer />
-
-            {/* 🔴 AJOUT OBLIGATOIRE : Live regions pour les annonces */}
-            <div
-                aria-live="polite"
-                aria-atomic="true"
-                className="sr-only"
-                id="status-announcements"
-            >
-                {notification}
-            </div>
-
-            {/* 🔴 AJOUT : Zone pour les erreurs critiques */}
-            <div
-                aria-live="assertive"
-                aria-atomic="true"
-                className="sr-only"
-                id="error-announcements"
-            >
-                {/* Les erreurs critiques seront annoncées ici */}
-            </div>
         </div>
-    )
-}
+    );
+};
