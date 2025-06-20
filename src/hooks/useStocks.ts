@@ -345,10 +345,10 @@ export const useStocks = () => {
 
     // ===== ACTIONS EXPORTÉES AVEC useCallback =====
     const loadStocks = useCallback(() => loadStocksAction.execute(), [loadStocksAction]);
-    const createStock = useCallback((data: CreateStockData) => createStockAction.execute(data), [createStockAction.execute]);
-    const updateStock = useCallback((data: UpdateStockData) => updateStockAction.execute(data), [updateStockAction.execute]);
-    const deleteStock = useCallback((id: number) => deleteStockAction.execute(id), [deleteStockAction.execute]);
-    const deleteMultipleStocks = useCallback((ids: number[]) => deleteMultipleStocksAction.execute(ids), [deleteMultipleStocksAction.execute]);
+    const createStock = useCallback((data: CreateStockData) => createStockAction.execute(data), [createStockAction]);
+    const updateStock = useCallback((data: UpdateStockData) => updateStockAction.execute(data), [updateStockAction]);
+    const deleteStock = useCallback((id: number) => deleteStockAction.execute(id), [deleteStockAction]);
+    const deleteMultipleStocks = useCallback((ids: number[]) => deleteMultipleStocksAction.execute(ids), [deleteMultipleStocksAction]);
 
     // ===== RETURN OBJECT =====
     return {
