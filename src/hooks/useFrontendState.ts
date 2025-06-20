@@ -88,7 +88,7 @@ export const useFrontendState = <T>(initialData: T | null = null) => {
 };
 
 // ===== HOOK POUR ACTIONS ASYNCHRONES SIMULÉES =====
-export const useAsyncAction = <T, P extends any[] = []>(
+export const useAsyncAction = <T, P extends unknown[] = []>(
     action: (...args: P) => Promise<T> | T,
     options: {
         onSuccess?: (data: T) => void;
@@ -160,7 +160,7 @@ export interface ValidationRule<T> {
     message: string;
 }
 
-export const useFormValidation = <T extends Record<string, any>>(
+export const useFormValidation = <T extends Record<string, unknown>>(
     initialData: T,
     validationRules: Partial<Record<keyof T, ValidationRule<T[keyof T]>[]>>
 ) => {
@@ -329,7 +329,7 @@ export const useFileHandler = () => {
 export const useDataExport = () => {
     const exportState = useFrontendState<Blob>();
 
-    const exportToCsv = useCallback(async <T extends Record<string, any>>(
+    const exportToCsv = useCallback(async <T extends Record<string, unknown>>(
         data: T[],
         filename: string = 'export.csv'
     ): Promise<boolean> => {
