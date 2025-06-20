@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {BarChart3, Download, Plus, Search,} from 'lucide-react';
 
 // Import de tes composants existants
@@ -42,6 +42,9 @@ export const Dashboard: React.FC = () => {
 
     const { exportToCsv, isLoading: isExporting } = useDataExport();
 
+    const loadStocksRef = useRef(loadStocks);
+    loadStocksRef.current = loadStocks;
+
     // Classes CSS basées sur le thème
     const themeClasses = {
         background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -56,7 +59,7 @@ export const Dashboard: React.FC = () => {
 
         const initializeData = async () => {
             try {
-                await loadStocks();
+                await loadStocksRef.current(); // ✅ Utiliser la ref
                 if (mounted) {
                     setIsLoaded(true);
                 }
@@ -70,7 +73,8 @@ export const Dashboard: React.FC = () => {
         return () => {
             mounted = false;
         };
-    }, []); // Dépendance vide - exécuté une seule fois
+    }, []); // ✅ Pas de warning ESLint maintenant
+
 
     // Mettre à jour les filtres avec useCallback et dépendance stable
     const handleSearchChange = useCallback((value: string) => {
@@ -82,7 +86,9 @@ export const Dashboard: React.FC = () => {
     const handleExport = useCallback(async (): Promise<void> => {
         if (stocks.length === 0) return;
 
-        const success = await exportToCsv(stocks, 'stocks-export.csv');
+        const stocksForExport = stocks.map(stock => ({ ...stock })) as Record<string, unknown>[];
+
+        const success = await exportToCsv(stocksForExport, 'stocks-export.csv');
         if (success) {
             console.log('Export réussi');
         }
