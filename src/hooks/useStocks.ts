@@ -1,43 +1,8 @@
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import type {SearchFilters, Stock, StockStatus} from '@/types';
 import {createFrontendError, useAsyncAction, useLocalStorageState} from './useFrontendState';
 import {stockData} from "@/data/stockData.ts";
 
-// ===== DONNÉES MOCK TYPÉES =====
-// const INITIAL_STOCKS: Stock[] = [
-//     {
-//         id: 1,
-//         name: "MyFirstStock",
-//         quantity: 156,
-//         value: 2450,
-//         status: "optimal",
-//         lastUpdate: "2h"
-//     },
-//     {
-//         id: 2,
-//         name: "MonTest",
-//         quantity: 89,
-//         value: 1780,
-//         status: "optimal",
-//         lastUpdate: "1h"
-//     },
-//     {
-//         id: 3,
-//         name: "StockVide",
-//         quantity: 3,
-//         value: 150,
-//         status: "low",
-//         lastUpdate: "30min"
-//     },
-//     {
-//         id: 4,
-//         name: "Stock Critique",
-//         quantity: 0,
-//         value: 0,
-//         status: "critical",
-//         lastUpdate: "5min"
-//     }
-// ];
 
 // ===== TYPES POUR ACTIONS STOCKS =====
 export interface CreateStockData {
@@ -58,11 +23,20 @@ export const useStocks = () => {
     const {
         value: stocks,
         setValue: setStocks,
-        loading: storageLoading,
         error: storageError
     } = useLocalStorageState<Stock[]>('stocks', stockData);
 
+    const [storageLoading, setStorageLoading] = useState(true);
+    useEffect(() => {
+        // Simulation du temps de chargement initial du localStorage
+        const timer = setTimeout(() => {
+            setStorageLoading(false);
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, []);
     const [filters, setFilters] = useState<SearchFilters>({});
+
 
     // ===== ACTIONS AVEC GESTION D'ERREURS =====
 
