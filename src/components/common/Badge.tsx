@@ -38,11 +38,7 @@ export const Badge: React.FC<BadgeProps> = ({
 
     return (
         <span
-            className={`
-        ${sizes[size]} rounded-full font-medium border 
-        ${variants[variant]} 
-        ${className}
-      `}
+            className={`${sizes[size]} rounded-full font-medium border ${variants[variant]} ${className}`.trim()}
         >
       {children}
     </span>

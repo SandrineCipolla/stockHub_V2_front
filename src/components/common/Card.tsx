@@ -36,14 +36,7 @@ export const Card: React.FC<CardProps> = ({
 
     return (
         <div
-            className={`
-        ${baseClasses} 
-        backdrop-blur-sm border rounded-xl p-6
-        transition-all duration-300
-        ${hoverClasses}
-        ${clickableClasses}
-        ${className}
-      `}
+            className={`${baseClasses} backdrop-blur-sm border rounded-xl p-6 transition-all duration-300 ${hoverClasses} ${clickableClasses} ${className}`.trim()}
             onClick={onClick}
             role={role}
             tabIndex={onClick ? 0 : undefined}

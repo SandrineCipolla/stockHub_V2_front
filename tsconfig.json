@@ -22,7 +22,8 @@
   },
   "include": [
     "src/**/*",
-    "documentation/V2/ARCHITECTURE.md"
+    "documentation/V2/ARCHITECTURE.md",
+    "node_modules/vitest/globals.d.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
