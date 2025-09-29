@@ -261,6 +261,79 @@ npm run type-check
 
 🔄 À reporter : Rien - Séance 1 SURVALIDÉE ✅⭐
 ```
+### Séance 2 -  Tests Dashboard (Date : 29/09/2025)
+```
+⏱️ Temps réel : 2h15min (estimé 2h)
+
+✅ Réalisé :
+- Tests MetricCard.tsx : 15-20 tests, coverage 100%
+- Tests StockCard.tsx : 34 tests, coverage 99.19%
+- Tests StockGrid.tsx : 31 tests, coverage 100%
+- Structure BDD avec 3 niveaux (Component > Category > when > should)
+- Section "StockHub business use cases" pour tests métier
+- 80-85 tests dashboard fonctionnels
+- Coverage components/dashboard : 99.56% ⭐
+
+❌ Difficultés :
+- Mock de StockCard dans StockGrid (résolu : test d'intégration sans mock)
+- Sélection DOM sans data-testid (résolu : querySelector sur 'article')
+- Pattern de tests : confusion entre mock et intégration réelle
+- Tests d'intégration vs tests unitaires (choix architecture)
+
+💡 Apprentissages :
+- Tests d'intégration préférables pour composants wrapper simples
+- StockGrid teste le vrai StockCard → plus robuste, détecte bugs réels
+- Structure 3 niveaux : Component > Feature > Context > Test
+- Section business cases = documentation vivante des user flows
+- querySelectorAll('article') pour compter éléments sans testid
+- forEach sur NodeList pour assertions sur collections
+
+✅ Validation Séance 2 :
+- [x] 80+ tests passent (objectif : 55)
+- [x] Coverage 99.56% dashboard (objectif : 80%+)
+- [x] Pattern BDD business cases établi
+
+🔄 À reporter : Rien - Séance 2 SURVALIDÉE ✅⭐
+```
+### Séance 3 - Tests Hooks (Date : 29/09/2025)
+```
+⏱️ Temps réel : 2h45min (estimé 2h30)
+
+✅ Réalisé :
+- Tests useTheme.tsx : 30 tests, coverage 100%
+- Tests useStocks.tsx : 35 tests, coverage 86.59%
+- Tests useFrontendState.tsx : 24 tests, coverage 76.19%
+- Mock localStorage avec objet closure
+- Mock DOM (createElement, appendChild) pour tests CSV export
+- Tests CRUD complets avec validation métier
+- 89 tests hooks fonctionnels
+- Coverage hooks : 82.17% ⭐
+
+❌ Difficultés :
+- Typage TypeScript implicite (résolu : type explicite `any` sur variables async)
+- Mock DOM pour export CSV (appendChild/removeChild)
+- Erreur "Target container is not a DOM element" (résolu : vi.spyOn au lieu de remplacement direct)
+- Variables déclarées mais non utilisées (originalAppendChild)
+
+💡 Apprentissages :
+- renderHook avec wrapper pour Context Provider
+- Mock localStorage : objet closure pour simuler storage
+- Mock DOM complexe : vi.spyOn() > remplacement direct
+- vi.restoreAllMocks() dans afterEach pour cleanup
+- Type explicite nécessaire sur variables async let/const
+- Tests hooks = tester logique métier sans UI
+
+✅ Validation Séance 3 :
+- [x] 89 tests passent (objectif : 55)
+- [x] Coverage 82.17% hooks (objectif : 70%+)
+- [x] useTheme 100% coverage
+- [x] useStocks 86.59% (logique métier critique couverte)
+
+🔄 À reporter : 
+- Lignes non couvertes useStocks (109, 230-234) : error handlers edge cases
+- Lignes non couvertes useFrontendState : fonctions commentées
+→ Non critique, logique principale 100% testée
+```
 
 ### Séance 2 - Tests Coverage (Date : ___/___/___)
 ```
