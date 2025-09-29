@@ -33,17 +33,17 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ### 📅 **SEMAINE 1 - Tests Unitaires (4h)**
 
 #### **Soirée 1 - Mardi (2h) : Setup Tests + Composants UI**
-- [ ] **Installation dépendances** (30min)
+- [x ] **Installation dépendances** (30min)
   ```bash
   npm install -D vitest @vitest/ui @testing-library/react @testing-library/user-event jsdom
   ```
-- [ ] **Configuration Vitest** (30min)
-  - [ ] Créer `vitest.config.ts`
-  - [ ] Mettre à jour `package.json` (scripts tests)
-- [ ] **Tests composants UI** (60min)
-  - [ ] Tests Button (variantes, disabled, onClick)
-  - [ ] Tests Card (props, hover, accessibility)
-  - [ ] Tests Badge (statuts, couleurs)
+- [x ] **Configuration Vitest** (30min)
+  - [x ] Créer `vitest.config.ts`
+  - [ x] Mettre à jour `package.json` (scripts tests)
+- [x ] **Tests composants UI** (60min)
+  - [x ] Tests Button (variantes, disabled, onClick)
+  - [x ] Tests Card (props, hover, accessibility)
+  - [x ] Tests Badge (statuts, couleurs)
 
 #### **Soirée 2 - Jeudi (2h) : Tests Principaux + Coverage**
 - [ ] **Tests Dashboard** (60min)
@@ -129,12 +129,12 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ## 📋 CHECKLIST PAR LIVRABLE
 
 ### 🧪 **Livrable 1 : Tests Unitaires**
-- [ ] Vitest configuré et fonctionnel
-- [ ] Tests Button, Card, Badge passent
+- [x ] Vitest configuré et fonctionnel
+- [x ] Tests Button, Card, Badge passent
 - [ ] Tests Dashboard passent
 - [ ] Coverage ≥ 80%
-- [ ] Script `npm run test` fonctionne
-- [ ] Script `npm run test:coverage` fonctionne
+- [x ] Script `npm run test` fonctionne
+- [x ] Script `npm run test:coverage` fonctionne
 
 ### 🎨 **Livrable 2 : Créativité Visuelle**
 - [ ] 5 statuts stocks définis avec couleurs
@@ -227,13 +227,39 @@ npm run type-check
 
 ## 📝 NOTES ET OBSERVATIONS
 
-### Séance 1 - Tests Setup (Date : ___/___/___)
+### Séance 1 - Tests Setup (Date : 28/09/2025)
 ```
-⏱️ Temps réel : ___h___min
+⏱️ Temps réel : 2h30 (incluant bonus Input)
+
 ✅ Réalisé :
+- Setup Vitest + React Testing Library + configuration complète
+- Tests Button.tsx : 21 tests, coverage 95.45%
+- Tests Card.tsx : 14 tests, coverage 94.28%
+- Tests Badge.tsx : 18 tests, coverage 90%
+- Tests Input.tsx : 33 tests, coverage 98.46% (BONUS)
+- Structure BDD avec 2 niveaux describe (when/should)
+- 86 tests unitaires fonctionnels, 100% de succès
+- Coverage components/common : 95.4% ⭐
+
 ❌ Difficultés :
+- Mock du contexte useTheme pour les composants
+- Sélection des éléments DOM (parentElement vs closest)
+- Classes CSS non appliquées (espaces dans template literals)
+- Export nommé vs export default des composants
+
 💡 Apprentissages :
-🔄 À reporter :
+- vi.mock() pour mocker les hooks React
+- closest() pour sélectionner le bon élément DOM
+- .trim() nécessaire sur les template literals multi-lignes
+- toHaveClass() teste les classes individuellement
+- Importance de tester le comportement plutôt que l'implémentation
+
+✅ Validation Séance 1 :
+- [x] 86 tests passent (objectif : 50+)
+- [x] Coverage 95.4% sur common (objectif : 80%+)
+- [x] 100% Functions couvertes
+
+🔄 À reporter : Rien - Séance 1 SURVALIDÉE ✅⭐
 ```
 
 ### Séance 2 - Tests Coverage (Date : ___/___/___)
