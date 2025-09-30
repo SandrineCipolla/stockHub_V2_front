@@ -3,6 +3,7 @@ import {act, renderHook, waitFor} from '@testing-library/react';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import type {CreateStockData, UpdateStockData} from '@/hooks/useStocks';
 import {useStocks} from '@/hooks/useStocks';
+import {Stock} from '@/types/index.ts';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -97,7 +98,7 @@ describe('useStocks Hook', () => {
                     description: 'Test description'
                 };
 
-                let createdStock: any;
+                let createdStock: Stock | null = null;
                 await act(async () => {
                     createdStock = await result.current.createStock(newStockData);
                 });
@@ -117,12 +118,13 @@ describe('useStocks Hook', () => {
                     value: 1000
                 };
 
-                let created: any;
+                let created: Stock | null = null;
                 await act(async () => {
                     created = await result.current.createStock(optimalStock);
                 });
 
-                expect(created?.status).toBe('optimal');
+                expect(created).not.toBeNull();
+                expect(created!.status).toBe('optimal');
             });
 
             it('should set status to low for quantity < 10', async () => {
@@ -134,12 +136,13 @@ describe('useStocks Hook', () => {
                     value: 500
                 };
 
-                let created: any;
+                let created: Stock | null= null;
                 await act(async () => {
                     created = await result.current.createStock(lowStock);
                 });
 
-                expect(created?.status).toBe('low');
+                expect(created).not.toBeNull();
+                expect(created!.status).toBe('low');
             });
 
             it('should set status to critical for quantity = 0', async () => {
@@ -151,12 +154,13 @@ describe('useStocks Hook', () => {
                     value: 0
                 };
 
-                let created: any;
+                let created: Stock | null = null;
                 await act(async () => {
                     created = await result.current.createStock(criticalStock);
                 });
 
-                expect(created?.status).toBe('critical');
+                expect(created).not.toBeNull();
+                expect(created!.status).toBe('critical');
             });
         });
 
@@ -173,8 +177,10 @@ describe('useStocks Hook', () => {
                 await act(async () => {
                     try {
                         await result.current.createStock(invalidStock);
-                    } catch (error: any) {
-                        expect(error.message).toContain('obligatoire');
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            expect(error.message).toContain('obligatoire');
+                        }
                     }
                 });
             });
@@ -191,8 +197,10 @@ describe('useStocks Hook', () => {
                 await act(async () => {
                     try {
                         await result.current.createStock(invalidStock);
-                    } catch (error: any) {
-                        expect(error.message).toContain('négative');
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            expect(error.message).toContain('negative');
+                        }
                     }
                 });
             });
@@ -209,8 +217,10 @@ describe('useStocks Hook', () => {
                 await act(async () => {
                     try {
                         await result.current.createStock(invalidStock);
-                    } catch (error: any) {
-                        expect(error.message).toContain('négative');
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            expect(error.message).toContain('negative');
+                        }
                     }
                 });
             });
@@ -231,8 +241,10 @@ describe('useStocks Hook', () => {
                 await act(async () => {
                     try {
                         await result.current.createStock(stock);
-                    } catch (error: any) {
-                        expect(error.message).toContain('existe déjà');
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            expect(error.message).toContain('existe deja');
+                        }
                     }
                 });
             });
@@ -273,12 +285,13 @@ describe('useStocks Hook', () => {
                     value: 1000
                 };
 
-                let created: any;
+                let created: Stock | null = null;
                 await act(async () => {
                     created = await result.current.createStock(newStock);
                 });
 
-                expect(created?.status).toBe('optimal');
+                expect(created).not.toBeNull();
+                expect(created!.status).toBe('optimal');
 
                 await act(async () => {
                     await result.current.updateStock({
@@ -306,8 +319,10 @@ describe('useStocks Hook', () => {
                 await act(async () => {
                     try {
                         await result.current.updateStock(updateData);
-                    } catch (error: any) {
-                        expect(error.message).toContain('introuvable');
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            expect(error.message).toContain('introuvable');
+                        }
                     }
                 });
             });
@@ -344,8 +359,10 @@ describe('useStocks Hook', () => {
                 await act(async () => {
                     try {
                         await result.current.deleteStock(99999);
-                    } catch (error: any) {
-                        expect(error.message).toContain('introuvable');
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            expect(error.message).toContain('introuvable');
+                        }
                     }
                 });
             });
@@ -381,8 +398,10 @@ describe('useStocks Hook', () => {
                 await act(async () => {
                     try {
                         await result.current.deleteMultipleStocks([]);
-                    } catch (error: any) {
-                        expect(error.message).toContain('Aucun stock sélectionné');
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            expect(error.message).toContain('aucun stock selectionné');
+                        }
                     }
                 });
             });
@@ -569,12 +588,12 @@ describe('useStocks Hook', () => {
                     value: 5000
                 };
 
-                let created: any;
+                let created: Stock | null = null;
                 await act(async () => {
                     created = await result.current.createStock(newStock);
                 });
 
-                expect(created).toBeDefined();
+                expect(created).not.toBeNull();
 
                 // Update
                 await act(async () => {

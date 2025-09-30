@@ -32,11 +32,11 @@ beforeEach(() => {
 
     // Mock appendChild/removeChild
     vi.spyOn(document.body, 'appendChild').mockImplementation((node: Node) => {
-        return node as any;
+        return node as HTMLElement;
     });
 
     vi.spyOn(document.body, 'removeChild').mockImplementation((node: Node) => {
-        return node as any;
+        return node as HTMLElement;
     });
 
     // Mock URL methods

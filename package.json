@@ -8,6 +8,7 @@
     "generate-sitemap": "tsx scripts/generate-sitemap.ts",
     "build": "npm run generate-sitemap && tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "test": "vitest",

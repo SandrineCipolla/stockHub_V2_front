@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import {
-  Package,
-  TrendingUp,
   AlertTriangle,
-  Plus,
-  Search,
   BarChart3,
-  Eye,
-  Edit3,
-  Trash2,
-  Sun,
-  Moon,
   Bell,
-  User,
-  Home,
   ChevronRight,
   Download,
+  Edit3,
+  Eye,
+  Home,
+  Moon,
+  Package,
+  Plus,
+  Search,
+  Sun,
+  Trash2,
+  TrendingUp,
+  User,
 } from "lucide-react";
 
 export const StockHubDesignSystemAligned = () => {
@@ -101,7 +101,7 @@ export const StockHubDesignSystemAligned = () => {
     children?: React.ReactNode;
     icon?: React.ElementType;
     className?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   const Button = ({
     variant = "primary",
