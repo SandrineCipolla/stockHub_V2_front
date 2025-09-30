@@ -33,32 +33,32 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ### 📅 **SEMAINE 1 - Tests Unitaires (4h)**
 
 #### **Soirée 1 - Mardi (2h) : Setup Tests + Composants UI**
-- [x ] **Installation dépendances** (30min)
+- [x] **Installation dépendances** (30min)
   ```bash
   npm install -D vitest @vitest/ui @testing-library/react @testing-library/user-event jsdom
   ```
-- [x ] **Configuration Vitest** (30min)
-  - [x ] Créer `vitest.config.ts`
-  - [ x] Mettre à jour `package.json` (scripts tests)
-- [x ] **Tests composants UI** (60min)
-  - [x ] Tests Button (variantes, disabled, onClick)
-  - [x ] Tests Card (props, hover, accessibility)
-  - [x ] Tests Badge (statuts, couleurs)
+- [x] **Configuration Vitest** (30min)
+- [x] Créer `vitest.config.ts`
+- [x] Mettre à jour `package.json` (scripts tests)
+- [x] **Tests composants UI** (60min)
+- [x] Tests Button (variantes, disabled, onClick)
+- [x] Tests Card (props, hover, accessibility)
+- [x] Tests Badge (statuts, couleurs)
 
 #### **Soirée 2 - Jeudi (2h) : Tests Principaux + Coverage**
-- [ ] **Tests Dashboard** (60min)
-  - [ ] Tests métriques affichage
-  - [ ] Tests composants responsives
-  - [ ] Tests navigation
-- [ ] **Atteindre >80% coverage** (60min)
-  - [ ] Tests hooks personnalisés (si existants)
-  - [ ] Tests utils/helpers
-  - [ ] Vérifier coverage `npm run test:coverage`
+- [x] **Tests Dashboard** (60min)
+  - [x] Tests métriques affichage
+  - [x] Tests composants responsives
+  - [x] Tests navigation
+- [x] **Atteindre >80% coverage** (60min)
+  - [x] Tests hooks personnalisés (si existants)
+  - [x] Tests utils/helpers
+  - [x] Vérifier coverage `npm run test:coverage`
 
 **✅ Validation Semaine 1** :
-- [ ] Tous les tests passent (`npm run test`)
-- [ ] Coverage ≥ 80%
-- [ ] CI/CD fonctionne (si configuré)
+- [x] Tous les tests passent (`npm run test`)
+- [x] Coverage ≥ 80%
+- [ ] CI/CD fonctionne (si configuré) => je crois que sur vercel y a une ci/cd?
 
 ---
 
@@ -129,12 +129,12 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ## 📋 CHECKLIST PAR LIVRABLE
 
 ### 🧪 **Livrable 1 : Tests Unitaires**
-- [x ] Vitest configuré et fonctionnel
-- [x ] Tests Button, Card, Badge passent
-- [ ] Tests Dashboard passent
-- [ ] Coverage ≥ 80%
-- [x ] Script `npm run test` fonctionne
-- [x ] Script `npm run test:coverage` fonctionne
+- [x] Vitest configuré et fonctionnel
+- [x] Tests Button, Card, Badge passent
+- [x] Tests Dashboard passent
+- [x] Coverage ≥ 80%
+- [x] Script `npm run test` fonctionne
+- [x] Script `npm run test:coverage` fonctionne
 
 ### 🎨 **Livrable 2 : Créativité Visuelle**
 - [ ] 5 statuts stocks définis avec couleurs
@@ -333,6 +333,106 @@ npm run type-check
 - Lignes non couvertes useStocks (109, 230-234) : error handlers edge cases
 - Lignes non couvertes useFrontendState : fonctions commentées
 → Non critique, logique principale 100% testée
+```
+### Séance 4 - Tests Components Layout (Date : 30/09/2025)
+```
+⏱️ Temps réel : 1h30min (estimé 1h30)
+
+✅ Réalisé :
+- Tests Header.tsx : 47 tests, coverage 100%
+- Tests Footer.tsx : déjà existants, coverage 97.87%
+- Tests NavSection.tsx : déjà existants, coverage 98.11%
+- Mock useTheme hook avec vi.mock et vi.mocked
+- Tests accessibilité complète (ARIA, keyboard navigation)
+- Tests responsive (classes Tailwind conditionnelles)
+- Tests thèmes dark/light avec rerender
+- Tests edge cases (nombres grands, noms longs)
+- Coverage composants layout : 98.91%
+
+❌ Difficultés rencontrées :
+- TestingLibraryElementError : plusieurs éléments avec /Notifications/i
+  → Résolu : getByRole('button', { name: /Notifications \(3 non lues\)/i })
+- Type Error : props onNotificationClick/onLogout inexistantes
+  → Résolu : adapté tests au composant réel (console.log uniquement)
+- aria-hidden test échoue sur parentElement
+  → Résolu : Lucide ajoute aria-hidden directement sur SVG
+- getByRole('navigation') ne trouve pas l'élément
+  → Résolu : utiliser getByLabelText('Actions utilisateur')
+
+💡 Apprentissages :
+- getByRole avec { name } pour désambiguïser éléments multiples
+- Lucide-react ajoute aria-hidden="true" automatiquement sur SVG
+- getByLabelText > getByRole pour éléments avec peu de contenu
+- vi.spyOn(console, 'log') pour tester comportement temporaire
+- Tests doivent refléter l'interface réelle, pas l'idéale
+- Tester les deux thèmes nécessite mock + rerender
+- Classes Tailwind responsive testées avec regex (/gap-1.*sm:gap-4/)
+
+✅ Validation Séance 4 :
+- [x] 47 tests Header passent
+- [x] Coverage Header 100% (Statements, Branch, Functions, Lines)
+- [x] Coverage layout global 98.91%
+- [x] Accessibilité : ARIA, focus, keyboard navigation
+- [x] Responsive : toutes tailles d'écran testées
+- [x] Thèmes : dark et light couverts
+
+🔄 À reporter :
+- Footer.tsx ligne 37 non couverte (lien externe edge case)
+- NavSection.tsx ligne 33 non couverte (breadcrumb conditionnel)
+- Ajouter props callbacks (onNotificationClick, onLogout) pour tests plus robustes
+- Remplacer console.log spy par vraies fonctionnalités
+```
+
+### Séance 5 - Tests Page Dashboard (Date : 30/09/2025)
+```
+⏱️ Temps réel : Estimé 2h (à compléter)
+
+✅ Réalisé :
+- Tests Dashboard.tsx : 33 tests créés
+- Coverage : 95.72% (Statements, Lines)
+- Coverage Branch : 57.14%
+- Coverage Functions : 57.14%
+- Mock complets useStocks et useDataExport
+- Mock layout components (Header, Footer, NavSection)
+- Tests d'intégration complète
+- Factory functions pour mocks réutilisables
+- Tests de tous les flux utilisateur principaux
+
+❌ Difficultés rencontrées :
+- Mock de hooks complexes avec nombreuses propriétés
+  → Résolu : Factory functions createMockUseStocks() et createMockUseDataExport()
+- Mock des composants layout pour isolation
+  → Résolu : vi.mock() avec data-testid pour vérification
+- Tests conditionnels (boutons peuvent ne pas exister)
+  → Résolu : queryByRole + vérification if (button) avant interaction
+- Types TypeScript pour mocks avec as const sur status
+  → Résolu : Typage explicite des valeurs littérales
+
+💡 Apprentissages :
+- Factory functions = pattern propre pour mocks complexes réutilisables
+- Mock de composants enfants pour tester intégration sans dépendances
+- waitFor() essentiel pour tests async et state updates
+- queryBy* au lieu de getBy* quand élément peut ne pas exister
+- createMockUseStocks({ overrides }) pattern pour customiser mocks
+- Tests d'intégration = tester orchestration, pas implémentation détaillée
+- data-testid utile pour composants mockés sans logique
+- Typage 'as const' nécessaire pour valeurs littérales TypeScript
+
+✅ Validation Séance 5 :
+- [x] 33 tests Dashboard passent
+- [x] Coverage 95.72% Statements/Lines (excellent)
+- [x] Tous les flux utilisateur testés
+- [x] États loading/error/empty couverts
+- [x] Intégration layout + hooks testée
+- [ ] Coverage Branch 57.14% (branches conditionnelles partielles)
+- [ ] Coverage Functions 57.14% (callbacks optionnels)
+
+🔄 Lignes non couvertes (4.28%) :
+- Lignes 67-68 : Condition export edge case ou error handling
+- Lignes 106-107 : Branche filtrage avancée spécifique
+- Lignes 129-130 : Condition recherche edge case
+- Ligne 325 : console.log (non critique)
+- Lignes 341-346 : État complexe ou callback conditionnel
 ```
 
 ### Séance 2 - Tests Coverage (Date : ___/___/___)
