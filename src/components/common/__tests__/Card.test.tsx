@@ -1,10 +1,10 @@
 import {fireEvent, render, screen} from '@testing-library/react'
 import {describe, expect, it, vi} from 'vitest'
 
-// Import du VRAI composant Card
+
 import {Card} from '../Card'
 
-// Mock du hook useTheme
+
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'light' })
 }))
@@ -27,7 +27,7 @@ describe('Card Component', () => {
 
             it('should apply base CSS classes', () => {
                 render(<Card>Test content</Card>)
-                // Le vrai Card est le conteneur direct du texte, pas son parent
+
                 const card = screen.getByText('Test content').closest('div')
 
                 // Classes toujours présentes
@@ -184,7 +184,6 @@ describe('Card Component', () => {
                     </Card>
                 )
 
-                // Vérification du contenu
                 expect(screen.getByText('MyFirstStock')).toBeInTheDocument()
                 expect(screen.getByText('Quantité: 156')).toBeInTheDocument()
                 expect(screen.getByText('Valeur: 2450€')).toBeInTheDocument()

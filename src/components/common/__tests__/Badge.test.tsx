@@ -1,10 +1,10 @@
 import {render, screen} from '@testing-library/react'
 import {describe, expect, it, vi} from 'vitest'
 
-// Import du VRAI composant Badge
+
 import {Badge} from '../Badge'
 
-// Mock du hook useTheme si nécessaire
+
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'light' })
 }))
@@ -44,7 +44,6 @@ describe('Badge Component', () => {
                 render(<Badge variant="success">Success</Badge>)
                 const badge = screen.getByText('Success')
 
-                // Les classes dépendent du thème mocké (light)
                 expect(badge.className).toContain('emerald')
             })
         })

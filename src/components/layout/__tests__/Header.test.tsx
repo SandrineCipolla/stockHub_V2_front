@@ -402,12 +402,10 @@ describe('Header Component', () => {
 
             render(<Header />);
 
-            // Vérifie que le hook est appelé
             expect(useThemeModule.useTheme).toHaveBeenCalled();
         });
 
         it('should render correctly in both themes', () => {
-            // Test dark theme
             vi.mocked(useThemeModule.useTheme).mockReturnValue({
                 theme: 'dark',
                 toggleTheme: vi.fn(),
@@ -418,7 +416,6 @@ describe('Header Component', () => {
             let header = container.querySelector('header');
             expect(header?.className).toContain('bg-slate-900/90');
 
-            // Test light theme
             vi.mocked(useThemeModule.useTheme).mockReturnValue({
                 theme: 'light',
                 toggleTheme: vi.fn(),

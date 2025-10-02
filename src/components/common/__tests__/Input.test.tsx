@@ -2,10 +2,9 @@ import {fireEvent, render, screen} from '@testing-library/react'
 import {describe, expect, it, vi} from 'vitest'
 import {Mail, Search} from 'lucide-react'
 
-// Import du VRAI composant Input
+
 import {Input} from '../Input'
 
-// Mock du hook useTheme
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'light' })
 }))

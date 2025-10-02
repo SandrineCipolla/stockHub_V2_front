@@ -1,4 +1,3 @@
-// tests/hooks/useStocks.test.tsx
 import {act, renderHook, waitFor} from '@testing-library/react';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import type {CreateStockData, UpdateStockData} from '@/hooks/useStocks';
@@ -581,7 +580,6 @@ describe('useStocks Hook', () => {
             it('should create, update, and delete stock', async () => {
                 const { result } = renderHook(() => useStocks());
 
-                // Create
                 const newStock: CreateStockData = {
                     name: 'Business Stock',
                     quantity: 100,
@@ -595,7 +593,6 @@ describe('useStocks Hook', () => {
 
                 expect(created).not.toBeNull();
 
-                // Update
                 await act(async () => {
                     await result.current.updateStock({
                         id: created!.id,
@@ -608,7 +605,6 @@ describe('useStocks Hook', () => {
                     expect(updated?.quantity).toBe(150);
                 });
 
-                // Delete
                 await act(async () => {
                     await result.current.deleteStock(created!.id);
                 });

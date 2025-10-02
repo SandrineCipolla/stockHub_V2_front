@@ -5,12 +5,10 @@ import {describe, expect, it, vi} from 'vitest';
 import type {Stock} from '@/types';
 import {StockGrid} from '../StockGrid';
 
-// Mock du hook useTheme (utilisé par StockCard)
+
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'dark' })
 }));
-
-// Note: On ne mock PAS StockCard ici, on teste l'intégration réelle
 
 // Helper pour créer un stock de test
 const createMockStock = (id: number, overrides?: Partial<Stock>): Stock => ({

@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import type {Stock} from '@/types';
 import {StockCard} from '../StockCard';
 
-// Mock du hook useTheme
+
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'dark' })
 }));

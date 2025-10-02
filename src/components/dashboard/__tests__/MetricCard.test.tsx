@@ -1,10 +1,9 @@
 import {render, screen} from '@testing-library/react'
 import {describe, expect, it, vi} from 'vitest'
 
-// Import du VRAI composant
+
 import {MetricCard} from '../MetricCard'
 
-// Mock du hook useTheme
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'light' })
 }))

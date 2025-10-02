@@ -1,4 +1,3 @@
-// tests/pages/Dashboard.test.tsx
 import {render, screen, waitFor} from '@testing-library/react';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import userEvent from '@testing-library/user-event';
@@ -6,7 +5,7 @@ import {Dashboard} from '@/pages/Dashboard';
 import * as useStocksModule from '@/hooks/useStocks';
 import * as useFrontendStateModule from '@/hooks/useFrontendState';
 
-// Mock des hooks
+
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'dark' })
 }));

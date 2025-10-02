@@ -1,19 +1,18 @@
-// tests/hooks/useFrontendState.test.tsx
 import {act, renderHook, waitFor} from '@testing-library/react';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {useDataExport} from '@/hooks/useFrontendState';
 
-// Store original implementations
+
 const originalCreateElement = document.createElement.bind(document);
 
-// Mock variables
+
 const mockCreateObjectURL = vi.fn();
 const mockRevokeObjectURL = vi.fn();
 const mockLinkClick = vi.fn();
 const mockSetAttribute = vi.fn();
 
 beforeEach(() => {
-    // Mock document.createElement to return a proper link element
+    
     vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
         if (tag === 'a') {
             const mockLink = {
@@ -30,7 +29,6 @@ beforeEach(() => {
         return originalCreateElement(tag);
     });
 
-    // Mock appendChild/removeChild
     vi.spyOn(document.body, 'appendChild').mockImplementation((node: Node) => {
         return node as HTMLElement;
     });
@@ -39,7 +37,7 @@ beforeEach(() => {
         return node as HTMLElement;
     });
 
-    // Mock URL methods
+
     mockCreateObjectURL.mockReturnValue('blob:mock-url');
     URL.createObjectURL = mockCreateObjectURL;
     URL.revokeObjectURL = mockRevokeObjectURL;

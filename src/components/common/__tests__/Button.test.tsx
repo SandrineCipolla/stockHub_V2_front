@@ -5,7 +5,7 @@ import {Plus, User} from 'lucide-react'
 
 import {Button} from '../Button'
 
-// Mock du hook useTheme pour éviter les erreurs de contexte
+
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'light' })
 }))

@@ -1,4 +1,3 @@
-// tests/hooks/useTheme.test.tsx
 import {act, renderHook, waitFor} from '@testing-library/react';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {useTheme} from '@/hooks/useTheme';
@@ -63,7 +62,6 @@ describe('useTheme Hook', () => {
 
         describe('when hook is used outside ThemeProvider', () => {
             it('should throw error', () => {
-                // Supprimer le console.error pour ce test
                 const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
                 expect(() => {
@@ -280,17 +278,15 @@ describe('useTheme Hook', () => {
             it('should persist preference across sessions', () => {
                 const { result, unmount } = renderHook(() => useTheme(), { wrapper });
 
-                // User clicks theme toggle
                 act(() => {
                     result.current.toggleTheme();
                 });
 
                 expect(result.current.theme).toBe('light');
 
-                // Unmount (simulate page reload)
+                // reload
                 unmount();
 
-                // Remount and check persistence
                 const { result: newResult } = renderHook(() => useTheme(), { wrapper });
 
                 waitFor(() => {
@@ -316,14 +312,13 @@ describe('useTheme Hook', () => {
             it('should maintain theme consistency', () => {
                 const { result } = renderHook(() => useTheme(), { wrapper });
 
-                // Set theme on dashboard A
                 act(() => {
                     result.current.setTheme('light');
                 });
 
                 expect(result.current.theme).toBe('light');
 
-                // Navigate to dashboard B (theme should persist)
+
                 waitFor(() => {
                     expect(localStorageMock.getItem('stockhub-theme')).toBe('light');
                 });
@@ -340,7 +335,7 @@ describe('useTheme Hook', () => {
                     expect(result.current.theme).toBe('light');
                 });
 
-                // User switches to dark mode for night usage
+
                 act(() => {
                     result.current.setTheme('dark');
                 });
