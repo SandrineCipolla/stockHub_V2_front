@@ -64,7 +64,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ---
 ### 📅 **SEMAINE 2 - Refactoring Complet (07/10 - 13/10)** ✅
 
-#### **Mardi 08/10 (2h30) : Refactoring Types + Fixtures** 
+#### **Mardi 08/10 (2h30) : Refactoring Types + Fixtures** ✅
 - [x] **Centralisation des types** (30min)
   - [x] Créer `src/types/index.ts`
   - [x] BadgeVariant, ButtonVariant, ComponentSize, InputType
@@ -87,19 +87,24 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 **✅ FAIT** : Composants UI refactorisés
 
-#### **Jeudi 10/10 (2h) : Fixtures Dashboard** 🔄 EN COURS
-- [ ] **Types Dashboard** (30min)
-  - [ ] Créer types pour MetricCard, StockCard dans types/index.ts
-  - [ ] Type MetricType, StockStatus si nécessaires
+#### **Jeudi 10/10 (2h) : Fixtures Dashboard** ✅
+- [x] **Types Dashboard** (30min)
+  - [x] Créer types pour MetricCard, StockCard dans types/index.ts
+  - [x] Type MetricIcon, MetricColor, ChangeType, MetricCardData
 
-- [ ] **Fixtures Dashboard** (90min)
-  - [ ] `fixtures/metric.ts` (métriques dashboard mockées)
-  - [ ] `fixtures/stock.ts` (stocks mockés avec différents statuts)
-  - [ ] Cas d'usage métier StockHub
+- [x] **Fixtures Dashboard** (90min)
+  - [x] `fixtures/metric.ts` (métriques dashboard mockées)
+  - [x] `fixtures/stock.ts` (stocks mockés avec différents statuts)
+  - [x] Cas d'usage métier StockHub (stockHubMetricUseCases, stockHubStockUseCases)
+  - [x] Factory function createMockStock()
 
-**🎯 Objectif** : Données dashboard centralisées
+- [x] **Tests mis à jour avec fixtures** (inclus dans le temps)
+  - [x] MetricCard.test.tsx - Utilise stockHubMetricUseCases
+  - [x] StockCard.test.tsx - Utilise stockHubStockUseCases et createMockStock
+  - [x] StockGrid.test.tsx - Utilise dashboardStocks, stockHubStockUseCases
 
-1
+**✅ FAIT** : Données dashboard centralisées 
+
 
 #### **Dimanche 13/10 Matin (4h) : Refactoring Layout/Hooks/Page**
 - [ ] **Fixtures Layout** (60min)
@@ -725,3 +730,4 @@ npm run type-check
 **Rythme** : 11h/semaine sur 4 semaines = 44h total
 **Encadrant(e)** : Koni 
 **Projet** : StockHub V2 - Certification RNCP 7
+
