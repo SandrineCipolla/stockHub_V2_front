@@ -2,31 +2,20 @@
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it, vi} from 'vitest';
 
-import type {Stock} from '@/types';
 import {StockGrid} from '../StockGrid';
+import {createMockStock, dashboardStocks, stockHubStockUseCases,} from '@/test/fixtures/stock';
 
 
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'dark' })
 }));
 
-// Helper pour créer un stock de test
-const createMockStock = (id: number, overrides?: Partial<Stock>): Stock => ({
-    id,
-    name: `Stock ${id}`,
-    quantity: 100,
-    value: 5000,
-    status: 'optimal',
-    lastUpdate: '2h',
-    ...overrides
-});
-
 describe('StockGrid Component', () => {
 
     describe('Basic rendering', () => {
         describe('when rendered with stocks array', () => {
             it('should render a section with region role', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const section = container.querySelector('section[role="region"]');
@@ -34,7 +23,7 @@ describe('StockGrid Component', () => {
             });
 
             it('should apply responsive grid layout classes', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const section = container.querySelector('section');
@@ -46,7 +35,7 @@ describe('StockGrid Component', () => {
             });
 
             it('should display accessible hidden heading with count', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 render(<StockGrid stocks={stocks} />);
 
                 const heading = screen.getByText(/Liste des stocks \(2 éléments\)/i);
@@ -57,7 +46,7 @@ describe('StockGrid Component', () => {
 
         describe('when custom className is provided', () => {
             it('should apply custom className to section', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 const { container } = render(<StockGrid stocks={stocks} className="custom-grid-class" />);
 
                 const section = container.querySelector('section');
@@ -86,14 +75,14 @@ describe('StockGrid Component', () => {
     describe('Stock cards rendering', () => {
         describe('when single stock is provided', () => {
             it('should render one stock article', () => {
-                const stocks = [createMockStock(1, { name: 'Mon Stock' })];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 render(<StockGrid stocks={stocks} />);
 
-                expect(screen.getByText('Mon Stock')).toBeInTheDocument();
+                expect(screen.getByText(stocks[0].name)).toBeInTheDocument();
             });
 
             it('should apply correct animation delay', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const article = container.querySelector('article');
@@ -103,24 +92,16 @@ describe('StockGrid Component', () => {
 
         describe('when multiple stocks are provided', () => {
             it('should render all stock names', () => {
-                const stocks = [
-                    createMockStock(1, { name: 'Stock A' }),
-                    createMockStock(2, { name: 'Stock B' }),
-                    createMockStock(3, { name: 'Stock C' })
-                ];
+                const stocks = dashboardStocks.slice(0, 3);
                 render(<StockGrid stocks={stocks} />);
 
-                expect(screen.getByText('Stock A')).toBeInTheDocument();
-                expect(screen.getByText('Stock B')).toBeInTheDocument();
-                expect(screen.getByText('Stock C')).toBeInTheDocument();
+                stocks.forEach(stock => {
+                    expect(screen.getByText(stock.name)).toBeInTheDocument();
+                });
             });
 
             it('should apply staggered animation delays', () => {
-                const stocks = [
-                    createMockStock(1),
-                    createMockStock(2),
-                    createMockStock(3)
-                ];
+                const stocks = dashboardStocks.slice(0, 3);
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
@@ -130,16 +111,10 @@ describe('StockGrid Component', () => {
             });
 
             it('should update heading count dynamically', () => {
-                const stocks = [
-                    createMockStock(1),
-                    createMockStock(2),
-                    createMockStock(3),
-                    createMockStock(4),
-                    createMockStock(5)
-                ];
+                const stocks = dashboardStocks;
                 render(<StockGrid stocks={stocks} />);
 
-                expect(screen.getByText(/Liste des stocks \(5 éléments\)/i)).toBeInTheDocument();
+                expect(screen.getByText(new RegExp(`Liste des stocks \\(${stocks.length} éléments\\)`, 'i'))).toBeInTheDocument();
             });
         });
     });
@@ -148,17 +123,17 @@ describe('StockGrid Component', () => {
         describe('when onView callback is provided', () => {
             it('should render Details button for each stock', () => {
                 const onView = vi.fn();
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 render(<StockGrid stocks={stocks} onView={onView} />);
 
                 const detailsButtons = screen.getAllByRole('button', { name: /Voir les détails/i });
-                expect(detailsButtons).toHaveLength(2);
+                expect(detailsButtons).toHaveLength(stocks.length);
             });
         });
 
         describe('when onView callback is not provided', () => {
             it('should not render Details buttons', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 render(<StockGrid stocks={stocks} />);
 
                 expect(screen.queryByRole('button', { name: /Voir les détails/i })).not.toBeInTheDocument();
@@ -168,22 +143,22 @@ describe('StockGrid Component', () => {
         describe('when onEdit callback is provided', () => {
             it('should render Edit buttons for each stock', () => {
                 const onEdit = vi.fn();
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 render(<StockGrid stocks={stocks} onEdit={onEdit} />);
 
                 const editButtons = screen.getAllByRole('button', { name: /Modifier/i });
-                expect(editButtons).toHaveLength(2);
+                expect(editButtons).toHaveLength(stocks.length);
             });
         });
 
         describe('when onDelete callback is provided', () => {
             it('should render Delete buttons for each stock', () => {
                 const onDelete = vi.fn();
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 render(<StockGrid stocks={stocks} onDelete={onDelete} />);
 
                 const deleteButtons = screen.getAllByRole('button', { name: /Supprimer/i });
-                expect(deleteButtons).toHaveLength(2);
+                expect(deleteButtons).toHaveLength(stocks.length);
             });
         });
     });
@@ -191,7 +166,7 @@ describe('StockGrid Component', () => {
     describe('Loading states', () => {
         describe('when isLoaded is true', () => {
             it('should apply loaded animation classes to all cards', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 const { container } = render(<StockGrid stocks={stocks} isLoaded={true} />);
 
                 const articles = container.querySelectorAll('article');
@@ -203,7 +178,7 @@ describe('StockGrid Component', () => {
 
         describe('when isLoaded is false', () => {
             it('should apply initial animation classes to all cards', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 const { container } = render(<StockGrid stocks={stocks} isLoaded={false} />);
 
                 const articles = container.querySelectorAll('article');
@@ -215,7 +190,7 @@ describe('StockGrid Component', () => {
 
         describe('when isUpdating is true', () => {
             it('should disable all Edit and Delete buttons', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 render(<StockGrid stocks={stocks} onEdit={vi.fn()} onDelete={vi.fn()} isUpdating={true} />);
 
                 const editButton = screen.getByRole('button', { name: /Modifier/i });
@@ -228,7 +203,7 @@ describe('StockGrid Component', () => {
 
         describe('when isDeleting is true', () => {
             it('should disable all Edit and Delete buttons', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 render(<StockGrid stocks={stocks} onEdit={vi.fn()} onDelete={vi.fn()} isDeleting={true} />);
 
                 const editButton = screen.getByRole('button', { name: /Modifier/i });
@@ -243,7 +218,7 @@ describe('StockGrid Component', () => {
     describe('Accessibility', () => {
         describe('when rendered', () => {
             it('should link section to heading via aria-labelledby', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const section = container.querySelector('section');
@@ -254,14 +229,14 @@ describe('StockGrid Component', () => {
             });
 
             it('should provide descriptive count in heading', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 render(<StockGrid stocks={stocks} />);
 
                 expect(screen.getByText('Liste des stocks (2 éléments)')).toBeInTheDocument();
             });
 
             it('should use sr-only class for screen reader only heading', () => {
-                const stocks = [createMockStock(1)];
+                const stocks = [stockHubStockUseCases.optimalStock];
                 render(<StockGrid stocks={stocks} />);
 
                 const heading = screen.getByText(/Liste des stocks/);
@@ -273,31 +248,27 @@ describe('StockGrid Component', () => {
     describe('StockHub business use cases', () => {
         describe('when displaying dashboard stock overview', () => {
             it('should render all user stocks in grid layout', () => {
-                const stocks = [
-                    createMockStock(1, { name: 'Entrepôt Principal' }),
-                    createMockStock(2, { name: 'Stock Secondaire' }),
-                    createMockStock(3, { name: 'Réserve' })
-                ];
+                const stocks = dashboardStocks;
                 render(<StockGrid stocks={stocks} />);
 
-                expect(screen.getByText('Entrepôt Principal')).toBeInTheDocument();
-                expect(screen.getByText('Stock Secondaire')).toBeInTheDocument();
-                expect(screen.getByText('Réserve')).toBeInTheDocument();
+                stocks.forEach(stock => {
+                    expect(screen.getByText(stock.name)).toBeInTheDocument();
+                });
             });
         });
 
         describe('when displaying stocks with different statuses', () => {
             it('should render mixed status stocks correctly', () => {
                 const stocks = [
-                    createMockStock(1, { name: 'Stock OK', status: 'optimal' }),
-                    createMockStock(2, { name: 'Stock Faible', status: 'low' }),
-                    createMockStock(3, { name: 'Stock Critique', status: 'critical' })
+                    stockHubStockUseCases.optimalStock,
+                    stockHubStockUseCases.lowStock,
+                    stockHubStockUseCases.criticalStock
                 ];
                 render(<StockGrid stocks={stocks} />);
 
-                expect(screen.getByText('Stock OK')).toBeInTheDocument();
-                expect(screen.getByText('Stock Faible')).toBeInTheDocument();
-                expect(screen.getByText('Stock Critique')).toBeInTheDocument();
+                stocks.forEach(stock => {
+                    expect(screen.getByText(stock.name)).toBeInTheDocument();
+                });
 
                 // Vérifier les badges de statut
                 expect(screen.getByText('Optimal')).toBeInTheDocument();
@@ -320,7 +291,7 @@ describe('StockGrid Component', () => {
         describe('when rendering large inventory', () => {
             it('should handle 50 stocks efficiently', () => {
                 const stocks = Array.from({ length: 50 }, (_, i) =>
-                    createMockStock(i + 1, { name: `Stock ${i + 1}` })
+                    createMockStock({ id: i + 1, name: `Stock ${i + 1}` })
                 );
                 const { container } = render(<StockGrid stocks={stocks} />);
 
@@ -329,7 +300,7 @@ describe('StockGrid Component', () => {
             });
 
             it('should maintain correct animation delays for first and last items', () => {
-                const stocks = Array.from({ length: 10 }, (_, i) => createMockStock(i + 1));
+                const stocks = Array.from({ length: 10 }, (_, i) => createMockStock({ id: i + 1 }));
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
@@ -341,21 +312,17 @@ describe('StockGrid Component', () => {
         describe('when user performs bulk operations', () => {
             it('should support view action on multiple stocks', () => {
                 const onView = vi.fn();
-                const stocks = [
-                    createMockStock(1),
-                    createMockStock(2),
-                    createMockStock(3)
-                ];
+                const stocks = dashboardStocks.slice(0, 3);
                 render(<StockGrid stocks={stocks} onView={onView} />);
 
                 const viewButtons = screen.getAllByRole('button', { name: /Voir les détails/i });
-                expect(viewButtons).toHaveLength(3);
+                expect(viewButtons).toHaveLength(stocks.length);
             });
         });
 
         describe('when loading stocks from API', () => {
             it('should show initial loading state for all cards', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 const { container } = render(<StockGrid stocks={stocks} isLoaded={false} />);
 
                 const articles = container.querySelectorAll('article');
@@ -365,7 +332,7 @@ describe('StockGrid Component', () => {
             });
 
             it('should show loaded state after API response', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 const { container } = render(<StockGrid stocks={stocks} isLoaded={true} />);
 
                 const articles = container.querySelectorAll('article');
@@ -377,7 +344,7 @@ describe('StockGrid Component', () => {
 
         describe('when user updates a stock', () => {
             it('should disable all action buttons during update', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 render(<StockGrid stocks={stocks} onEdit={vi.fn()} onDelete={vi.fn()} isUpdating={true} />);
 
                 const editButtons = screen.getAllByRole('button', { name: /Modifier/i });
@@ -390,7 +357,7 @@ describe('StockGrid Component', () => {
 
         describe('when user deletes a stock', () => {
             it('should disable all action buttons during deletion', () => {
-                const stocks = [createMockStock(1), createMockStock(2)];
+                const stocks = dashboardStocks.slice(0, 2);
                 render(<StockGrid stocks={stocks} onEdit={vi.fn()} onDelete={vi.fn()} isDeleting={true} />);
 
                 const editButtons = screen.getAllByRole('button', { name: /Modifier/i });

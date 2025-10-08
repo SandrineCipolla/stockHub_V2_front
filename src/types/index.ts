@@ -19,15 +19,6 @@ export interface Stock {
     maxThreshold?: number
 }
 
-export interface MetricData {
-    id: string
-    label: string
-    value: string | number
-    change: number
-    changeType: "increase" | "decrease"
-    icon: string
-    color: "success" | "warning" | "info"
-}
 
 export type ButtonVariant = "primary" | "secondary" | "ghost"
 export type ComponentSize = "sm" | "md" | "lg"
@@ -104,14 +95,18 @@ export interface FooterLink {
 }
 
 // Types pour les métriques
+export type MetricIcon = 'package' | 'alert-triangle' | 'trending-up';
+export type MetricColor = 'success' | 'warning' | 'info';
+export type ChangeType = 'increase' | 'decrease';
+
 export interface MetricCardData {
     id: string;
     label: string;
     value: string | number;
     change: number;
-    changeType: 'increase' | 'decrease';
-    icon: 'package' | 'alert-triangle' | 'trending-up';
-    color: 'success' | 'warning' | 'info';
+    changeType: ChangeType;
+    icon: MetricIcon;
+    color: MetricColor;
 }
 
 // Constantes typées

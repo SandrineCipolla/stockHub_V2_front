@@ -99,14 +99,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 **🎯 Objectif** : Données dashboard centralisées
 
-#### **Samedi 12/10 Soirée (3h) : Refactoring tests Dashboard**
-- [ ] **Refactoring tests Dashboard** (3h)
-  - [ ] MetricCard.test.tsx avec fixtures/metric
-  - [ ] StockCard.test.tsx avec fixtures/stock
-  - [ ] StockGrid.test.tsx avec fixtures/stock
-  - [ ] Vérifier coverage maintenu
-
-**🎯 Objectif** : Tests dashboard refactorisés
+1
 
 #### **Dimanche 13/10 Matin (4h) : Refactoring Layout/Hooks/Page**
 - [ ] **Fixtures Layout** (60min)
