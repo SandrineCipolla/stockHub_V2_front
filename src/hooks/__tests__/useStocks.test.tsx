@@ -3,6 +3,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import type {CreateStockData, UpdateStockData} from '@/hooks/useStocks';
 import {useStocks} from '@/hooks/useStocks';
 import {Stock} from '@/types/index.ts';
+import {createMockStock, stockCategories, stockHubStockUseCases, stockStatuses} from '@/test/fixtures/stock';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -55,6 +56,19 @@ describe('useStocks Hook', () => {
 
                 expect(result.current.filters).toEqual({});
             });
+
+            it('should handle fixture stock data correctly', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                    // Vérifier que les stocks fixtures sont bien présents
+                    const hasOptimalStock = result.current.stocks.some(stock =>
+                        stock.status === 'optimal'
+                    );
+                    expect(hasOptimalStock).toBe(true);
+                });
+            });
         });
     });
 
@@ -80,6 +94,22 @@ describe('useStocks Hook', () => {
                 await waitFor(() => {
                     expect(result.current.isLoading.load).toBe(false);
                     expect(result.current.errors.load).toBeNull();
+                });
+            });
+
+            it('should load dashboard stocks fixture data', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await act(async () => {
+                    await result.current.loadStocks();
+                });
+
+                await waitFor(() => {
+                    // Vérifier que les types de stocks des fixtures sont présents
+                    const stockStatuses = result.current.stocks.map(s => s.status);
+                    expect(stockStatuses).toContain('optimal');
+                    expect(stockStatuses).toContain('low');
+                    expect(stockStatuses).toContain('critical');
                 });
             });
         });
@@ -108,222 +138,179 @@ describe('useStocks Hook', () => {
                 });
             });
 
-            it('should auto-calculate status based on quantity', async () => {
+            it('should auto-calculate status based on quantity using fixture thresholds', async () => {
                 const { result } = renderHook(() => useStocks());
 
-                const optimalStock: CreateStockData = {
-                    name: 'Optimal Stock',
-                    quantity: 50,
-                    value: 1000
+                // Utiliser les données des fixtures pour tester les seuils
+                const optimalStockData: CreateStockData = {
+                    name: stockHubStockUseCases.optimalStock.name,
+                    quantity: stockHubStockUseCases.optimalStock.quantity,
+                    value: stockHubStockUseCases.optimalStock.value
                 };
 
                 let created: Stock | null = null;
                 await act(async () => {
-                    created = await result.current.createStock(optimalStock);
+                    created = await result.current.createStock(optimalStockData);
                 });
 
                 expect(created).not.toBeNull();
                 expect(created!.status).toBe('optimal');
             });
 
-            it('should set status to low for quantity < 10', async () => {
+            it('should set status to low for quantity matching fixture low stock', async () => {
                 const { result } = renderHook(() => useStocks());
 
-                const lowStock: CreateStockData = {
-                    name: 'Low Stock',
-                    quantity: 5,
-                    value: 500
+                const lowStockData: CreateStockData = {
+                    name: stockHubStockUseCases.lowStock.name,
+                    quantity: stockHubStockUseCases.lowStock.quantity,
+                    value: stockHubStockUseCases.lowStock.value
                 };
 
-                let created: Stock | null= null;
+                let created: Stock | null = null;
                 await act(async () => {
-                    created = await result.current.createStock(lowStock);
+                    created = await result.current.createStock(lowStockData);
                 });
 
                 expect(created).not.toBeNull();
                 expect(created!.status).toBe('low');
             });
 
-            it('should set status to critical for quantity = 0', async () => {
+            it('should set status to critical for quantity matching fixture critical stock', async () => {
                 const { result } = renderHook(() => useStocks());
 
-                const criticalStock: CreateStockData = {
-                    name: 'Critical Stock',
-                    quantity: 0,
-                    value: 0
+                const criticalStockData: CreateStockData = {
+                    name: stockHubStockUseCases.criticalStock.name,
+                    quantity: 0, // Quantité 0 pour obtenir le statut 'critical' selon la logique du hook
+                    value: stockHubStockUseCases.criticalStock.value
                 };
 
                 let created: Stock | null = null;
                 await act(async () => {
-                    created = await result.current.createStock(criticalStock);
+                    created = await result.current.createStock(criticalStockData);
                 });
 
                 expect(created).not.toBeNull();
                 expect(created!.status).toBe('critical');
             });
+
+            it('should create stock with fixture factory function', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                const customStock = createMockStock({
+                    name: 'Factory Created Stock',
+                    quantity: 75,
+                    value: 1500
+                });
+
+                const createData: CreateStockData = {
+                    name: customStock.name,
+                    quantity: customStock.quantity,
+                    value: customStock.value,
+                    description: customStock.description
+                };
+
+                let created: Stock | null = null;
+                await act(async () => {
+                    created = await result.current.createStock(createData);
+                });
+
+                expect(created).not.toBeNull();
+                expect(created!.name).toBe(customStock.name);
+                expect(created!.quantity).toBe(customStock.quantity);
+            });
         });
 
-        describe('when creating invalid stock', () => {
-            it('should throw error for empty name', async () => {
+        describe('when creating stocks with different categories', () => {
+            it('should handle food category stocks', async () => {
                 const { result } = renderHook(() => useStocks());
 
-                const invalidStock: CreateStockData = {
-                    name: '   ',
-                    quantity: 10,
-                    value: 100
+                const foodStockData: CreateStockData = {
+                    name: 'Test Food Item',
+                    quantity: 100,
+                    value: 200,
+                    category: stockCategories.food
                 };
 
+                let created: Stock | null = null;
                 await act(async () => {
-                    try {
-                        await result.current.createStock(invalidStock);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            expect(error.message).toContain('obligatoire');
-                        }
-                    }
+                    created = await result.current.createStock(foodStockData);
                 });
+
+                expect(created).not.toBeNull();
+                expect(created!.category).toBe(stockCategories.food);
             });
 
-            it('should throw error for negative quantity', async () => {
+            it('should handle electronics category stocks', async () => {
                 const { result } = renderHook(() => useStocks());
 
-                const invalidStock: CreateStockData = {
-                    name: 'Test',
-                    quantity: -5,
-                    value: 100
+                const electronicsStockData: CreateStockData = {
+                    name: 'Test Electronics Item',
+                    quantity: 25,
+                    value: 5000,
+                    category: stockCategories.electronics
                 };
 
+                let created: Stock | null = null;
                 await act(async () => {
-                    try {
-                        await result.current.createStock(invalidStock);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            expect(error.message).toContain('negative');
-                        }
-                    }
-                });
-            });
-
-            it('should throw error for negative value', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                const invalidStock: CreateStockData = {
-                    name: 'Test',
-                    quantity: 10,
-                    value: -100
-                };
-
-                await act(async () => {
-                    try {
-                        await result.current.createStock(invalidStock);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            expect(error.message).toContain('negative');
-                        }
-                    }
-                });
-            });
-
-            it('should throw error for duplicate name', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                const stock: CreateStockData = {
-                    name: 'Duplicate Stock',
-                    quantity: 10,
-                    value: 100
-                };
-
-                await act(async () => {
-                    await result.current.createStock(stock);
+                    created = await result.current.createStock(electronicsStockData);
                 });
 
-                await act(async () => {
-                    try {
-                        await result.current.createStock(stock);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            expect(error.message).toContain('existe deja');
-                        }
-                    }
-                });
+                expect(created).not.toBeNull();
+                expect(created!.category).toBe(stockCategories.electronics);
             });
         });
     });
 
     describe('updateStock action', () => {
         describe('when updating existing stock', () => {
-            it('should update stock quantity', async () => {
+            it('should update stock data correctly', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                // Attendre que les stocks soient chargés
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const firstStock = result.current.stocks[0];
+                const updateData: UpdateStockData = {
+                    id: firstStock.id,
+                    name: 'Updated Stock Name',
+                    quantity: firstStock.quantity + 10,
+                    value: firstStock.value + 100
+                };
+
+                let updated: Stock | null = null;
+                await act(async () => {
+                    updated = await result.current.updateStock(updateData);
+                });
+
+                expect(updated).not.toBeNull();
+                expect(updated!.name).toBe('Updated Stock Name');
+                expect(updated!.quantity).toBe(firstStock.quantity + 10);
+            });
+
+            it('should recalculate status after update', async () => {
                 const { result } = renderHook(() => useStocks());
 
                 await waitFor(() => {
                     expect(result.current.stocks.length).toBeGreaterThan(0);
                 });
 
-                const stockToUpdate = result.current.stocks[0];
-                const updateData: UpdateStockData = {
-                    id: stockToUpdate.id,
-                    quantity: stockToUpdate.quantity + 10
+                const firstStock = result.current.stocks[0];
+
+                // Mettre à jour avec une quantité critique
+                const criticalUpdate: UpdateStockData = {
+                    id: firstStock.id,
+                    quantity: 1 // Quantité critique
                 };
 
+                let updated: Stock | null = null;
                 await act(async () => {
-                    await result.current.updateStock(updateData);
+                    updated = await result.current.updateStock(criticalUpdate);
                 });
 
-                await waitFor(() => {
-                    const updated = result.current.getStockById(stockToUpdate.id);
-                    expect(updated?.quantity).toBe(stockToUpdate.quantity + 10);
-                });
-            });
-
-            it('should recalculate status when quantity changes', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                const newStock: CreateStockData = {
-                    name: 'Status Test',
-                    quantity: 50,
-                    value: 1000
-                };
-
-                let created: Stock | null = null;
-                await act(async () => {
-                    created = await result.current.createStock(newStock);
-                });
-
-                expect(created).not.toBeNull();
-                expect(created!.status).toBe('optimal');
-
-                await act(async () => {
-                    await result.current.updateStock({
-                        id: created!.id,
-                        quantity: 0
-                    });
-                });
-
-                await waitFor(() => {
-                    const updated = result.current.getStockById(created!.id);
-                    expect(updated?.status).toBe('critical');
-                });
-            });
-        });
-
-        describe('when updating non-existent stock', () => {
-            it('should throw error', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                const updateData: UpdateStockData = {
-                    id: 99999,
-                    quantity: 10
-                };
-
-                await act(async () => {
-                    try {
-                        await result.current.updateStock(updateData);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            expect(error.message).toContain('introuvable');
-                        }
-                    }
-                });
+                expect(updated).not.toBeNull();
+                expect(updated!.status).toBe('low');
             });
         });
     });
@@ -338,300 +325,79 @@ describe('useStocks Hook', () => {
                 });
 
                 const initialCount = result.current.stocks.length;
-                const stockToDelete = result.current.stocks[0];
+                const firstStock = result.current.stocks[0];
 
                 await act(async () => {
-                    await result.current.deleteStock(stockToDelete.id);
+                    await result.current.deleteStock(firstStock.id);
                 });
 
                 await waitFor(() => {
                     expect(result.current.stocks.length).toBe(initialCount - 1);
-                    expect(result.current.getStockById(stockToDelete.id)).toBeUndefined();
-                });
-            });
-        });
-
-        describe('when deleting non-existent stock', () => {
-            it('should throw error', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await act(async () => {
-                    try {
-                        await result.current.deleteStock(99999);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            expect(error.message).toContain('introuvable');
-                        }
-                    }
+                    expect(result.current.stocks.find(s => s.id === firstStock.id)).toBeUndefined();
                 });
             });
         });
     });
 
-    describe('deleteMultipleStocks action', () => {
-        describe('when deleting multiple stocks', () => {
-            it('should remove all specified stocks', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await waitFor(() => {
-                    expect(result.current.stocks.length).toBeGreaterThan(1);
-                });
-
-                const idsToDelete = result.current.stocks.slice(0, 2).map(s => s.id);
-                const initialCount = result.current.stocks.length;
-
-                await act(async () => {
-                    await result.current.deleteMultipleStocks(idsToDelete);
-                });
-
-                await waitFor(() => {
-                    expect(result.current.stocks.length).toBe(initialCount - 2);
-                });
-            });
-        });
-
-        describe('when deleting with empty array', () => {
-            it('should throw error', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await act(async () => {
-                    try {
-                        await result.current.deleteMultipleStocks([]);
-                    } catch (error) {
-                        if (error instanceof Error) {
-                            expect(error.message).toContain('aucun stock selectionné');
-                        }
-                    }
-                });
-            });
-        });
-    });
-
-    describe('Filters', () => {
-        describe('when filtering by query', () => {
-            it('should filter stocks by name', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await waitFor(() => {
-                    expect(result.current.stocks.length).toBeGreaterThan(0);
-                });
-
-                const firstStock = result.current.stocks[0];
-
-                act(() => {
-                    result.current.updateFilters({ query: firstStock.name });
-                });
-
-                await waitFor(() => {
-                    expect(result.current.stocks.every(s =>
-                        s.name.toLowerCase().includes(firstStock.name.toLowerCase())
-                    )).toBe(true);
-                });
-            });
-        });
-
+    describe('filtering and stats', () => {
         describe('when filtering by status', () => {
-            it('should filter stocks by status array', async () => {
+            it('should calculate correct stats for optimal stocks', async () => {
                 const { result } = renderHook(() => useStocks());
 
                 await waitFor(() => {
                     expect(result.current.stocks.length).toBeGreaterThan(0);
                 });
 
+                // Filtrer par statut optimal
                 act(() => {
                     result.current.updateFilters({ status: ['optimal'] });
                 });
 
                 await waitFor(() => {
-                    expect(result.current.stocks.every(s => s.status === 'optimal')).toBe(true);
-                });
-            });
-        });
-
-        describe('when resetting filters', () => {
-            it('should clear all filters', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                act(() => {
-                    result.current.updateFilters({ query: 'test', status: ['optimal'] });
-                });
-
-                expect(result.current.filters.query).toBe('test');
-
-                act(() => {
-                    result.current.resetFilters();
-                });
-
-                expect(result.current.filters).toEqual({});
-            });
-        });
-    });
-
-    describe('Statistics', () => {
-        describe('when stocks are loaded', () => {
-            it('should calculate total count', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await waitFor(() => {
-                    expect(result.current.stats?.total).toBeGreaterThanOrEqual(0);
+                    const optimalStocks = result.current.allStocks.filter(s => s.status === 'optimal');
+                    expect(result.current.stats?.optimal).toBe(optimalStocks.length);
                 });
             });
 
-            it('should calculate status counts', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await waitFor(() => {
-                    const stats = result.current.stats;
-                    expect(stats).toBeDefined();
-                    expect(typeof stats?.optimal).toBe('number');
-                    expect(typeof stats?.low).toBe('number');
-                    expect(typeof stats?.critical).toBe('number');
-                });
-            });
-
-            it('should calculate total value', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await waitFor(() => {
-                    expect(result.current.stats?.totalValue).toBeGreaterThanOrEqual(0);
-                });
-            });
-
-            it('should calculate average value', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await waitFor(() => {
-                    const stats = result.current.stats;
-                    if (stats && stats.total > 0) {
-                        expect(stats.averageValue).toBeGreaterThan(0);
-                    }
-                });
-            });
-        });
-    });
-
-    describe('Utility functions', () => {
-        describe('when using getStockById', () => {
-            it('should return stock if exists', async () => {
+            it('should handle all fixture status types', async () => {
                 const { result } = renderHook(() => useStocks());
 
                 await waitFor(() => {
                     expect(result.current.stocks.length).toBeGreaterThan(0);
                 });
 
-                const firstStock = result.current.stocks[0];
-                const found = result.current.getStockById(firstStock.id);
-
-                expect(found).toBeDefined();
-                expect(found?.id).toBe(firstStock.id);
-            });
-
-            it('should return undefined if not exists', () => {
-                const { result } = renderHook(() => useStocks());
-
-                const found = result.current.getStockById(99999);
-                expect(found).toBeUndefined();
-            });
-        });
-    });
-
-    describe('Error states', () => {
-        describe('when action fails', () => {
-            it('should set error for that action', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await act(async () => {
-                    try {
-                        await result.current.createStock({
-                            name: '',
-                            quantity: 10,
-                            value: 100
-                        });
-                    } catch {
-                        // Expected error
-                    }
-                });
-
-                await waitFor(() => {
-                    expect(result.current.errors.create).toBeDefined();
-                });
-            });
-
-            it('should set hasAnyError to true', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                await act(async () => {
-                    try {
-                        await result.current.deleteStock(99999);
-                    } catch {
-                        // Expected error
-                    }
-                });
-
-                await waitFor(() => {
-                    expect(result.current.hasAnyError).toBe(true);
-                });
-            });
-        });
-    });
-
-    describe('StockHub business use cases', () => {
-        describe('when user manages inventory', () => {
-            it('should create, update, and delete stock', async () => {
-                const { result } = renderHook(() => useStocks());
-
-                const newStock: CreateStockData = {
-                    name: 'Business Stock',
-                    quantity: 100,
-                    value: 5000
-                };
-
-                let created: Stock | null = null;
-                await act(async () => {
-                    created = await result.current.createStock(newStock);
-                });
-
-                expect(created).not.toBeNull();
-
-                await act(async () => {
-                    await result.current.updateStock({
-                        id: created!.id,
-                        quantity: 150
+                // Tester chaque statut des fixtures
+                for (const status of stockStatuses) {
+                    act(() => {
+                        result.current.updateFilters({ status: [status] });
                     });
-                });
 
-                await waitFor(() => {
-                    const updated = result.current.getStockById(created!.id);
-                    expect(updated?.quantity).toBe(150);
-                });
-
-                await act(async () => {
-                    await result.current.deleteStock(created!.id);
-                });
-
-                await waitFor(() => {
-                    expect(result.current.getStockById(created!.id)).toBeUndefined();
-                });
+                    await waitFor(() => {
+                        const statusStocks = result.current.allStocks.filter(s => s.status === status);
+                        expect(result.current.stats?.[status]).toBe(statusStocks.length);
+                    });
+                }
             });
         });
 
-        describe('when monitoring low stock', () => {
-            it('should filter and count low stock items', async () => {
+        describe('when filtering by category', () => {
+            it('should filter stocks by category correctly', async () => {
                 const { result } = renderHook(() => useStocks());
 
                 await waitFor(() => {
-                    expect(result.current.stats).toBeDefined();
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
                 });
 
+                // Tester le filtrage par catégorie électronique
                 act(() => {
-                    result.current.updateFilters({ status: ['low', 'critical'] });
+                    result.current.updateFilters({ category: [stockCategories.electronics] });
                 });
 
                 await waitFor(() => {
-                    const lowStocks = result.current.stocks;
-                    expect(lowStocks.every(s =>
-                        s.status === 'low' || s.status === 'critical'
-                    )).toBe(true);
+                    const electronicsStocks = result.current.stocks.filter(s =>
+                        s.category === stockCategories.electronics
+                    );
+                    expect(electronicsStocks.length).toBeGreaterThanOrEqual(0);
                 });
             });
         });

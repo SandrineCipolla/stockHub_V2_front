@@ -1,6 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it, vi} from 'vitest';
 import {Footer} from '@/components/layout/Footer';
+import {mockSecondaryNavigation} from '@/test/fixtures/navigation';
 
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'dark' })
@@ -50,6 +51,18 @@ describe('Footer Component', () => {
                 expect(screen.getByText('Contact')).toBeInTheDocument();
                 expect(screen.getByText('About')).toBeInTheDocument();
             });
+
+            it('should display secondary navigation links', () => {
+                const secondaryLinks = mockSecondaryNavigation.map(link => ({
+                    label: link.label,
+                    href: link.href
+                }));
+                render(<Footer links={secondaryLinks} />);
+
+                mockSecondaryNavigation.forEach(link => {
+                    expect(screen.getByText(link.label)).toBeInTheDocument();
+                });
+            });
         });
     });
 
@@ -66,6 +79,25 @@ describe('Footer Component', () => {
                 expect(link).toHaveAttribute('rel', 'noopener noreferrer');
             });
         });
+
+        describe('when using navigation fixtures', () => {
+            it('should render internal navigation links correctly', () => {
+                const internalLinks = mockSecondaryNavigation
+                    .filter(link => !link.href.startsWith('http'))
+                    .map(link => ({
+                        label: link.label,
+                        href: link.href
+                    }));
+
+                render(<Footer links={internalLinks} />);
+
+                internalLinks.forEach(link => {
+                    const linkElement = screen.getByText(link.label);
+                    expect(linkElement).toHaveAttribute('href', link.href);
+                    expect(linkElement).not.toHaveAttribute('target', '_blank');
+                });
+            });
+        });
     });
 
     describe('Accessibility', () => {
@@ -78,6 +110,21 @@ describe('Footer Component', () => {
             it('should have aria-label on nav', () => {
                 render(<Footer />);
                 expect(screen.getByLabelText('Liens légaux')).toBeInTheDocument();
+            });
+
+            it('should maintain accessibility with custom navigation', () => {
+                const navLinks = mockSecondaryNavigation.map(link => ({
+                    label: link.label,
+                    href: link.href
+                }));
+                render(<Footer links={navLinks} />);
+
+                expect(screen.getByLabelText('Liens légaux')).toBeInTheDocument();
+
+                navLinks.forEach(link => {
+                    const linkElement = screen.getByText(link.label);
+                    expect(linkElement).toBeInTheDocument();
+                });
             });
         });
     });

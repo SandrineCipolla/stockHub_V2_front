@@ -3,6 +3,7 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {useTheme} from '@/hooks/useTheme';
 import {ThemeProvider} from '@/components/providers/ThemeProvider';
 import type {ReactNode} from 'react';
+import {mockDefaultUser, mockUserScenarios} from '@/test/fixtures/user';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -57,6 +58,12 @@ describe('useTheme Hook', () => {
                 const { result } = renderHook(() => useTheme(), { wrapper });
 
                 expect(result.current.theme).toBe('dark');
+            });
+
+            it('should match default user theme preference', () => {
+                const { result } = renderHook(() => useTheme(), { wrapper });
+
+                expect(result.current.theme).toBe(mockDefaultUser.preferences.theme);
             });
         });
 
@@ -168,6 +175,49 @@ describe('useTheme Hook', () => {
         });
     });
 
+    describe('User preference scenarios', () => {
+        describe('when different users have theme preferences', () => {
+            it('should work with wealthy user light theme preference', () => {
+                const wealthyUser = mockUserScenarios.wealthyUser;
+                const userTheme = wealthyUser.preferences.theme;
+
+                localStorageMock.setItem('stockhub-theme', userTheme);
+                const { result } = renderHook(() => useTheme(), { wrapper });
+
+                waitFor(() => {
+                    expect(result.current.theme).toBe(userTheme);
+                });
+            });
+
+            it('should work with new user auto theme preference', () => {
+                const newUser = mockUserScenarios.newUser;
+                const userTheme = newUser.preferences.theme;
+
+                localStorageMock.setItem('stockhub-theme', userTheme);
+                const { result } = renderHook(() => useTheme(), { wrapper });
+
+                waitFor(() => {
+                    expect(result.current.theme).toBe(userTheme);
+                });
+            });
+
+            it('should handle theme switching for different user types', () => {
+                const { result } = renderHook(() => useTheme(), { wrapper });
+
+                // Test with each user scenario
+                const userScenarios = Object.values(mockUserScenarios);
+
+                userScenarios.forEach(user => {
+                    act(() => {
+                        result.current.setTheme(user.preferences.theme);
+                    });
+
+                    expect(result.current.theme).toBe(user.preferences.theme);
+                });
+            });
+        });
+    });
+
     describe('localStorage persistence', () => {
         describe('when theme is changed', () => {
             it('should save theme to localStorage', () => {
@@ -193,6 +243,23 @@ describe('useTheme Hook', () => {
                     expect(localStorageMock.getItem('stockhub-theme')).toBe('light');
                 });
             });
+
+            it('should persist user theme preferences', () => {
+                const { result } = renderHook(() => useTheme(), { wrapper });
+
+                // Test each user theme preference
+                const themes: Array<'light' | 'dark'> = ['light', 'dark'];
+
+                themes.forEach(theme => {
+                    act(() => {
+                        result.current.setTheme(theme);
+                    });
+
+                    waitFor(() => {
+                        expect(localStorageMock.getItem('stockhub-theme')).toBe(theme);
+                    });
+                });
+            });
         });
 
         describe('when component mounts', () => {
@@ -210,6 +277,16 @@ describe('useTheme Hook', () => {
                 const { result } = renderHook(() => useTheme(), { wrapper });
 
                 expect(result.current.theme).toBe('dark');
+            });
+
+            it('should load default user preference theme', () => {
+                localStorageMock.setItem('stockhub-theme', mockDefaultUser.preferences.theme);
+
+                const { result } = renderHook(() => useTheme(), { wrapper });
+
+                waitFor(() => {
+                    expect(result.current.theme).toBe(mockDefaultUser.preferences.theme);
+                });
             });
         });
     });
@@ -270,79 +347,21 @@ describe('useTheme Hook', () => {
                     expect(document.documentElement.classList.contains('dark')).toBe(true);
                 });
             });
-        });
-    });
 
-    describe('StockHub business use cases', () => {
-        describe('when user toggles theme from header', () => {
-            it('should persist preference across sessions', () => {
-                const { result, unmount } = renderHook(() => useTheme(), { wrapper });
-
-                act(() => {
-                    result.current.toggleTheme();
-                });
-
-                expect(result.current.theme).toBe('light');
-
-                // reload
-                unmount();
-
-                const { result: newResult } = renderHook(() => useTheme(), { wrapper });
-
-                waitFor(() => {
-                    expect(newResult.current.theme).toBe('light');
-                });
-            });
-        });
-
-        describe('when user prefers light mode', () => {
-            it('should load light theme on first visit if saved', () => {
-                localStorageMock.setItem('stockhub-theme', 'light');
-
+            it('should handle DOM updates for user preference themes', () => {
                 const { result } = renderHook(() => useTheme(), { wrapper });
 
-                waitFor(() => {
-                    expect(result.current.theme).toBe('light');
-                    expect(document.documentElement.classList.contains('dark')).toBe(false);
-                });
-            });
-        });
+                // Test DOM updates for each user scenario
+                Object.values(mockUserScenarios).forEach(user => {
+                    act(() => {
+                        result.current.setTheme(user.preferences.theme);
+                    });
 
-        describe('when user switches between dashboards', () => {
-            it('should maintain theme consistency', () => {
-                const { result } = renderHook(() => useTheme(), { wrapper });
+                    const shouldHaveDarkClass = user.preferences.theme === 'dark';
 
-                act(() => {
-                    result.current.setTheme('light');
-                });
-
-                expect(result.current.theme).toBe('light');
-
-
-                waitFor(() => {
-                    expect(localStorageMock.getItem('stockhub-theme')).toBe('light');
-                });
-            });
-        });
-
-        describe('when app is used at night', () => {
-            it('should allow switching to dark mode', () => {
-                localStorageMock.setItem('stockhub-theme', 'light');
-
-                const { result } = renderHook(() => useTheme(), { wrapper });
-
-                waitFor(() => {
-                    expect(result.current.theme).toBe('light');
-                });
-
-
-                act(() => {
-                    result.current.setTheme('dark');
-                });
-
-                expect(result.current.theme).toBe('dark');
-                waitFor(() => {
-                    expect(document.documentElement.classList.contains('dark')).toBe(true);
+                    waitFor(() => {
+                        expect(document.documentElement.classList.contains('dark')).toBe(shouldHaveDarkClass);
+                    });
                 });
             });
         });

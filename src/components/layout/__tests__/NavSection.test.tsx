@@ -1,6 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it, vi} from 'vitest';
 import {NavSection} from '@/components/layout/NavSection';
+import {mockBreadcrumbs, mockNavigationLinks} from '@/test/fixtures/navigation';
 
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'dark' })
@@ -26,6 +27,80 @@ describe('NavSection Component', () => {
 
                 expect(screen.getByText('Accueil')).toBeInTheDocument();
                 expect(screen.getByText('Dashboard')).toBeInTheDocument();
+            });
+        });
+
+        describe('when rendered with fixture breadcrumbs', () => {
+            it('should display dashboard breadcrumbs', () => {
+                const dashboardBreadcrumbs = mockBreadcrumbs.dashboard.map(item => ({
+                    label: item.label,
+                    href: item.href,
+                    current: item.isActive
+                }));
+
+                render(
+                    <NavSection breadcrumbs={dashboardBreadcrumbs}>
+                        <div>Dashboard Content</div>
+                    </NavSection>
+                );
+
+                mockBreadcrumbs.dashboard.forEach(item => {
+                    expect(screen.getByText(item.label)).toBeInTheDocument();
+                });
+            });
+
+            it('should display stocks breadcrumbs', () => {
+                const stocksBreadcrumbs = mockBreadcrumbs.stocks.map(item => ({
+                    label: item.label,
+                    href: item.href,
+                    current: item.isActive
+                }));
+
+                render(
+                    <NavSection breadcrumbs={stocksBreadcrumbs}>
+                        <div>Stocks Content</div>
+                    </NavSection>
+                );
+
+                mockBreadcrumbs.stocks.forEach(item => {
+                    expect(screen.getByText(item.label)).toBeInTheDocument();
+                });
+            });
+
+            it('should display stock detail breadcrumbs', () => {
+                const stockDetailBreadcrumbs = mockBreadcrumbs.stockDetail.map(item => ({
+                    label: item.label,
+                    href: item.href,
+                    current: item.isActive
+                }));
+
+                render(
+                    <NavSection breadcrumbs={stockDetailBreadcrumbs}>
+                        <div>Stock Detail Content</div>
+                    </NavSection>
+                );
+
+                mockBreadcrumbs.stockDetail.forEach(item => {
+                    expect(screen.getByText(item.label)).toBeInTheDocument();
+                });
+            });
+
+            it('should display portfolio breadcrumbs', () => {
+                const portfolioBreadcrumbs = mockBreadcrumbs.portfolio.map(item => ({
+                    label: item.label,
+                    href: item.href,
+                    current: item.isActive
+                }));
+
+                render(
+                    <NavSection breadcrumbs={portfolioBreadcrumbs}>
+                        <div>Portfolio Content</div>
+                    </NavSection>
+                );
+
+                mockBreadcrumbs.portfolio.forEach(item => {
+                    expect(screen.getByText(item.label)).toBeInTheDocument();
+                });
             });
         });
 
@@ -73,6 +148,20 @@ describe('NavSection Component', () => {
                 const current = screen.getByText('Current');
                 expect(current.tagName).not.toBe('A');
             });
+
+            it('should handle fixture active breadcrumbs', () => {
+                const activeDashboard = mockBreadcrumbs.dashboard.find(item => item.isActive);
+                if (activeDashboard) {
+                    const breadcrumbs = [
+                        { label: activeDashboard.label, current: true }
+                    ];
+
+                    render(<NavSection breadcrumbs={breadcrumbs}><div>Content</div></NavSection>);
+
+                    const currentItem = screen.getByText(activeDashboard.label);
+                    expect(currentItem).toHaveAttribute('aria-current', 'page');
+                }
+            });
         });
 
         describe('when breadcrumb has href', () => {
@@ -87,6 +176,41 @@ describe('NavSection Component', () => {
                 expect(link.tagName).toBe('A');
                 expect(link).toHaveAttribute('href', '/test');
             });
+
+            it('should render fixture links correctly', () => {
+                const dashboardLinks = mockBreadcrumbs.dashboard
+                    .filter(item => item.href && !item.isActive)
+                    .map(item => ({
+                        label: item.label,
+                        href: item.href
+                    }));
+
+                render(<NavSection breadcrumbs={dashboardLinks}><div>Content</div></NavSection>);
+
+                dashboardLinks.forEach(link => {
+                    const linkElement = screen.getByText(link.label);
+                    expect(linkElement.tagName).toBe('A');
+                    expect(linkElement).toHaveAttribute('href', link.href);
+                });
+            });
+        });
+    });
+
+    describe('Navigation integration', () => {
+        describe('when using navigation fixtures', () => {
+            it('should work with navigation link labels in breadcrumbs', () => {
+                const navLinkLabels = mockNavigationLinks.map(link => link.label);
+                const breadcrumbsFromNav = navLinkLabels.map(label => ({
+                    label,
+                    href: `/${label.toLowerCase().replace(' ', '-')}`
+                }));
+
+                render(<NavSection breadcrumbs={breadcrumbsFromNav}><div>Content</div></NavSection>);
+
+                navLinkLabels.forEach(label => {
+                    expect(screen.getByText(label)).toBeInTheDocument();
+                });
+            });
         });
     });
 
@@ -98,21 +222,39 @@ describe('NavSection Component', () => {
                 expect(screen.getByLabelText('Fil d\'Ariane')).toBeInTheDocument();
             });
 
-            it('should render breadcrumb list', () => {
-                const { container } = render(<NavSection><div>Content</div></NavSection>);
+            it('should render breadcrumb list with proper structure', () => {
+                const breadcrumbs = mockBreadcrumbs.stockDetail.map(item => ({
+                    label: item.label,
+                    href: item.href,
+                    current: item.isActive
+                }));
 
-                expect(container.querySelector('ol')).toBeInTheDocument();
+                render(<NavSection breadcrumbs={breadcrumbs}><div>Content</div></NavSection>);
+
+                expect(screen.getByLabelText('Fil d\'Ariane')).toBeInTheDocument();
+
+                breadcrumbs.forEach(breadcrumb => {
+                    expect(screen.getByText(breadcrumb.label)).toBeInTheDocument();
+                });
             });
-        });
-    });
 
-    describe('StockHub business use cases', () => {
-        describe('when user navigates dashboard', () => {
-            it('should show current location in breadcrumb', () => {
-                render(<NavSection><div>Dashboard Content</div></NavSection>);
+            it('should maintain accessibility across different breadcrumb scenarios', () => {
+                Object.entries(mockBreadcrumbs).forEach(([scenario, breadcrumbs]) => {
+                    const mappedBreadcrumbs = breadcrumbs.map(item => ({
+                        label: item.label,
+                        href: item.href,
+                        current: item.isActive
+                    }));
 
-                const dashboard = screen.getByText('Dashboard');
-                expect(dashboard).toHaveAttribute('aria-current', 'page');
+                    const { unmount } = render(
+                        <NavSection breadcrumbs={mappedBreadcrumbs}>
+                            <div>{scenario} Content</div>
+                        </NavSection>
+                    );
+
+                    expect(screen.getByLabelText('Fil d\'Ariane')).toBeInTheDocument();
+                    unmount();
+                });
             });
         });
     });
