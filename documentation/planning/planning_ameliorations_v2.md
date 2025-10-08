@@ -13,7 +13,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - Architecture React 19 + TypeScript solide
 
 **Améliorations prioritaires** ⚠️
-- [ ] Tests unitaires (sécurisation code)
+- [x] Tests unitaires (sécurisation code)
 - [ ] Créativité visuelle (différenciation cartes stocks)
 - [ ] Micro-animations dashboard
 - [ ] IA plus concrète/visible
@@ -23,14 +23,15 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ## ⏰ Disponibilité
 
 - **Semaine** : 2 soirées × 2h = 4h/semaine
-- **Weekend** : 2 soirées × 2h = 4h/weekend
-- **Total planning** : 12h sur 2 semaines
+- **Weekend** : 1 soirées × 3h = 3h/weekend
+- **Weekend** : 1/2 journée × 4h = 4h/weekend
+- **Total planning semaine** : 11h 
 
 ---
 
 ## 🗓️ PLANNING DÉTAILLÉ
 
-### 📅 **SEMAINE 1 - Tests Unitaires (4h)**
+### 📅 **SEMAINE 1 - Tests Unitaires (4h)** ✅
 
 #### **Soirée 1 - Mardi (2h) : Setup Tests + Composants UI**
 - [x] **Installation dépendances** (30min)
@@ -58,71 +59,207 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ Validation Semaine 1** :
 - [x] Tous les tests passent (`npm run test`)
 - [x] Coverage ≥ 80%
-- [ ] CI/CD fonctionne (si configuré) => je crois que sur vercel y a une ci/cd?
+- [X] CI/CD Vercel
 
 ---
+### 📅 **SEMAINE 2 - Refactoring Complet (07/10 - 13/10)** ✅
 
-### 🎨 **WEEKEND 1 - Créativité & Animations (4h)**
+#### **Mardi 08/10 (2h30) : Refactoring Types + Fixtures** 
+- [x] **Centralisation des types** (30min)
+  - [x] Créer `src/types/index.ts`
+  - [x] BadgeVariant, ButtonVariant, ComponentSize, InputType
 
-#### **Samedi soir (2h) : Créativité Visuelle**
-- [ ] **Système de statuts enrichi** (60min)
-  - [ ] Définir les statuts stocks (optimal, low, critical, out_of_stock, overstocked)
-  - [ ] Créer palette couleurs par statut
-  - [ ] Intégrer icônes Lucide React spécifiques
-- [ ] **Différenciation cartes stocks** (60min)
-  - [ ] Appliquer couleurs par statut
-  - [ ] Ajouter bordures colorées
-  - [ ] Tester responsive design
+- [x] **Fixtures** (90min)
+  - [x] `fixtures/badge.ts` (contenus, cas d'usage)
+  - [x] `fixtures/button.ts` (cas d'usage StockHub)
+  - [x] `fixtures/icon.ts` (icônes Lucide typées)
+  - [x] `fixtures/card.ts` (contenus, cas d'usage)
+  - [x] `fixtures/input.ts` (labels, erreurs, helpers, cas d'usage)
 
-#### **Dimanche soir (2h) : Micro-animations**
-- [ ] **Installation Framer Motion** (30min)
+- [x] **Refactoring tests** (30min)
+  - [x] Button.test.tsx avec fixtures
+  - [x] Badge.test.tsx avec fixtures
+  - [x] Card.test.tsx avec fixtures
+  - [x] Input.test.tsx avec fixtures
+  - [x] Vérifier tous les tests passent
+  
+- [x] **Refactoriser Input.tsx** avec InputType
+
+**✅ FAIT** : Composants UI refactorisés
+
+#### **Jeudi 10/10 (2h) : Fixtures Dashboard** 🔄 EN COURS
+- [ ] **Types Dashboard** (30min)
+  - [ ] Créer types pour MetricCard, StockCard dans types/index.ts
+  - [ ] Type MetricType, StockStatus si nécessaires
+
+- [ ] **Fixtures Dashboard** (90min)
+  - [ ] `fixtures/metric.ts` (métriques dashboard mockées)
+  - [ ] `fixtures/stock.ts` (stocks mockés avec différents statuts)
+  - [ ] Cas d'usage métier StockHub
+
+**🎯 Objectif** : Données dashboard centralisées
+
+#### **Samedi 12/10 Soirée (3h) : Refactoring tests Dashboard**
+- [ ] **Refactoring tests Dashboard** (3h)
+  - [ ] MetricCard.test.tsx avec fixtures/metric
+  - [ ] StockCard.test.tsx avec fixtures/stock
+  - [ ] StockGrid.test.tsx avec fixtures/stock
+  - [ ] Vérifier coverage maintenu
+
+**🎯 Objectif** : Tests dashboard refactorisés
+
+#### **Dimanche 13/10 Matin (4h) : Refactoring Layout/Hooks/Page**
+- [ ] **Fixtures Layout** (60min)
+  - [ ] `fixtures/navigation.ts` (liens nav, breadcrumb)
+  - [ ] `fixtures/user.ts` (données user mockées)
+  - [ ] `fixtures/notification.ts` (notifications mockées)
+
+- [ ] **Refactoring tests Layout** (90min)
+  - [ ] Header.test.tsx avec fixtures
+  - [ ] Footer.test.tsx avec fixtures (si nécessaire)
+  - [ ] NavSection.test.tsx avec fixtures (si nécessaire)
+
+- [ ] **Refactoring tests Hooks/Page** (90min)
+  - [ ] useTheme.test.ts (vérifier si fixtures nécessaires)
+  - [ ] useStocks.test.ts avec fixtures/stock
+  - [ ] Dashboard.test.tsx avec fixtures complètes
+  - [ ] Validation finale : tous les tests passent
+
+**🎯 Objectif** : Code 100% organisé et maintenable
+
+**✅ BILAN SEMAINE 2** :
+- Tous composants refactorisés avec fixtures
+- 252 tests toujours au vert
+- Code DRY et maintenable
+- Prêt pour la créativité !
+
+---
+### 🎨 **SEMAINE 3 - Créativité & Animations (14-20/10)**
+
+#### **Mardi 15/10 (2h) : Système de statuts**
+- [ ] **Types et constantes** (45min)
+  - [ ] Type StockStatus dans types/index.ts
+  - [ ] 5 statuts : optimal, low, critical, outOfStock, overstocked
+  - [ ] Créer `constants/stockStatus.ts` avec palette couleurs
+
+- [ ] **Icônes par statut** (45min)
+  - [ ] Ajouter icônes dans fixtures/icon.ts
+  - [ ] CheckCircle, AlertTriangle, XCircle, Package, TrendingUp
+  - [ ] Documentation dans fixtures
+
+- [ ] **Composant StatusBadge** (30min)
+  - [ ] Créer StatusBadge.tsx avec icône + couleur
+  - [ ] Tests basiques
+
+**🎯 Objectif** : Système de statuts défini
+
+#### **Jeudi 17/10 (2h) : Design coloré des cartes**
+- [ ] **StockCard enrichie** (90min)
+  - [ ] Ajouter prop status
+  - [ ] Bordure gauche colorée selon statut
+  - [ ] Badge de statut avec icône
+  - [ ] Background subtle selon statut
+  - [ ] Tests avec différents statuts
+
+- [ ] **Tests responsive** (30min)
+  - [ ] Mobile, tablet, desktop
+  - [ ] Lighthouse après modifications
+
+**🎯 Objectif** : Cartes visuellement différenciées
+
+#### **Samedi 19/10 Soirée (3h) : Animations Framer Motion**
+- [ ] **Setup Framer Motion** (30min)
   ```bash
   npm install framer-motion
   ```
-- [ ] **Animations cartes stocks** (60min)
-  - [ ] Animation entrance (opacity + translateY)
-  - [ ] Animation hover (scale + shadow)
-  - [ ] Stagger animation pour listes
-- [ ] **Animations dashboard** (30min)
-  - [ ] Compteurs animés pour métriques
-  - [ ] Transitions fluides
+  - [ ] Hook useReducedMotion
 
-**✅ Validation Weekend 1** :
-- [ ] Interface plus créative et différenciée
-- [ ] Animations fluides sans impact performance
-- [ ] Lighthouse Performance ≥ 98/100 maintenu
+- [ ] **Animations StockCard** (90min)
+  - [ ] Entrance (opacity, translateY)
+  - [ ] Hover (scale, shadow)
+  - [ ] Exit animation
+
+- [ ] **Animations StockGrid** (60min)
+  - [ ] Stagger children
+  - [ ] Layout animation
+
+**🎯 Objectif** : Cartes animées
+
+#### **Dimanche 20/10 Matin (4h) : Animations Dashboard + Tests**
+- [ ] **Compteurs animés** (90min)
+  - [ ] MetricCard count-up animation
+  - [ ] Format numbers
+  - [ ] Easing et durées
+
+- [ ] **Tests performance** (60min)
+  - [ ] FPS > 55
+  - [ ] Lighthouse ≥ 98
+  - [ ] prefers-reduced-motion
+
+- [ ] **Polish final** (90min)
+  - [ ] Ajustements transitions
+  - [ ] Tests UX
+  - [ ] Documentation
+
+**🎯 Objectif** : Dashboard vivant et fluide 🎬
+
+**✅ BILAN SEMAINE 3** :
+- Interface créative et différenciée
+- Animations fluides
+- Performance maintenue
+- UX améliorée
 
 ---
 
-### 🤖 **SEMAINE 2 - IA & Connexion (4h)**
+### 🤖 **SEMAINE 4 - IA & Backend (21-27/10)**
 
-#### **Soirée 1 - Mardi (2h) : IA Visible**
-- [ ] **Composant SmartSuggestions** (60min)
-  - [ ] Interface suggestions IA (mockées)
-  - [ ] Design avec icône AI + animations
-  - [ ] Intégration dans dashboard
-- [ ] **Composant StockPrediction** (60min)
-  - [ ] Prédictions rupture de stock (mockées)
-  - [ ] Barre de progression + alertes
+#### **Mardi 22/10 (2h) : Composant SmartSuggestions**
+- [ ] **Design composant** (60min)
+  - [ ] Card avec icône AI sparkles
+  - [ ] Liste suggestions mockées
+  - [ ] Design gradient subtil
+
+- [ ] **Animations** (60min)
+  - [ ] Apparition suggestions (stagger)
+  - [ ] Hover effects
+  - [ ] Bouton "Appliquer"
+
+#### **Jeudi 24/10 (2h) : Composant StockPrediction**
+- [ ] **Design composant** (60min)
+  - [ ] Prédiction rupture stock
+  - [ ] Barre de progression
+  - [ ] Indicateur risque
+
+- [ ] **Animations & intégration** (60min)
+  - [ ] Animation barre
   - [ ] Actions recommandées
+  - [ ] Intégration dashboard
 
-#### **Soirée 2 - Jeudi (2h) : Connexion Backend V1**
-- [ ] **Services API** (30min)
-  - [ ] Créer `src/services/api/client.ts`
-  - [ ] Créer `src/services/api/stockService.ts`
+#### **Samedi 26/10 Soirée (3h) : Setup Backend**
+- [ ] **Services API** (90min)
+  - [ ] Installer @tanstack/react-query
+  - [ ] `services/api/client.ts`
+  - [ ] `services/api/stockService.ts`
   - [ ] Configuration React Query
-- [ ] **Connexion & Tests** (90min)
-  - [ ] Installer `@tanstack/react-query`
-  - [ ] Créer hooks useStocks, useStock
-  - [ ] Connecter au backend (port 3006)
-  - [ ] Tester authentification Azure AD
-  - [ ] Vérifier affichage données réelles
 
-**✅ Validation Finale** :
-- [ ] Application V2 complète et fonctionnelle
-- [ ] Connexion backend opérationnelle
-- [ ] Toutes les améliorations encadrante implémentées
-- [ ] Performance maintenue (Lighthouse ≥ 98)
+- [ ] **Tests connexion** (90min)
+  - [ ] Test client API
+  - [ ] Test authentification Azure AD
+
+#### **Dimanche 27/10 Matin (4h) : Connexion finale**
+- [ ] **Hooks React Query** (2h)
+  - [ ] useStocksQuery
+  - [ ] Adapter composants
+
+- [ ] **Tests & validation** (2h)
+  - [ ] Données réelles affichées
+  - [ ] Gestion erreurs/loading
+  - [ ] Tests end-to-end
+
+**✅ BILAN SEMAINE 4** :
+- IA visible et fonctionnelle
+- Backend connecté
+- Application complète
 
 ---
 
@@ -136,35 +273,53 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - [x] Script `npm run test` fonctionne
 - [x] Script `npm run test:coverage` fonctionne
 
-### 🎨 **Livrable 2 : Créativité Visuelle**
-- [ ] 5 statuts stocks définis avec couleurs
+### 🔄 **Livrable 2 : Refactoring Complet** 🔄 EN COURS (08-13/10)
+- [x] Types centralisés src/types/index.ts
+- [x] Fixtures Badge/Button/Icon
+- [x] Tests Button/Badge refactorisés
+- [ ] Fixtures Card/Input (09/10)
+- [ ] Tests Card/Input refactorisés (09/10)
+- [ ] Fixtures Dashboard : metric, stock (10/10)
+- [ ] Tests Dashboard refactorisés (12/10)
+- [ ] Fixtures Layout : navigation, user, notification (13/10)
+- [ ] Tests Layout/Hooks/Page refactorisés (13/10)
+- [ ] 252 tests toujours au vert
+- [ ] Code 100% DRY et maintenable
+
+### 🎨 **Livrable 3 : Créativité Visuelle** 📅 15-17/10
+- [ ] Type StockStatus + constantes couleurs
+- [ ] 5 statuts définis avec palette complète
 - [ ] Icônes spécifiques par statut
-- [ ] Cartes visuellement différenciées
-- [ ] Design cohérent avec design system
-- [ ] Responsive design maintenu
+- [ ] Composant StatusBadge
+- [ ] StockCard enrichie visuellement
+- [ ] Bordures et backgrounds colorés
+- [ ] Tests responsive
+- [ ] Design cohérent
 
-### ✨ **Livrable 3 : Micro-animations**
+### ✨ **Livrable 4 : Micro-animations** 📅 19-20/10
 - [ ] Framer Motion installé
-- [ ] Animations entrance sur cartes
+- [ ] Animations entrance/exit StockCard
 - [ ] Animations hover fluides
+- [ ] Stagger animation StockGrid
 - [ ] Compteurs animés dashboard
-- [ ] Performance non dégradée
-- [ ] `prefers-reduced-motion` respecté
+- [ ] useReducedMotion hook
+- [ ] Performance ≥ 98/100
+- [ ] Tests FPS et accessibilité
 
-### 🤖 **Livrable 4 : IA Visible**
-- [ ] Composant SmartSuggestions créé
-- [ ] Composant StockPrediction créé
+### 🤖 **Livrable 5 : IA Visible** 📅 22-24/10
+- [ ] SmartSuggestions avec animations
+- [ ] StockPrediction avec barre progression
 - [ ] Interface IA intuitive
 - [ ] Données mockées réalistes
 - [ ] Intégration dashboard harmonieuse
 
-### 🔌 **Livrable 5 : Connexion Backend**
-- [ ] Client API créé avec auth Azure AD
-- [ ] Service Stock opérationnel
+### 📌 **Livrable 6 : Connexion Backend** 📅 26-27/10
 - [ ] React Query configuré
-- [ ] Hooks useStocks fonctionnels
+- [ ] Client API avec auth Azure AD
+- [ ] useStocksQuery fonctionnel
 - [ ] Données backend affichées
-- [ ] Authentification testée
+- [ ] Gestion erreurs/loading
+- [ ] Tests end-to-end
 
 ---
 
@@ -434,7 +589,73 @@ npm run type-check
 - Ligne 325 : console.log (non critique)
 - Lignes 341-346 : État complexe ou callback conditionnel
 ```
+### Séance 6 - Refactoring Badge/Button (Date : 08/10/2025) ✅
+```
+⏱️ Temps réel : 2h (estimé 2h)
 
+✅ Réalisé :
+- Types centralisés (BadgeVariant, ButtonVariant, ComponentSize, InputType)
+- Fixtures badge.ts, button.ts, icon.ts
+- Tests Button/Badge refactorisés
+- Convention suffixe de type respectée
+
+💡 Apprentissages :
+- Record<string, T> pour fixtures flexibles
+- vi.mock() DOIT être avant imports
+- Fixtures = documentation vivante
+
+📄 Pour demain (09/10) :
+- Fixtures Card/Input
+- Refactoring tests Card/Input
+```
+
+### Séance 7 - Refactoring Card/Input (Date : 09/10/2025)
+```
+⏱️ Temps réel : ___h___ (estimé 2h)
+
+✅ Réalisé :
+❌ Difficultés :
+💡 Apprentissages :
+📄 Pour jeudi (10/10) :
+- Fixtures Dashboard (metric, stock)
+```
+
+### Séance 8 - Fixtures Dashboard (Date : 10/10/2025)
+```
+⏱️ Temps réel : ___h___ (estimé 2h)
+
+✅ Réalisé :
+❌ Difficultés :
+💡 Apprentissages :
+📄 Pour samedi (12/10) :
+- Refactoring tests Dashboard
+```
+
+### Séance 9 - Refactoring tests Dashboard (Date : 12/10/2025)
+```
+⏱️ Temps réel : ___h___ (estimé 3h)
+
+✅ Réalisé :
+❌ Difficultés :
+💡 Apprentissages :
+📄 Pour dimanche (13/10) :
+- Fixtures Layout + refactoring final
+```
+
+### Séance 10 - Refactoring Layout/Hooks/Page (Date : 13/10/2025)
+```
+⏱️ Temps réel : ___h___ (estimé 4h)
+
+✅ Réalisé :
+❌ Difficultés :
+💡 Apprentissages :
+✅ Validation Semaine 2 :
+- [ ] Tous les tests passent
+- [ ] Code 100% refactorisé
+- [ ] Prêt pour créativité
+```
+
+---
 ### Séance 2 - Tests Coverage (Date : ___/___/___)
 ```
 ⏱️ Temps réel : ___h___min
@@ -484,28 +705,30 @@ npm run type-check
 
 ## 🎉 VALIDATION FINALE
 
-### Checklist finale avant livraison
-- [ ] Tous les tests passent ✅
-- [ ] Coverage ≥ 80% ✅
+### Checklist finale avant livraison (27/10)
+- [x] Tous les tests passent ✅ (252 tests)
+- [x] Coverage ≥ 80% ✅ (90%+)
+- [ ] Code 100% refactorisé ✅
+- [ ] Cartes différenciées visuellement ✅
 - [ ] Animations fluides ✅
 - [ ] IA visible et fonctionnelle ✅
 - [ ] Connexion backend opérationnelle ✅
 - [ ] Performance maintenue ✅
 - [ ] Documentation mise à jour ✅
-- [ ] Commit et push final ✅
 
 ### Résultat attendu
-- [ ] **Note encadrante** : 85/100 → 95/100+ 
-- [ ] **Application complète** : V2 + Backend connecté
-- [ ] **Compétences RNCP** : Tests, animations, intégration API
+- [ ] **Note encadrante** : 85/100 → 95/100+ ?
+- [ ] **Application complète** : V2 + Backend connecté +IA
+- [ ] **Compétences RNCP** :  Tests ✅, créativité, animations, intégration API
 - [ ] **Portfolio** : Projet de qualité professionnelle
 
 ---
 
-**Date de début** : 30/09/2025  
-**Date de fin prévue** : 11/10/2025  
-**Statut** : ⬜ En cours ⬜ Terminé ⬜ Reporté
+**Date de début** : 28/09/2025  
+**Date de fin prévue** : 27/10/2025 (4 semaines)
+**Statut** : [X] En cours [ ] Terminé [ ] Reporté / (Semaine 2/4 - Refactoring)
 
-**Développé par** : Sandrine Cipolla  
-**Encadrant(e)** : [Nom encadrante]  
+**Développé par** : Sandrine Cipolla
+**Rythme** : 11h/semaine sur 4 semaines = 44h total
+**Encadrant(e)** : Koni 
 **Projet** : StockHub V2 - Certification RNCP 7

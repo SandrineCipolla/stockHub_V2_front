@@ -1,5 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
+import {InputType} from "@/types";
 
 // Types pour les props du composant
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -7,6 +8,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     icon?: React.ElementType;
     helperText?: string;
+    type?: InputType;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -16,6 +18,7 @@ export const Input: React.FC<InputProps> = ({
                                                 helperText,
                                                 className = '',
                                                 id,
+                                                type = 'text',
                                                 ...props
                                             }) => {
     const { theme } = useTheme();
@@ -52,6 +55,7 @@ export const Input: React.FC<InputProps> = ({
                 )}
                 <input
                     id={inputId}
+                    type={type}
                     className={`
             w-full px-4 py-3 rounded-xl transition-all
             ${Icon ? 'pl-10' : ''}

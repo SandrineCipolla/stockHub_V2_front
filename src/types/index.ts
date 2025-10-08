@@ -30,8 +30,12 @@ export interface MetricData {
 }
 
 export type ButtonVariant = "primary" | "secondary" | "ghost"
-export type ButtonSize = "sm" | "md" | "lg"
+export type ComponentSize = "sm" | "md" | "lg"
 export type BadgeVariant = "success" | "warning" | "danger"
+/**
+ * Types d'input HTML standards
+ */
+export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 
 export interface SearchFilters {
     query?: string;
