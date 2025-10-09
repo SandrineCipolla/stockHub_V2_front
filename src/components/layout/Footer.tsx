@@ -1,20 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
-
-// Types pour les liens du footer
-interface FooterLink {
-    label: string;
-    href: string;
-    external?: boolean;
-}
-
-// Types pour les props du composant
-interface FooterProps {
-    className?: string;
-    companyName?: string;
-    year?: number;
-    links?: FooterLink[];
-}
+import type {FooterLink, FooterProps} from '@/types';
 
 const defaultLinks: FooterLink[] = [
     { label: 'Mentions Légales', href: '#' },

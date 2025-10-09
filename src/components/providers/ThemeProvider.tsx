@@ -1,12 +1,8 @@
 "use client"
 
-import {type ReactNode, useEffect, useState} from "react"
-import type {Theme} from "@/types"
+import {useEffect, useState} from "react"
+import type {Theme, ThemeProviderProps} from "@/types"
 import {ThemeContext} from "@/contexts/theme"
-
-interface ThemeProviderProps {
-    children: ReactNode
-}
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
     const [theme, setTheme] = useState<Theme>("dark")
@@ -24,7 +20,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     }, [theme])
 
     const toggleTheme = () => {
-        setTheme((prev) => (prev === "dark" ? "light" : "dark"))
+        setTheme((prev: Theme) => (prev === "dark" ? "light" : "dark"))
     }
 
     return (

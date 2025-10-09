@@ -1,16 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
-
-// Types pour les props du composant
-interface CardProps {
-    children: React.ReactNode;
-    hover?: boolean;
-    className?: string;
-    onClick?: () => void;
-    role?: string;
-    'aria-labelledby'?: string;
-    'aria-describedby'?: string;
-}
+import type {CardProps} from '@/types';
 
 export const Card: React.FC<CardProps> = ({
                                               children,
@@ -36,14 +26,7 @@ export const Card: React.FC<CardProps> = ({
 
     return (
         <div
-            className={`
-        ${baseClasses} 
-        backdrop-blur-sm border rounded-xl p-6
-        transition-all duration-300
-        ${hoverClasses}
-        ${clickableClasses}
-        ${className}
-      `}
+            className={`${baseClasses} backdrop-blur-sm border rounded-xl p-6 transition-all duration-300 ${hoverClasses} ${clickableClasses} ${className}`.trim()}
             onClick={onClick}
             role={role}
             tabIndex={onClick ? 0 : undefined}

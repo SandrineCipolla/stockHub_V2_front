@@ -25,3 +25,8 @@ dist-ssr
 
 *.tsbuildinfo
 
+# Test coverage
+coverage/
+
+# Documentation files
+documentation/propositionIA/propositionIA.tsx

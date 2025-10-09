@@ -1,22 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
-import type {ButtonSize, ButtonVariant} from '@/types';
-
-// Types pour les props du composant
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
-    icon?: React.ElementType;
-    loading?: boolean;
-    children?: React.ReactNode;
-}
-
-// // Test d'utilisation invalide (à commenter pour éviter les erreurs)
-// const InvalidButtonUsage = () => (
-//   <Button variant="invalid" size="xl"> {/* ❌ Erreurs attendues */}
-//     Click me
-//   </Button>
-// );
+import type {ButtonProps, ButtonVariant, ComponentSize} from '@/types';
 
 export const Button: React.FC<ButtonProps> = ({
                                                   variant = 'primary',
@@ -43,7 +27,7 @@ export const Button: React.FC<ButtonProps> = ({
             : "bg-transparent hover:bg-gray-100 text-gray-600 hover:text-gray-900"
     };
 
-    const sizes: Record<ButtonSize, string> = {
+    const sizes: Record<ComponentSize, string> = {
         sm: "px-3 py-1.5 text-sm rounded-lg gap-1.5",
         md: "px-4 py-2 text-sm rounded-lg gap-2",
         lg: "px-6 py-3 text-base rounded-xl gap-2"

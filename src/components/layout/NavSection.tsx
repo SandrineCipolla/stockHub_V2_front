@@ -1,21 +1,7 @@
 import React from 'react';
 import {ChevronRight, Home} from 'lucide-react';
 import {useTheme} from '@/hooks/useTheme.ts';
-
-// Types pour les éléments de breadcrumb
-interface BreadcrumbItem {
-    label: string;
-    href?: string;
-    current?: boolean;
-    icon?: React.ElementType;
-}
-
-// Types pour les props du composant
-interface NavSectionProps {
-    children: React.ReactNode;
-    breadcrumbs?: BreadcrumbItem[];
-    className?: string;
-}
+import type {NavSectionProps} from '@/types';
 
 export const NavSection: React.FC<NavSectionProps> = ({
                                                           children,

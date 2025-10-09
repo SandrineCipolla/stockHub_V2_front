@@ -1,14 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
-import type {BadgeVariant} from '@/types';
-
-// Types pour les props du composant
-interface BadgeProps {
-    variant: BadgeVariant;
-    children: React.ReactNode;
-    className?: string;
-    size?: 'sm' | 'md' | 'lg';
-}
+import type {BadgeProps, BadgeVariant, ComponentSize} from '@/types';
 
 export const Badge: React.FC<BadgeProps> = ({
                                                 variant,
@@ -30,7 +22,7 @@ export const Badge: React.FC<BadgeProps> = ({
             : "bg-red-100 text-red-700 border-red-300"
     };
 
-    const sizes = {
+    const sizes: Record<ComponentSize, string> = {
         sm: "px-2 py-0.5 text-xs",
         md: "px-3 py-1 text-xs",
         lg: "px-4 py-1.5 text-sm"
@@ -38,11 +30,7 @@ export const Badge: React.FC<BadgeProps> = ({
 
     return (
         <span
-            className={`
-        ${sizes[size]} rounded-full font-medium border 
-        ${variants[variant]} 
-        ${className}
-      `}
+            className={`${sizes[size]} rounded-full font-medium border ${variants[variant]} ${className}`.trim()}
         >
       {children}
     </span>

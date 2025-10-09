@@ -1,21 +1,10 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import type {SearchFilters, Stock, StockStatus} from '@/types';
+import type {CreateStockData, SearchFilters, Stock, StockStatus, UpdateStockData} from '@/types';
 import {createFrontendError, useAsyncAction, useLocalStorageState} from './useFrontendState';
 import {stockData} from "@/data/stockData.ts";
 
 
-// ===== TYPES POUR ACTIONS STOCKS =====
-export interface CreateStockData {
-    name: string;
-    quantity: number;
-    value: number;
-    description?: string;
-    category?: string;
-}
-
-export interface UpdateStockData extends Partial<CreateStockData> {
-    id: number;
-}
+export type {CreateStockData, UpdateStockData};
 
 // ===== HOOK PRINCIPAL POUR GESTION DES STOCKS =====
 export const useStocks = () => {

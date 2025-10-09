@@ -2,35 +2,21 @@ import React from 'react';
 import {AlertTriangle, Package, TrendingUp} from 'lucide-react';
 import {Card} from '@/components/common/Card';
 import {useTheme} from '@/hooks/useTheme.ts';
+import type {IconComponentMap, MetricCardProps} from '@/types';
 
-
-// Types pour les props du composant
-interface MetricCardProps {
-    id: string;
-    label: string;
-    value: string | number;
-    change: number;
-    changeType: 'increase' | 'decrease';
-    icon: 'package' | 'alert-triangle' | 'trending-up';
-    color: 'success' | 'warning' | 'info';
-    className?: string;
-}
-
-// Mapping des icônes
-const iconMap = {
+// Mapping des icônes avec typage strict
+const iconMap: IconComponentMap = {
     'package': Package,
     'alert-triangle': AlertTriangle,
     'trending-up': TrendingUp,
-} as const;
+};
 
 export const MetricCard: React.FC<MetricCardProps> = ({
-                                                          id,
-                                                          label,
+                                                          title,
                                                           value,
-                                                          change,
-                                                          changeType,
                                                           icon,
                                                           color,
+                                                          change,
                                                           className = ''
                                                       }) => {
     const { theme } = useTheme();
@@ -67,7 +53,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     };
 
     return (
-        <Card className={className} aria-labelledby={id} role="region">
+        <Card className={className} role="region">
             <div className="flex items-center justify-between mb-4">
                 <div
                     className={`p-3 rounded-xl ${getIconBackground(color)}`}
@@ -75,26 +61,27 @@ export const MetricCard: React.FC<MetricCardProps> = ({
                 >
                     <IconComponent className={`w-6 h-6 ${getIconColor(color)}`} />
                 </div>
-                <span
-                    className={`text-sm flex items-center gap-1 ${getChangeColor(changeType)}`}
-                    aria-label={`Évolution ${changeType === 'increase' ? 'positive' : 'négative'}: ${changeType === 'increase' ? '+' : '-'}${change}`}
-                >
+                {change && (
+                    <span
+                        className={`text-sm flex items-center gap-1 ${getChangeColor(change.type)}`}
+                        aria-label={`Évolution ${change.type === 'increase' ? 'positive' : 'négative'}: ${change.type === 'increase' ? '+' : '-'}${change.value}`}
+                    >
           <TrendingUp
-              className={`w-3 h-3 ${changeType === 'decrease' ? 'rotate-180' : ''}`}
+              className={`w-3 h-3 ${change.type === 'decrease' ? 'rotate-180' : ''}`}
               aria-hidden="true"
           />
-                    {changeType === 'increase' ? '+' : '-'}{change}
+                        {change.type === 'increase' ? '+' : '-'}{change.value}
         </span>
+                )}
             </div>
             <div
                 className="text-3xl font-bold mb-1"
-                id={id}
-                aria-label={`${label}: ${value}`}
+                aria-label={`${title}: ${value}`}
             >
                 {value}
             </div>
             <div className={`text-sm ${themeClasses.textSubtle}`}>
-                {label}
+                {title}
             </div>
         </Card>
     );
