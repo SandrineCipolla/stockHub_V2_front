@@ -2,13 +2,7 @@ import React from 'react';
 import {Bell, Moon, Sun, User} from 'lucide-react';
 import {Button} from '@/components/common/Button';
 import {useTheme} from '@/hooks/useTheme.ts';
-
-// Types pour les props du composant
-interface HeaderProps {
-    className?: string;
-    userName?: string;
-    notificationCount?: number;
-}
+import type {HeaderProps} from '@/types';
 
 export const Header: React.FC<HeaderProps> = ({
                                                   className = '',

@@ -823,7 +823,145 @@ npm run type-check
 
 **🎯 OBJECTIF 80% COVERAGE : LARGEMENT DÉPASSÉ ✅**
 
-### Séance 12 - Créativité (Date : ___/___/___)
+### Séance 12 - Nettoyage Architecture Types (Date : 09/10/2025) ✅
+```
+⏱️ Temps réel : 45min (estimé 1h)
+
+✅ Réalisé :
+- Création types/error.ts pour centraliser types erreurs
+  - FrontendErrorType, FrontendError, LoadingState, AsyncFrontendState<T>
+- Suppression interfaces dupliquées dans hooks
+  - useFrontendState.ts : Suppression définitions locales FrontendError
+  - useStocks.ts : Suppression CreateStockData, UpdateStockData (import depuis @/types)
+- Suppression interfaces locales dans tous les composants
+  - Card.tsx, Input.tsx : Import CardProps, InputProps depuis @/types
+  - StockCard.tsx, StockGrid.tsx : Import StockCardProps, StockGridProps
+  - Header.tsx, Footer.tsx, NavSection.tsx : Import props depuis @/types
+  - ThemeProvider.tsx : Import ThemeProviderProps depuis @/types
+- Mise à jour types/components.ts avec props réelles composants
+- Ajout props manquantes dans types/dashboard.ts (NavSectionProps, HeaderProps, FooterProps)
+- Résolution duplication LoadingState (types/api.ts → import depuis types/error.ts)
+- Suppression imports inutilisés (BaseComponentProps, Stock)
+- Ré-export types pour compatibilité tests (CreateStockData, UpdateStockData)
+- 340 tests passent sans régression ✅
+- TypeScript compilation OK (0 erreur) ✅
+
+❌ Difficultés :
+- Incohérence entre types/components.ts et props réelles des composants
+  - CardProps, InputProps ne correspondaient pas à l'implémentation
+  - StockCardProps, StockGridProps callbacks différents (stock vs stockId)
+- Duplication LoadingState entre types/api.ts et types/error.ts
+- Imports circulaires à éviter lors de la réorganisation
+- Props manquantes (className) dans HeaderProps, NavSectionProps
+
+💡 Apprentissages :
+- Importance de maintenir cohérence entre définitions types et implémentations
+- types/components.ts doit refléter exactement les props des composants réels
+- Centralisation des types erreurs facilite maintenance et évite duplications
+- Re-export types depuis hooks pour compatibilité tests sans casser encapsulation
+- TypeScript compilation check essentiel après refactoring types
+- Architecture types bien organisée = zéro interface locale dans composants/hooks
+
+✅ Validation Séance 12 :
+- [x] Tous les types centralisés dans src/types/ ✅
+- [x] Aucune interface locale dans composants ✅
+- [x] Aucune interface locale dans hooks ✅
+- [x] 340 tests passent (100%) ✅
+- [x] TypeScript OK (0 erreur) ✅
+- [x] Architecture clean et maintenable ✅
+
+🔄 À reporter : Rien - Architecture types parfaitement organisée ✅
+```
+
+📊 **ARCHITECTURE TYPES FINALE :**
+
+```
+src/types/
+├── error.ts         ✅ Types erreurs (FrontendError, LoadingState)
+├── api.ts           ✅ Types API (AsyncState, ApiError)
+├── stock.ts         ✅ Types métier (Stock, CreateStockData, UpdateStockData)
+├── dashboard.ts     ✅ Types dashboard + layout (MetricCard, Header, Footer, NavSection)
+├── components.ts    ✅ Props composants (Card, Input, Badge, Button, StockCard, StockGrid)
+├── ui.ts            ✅ Types UI de base (Theme, ButtonVariant, ComponentSize)
+├── utils.ts         ✅ Types utilitaires
+└── index.ts         ✅ Point d'entrée central (export all)
+```
+
+**🎯 RÉSULTAT : CODE 100% DRY, ZÉRO DUPLICATION ✅**
+
+### Séance 13 - Nettoyage Final Tests & Fixtures (Date : 09/10/2025) ✅
+```
+⏱️ Temps réel : 30min (estimé 45min)
+
+✅ Réalisé :
+- Création test/fixtures/localStorage.ts
+  - createLocalStorageMock() : Factory pour créer mocks localStorage isolés
+  - Interface LocalStorageMock typée
+  - Instance par défaut exportée
+- Création test/fixtures/hooks.ts
+  - createMockUseStocks() : Mock complet hook useStocks avec fixtures
+  - createMockUseDataExport() : Mock hook useDataExport
+  - createMockUseTheme() : Mock hook useTheme
+- Typage strict iconMap dans MetricCard.tsx
+  - Création type IconComponentMap dans types/dashboard.ts
+  - Remplacement 'as const' par typage explicite
+- Migration tests vers fixtures centralisées
+  - useStocks.test.tsx : Import createLocalStorageMock()
+  - useTheme.test.tsx : Import createLocalStorageMock()
+  - Dashboard.test.tsx : Import createMockUseStocks, createMockUseDataExport, createMockUseTheme
+- Suppression définitions locales dupliquées
+  - Supprimé : localStorage mock local dans useStocks.test.tsx
+  - Supprimé : localStorage mock local dans useTheme.test.tsx
+  - Supprimé : createMockUseStocks local dans Dashboard.test.tsx
+  - Supprimé : createMockUseDataExport local dans Dashboard.test.tsx
+- 340 tests passent sans régression ✅
+- TypeScript compilation OK (0 erreur) ✅
+
+❌ Difficultés :
+- Identification de tous les mocks dupliqués dans les tests
+- Maintien compatibilité avec tests existants lors migration
+- Typage correct des mocks hooks (vi.fn() avec types corrects)
+
+💡 Apprentissages :
+- Fixtures mocks = même principe que fixtures données
+- createLocalStorageMock() permet isolation complète entre tests
+- Factory functions pour mocks offrent flexibilité (overrides param)
+- Centralisation mocks facilite maintenance et évolutions
+- Mock localStorage doit être créé avant définition window.localStorage
+- Type IconComponentMap garantit cohérence mapping icônes/types
+
+✅ Validation Séance 13 :
+- [x] Fixtures mocks centralisées (localStorage, hooks) ✅
+- [x] Zéro duplication mocks dans tests ✅
+- [x] iconMap strictement typé ✅
+- [x] 340 tests passent (100%) ✅
+- [x] TypeScript OK (0 erreur) ✅
+- [x] Architecture tests maintenable ✅
+
+🔄 À reporter : Rien - Tests 100% DRY ✅
+```
+
+📊 **ORGANISATION FINALE FIXTURES :**
+
+```
+src/test/fixtures/
+├── badge.ts          ✅ Fixtures données badges
+├── button.ts         ✅ Fixtures données buttons
+├── card.ts           ✅ Fixtures données cards
+├── icon.ts           ✅ Fixtures icônes Lucide
+├── input.ts          ✅ Fixtures données inputs
+├── metric.ts         ✅ Fixtures métriques dashboard
+├── stock.ts          ✅ Fixtures stocks métier
+├── navigation.ts     ✅ Fixtures navigation
+├── user.ts           ✅ Fixtures utilisateurs
+├── notification.ts   ✅ Fixtures notifications
+├── localStorage.ts   ✅ Mock localStorage (NEW)
+└── hooks.ts          ✅ Mocks hooks React (NEW)
+```
+
+**🎯 TESTS 100% DRY & RÉUTILISABLES ✅**
+
+### Séance 14 - Créativité (Date : ___/___/___)
 ```
 ⏱️ Temps réel : ___h___min
 ✅ Réalisé :

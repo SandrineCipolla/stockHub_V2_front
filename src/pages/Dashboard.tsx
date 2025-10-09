@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {BarChart3, Download, Plus, Search,} from 'lucide-react';
 
-// Import de tes composants existants
+
 import {Header} from '@/components/layout/Header';
 import {NavSection} from '@/components/layout/NavSection';
 import {Footer} from '@/components/layout/Footer';

@@ -2,14 +2,14 @@ import React from 'react';
 import {AlertTriangle, Package, TrendingUp} from 'lucide-react';
 import {Card} from '@/components/common/Card';
 import {useTheme} from '@/hooks/useTheme.ts';
-import type {MetricCardProps} from '@/types';
+import type {IconComponentMap, MetricCardProps} from '@/types';
 
-// Mapping des icônes
-const iconMap = {
+// Mapping des icônes avec typage strict
+const iconMap: IconComponentMap = {
     'package': Package,
     'alert-triangle': AlertTriangle,
     'trending-up': TrendingUp,
-} as const;
+};
 
 export const MetricCard: React.FC<MetricCardProps> = ({
                                                           title,

@@ -4,18 +4,10 @@ import type {CreateStockData, UpdateStockData} from '@/hooks/useStocks';
 import {useStocks} from '@/hooks/useStocks';
 import {Stock} from '@/types/index.ts';
 import {createMockStock, stockCategories, stockHubStockUseCases, stockStatuses} from '@/test/fixtures/stock';
+import {createLocalStorageMock} from '@/test/fixtures/localStorage';
 
-// Mock localStorage
-const localStorageMock = (() => {
-    let store: Record<string, string> = {};
-    return {
-        getItem: (key: string) => store[key] || null,
-        setItem: (key: string, value: string) => { store[key] = value; },
-        removeItem: (key: string) => { delete store[key]; },
-        clear: () => { store = {}; },
-    };
-})();
 
+const localStorageMock = createLocalStorageMock();
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
 describe('useStocks Hook', () => {
@@ -180,7 +172,7 @@ describe('useStocks Hook', () => {
 
                 const criticalStockData: CreateStockData = {
                     name: stockHubStockUseCases.criticalStock.name,
-                    quantity: 0, // Quantité 0 pour obtenir le statut 'critical' selon la logique du hook
+                    quantity: 0,
                     value: stockHubStockUseCases.criticalStock.value
                 };
 
@@ -301,7 +293,7 @@ describe('useStocks Hook', () => {
                 // Mettre à jour avec une quantité critique
                 const criticalUpdate: UpdateStockData = {
                     id: firstStock.id,
-                    quantity: 1 // Quantité critique
+                    quantity: 1
                 };
 
                 let updated: Stock | null = null;
@@ -327,7 +319,7 @@ describe('useStocks Hook', () => {
                 const firstStock = result.current.stocks[0];
                 const invalidUpdate: UpdateStockData = {
                     id: firstStock.id,
-                    name: '   ' // Empty name
+                    name: '   '
                 };
 
                 let updated: Stock | null = null;

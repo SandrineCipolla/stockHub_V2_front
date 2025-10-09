@@ -4,20 +4,7 @@ import {Card} from '@/components/common/Card';
 import {Button} from '@/components/common/Button';
 import {Badge} from '@/components/common/Badge';
 import {useTheme} from '@/hooks/useTheme.ts';
-import type {Stock, StockStatus} from '@/types';
-
-// Types pour les props du composant
-interface StockCardProps {
-    stock: Stock;
-    index?: number;
-    isLoaded?: boolean;
-    onView?: (stockId: number) => void;
-    onEdit?: (stockId: number) => void;
-    onDelete?: (stockId: number) => void;
-    isUpdating?: boolean;
-    isDeleting?: boolean;
-    className?: string;
-}
+import type {StockCardProps, StockStatus} from '@/types';
 
 export const StockCard: React.FC<StockCardProps> = ({
                                                         stock,
@@ -36,7 +23,6 @@ export const StockCard: React.FC<StockCardProps> = ({
         textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
     };
 
-    // Fonction pour obtenir le badge de statut
     const getStatusBadge = (status: StockStatus): React.ReactElement => {
         const statusMap: Record<StockStatus, { variant: 'success' | 'warning' | 'danger'; label: string }> = {
             optimal: { variant: 'success', label: 'Optimal' },

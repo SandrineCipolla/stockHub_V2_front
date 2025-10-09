@@ -39,3 +39,8 @@ export const isTheme = (theme: string): theme is Theme => {
 export const isButtonVariant = (variant: string): variant is ButtonVariant => {
     return BUTTON_VARIANTS.includes(variant as ButtonVariant);
 };
+
+// Props pour les providers
+export interface ThemeProviderProps {
+    children: React.ReactNode;
+}

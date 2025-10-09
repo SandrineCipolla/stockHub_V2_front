@@ -1,16 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
-
-// Types pour les props du composant
-interface CardProps {
-    children: React.ReactNode;
-    hover?: boolean;
-    className?: string;
-    onClick?: () => void;
-    role?: string;
-    'aria-labelledby'?: string;
-    'aria-describedby'?: string;
-}
+import type {CardProps} from '@/types';
 
 export const Card: React.FC<CardProps> = ({
                                               children,

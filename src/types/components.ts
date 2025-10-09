@@ -1,5 +1,5 @@
 import React from "react";
-import type {BadgeVariant, BaseComponentProps, ButtonVariant, ComponentSize, InputType} from './ui';
+import type {BadgeVariant, ButtonVariant, ComponentSize, InputType} from './ui';
 import type {Stock} from './stock';
 
 // ========================================
@@ -22,39 +22,44 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     children?: React.ReactNode;
 }
 
-export interface CardProps extends BaseComponentProps {
-    title?: string;
-    subtitle?: string;
-    footer?: React.ReactNode;
-    variant?: 'default' | 'highlighted';
-    padding?: ComponentSize;
+export interface CardProps {
+    children: React.ReactNode;
+    hover?: boolean;
+    className?: string;
+    onClick?: () => void;
+    role?: string;
+    'aria-labelledby'?: string;
+    'aria-describedby'?: string;
 }
 
-export interface InputProps extends BaseComponentProps {
-    type?: InputType;
-    placeholder?: string;
-    value?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    disabled?: boolean;
-    error?: string;
-    helper?: string;
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
-    required?: boolean;
-    size?: ComponentSize;
+    error?: string;
+    icon?: React.ElementType;
+    helperText?: string;
+    type?: InputType;
 }
 
 // Props composants métier Stock
 export interface StockCardProps {
     stock: Stock;
-    onEdit?: (stock: Stock) => void;
-    onDelete?: (id: number) => void;
+    index?: number;
+    isLoaded?: boolean;
+    onView?: (stockId: number) => void;
+    onEdit?: (stockId: number) => void;
+    onDelete?: (stockId: number) => void;
+    isUpdating?: boolean;
+    isDeleting?: boolean;
     className?: string;
 }
 
 export interface StockGridProps {
     stocks: Stock[];
-    onEdit?: (stock: Stock) => void;
-    onDelete?: (id: number) => void;
-    loading?: boolean;
+    isLoaded?: boolean;
+    onView?: (stockId: number) => void;
+    onEdit?: (stockId: number) => void;
+    onDelete?: (stockId: number) => void;
+    isUpdating?: boolean;
+    isDeleting?: boolean;
     className?: string;
 }

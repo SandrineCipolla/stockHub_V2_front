@@ -4,25 +4,10 @@ import {useTheme} from '@/hooks/useTheme';
 import {ThemeProvider} from '@/components/providers/ThemeProvider';
 import type {ReactNode} from 'react';
 import {mockDefaultUser, mockUserScenarios} from '@/test/fixtures/user';
+import {createLocalStorageMock} from '@/test/fixtures/localStorage';
 
-// Mock localStorage
-const localStorageMock = (() => {
-    let store: Record<string, string> = {};
 
-    return {
-        getItem: (key: string) => store[key] || null,
-        setItem: (key: string, value: string) => {
-            store[key] = value.toString();
-        },
-        removeItem: (key: string) => {
-            delete store[key];
-        },
-        clear: () => {
-            store = {};
-        },
-    };
-})();
-
+const localStorageMock = createLocalStorageMock();
 Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
 });

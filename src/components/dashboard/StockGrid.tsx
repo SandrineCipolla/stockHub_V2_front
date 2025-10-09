@@ -1,18 +1,6 @@
 import React from 'react';
 import {StockCard} from './StockCard';
-import type {Stock} from '@/types';
-
-// Types pour les props du composant
-interface StockGridProps {
-    stocks: Stock[];
-    isLoaded?: boolean;
-    onView?: (stockId: number) => void;
-    onEdit?: (stockId: number) => void;
-    onDelete?: (stockId: number) => void;
-    isUpdating?: boolean;
-    isDeleting?: boolean;
-    className?: string;
-}
+import type {StockGridProps} from '@/types';
 
 export const StockGrid: React.FC<StockGridProps> = ({
                                                         stocks,
@@ -40,9 +28,9 @@ export const StockGrid: React.FC<StockGridProps> = ({
                     stock={stock}
                     index={index}
                     isLoaded={isLoaded}
-                    {...(onView && { onView })}         // Seulement si défini
-                    {...(onEdit && { onEdit })}         // Seulement si défini
-                    {...(onDelete && { onDelete })}     // Seulement si défini
+                    {...(onView && { onView })}
+                    {...(onEdit && { onEdit })}
+                    {...(onDelete && { onDelete })}
                     isUpdating={isUpdating}
                     isDeleting={isDeleting}
                 />

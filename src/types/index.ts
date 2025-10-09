@@ -17,5 +17,8 @@ export * from './dashboard';
 // Types API et état asynchrone
 export * from './api';
 
+// Types erreurs
+export * from './error';
+
 // Types utilitaires
 export * from './utils';

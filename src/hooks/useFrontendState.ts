@@ -1,33 +1,9 @@
 import {useCallback, useEffect, useState} from 'react';
-
-
-// ===== TYPES POUR ERREURS FRONT-END =====
-export type FrontendErrorType =
-    | 'validation'
-    | 'storage'
-    | 'permission'
-    | 'file_upload'
-    | 'export'
-    | 'unknown';
-
-export interface FrontendError {
-    readonly id: string;
-    type: FrontendErrorType;
-    message: string;
-    field?: string; // Pour erreurs de validation
-    timestamp: Date;
-    details?: Record<string, unknown>;
-}
-
-// ===== TYPES POUR ÉTATS DE CHARGEMENT =====
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
-
-export interface AsyncFrontendState<T> {
-    data: T | null;
-    loading: boolean;
-    error: FrontendError | null;
-    status: LoadingState;
-}
+import type {
+    AsyncFrontendState,
+    FrontendError,
+    FrontendErrorType
+} from '@/types';
 
 // ===== HOOK PRINCIPAL POUR GESTION D'ÉTATS =====
 export const useFrontendState = <T>(initialData: T | null = null) => {

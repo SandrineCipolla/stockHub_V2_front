@@ -2,7 +2,7 @@
 // TYPES API ET ÉTAT ASYNCHRONE
 // ========================================
 
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+import type {LoadingState} from './error';
 
 export interface AsyncState<T> {
     status: LoadingState;

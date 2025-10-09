@@ -1,15 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
-import {InputType} from "@/types";
-
-// Types pour les props du composant
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    label?: string;
-    error?: string;
-    icon?: React.ElementType;
-    helperText?: string;
-    type?: InputType;
-}
+import type {InputProps} from "@/types";
 
 export const Input: React.FC<InputProps> = ({
                                                 label,
