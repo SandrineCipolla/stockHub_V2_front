@@ -1,4 +1,4 @@
-import type {MetricCardData, MetricIcon, MetricColor, ChangeType} from '@/types';
+import type {ChangeType, MetricCardData, MetricColor, MetricIcon} from '@/types';
 
 /**
  * Icônes disponibles pour les métriques
@@ -55,65 +55,74 @@ export const metricChanges: Record<string, number> = {
  */
 export const stockHubMetricUseCases: Record<string, MetricCardData> = {
     totalStockMetric: {
-        id: 'metric-total-stocks',
-        label: metricLabels.totalStocks,
+        title: metricLabels.totalStocks,
         value: metricValues.high,
-        change: metricChanges.positive,
-        changeType: 'increase',
+        change: {
+            value: 12,
+            type: 'increase',
+            period: 'ce mois'
+        },
         icon: 'package',
         color: 'success',
     },
     lowStockAlert: {
-        id: 'metric-low-stocks',
-        label: metricLabels.lowStocks,
+        title: metricLabels.lowStocks,
         value: metricValues.medium,
-        change: metricChanges.small,
-        changeType: 'increase',
+        change: {
+            value: 3,
+            type: 'increase',
+            period: 'cette semaine'
+        },
         icon: 'alert-triangle',
         color: 'warning',
     },
     criticalStockAlert: {
-        id: 'metric-critical-stocks',
-        label: metricLabels.criticalStocks,
+        title: metricLabels.criticalStocks,
         value: metricValues.low,
-        change: metricChanges.negative,
-        changeType: 'decrease',
+        change: {
+            value: 2,
+            type: 'decrease',
+            period: 'aujourd\'hui'
+        },
         icon: 'alert-triangle',
         color: 'warning',
     },
     totalValueMetric: {
-        id: 'metric-total-value',
-        label: metricLabels.totalValue,
+        title: metricLabels.totalValue,
         value: metricValues.currency,
-        change: metricChanges.large,
-        changeType: 'increase',
+        change: {
+            value: 15,
+            type: 'increase',
+            period: 'ce mois'
+        },
         icon: 'trending-up',
         color: 'info',
     },
     averageValueMetric: {
-        id: 'metric-average-value',
-        label: metricLabels.averageValue,
+        title: metricLabels.averageValue,
         value: '289€',
-        change: metricChanges.small,
-        changeType: 'increase',
+        change: {
+            value: 5,
+            type: 'increase',
+            period: 'cette semaine'
+        },
         icon: 'trending-up',
         color: 'info',
     },
     noChangeMetric: {
-        id: 'metric-stable',
-        label: 'Stocks Stables',
+        title: 'Stocks Stables',
         value: metricValues.medium,
-        change: metricChanges.zero,
-        changeType: 'increase',
         icon: 'package',
         color: 'success',
     },
     decreasingMetric: {
-        id: 'metric-decreasing',
-        label: 'Stocks en Baisse',
+        title: 'Stocks en Baisse',
         value: metricValues.low,
-        change: metricChanges.negative,
-        changeType: 'decrease',
+        change: {
+            value: 8,
+            type: 'decrease',
+            period: 'cette semaine'
+        },
         icon: 'alert-triangle',
         color: 'warning',
     },

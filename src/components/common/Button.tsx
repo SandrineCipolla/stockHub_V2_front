@@ -1,15 +1,6 @@
 import React from 'react';
 import {useTheme} from '@/hooks/useTheme.ts';
-import type {ButtonVariant, ComponentSize} from '@/types';
-
-// Types pour les props du composant
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: ButtonVariant;
-    size?: ComponentSize;
-    icon?: React.ElementType;
-    loading?: boolean;
-    children?: React.ReactNode;
-}
+import type {ButtonProps, ButtonVariant, ComponentSize} from '@/types';
 
 export const Button: React.FC<ButtonProps> = ({
                                                   variant = 'primary',

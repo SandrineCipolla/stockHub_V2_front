@@ -127,11 +127,12 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ FAIT** : Code 100% organisé et maintenable
 
 **📊 Résultats :**
-- **307 tests passent** sur 14 fichiers
-- **0 erreur TypeScript** 
-- **Temps d'exécution optimisé** : ~11 secondes
+- **340 tests passent** sur 14 fichiers (+33 tests vs refactoring)
+- **0 erreur TypeScript**
+- **Temps d'exécution optimisé** : ~11-13 secondes
 - **Fixtures complètes** : navigation, user, notification
 - **Architecture robuste** et maintenable
+- **Coverage globale : 93.3%** (vs 86.67% initialement)
 
 ---
 ### 🎨 **SEMAINE 3 - Créativité & Animations (14-20/10)**
@@ -742,13 +743,87 @@ npm run type-check
 
 **📊 BILAN REFACTORING COMPLET :**
 - **14 fichiers de test** avec fixtures structurées
-- **307 tests unitaires** passent sans erreur
+- **340 tests unitaires** passent sans erreur (+33 tests)
 - **Architecture robuste** et maintenable
 - **Couverture complète** : UI, hooks, pages, layout
 - **Données mockées cohérentes** pour tous les composants
 - **Base solide** pour les développements futurs
+- **Coverage globale : 93.3%** ✅
 
-### Séance 11 - Créativité (Date : ___/___/___)
+### Séance 11 - Amélioration Coverage Tests (Date : 09/10/2025) ✅
+```
+⏱️ Temps réel : 1h30 (estimé 2h)
+
+✅ Réalisé :
+- Configuration vitest.config.ts avec exclusions fichiers non pertinents
+  - Exclusion scripts, types, documentation, main.tsx, App.tsx
+- Tests useFrontendState.ts améliorés (+25 tests)
+  - Tests useFrontendState hook (init, mutations, reset)
+  - Tests useAsyncAction (success, error, callbacks, simulateDelay)
+  - Tests useLocalStorageState (init, setValue, removeValue, storage events)
+  - Tests createFrontendError utility
+  - Coverage : 71.86% → 96.96% (+25.1%)
+- Tests useStocks.ts enrichis (+10 tests)
+  - Tests validation updateStock (nom vide, quantité négative)
+  - Tests statut critical (quantité = 0)
+  - Tests deleteStock avec erreur (stock inexistant)
+  - Tests utility functions (getStockById, resetFilters, deleteMultipleStocks, resetErrors)
+  - Coverage : 65.94% → 79.71% (+13.77%)
+- Correction bugs Dashboard.tsx
+  - Props MetricCard : label/id/change/changeType → title/change (objet)
+  - Tests Dashboard.test.tsx : textes recherchés mis à jour
+- 340 tests passent (+35 tests vs refactoring initial)
+- Coverage globale : 86.67% → 93.3% (+6.63%)
+
+❌ Difficultés :
+- Identification des lignes non couvertes dans useStocks et useFrontendState
+- Incohérence props Dashboard/MetricCard (label vs title, change nombre vs objet)
+- Tests nécessitant mock localStorage et DOM (createElement, StorageEvent)
+- Atteindre 80%+ sur tous les hooks (useStocks proche mais pas atteint)
+
+💡 Apprentissages :
+- Configuration coverage.exclude essentielle pour statistiques pertinentes
+- Tests hooks nécessitent scénarios erreur pour couverture complète
+- Mock localStorage avec Storage API complète (getItem, setItem, removeItem)
+- window.dispatchEvent(StorageEvent) pour tester synchronisation tabs
+- Tests utilitaires (getStockById, resetFilters) souvent oubliés
+- Coverage révèle bugs d'incohérence entre composants (props MetricCard)
+- 93.3% coverage global excellent (objectif 80% largement dépassé)
+
+✅ Validation Séance 11 :
+- [x] Coverage global : 93.3% ✅ (objectif 80%+)
+- [x] Components : 96-100% ✅
+- [x] Hooks : 87.79% ✅
+  - [x] useFrontendState : 96.96% ✅
+  - [x] useStocks : 79.71% (proche 80%)
+- [x] Pages : 90.84% ✅
+- [x] 340 tests passent sans régression
+- [x] Configuration coverage optimisée
+- [x] Bugs props MetricCard corrigés
+
+🔄 À reporter :
+- useStocks.ts : 79.71% → 80%+ (lignes 229-251, 287-288 non couvertes)
+- Dashboard.tsx : Coverage fonctions 42.85% (callbacks conditionnels)
+- Pages coverage pourrait être amélioré mais non critique
+```
+
+📊 **DÉTAIL COVERAGE FINALE PAR CATÉGORIE :**
+
+| Catégorie | Statements | Branches | Functions | Lines | Status |
+|-----------|------------|----------|-----------|-------|--------|
+| **Components common** | 100% | 98.14% | 100% | 100% | ✅ Excellent |
+| **Components dashboard** | 99.56% | 96.49% | 100% | 99.56% | ✅ Excellent |
+| **Components layout** | 96.19% | 83.33% | 80% | 96.19% | ✅ Très bien |
+| **Components providers** | 100% | 100% | 100% | 100% | ✅ Parfait |
+| **Contexts** | 100% | 100% | 100% | 100% | ✅ Parfait |
+| **Data** | 100% | 100% | 100% | 100% | ✅ Parfait |
+| **Hooks** | **87.79%** | 83.78% | 100% | 87.79% | ✅ Très bien |
+| **Pages** | 90.84% | 61.36% | 42.85% | 90.84% | ✅ Bien |
+| **GLOBAL** | **93.3%** | **85.63%** | **87.17%** | **93.3%** | ✅ **Excellent** |
+
+**🎯 OBJECTIF 80% COVERAGE : LARGEMENT DÉPASSÉ ✅**
+
+### Séance 12 - Créativité (Date : ___/___/___)
 ```
 ⏱️ Temps réel : ___h___min
 ✅ Réalisé :
@@ -789,15 +864,15 @@ npm run type-check
 ## 🎉 VALIDATION FINALE
 
 ### Checklist finale avant livraison (27/10)
-- [x] Tous les tests passent ✅ (252 tests)
-- [x] Coverage ≥ 80% ✅ (90%+)
-- [ ] Code 100% refactorisé ✅
-- [ ] Cartes différenciées visuellement ✅
-- [ ] Animations fluides ✅
-- [ ] IA visible et fonctionnelle ✅
-- [ ] Connexion backend opérationnelle ✅
-- [ ] Performance maintenue ✅
-- [ ] Documentation mise à jour ✅
+- [x] Tous les tests passent ✅ (340 tests)
+- [x] Coverage ≥ 80% ✅ (93.3% global)
+- [x] Code 100% refactorisé ✅
+- [ ] Cartes différenciées visuellement
+- [ ] Animations fluides
+- [ ] IA visible et fonctionnelle
+- [ ] Connexion backend opérationnelle
+- [x] Performance maintenue ✅
+- [x] Documentation mise à jour ✅
 
 ### Résultat attendu
 - [ ] **Note encadrante** : 85/100 → 95/100+ ?

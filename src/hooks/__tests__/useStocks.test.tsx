@@ -315,6 +315,76 @@ describe('useStocks Hook', () => {
         });
     });
 
+    describe('updateStock action', () => {
+        describe('when updating with invalid data', () => {
+            it('should reject empty name', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const firstStock = result.current.stocks[0];
+                const invalidUpdate: UpdateStockData = {
+                    id: firstStock.id,
+                    name: '   ' // Empty name
+                };
+
+                let updated: Stock | null = null;
+                await act(async () => {
+                    updated = await result.current.updateStock(invalidUpdate);
+                });
+
+                expect(updated).toBeNull();
+                expect(result.current.errors.update).toBeDefined();
+            });
+
+            it('should reject negative quantity', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const firstStock = result.current.stocks[0];
+                const invalidUpdate: UpdateStockData = {
+                    id: firstStock.id,
+                    quantity: -5
+                };
+
+                let updated: Stock | null = null;
+                await act(async () => {
+                    updated = await result.current.updateStock(invalidUpdate);
+                });
+
+                expect(updated).toBeNull();
+                expect(result.current.errors.update).toBeDefined();
+            });
+
+            it('should update to critical status when quantity is 0', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const firstStock = result.current.stocks[0];
+                const zeroUpdate: UpdateStockData = {
+                    id: firstStock.id,
+                    quantity: 0
+                };
+
+                let updated: Stock | null = null;
+                await act(async () => {
+                    updated = await result.current.updateStock(zeroUpdate);
+                });
+
+                expect(updated).not.toBeNull();
+                expect(updated!.status).toBe('critical');
+            });
+        });
+    });
+
     describe('deleteStock action', () => {
         describe('when deleting existing stock', () => {
             it('should remove stock from list', async () => {
@@ -335,6 +405,24 @@ describe('useStocks Hook', () => {
                     expect(result.current.stocks.length).toBe(initialCount - 1);
                     expect(result.current.stocks.find(s => s.id === firstStock.id)).toBeUndefined();
                 });
+            });
+        });
+
+        describe('when deleting non-existent stock', () => {
+            it('should handle error for non-existent stock', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const nonExistentId = 999999;
+
+                await act(async () => {
+                    await result.current.deleteStock(nonExistentId);
+                });
+
+                expect(result.current.errors.delete).toBeDefined();
             });
         });
     });
@@ -374,7 +462,7 @@ describe('useStocks Hook', () => {
 
                     await waitFor(() => {
                         const statusStocks = result.current.allStocks.filter(s => s.status === status);
-                        expect(result.current.stats?.[status]).toBe(statusStocks.length);
+                        expect(result.current.stats?.[status as keyof typeof result.current.stats]).toBe(statusStocks.length);
                     });
                 }
             });
@@ -399,6 +487,123 @@ describe('useStocks Hook', () => {
                     );
                     expect(electronicsStocks.length).toBeGreaterThanOrEqual(0);
                 });
+            });
+        });
+    });
+
+    describe('utility functions', () => {
+        describe('getStockById', () => {
+            it('should return stock by id', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const firstStock = result.current.stocks[0];
+                const foundStock = result.current.getStockById(firstStock.id);
+
+                expect(foundStock).toBeDefined();
+                expect(foundStock?.id).toBe(firstStock.id);
+            });
+
+            it('should return undefined for non-existent id', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const foundStock = result.current.getStockById(999999);
+                expect(foundStock).toBeUndefined();
+            });
+        });
+
+        describe('resetFilters', () => {
+            it('should reset all filters', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                // Apply some filters
+                act(() => {
+                    result.current.updateFilters({
+                        status: ['low'],
+                        category: [stockCategories.food],
+                        query: 'test'
+                    });
+                });
+
+                // Reset filters
+                act(() => {
+                    result.current.resetFilters();
+                });
+
+                expect(result.current.filters).toEqual({});
+                expect(result.current.stocks.length).toBe(result.current.allStocks.length);
+            });
+        });
+
+        describe('deleteMultipleStocks', () => {
+            it('should delete multiple stocks', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(1);
+                });
+
+                const initialCount = result.current.stocks.length;
+                const stocksToDelete = [result.current.stocks[0].id, result.current.stocks[1].id];
+
+                await act(async () => {
+                    await result.current.deleteMultipleStocks(stocksToDelete);
+                });
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBe(initialCount - 2);
+                });
+            });
+
+            it('should handle empty array', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                const initialCount = result.current.stocks.length;
+
+                await act(async () => {
+                    await result.current.deleteMultipleStocks([]);
+                });
+
+                expect(result.current.stocks.length).toBe(initialCount);
+            });
+        });
+
+        describe('resetErrors', () => {
+            it('should reset specific error', async () => {
+                const { result } = renderHook(() => useStocks());
+
+                await waitFor(() => {
+                    expect(result.current.stocks.length).toBeGreaterThan(0);
+                });
+
+                // Trigger an error
+                await act(async () => {
+                    await result.current.deleteStock(999999);
+                });
+
+                expect(result.current.errors.delete).toBeDefined();
+
+                // Reset the error
+                act(() => {
+                    result.current.resetErrors.delete();
+                });
+
+                expect(result.current.errors.delete).toBeNull();
             });
         });
     });

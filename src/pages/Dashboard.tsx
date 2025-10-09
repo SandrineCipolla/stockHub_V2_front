@@ -214,31 +214,34 @@ export const Dashboard: React.FC = () => {
                     <h2 id="metrics-heading" className="sr-only">Métriques principales</h2>
 
                     <MetricCard
-                        id="total-products"
-                        label="Total Produits"
+                        title="Total Produits"
                         value={stats?.total || 0}
-                        change={stats?.optimal || 0}
-                        changeType="increase"
+                        change={{
+                            value: stats?.optimal || 0,
+                            type: "increase"
+                        }}
                         icon="package"
                         color="success"
                     />
 
                     <MetricCard
-                        id="low-stock"
-                        label="Stock Faible"
+                        title="Stock Faible"
                         value={stats?.low || 0}
-                        change={stats?.critical || 0}
-                        changeType="decrease"
+                        change={{
+                            value: stats?.critical || 0,
+                            type: "decrease"
+                        }}
                         icon="alert-triangle"
                         color="warning"
                     />
 
                     <MetricCard
-                        id="total-value"
-                        label="Valeur Totale"
+                        title="Valeur Totale"
                         value={`€${stats?.totalValue?.toLocaleString() || 0}`}
-                        change={Math.round((stats?.averageValue || 0) / 10)}
-                        changeType="increase"
+                        change={{
+                            value: Math.round((stats?.averageValue || 0) / 10),
+                            type: "increase"
+                        }}
                         icon="trending-up"
                         color="info"
                     />

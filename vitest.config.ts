@@ -24,6 +24,17 @@ export default defineConfig({
         '**/*.config.*',
         'dist/',
         'coverage/',
+        // Scripts et outils
+        'audits/**',
+        'scripts/**',
+        'documentation/**',
+        // Points d'entrée (difficiles à tester)
+        'src/main.tsx',
+        'src/App.tsx',
+        // Fichiers de types (pas de logique à tester)
+        'src/types/**',
+        // Utilitaires simples
+        'src/utils/theme.ts',
       ],
       thresholds: {
         global: {

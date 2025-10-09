@@ -418,7 +418,7 @@ describe('Dashboard Component', () => {
                     render(<Dashboard />);
                 });
 
-                expect(screen.getByLabelText('Total Produits: 0')).toBeInTheDocument();
+                 expect(screen.getByLabelText('Total Produits: 0')).toBeInTheDocument();
             });
         });
     });
@@ -475,3 +475,4 @@ describe('Dashboard Component', () => {
         });
     });
 });
+
