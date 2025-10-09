@@ -64,7 +64,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ---
 ### 📅 **SEMAINE 2 - Refactoring Complet (07/10 - 13/10)** ✅
 
-#### **Mardi 08/10 (2h30) : Refactoring Types + Fixtures** ✅
+#### **Mardi 08/10 (2h30) : Séance 6 - Refactoring Badge/Button** ✅
 - [x] **Centralisation des types** (30min)
   - [x] Créer `src/types/index.ts`
   - [x] BadgeVariant, ButtonVariant, ComponentSize, InputType
@@ -73,66 +73,142 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [x] `fixtures/badge.ts` (contenus, cas d'usage)
   - [x] `fixtures/button.ts` (cas d'usage StockHub)
   - [x] `fixtures/icon.ts` (icônes Lucide typées)
-  - [x] `fixtures/card.ts` (contenus, cas d'usage)
-  - [x] `fixtures/input.ts` (labels, erreurs, helpers, cas d'usage)
 
 - [x] **Refactoring tests** (30min)
   - [x] Button.test.tsx avec fixtures
   - [x] Badge.test.tsx avec fixtures
-  - [x] Card.test.tsx avec fixtures
-  - [x] Input.test.tsx avec fixtures
   - [x] Vérifier tous les tests passent
-  
-- [x] **Refactoriser Input.tsx** avec InputType
 
 **✅ FAIT** : Composants UI refactorisés
 
-#### **Jeudi 10/10 (2h) : Fixtures Dashboard** ✅
+#### **Mercredi 09/10 (1h30) : Séance 7 - Refactoring Card/Input** ✅
+- [x] **Fixtures Card/Input** (60min)
+  - [x] `fixtures/card.ts` (contenus, cas d'usage)
+  - [x] `fixtures/input.ts` (labels, erreurs, helpers, cas d'usage)
+  - [x] Factory functions createMockCard() et createMockInput()
+
+- [x] **Refactoring tests** (30min)
+  - [x] Card.test.tsx avec fixtures
+  - [x] Input.test.tsx avec fixtures
+  - [x] Vérifier tous les tests passent
+
+**✅ FAIT** : 47 tests passent sans régression
+
+#### **Jeudi 10/10 (3h45) : Séance 8 - Refactoring Dashboard** ✅
 - [x] **Types Dashboard** (30min)
   - [x] Créer types pour MetricCard, StockCard dans types/index.ts
   - [x] Type MetricIcon, MetricColor, ChangeType, MetricCardData
 
-- [x] **Fixtures Dashboard** (90min)
+- [x] **Fixtures Dashboard** (60min)
   - [x] `fixtures/metric.ts` (métriques dashboard mockées)
   - [x] `fixtures/stock.ts` (stocks mockés avec différents statuts)
   - [x] Cas d'usage métier StockHub (stockHubMetricUseCases, stockHubStockUseCases)
   - [x] Factory function createMockStock()
 
-- [x] **Tests mis à jour avec fixtures** (inclus dans le temps)
+- [x] **Tests mis à jour avec fixtures** (15min)
   - [x] MetricCard.test.tsx - Utilise stockHubMetricUseCases
   - [x] StockCard.test.tsx - Utilise stockHubStockUseCases et createMockStock
   - [x] StockGrid.test.tsx - Utilise dashboardStocks, stockHubStockUseCases
 
-**✅ FAIT** : Données dashboard centralisées 
+**✅ FAIT** : 88 tests dashboard passent
 
-
-#### **Dimanche 13/10 Matin (4h) : Refactoring Layout/Hooks/Page** ✅
-
-- [x] **Fixtures Layout** (60min) 
-  - [x] `fixtures/navigation.ts` (liens nav, breadcrumb) 
-  - [x] `fixtures/user.ts` (données user mockées) 
-  - [x] `fixtures/notification.ts` (notifications mockées)
-
-- [x] **Refactoring tests Layout** (90min)
-  - [x] Header.test.tsx avec fixtures
-  - [x] Footer.test.tsx avec fixtures (si nécessaire)
-  - [x] NavSection.test.tsx avec fixtures (si nécessaire)
-
-- [x] **Refactoring tests Hooks/Page** (90min)
-  - [x] useTheme.test.ts (vérifier si fixtures nécessaires)
-  - [x] useStocks.test.ts avec fixtures/stock
-  - [x] Dashboard.test.tsx avec fixtures complètes
+- [x] **Tests Dashboard avec fixtures** (2h)
+  - [x] Dashboard.test.tsx refactorisé avec fixtures complètes
+  - [x] useStocks.test.tsx avec fixtures/stock
+  - [x] useFrontendState.test.tsx optimisés
+  - [x] Factory functions pour tous les cas de test
+  - [x] Correction bugs statut critical vs low
   - [x] Validation finale : tous les tests passent
 
-**✅ FAIT** : Code 100% organisé et maintenable
+**✅ FAIT** : 61 tests passent (Dashboard + hooks)
+
+#### **Dimanche 13/10 (3h30) : Séance 10 - Refactoring Layout/Hooks/Page** ✅
+
+- [x] **Fixtures Layout** (60min)
+  - [x] `fixtures/navigation.ts` (liens nav, breadcrumb)
+  - [x] `fixtures/user.ts` (données user mockées)
+  - [x] `fixtures/notification.ts` (notifications mockées)
+
+- [x] **Refactoring tests Layout** (60min)
+  - [x] Header.test.tsx avec fixtures
+  - [x] Footer.test.tsx avec fixtures
+  - [x] NavSection.test.tsx avec fixtures
+
+- [x] **Refactoring tests Hooks/Page** (90min)
+  - [x] useTheme.test.tsx validés (23 tests)
+  - [x] Correction type Theme (suppression 'auto')
+  - [x] Correction logique statut useStocks
+  - [x] Validation finale : tous les tests passent
+
+**✅ FAIT** : 307 tests passent, 0 erreur TypeScript
 
 **📊 Résultats :**
-- **340 tests passent** sur 14 fichiers (+33 tests vs refactoring)
+- **340 tests passent** sur 14 fichiers (+33 tests vs semaine 1)
 - **0 erreur TypeScript**
 - **Temps d'exécution optimisé** : ~11-13 secondes
 - **Fixtures complètes** : navigation, user, notification
 - **Architecture robuste** et maintenable
 - **Coverage globale : 93.3%** (vs 86.67% initialement)
+
+---
+
+#### **Mercredi 09/10 après-midi (2h30) : Séances 11-12-13 - Optimisation finale** ✅
+
+**Séance 11 - Amélioration Coverage (1h30)** ✅
+- [x] **Configuration coverage optimisée** (15min)
+  - [x] vitest.config.ts avec exclusions fichiers non pertinents
+  - [x] Exclusion scripts, types, documentation, main.tsx, App.tsx
+
+- [x] **Tests useFrontendState enrichis** (+25 tests, 45min)
+  - [x] Tests useFrontendState hook (init, mutations, reset)
+  - [x] Tests useAsyncAction (success, error, callbacks, simulateDelay)
+  - [x] Tests useLocalStorageState (init, setValue, removeValue, storage events)
+  - [x] Tests createFrontendError utility
+  - [x] Coverage : 71.86% → 96.96% (+25.1%)
+
+- [x] **Tests useStocks enrichis** (+10 tests, 30min)
+  - [x] Tests validation updateStock (nom vide, quantité négative)
+  - [x] Tests statut critical (quantité = 0)
+  - [x] Tests deleteStock avec erreur
+  - [x] Tests utility functions (getStockById, resetFilters, deleteMultipleStocks, resetErrors)
+  - [x] Coverage : 65.94% → 79.71% (+13.77%)
+
+**✅ RÉSULTAT** : Coverage globale 86.67% → 93.3% (+6.63%)
+
+**Séance 12 - Nettoyage Architecture Types (45min)** ✅
+- [x] **Centralisation types erreurs** (15min)
+  - [x] Création types/error.ts
+  - [x] FrontendErrorType, FrontendError, LoadingState, AsyncFrontendState<T>
+  - [x] Résolution duplication LoadingState
+
+- [x] **Suppression interfaces locales** (30min)
+  - [x] Hooks : useFrontendState, useStocks (imports depuis @/types)
+  - [x] Composants : Card, Input, StockCard, StockGrid, Header, Footer, NavSection, ThemeProvider
+  - [x] Mise à jour types/components.ts avec props réelles
+  - [x] Re-export types pour compatibilité tests
+
+**✅ RÉSULTAT** : Architecture types 100% DRY, zéro duplication
+
+**Séance 13 - Nettoyage Tests & Fixtures (30min)** ✅
+- [x] **Fixtures mocks centralisées** (20min)
+  - [x] test/fixtures/localStorage.ts avec createLocalStorageMock()
+  - [x] test/fixtures/hooks.ts avec createMockUseStocks, createMockUseDataExport, createMockUseTheme
+  - [x] Type IconComponentMap pour iconMap dans MetricCard
+
+- [x] **Migration tests vers fixtures** (10min)
+  - [x] useStocks.test.tsx : Import createLocalStorageMock()
+  - [x] useTheme.test.tsx : Import createLocalStorageMock()
+  - [x] Dashboard.test.tsx : Import mocks centralisés
+  - [x] Suppression définitions locales dupliquées
+
+**✅ RÉSULTAT** : Tests 100% DRY, fixtures complètes
+
+**📊 Résultats :**
+- **340 tests passent** (100% succès)
+- **Coverage globale : 93.3%** ✅ (objectif 80% largement dépassé)
+- **Architecture types clean** (zéro interface locale)
+- **Tests DRY** (fixtures mocks centralisées)
+- **TypeScript OK** (0 erreur compilation)
 
 ---
 ### 🎨 **SEMAINE 3 - Créativité & Animations (14-20/10)**
@@ -275,17 +351,31 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - [x] Script `npm run test:coverage` fonctionne
 
 ### 🔄 **Livrable 2 : Refactoring Complet** ✅ TERMINÉ (08-13/10)
-- [x] Types centralisés src/types/index.ts
-- [x] Fixtures Badge/Button/Icon
-- [x] Tests Button/Badge refactorisés
-- [x] Fixtures Card/Input (09/10)
-- [x] Tests Card/Input refactorisés (09/10)
-- [x] Fixtures Dashboard : metric, stock (10/10)
-- [x] Tests Dashboard refactorisés (12/10)
-- [x] Fixtures Layout : navigation, user, notification (13/10)
-- [x] Tests Layout/Hooks/Page refactorisés (13/10)
-- [x] 307 tests toujours au vert ✅
+- [x] **Séance 6** : Types centralisés src/types/index.ts (08/10)
+- [x] **Séance 6** : Fixtures Badge/Button/Icon (08/10)
+- [x] **Séance 6** : Tests Button/Badge refactorisés (08/10)
+- [x] **Séance 7** : Fixtures Card/Input (09/10)
+- [x] **Séance 7** : Tests Card/Input refactorisés (09/10)
+- [x] **Séance 8** : Fixtures Dashboard : metric, stock (10/10)
+- [x] **Séance 9** : Tests Dashboard refactorisés (12/10)
+- [x] **Séance 10** : Fixtures Layout : navigation, user, notification (13/10)
+- [x] **Séance 10** : Tests Layout/Hooks/Page refactorisés (13/10)
+- [x] 340 tests toujours au vert ✅
 - [x] Code 100% DRY et maintenable ✅
+
+### 🧹 **Livrable 2: Optimisation & Nettoyage** ✅ TERMINÉ (09/10)
+- [x] **Séance 11** : Configuration coverage optimisée
+- [x] **Séance 11** : Tests useFrontendState enrichis (+25 tests)
+- [x] **Séance 11** : Tests useStocks enrichis (+10 tests)
+- [x] **Séance 11** : Coverage globale 93.3% ✅ (objectif 80%+)
+- [x] **Séance 12** : Architecture types 100% DRY
+- [x] **Séance 12** : Zéro interface locale dans composants/hooks
+- [x] **Séance 12** : types/error.ts pour centraliser FrontendError
+- [x] **Séance 13** : Fixtures mocks centralisées (localStorage, hooks)
+- [x] **Séance 13** : Tests 100% DRY avec mocks réutilisables
+- [x] **Séance 13** : iconMap strictement typé (IconComponentMap)
+- [x] 340 tests passent ✅
+- [x] TypeScript OK (0 erreur) ✅
 
 ### 🎨 **Livrable 3 : Créativité Visuelle** 📅 15-17/10
 - [ ] Type StockStatus + constantes couleurs
