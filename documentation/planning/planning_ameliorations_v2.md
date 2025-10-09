@@ -214,19 +214,18 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ### 🎨 **SEMAINE 3 - Créativité & Animations (14-20/10)**
 
 #### **Mardi 15/10 (2h) : Système de statuts**
-- [ ] **Types et constantes** (45min)
-  - [ ] Type StockStatus dans types/index.ts
-  - [ ] 5 statuts : optimal, low, critical, outOfStock, overstocked
-  - [ ] Créer `constants/stockStatus.ts` avec palette couleurs
+- [x] **Types** (30min)
+  - [x] Type StockStatus dans types/index.ts
+  - [x] 5 statuts : optimal, low, critical, outOfStock, overstocked
 
-- [ ] **Icônes par statut** (45min)
-  - [ ] Ajouter icônes dans fixtures/icon.ts
-  - [ ] CheckCircle, AlertTriangle, XCircle, Package, TrendingUp
-  - [ ] Documentation dans fixtures
+- [x] **Icônes par statut** (30min)
+  - [x] Ajouter icônes dans fixtures/icon.ts
+  - [x] CheckCircle, AlertTriangle, XCircle, Package, TrendingUp
+  - [x] Documentation dans fixtures
 
-- [ ] **Composant StatusBadge** (30min)
-  - [ ] Créer StatusBadge.tsx avec icône + couleur
-  - [ ] Tests basiques
+- [x] **Composant StatusBadge** (60min)
+  - [x] Créer StatusBadge.tsx avec icône + couleur
+  - [x] Tests basiques
 
 **🎯 Objectif** : Système de statuts défini
 

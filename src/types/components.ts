@@ -1,6 +1,6 @@
 import React from "react";
 import type {BadgeVariant, ButtonVariant, ComponentSize, InputType} from './ui';
-import type {Stock} from './stock';
+import type {Stock, StockStatus} from './stock';
 
 // ========================================
 // INTERFACES PROPS COMPOSANTS
@@ -12,6 +12,14 @@ export interface BadgeProps {
     children: React.ReactNode;
     className?: string;
     size?: ComponentSize;
+}
+
+// 🆕 Props pour le badge de statut de stock
+export interface StatusBadgeProps {
+    status: StockStatus;
+    showIcon?: boolean;
+    size?: ComponentSize;
+    className?: string;
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

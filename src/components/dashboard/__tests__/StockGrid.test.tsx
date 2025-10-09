@@ -271,8 +271,8 @@ describe('StockGrid Component', () => {
 
                 // Vérifier les badges de statut
                 expect(screen.getByText('Optimal')).toBeInTheDocument();
-                expect(screen.getByText('Faible')).toBeInTheDocument();
-                expect(screen.getByText('Critique')).toBeInTheDocument();
+                expect(screen.getByText('Low')).toBeInTheDocument();
+                expect(screen.getByText('Critical')).toBeInTheDocument();
             });
         });
 

@@ -83,42 +83,42 @@ describe('StockCard Component', () => {
                 const stock = stockHubStockUseCases.optimalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
-                const statusBar = container.querySelector('.bg-emerald-400');
-                expect(statusBar).toBeInTheDocument();
+                const statusBar = container.querySelector('[aria-label*="Optimal"]');
+                expect(statusBar).toHaveClass('border-emerald-500/30');
             });
         });
 
         describe('when status is low', () => {
-            it('should display "Faible" badge', () => {
+            it('should display "Low" badge', () => {
                 const stock = stockHubStockUseCases.lowStock;
                 render(<StockCard stock={stock} />);
 
-                expect(screen.getByText('Faible')).toBeInTheDocument();
+                expect(screen.getByText('Low')).toBeInTheDocument();
             });
 
             it('should apply amber color to status bar', () => {
                 const stock = stockHubStockUseCases.lowStock;
                 const { container } = render(<StockCard stock={stock} />);
 
-                const statusBar = container.querySelector('.bg-amber-400');
-                expect(statusBar).toBeInTheDocument();
+                const statusBar = container.querySelector('[aria-label*="Low"]');
+                expect(statusBar).toHaveClass('border-amber-500/30');
             });
         });
 
         describe('when status is critical', () => {
-            it('should display "Critique" badge', () => {
+            it('should display "Critical" badge', () => {
                 const stock = stockHubStockUseCases.criticalStock;
                 render(<StockCard stock={stock} />);
 
-                expect(screen.getByText('Critique')).toBeInTheDocument();
+                expect(screen.getByText('Critical')).toBeInTheDocument();
             });
 
             it('should apply red color to status bar', () => {
                 const stock = stockHubStockUseCases.criticalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
-                const statusBar = container.querySelector('.bg-red-400');
-                expect(statusBar).toBeInTheDocument();
+                const statusBar = container.querySelector('[aria-label*="Critical"]');
+                expect(statusBar).toHaveClass('border-red-500/40');
             });
         });
     });
@@ -341,7 +341,7 @@ describe('StockCard Component', () => {
                 const { container } = render(<StockCard stock={stock} />);
 
                 const statusBar = container.querySelector('[aria-label*="Statut du stock"]');
-                expect(statusBar).toHaveAttribute('aria-label', `Statut du stock: ${stock.status}`);
+                expect(statusBar).toHaveAttribute('aria-label', 'Statut du stock: Low');
             });
 
             it('should group metrics with role="group"', () => {

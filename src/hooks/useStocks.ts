@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import type {CreateStockData, SearchFilters, Stock, StockStatus, UpdateStockData} from '@/types';
+import type {CreateStockData, SearchFilters, Stock, UpdateStockData} from '@/types';
+import {calculateStockStatus} from '@/types/stock'; // 🆕 AJOUTÉ
 import {createFrontendError, useAsyncAction, useLocalStorageState} from './useFrontendState';
 import {stockData} from "@/data/stockData.ts";
-
 
 export type {CreateStockData, UpdateStockData};
 
@@ -26,7 +26,6 @@ export const useStocks = () => {
     }, []);
     const [filters, setFilters] = useState<SearchFilters>({});
 
-
     // ===== ACTIONS AVEC GESTION D'ERREURS =====
 
     // Charger les stocks (simulé) - FIX: useCallback pour éviter re-création
@@ -40,7 +39,7 @@ export const useStocks = () => {
             }
 
             return stocks;
-        }, [stocks]), // Dépendance stable
+        }, [stocks]),
         { simulateDelay: 0 }
     );
 
@@ -54,7 +53,6 @@ export const useStocks = () => {
                     'Le nom du stock est obligatoire',
                     'name',
                     { field: 'name' },
-
                 );
             }
 
@@ -64,7 +62,6 @@ export const useStocks = () => {
                     'La quantité ne peut pas être négative',
                     'quantity',
                     { field: 'quantity' },
-
                 );
             }
 
@@ -74,7 +71,6 @@ export const useStocks = () => {
                     'La valeur ne peut pas être négative',
                     'value',
                     { field: 'value' },
-
                 );
             }
 
@@ -88,10 +84,12 @@ export const useStocks = () => {
                 );
             }
 
-            // Calculer le statut automatiquement
-            const status: StockStatus =
-                stockData.quantity === 0 ? 'critical' :
-                    stockData.quantity < 10 ? 'low' : 'optimal';
+            // ✅ CORRIGÉ : Calculer le statut avec les 5 statuts
+            const status = calculateStockStatus(
+                stockData.quantity,
+                stockData.minThreshold || 10,
+                stockData.maxThreshold || 100
+            );
 
             const newStock: Stock = {
                 id: Math.max(...(stocks || []).map(s => s.id), 0) + 1,
@@ -108,7 +106,7 @@ export const useStocks = () => {
             setStocks(updatedStocks);
 
             return newStock;
-        }, [stocks, setStocks]), // Dépendances stables
+        }, [stocks, setStocks]),
         {
             onSuccess: () => {
                 console.log('✅ Stock créé avec succès');
@@ -123,7 +121,7 @@ export const useStocks = () => {
             if (!stocks) {
                 throw createFrontendError(
                     'unknown',
-                    'Liste des stocks non disponible', );
+                    'Liste des stocks non disponible');
             }
 
             const existingStock = stocks.find(s => s.id === updateData.id);
@@ -131,7 +129,6 @@ export const useStocks = () => {
                 throw createFrontendError(
                     'validation',
                     `Stock avec l'ID ${updateData.id} introuvable`,
-
                 );
             }
 
@@ -142,7 +139,6 @@ export const useStocks = () => {
                     'Le nom du stock ne peut pas être vide',
                     'name',
                     { field: 'name' },
-
                 );
             }
 
@@ -152,15 +148,19 @@ export const useStocks = () => {
                     'La quantité ne peut pas être négative',
                     'quantity',
                     { field: 'quantity' },
-
                 );
             }
 
-            // Calculer le nouveau statut si la quantité change
+            // ✅ CORRIGÉ : Calculer le nouveau statut avec les 5 statuts
             const newQuantity = updateData.quantity ?? existingStock.quantity;
-            const newStatus: StockStatus =
-                newQuantity === 0 ? 'critical' :
-                    newQuantity < 10 ? 'low' : 'optimal';
+            const newMinThreshold = updateData.minThreshold ?? existingStock.minThreshold ?? 10;
+            const newMaxThreshold = updateData.maxThreshold ?? existingStock.maxThreshold ?? 100;
+
+            const newStatus = calculateStockStatus(
+                newQuantity,
+                newMinThreshold,
+                newMaxThreshold
+            );
 
             const updatedStock: Stock = {
                 ...existingStock,
@@ -179,7 +179,7 @@ export const useStocks = () => {
             setStocks(updatedStocks);
 
             return updatedStock;
-        }, [stocks, setStocks]), // Dépendances stables
+        }, [stocks, setStocks]),
         { simulateDelay: 0 }
     );
 
@@ -198,7 +198,6 @@ export const useStocks = () => {
                 throw createFrontendError(
                     'validation',
                     `Stock avec l'ID ${stockId} introuvable`,
-
                 );
             }
 
@@ -208,7 +207,7 @@ export const useStocks = () => {
             // Mettre à jour la liste
             const updatedStocks = stocks.filter(stock => stock.id !== stockId);
             setStocks(updatedStocks);
-        }, [stocks, setStocks]), // Dépendances stables
+        }, [stocks, setStocks]),
         { simulateDelay: 0 }
     );
 
@@ -235,7 +234,6 @@ export const useStocks = () => {
                 throw createFrontendError(
                     'validation',
                     `Stocks introuvables: ${missingIds.join(', ')}`,
-
                 );
             }
 
@@ -245,7 +243,7 @@ export const useStocks = () => {
             // Mettre à jour la liste
             const updatedStocks = stocks.filter(stock => !stockIds.includes(stock.id));
             setStocks(updatedStocks);
-        }, [stocks, setStocks]), // Dépendances stables
+        }, [stocks, setStocks]),
         { simulateDelay: 0 }
     );
 
@@ -277,7 +275,7 @@ export const useStocks = () => {
             }
             return !(filters.maxValue !== undefined && stock.value > filters.maxValue);
         });
-    }, [stocks, filters]); // Dépendances stables
+    }, [stocks, filters]);
 
     // Statistiques - FIX: useMemo avec dépendances correctes
     const stats = useMemo(() => {
@@ -288,10 +286,12 @@ export const useStocks = () => {
             optimal: stocks.filter(s => s.status === 'optimal').length,
             low: stocks.filter(s => s.status === 'low').length,
             critical: stocks.filter(s => s.status === 'critical').length,
+            outOfStock: stocks.filter(s => s.status === 'outOfStock').length,
+            overstocked: stocks.filter(s => s.status === 'overstocked').length,
             totalValue: stocks.reduce((sum, stock) => sum + stock.value, 0),
             averageValue: stocks.length > 0 ? stocks.reduce((sum, stock) => sum + stock.value, 0) / stocks.length : 0
         };
-    }, [stocks]); // Dépendance stable
+    }, [stocks]);
 
     // ===== FONCTIONS UTILITAIRES - FIX: useCallback pour éviter re-création =====
 

@@ -137,7 +137,9 @@ describe('useStocks Hook', () => {
                 const optimalStockData: CreateStockData = {
                     name: stockHubStockUseCases.optimalStock.name,
                     quantity: stockHubStockUseCases.optimalStock.quantity,
-                    value: stockHubStockUseCases.optimalStock.value
+                    value: stockHubStockUseCases.optimalStock.value,
+                    minThreshold: 50,  // 150 est entre 50 et 200 → optimal
+                    maxThreshold: 200
                 };
 
                 let created: Stock | null = null;
@@ -172,8 +174,9 @@ describe('useStocks Hook', () => {
 
                 const criticalStockData: CreateStockData = {
                     name: stockHubStockUseCases.criticalStock.name,
-                    quantity: 0,
-                    value: stockHubStockUseCases.criticalStock.value
+                    quantity: 3,  // 3 < 10 * 0.5 = 5 → critical
+                    value: stockHubStockUseCases.criticalStock.value,
+                    minThreshold: 10
                 };
 
                 let created: Stock | null = null;
@@ -290,15 +293,16 @@ describe('useStocks Hook', () => {
 
                 const firstStock = result.current.stocks[0];
 
-                // Mettre à jour avec une quantité critique
-                const criticalUpdate: UpdateStockData = {
+                // Mettre à jour avec une quantité faible (low)
+                const lowUpdate: UpdateStockData = {
                     id: firstStock.id,
-                    quantity: 1
+                    quantity: 7,  // 7 est entre 5 et 10 → low (minThreshold=10)
+                    minThreshold: 10
                 };
 
                 let updated: Stock | null = null;
                 await act(async () => {
-                    updated = await result.current.updateStock(criticalUpdate);
+                    updated = await result.current.updateStock(lowUpdate);
                 });
 
                 expect(updated).not.toBeNull();
@@ -353,7 +357,7 @@ describe('useStocks Hook', () => {
                 expect(result.current.errors.update).toBeDefined();
             });
 
-            it('should update to critical status when quantity is 0', async () => {
+            it('should update to outOfStock status when quantity is 0', async () => {
                 const { result } = renderHook(() => useStocks());
 
                 await waitFor(() => {
@@ -372,7 +376,7 @@ describe('useStocks Hook', () => {
                 });
 
                 expect(updated).not.toBeNull();
-                expect(updated!.status).toBe('critical');
+                expect(updated!.status).toBe('outOfStock');
             });
         });
     });

@@ -2,9 +2,10 @@ import React from 'react';
 import {Edit3, Eye, Trash2} from 'lucide-react';
 import {Card} from '@/components/common/Card';
 import {Button} from '@/components/common/Button';
-import {Badge} from '@/components/common/Badge';
+import {StatusBadge} from '@/components/common/StatusBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
-import type {StockCardProps, StockStatus} from '@/types';
+import {STOCK_STATUS_CONFIG} from '@/types/stock';
+import type {StockCardProps} from '@/types';
 
 export const StockCard: React.FC<StockCardProps> = ({
                                                         stock,
@@ -19,19 +20,12 @@ export const StockCard: React.FC<StockCardProps> = ({
                                                     }) => {
     const { theme } = useTheme();
 
+    // Récupération de la config du statut pour les couleurs
+    const statusConfig = STOCK_STATUS_CONFIG[stock.status];
+    const statusColors = theme === 'dark' ? statusConfig.colors.dark : statusConfig.colors.light;
+
     const themeClasses = {
         textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
-    };
-
-    const getStatusBadge = (status: StockStatus): React.ReactElement => {
-        const statusMap: Record<StockStatus, { variant: 'success' | 'warning' | 'danger'; label: string }> = {
-            optimal: { variant: 'success', label: 'Optimal' },
-            low: { variant: 'warning', label: 'Faible' },
-            critical: { variant: 'danger', label: 'Critique' },
-        };
-
-        const { variant, label } = statusMap[status];
-        return <Badge variant={variant}>{label}</Badge>;
     };
 
     return (
@@ -45,16 +39,12 @@ export const StockCard: React.FC<StockCardProps> = ({
             aria-labelledby={`stock-${stock.id}-name`}
         >
             <Card>
-                {/* Indicateur de statut accessible */}
+                {/* Indicateur de statut accessible avec couleurs dynamiques */}
                 <div
-                    className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${
-                        stock.status === 'optimal'
-                            ? 'bg-emerald-400'
-                            : stock.status === 'low'
-                                ? 'bg-amber-400'
-                                : 'bg-red-400'
+                    className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${statusColors.border} ${
+                        statusConfig.animate ? 'animate-pulse' : ''
                     }`}
-                    aria-label={`Statut du stock: ${stock.status}`}
+                    aria-label={`Statut du stock: ${statusConfig.label}`}
                 />
 
                 {/* Header avec nom et statut */}
@@ -72,7 +62,8 @@ export const StockCard: React.FC<StockCardProps> = ({
                             </p>
                         )}
                     </div>
-                    {getStatusBadge(stock.status)}
+                    {/* ✨ Utilisation du nouveau StatusBadge */}
+                    <StatusBadge status={stock.status} size="sm" />
                 </header>
 
                 {/* Métriques avec description accessible */}

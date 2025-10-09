@@ -20,7 +20,7 @@ export const stockData: Stock[] = [
     },
     {
         id: 3,
-        name: "StockVide",
+        name: "StockFaible",
         quantity: 3,
         value: 150,
         status: "low",
@@ -34,6 +34,18 @@ export const stockData: Stock[] = [
         status: "critical",
         lastUpdate: "5min",
     },
+    {
+        id: 6,
+        name: 'SurStock',
+        quantity: 250,  // > maxThreshold
+        value: 3750,
+        status: 'overstocked',
+        lastUpdate: '1h',
+        category: 'Bureau',
+        minThreshold: 10,
+        maxThreshold: 100,
+        description: 'Stock en surstockage'
+    }
 ];
 
 // Statistiques métrique

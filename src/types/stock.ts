@@ -112,24 +112,24 @@ export interface StockStatusConfig {
  * Ordre de priorité : Rupture > Critique > Attention > Normal > Surstockage
  */
 export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
-    // ⛔ RUPTURE DE STOCK - Rouge foncé (priorité 1 - LA PLUS URGENTE)
+    // ⛔ RUPTURE DE STOCK - Gris (priorité 1 - LA PLUS URGENTE)
     outOfStock: {
-        label: 'Rupture',
+        label: 'Out of Stock',
         icon: XCircle,
         colors: {
             light: {
-                background: 'bg-rose-50',
-                border: 'border-rose-500',
-                text: 'text-rose-800',
-                badge: 'bg-rose-100 text-rose-800 border-rose-400',
-                hover: 'hover:bg-rose-100 hover:border-rose-600'
+                background: 'bg-gray-50',
+                border: 'border-gray-500',
+                text: 'text-gray-800',
+                badge: 'bg-gray-100 text-gray-700 border-gray-300',
+                hover: 'hover:bg-gray-100 hover:border-gray-600'
             },
             dark: {
-                background: 'bg-rose-950/40',
-                border: 'border-rose-500/50',
-                text: 'text-rose-300',
-                badge: 'bg-rose-500/25 text-rose-300 border-rose-500/40',
-                hover: 'hover:bg-rose-950/60 hover:border-rose-500/70'
+                background: 'bg-gray-950/40',
+                border: 'border-gray-500/50',
+                text: 'text-gray-300',
+                badge: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+                hover: 'hover:bg-gray-950/60 hover:border-gray-500/70'
             }
         },
         priority: 1,
@@ -138,7 +138,7 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
 
     // 🔴 CRITIQUE - Rouge (priorité 2)
     critical: {
-        label: 'Critique',
+        label: 'Critical',
         icon: AlertTriangle,
         colors: {
             light: {
@@ -162,7 +162,7 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
 
     // ⚠️ ATTENTION - Orange (priorité 3)
     low: {
-        label: 'Attention',
+        label: 'Low',
         icon: AlertCircle,
         colors: {
             light: {
@@ -186,7 +186,7 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
 
     // ✅ NORMAL/OPTIMAL - Vert (priorité 4)
     optimal: {
-        label: 'Normal',
+        label: 'Optimal',
         icon: CheckCircle,
         colors: {
             light: {
@@ -210,7 +210,7 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
 
     // 📈 SURSTOCKAGE - Bleu (priorité 5)
     overstocked: {
-        label: 'Surstockage',
+        label: 'Overstocked',
         icon: TrendingUp,
         colors: {
             light: {

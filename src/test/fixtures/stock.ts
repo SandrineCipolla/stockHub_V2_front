@@ -1,9 +1,9 @@
 import type {Stock, StockStatus} from '@/types';
 
 /**
- * Statuts de stock disponibles pour les tests
+ * Statuts de stock disponibles pour les tests (5 statuts)
  */
-export const stockStatuses: StockStatus[] = ['optimal', 'low', 'critical'];
+export const stockStatuses: StockStatus[] = ['optimal', 'low', 'critical', 'outOfStock', 'overstocked'];
 
 /**
  * Catégories de stock pour les tests
@@ -85,6 +85,35 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         minThreshold: 5,
         maxThreshold: 20,
     },
+    // 🆕 NOUVEAU : Stock en rupture
+    outOfStockItem: {
+        id: 9,
+        name: 'Toner Imprimante',
+        quantity: 0,
+        value: 0,
+        status: 'outOfStock',
+        lastUpdate: '2024-10-08T12:00:00Z',
+        category: stockCategories.office,
+        sku: 'OFF-089',
+        description: 'Toner compatible imprimante laser - RUPTURE',
+        supplier: stockSuppliers.supplier1,
+        minThreshold: 5,
+        maxThreshold: 20,
+    },
+    overstockedItem: {
+        id: 10,
+        name: 'Ramettes Papier A4',
+        quantity: 250,
+        value: 3750.0,
+        status: 'overstocked',
+        lastUpdate: '2024-10-08T11:30:00Z',
+        category: stockCategories.office,
+        sku: 'OFF-150',
+        description: 'Ramettes papier A4 80g - Surstockage',
+        supplier: stockSuppliers.local,
+        minThreshold: 20,
+        maxThreshold: 100,
+    },
     highValueStock: {
         id: 4,
         name: productNames.table,
@@ -155,17 +184,29 @@ export const stockHubStockUseCases: Record<string, Stock> = {
  * Collection de stocks pour tests de tableau complet
  */
 export const dashboardStocks: Stock[] = [
-    stockHubStockUseCases.optimalStock,
-    stockHubStockUseCases.lowStock,
+    stockHubStockUseCases.outOfStockItem,
     stockHubStockUseCases.criticalStock,
+    stockHubStockUseCases.lowStock,
+    stockHubStockUseCases.optimalStock,
+    stockHubStockUseCases.overstockedItem,
     stockHubStockUseCases.highValueStock,
     stockHubStockUseCases.minimalStock,
 ];
 
 /**
- * Stocks filtrés par statut
+ * Stocks filtrés par statut (5 statuts)
  */
 export const stocksByStatus: Record<StockStatus, Stock[]> = {
+    outOfStock: [
+        stockHubStockUseCases.outOfStockItem,
+    ],
+    critical: [
+        stockHubStockUseCases.criticalStock,
+        stockHubStockUseCases.criticalLowQuantity,
+    ],
+    low: [
+        stockHubStockUseCases.lowStock
+    ],
     optimal: [
         stockHubStockUseCases.optimalStock,
         stockHubStockUseCases.highValueStock,
@@ -173,10 +214,8 @@ export const stocksByStatus: Record<StockStatus, Stock[]> = {
         stockHubStockUseCases.stockWithoutThresholds,
         stockHubStockUseCases.recentlyUpdatedStock,
     ],
-    low: [stockHubStockUseCases.lowStock],
-    critical: [
-        stockHubStockUseCases.criticalStock,
-        stockHubStockUseCases.criticalLowQuantity,
+    overstocked: [
+        stockHubStockUseCases.overstockedItem,
     ],
 };
 
@@ -195,7 +234,11 @@ export const stocksByCategory: Record<string, Stock[]> = {
         stockHubStockUseCases.highValueStock,
         stockHubStockUseCases.minimalStock,
     ],
-    [stockCategories.office]: [stockHubStockUseCases.recentlyUpdatedStock],
+    [stockCategories.office]: [
+        stockHubStockUseCases.outOfStockItem,
+        stockHubStockUseCases.overstockedItem,
+        stockHubStockUseCases.recentlyUpdatedStock,
+    ],
 };
 
 /**

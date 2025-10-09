@@ -1,5 +1,5 @@
 import {vi} from 'vitest';
-import {dashboardStocks, stockCategories, stocksByStatus} from './stock';
+import {dashboardStocks, stocksByStatus} from './stock';
 
 /**
  * Mock complet pour le hook useStocks
@@ -13,17 +13,10 @@ export const createMockUseStocks = (overrides = {}) => ({
         optimal: stocksByStatus.optimal.length,
         low: stocksByStatus.low.length,
         critical: stocksByStatus.critical.length,
+        outOfStock: dashboardStocks.filter(s => s.status === 'outOfStock').length,
+        overstocked: dashboardStocks.filter(s => s.status === 'overstocked').length,
         totalValue: dashboardStocks.reduce((sum, stock) => sum + stock.value, 0),
-        averageValue: dashboardStocks.reduce((sum, stock) => sum + stock.value, 0) / dashboardStocks.length,
-        byStatus: {
-            optimal: stocksByStatus.optimal.length,
-            low: stocksByStatus.low.length,
-            critical: stocksByStatus.critical.length
-        },
-        byCategory: Object.keys(stockCategories).reduce((acc, category) => {
-            acc[category] = dashboardStocks.filter(s => s.category === stockCategories[category]).length;
-            return acc;
-        }, {} as Record<string, number>)
+        averageValue: dashboardStocks.reduce((sum, stock) => sum + stock.value, 0) / dashboardStocks.length
     },
     filters: {},
     loadStocks: vi.fn().mockResolvedValue(undefined),
