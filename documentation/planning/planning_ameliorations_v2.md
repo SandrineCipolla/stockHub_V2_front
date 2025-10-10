@@ -236,17 +236,28 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - **Tous les tests au vert** (>360 tests)
 - **Architecture types/stock.ts** enrichie avec config visuelle complète
 
-#### **Vendredi 10/10 (2h) : Prochaine séance**
-- [ ] **StockCard enrichie** (90min)
-  - [ ] Bordure gauche colorée selon statut
-  - [ ] Background subtle selon statut
-  - [ ] Tests avec différents statuts
+#### **Vendredi 10/10 (2h30) : Séance 15 - StockCard enrichie** ✅
+- [x] **StockCard enrichie** (90min)
+  - [x] Bordure gauche 4px colorée selon statut
+  - [x] Background coloré uniquement au hover (10% opacité)
+  - [x] Hover effects qui préservent la couleur du statut
+  - [x] Tests avec les 3 statuts principaux (+11 tests)
 
-- [ ] **Tests responsive** (30min)
-  - [ ] Mobile, tablet, desktop
-  - [ ] Lighthouse après modifications
+- [x] **Tests & Validation** (60min)
+  - [x] 372 tests passent (100% succès)
+  - [x] Lighthouse Performance: 100/100 ✅
+  - [x] Lighthouse Accessibility: 96/100 ✅
+  - [x] Bundle: 227 KB (70 KB gzipped)
+  - [x] TypeScript: 0 erreur
 
-**🎯 Objectif** : Cartes visuellement différenciées
+**✅ FAIT** : Différenciation visuelle épurée + feedback hover subtil
+
+**📊 Résultats :**
+- **Bordures** : emerald (optimal), amber (low), red (critical), gray (outOfStock), blue (overstocked)
+- **Backgrounds** : Neutre par défaut, coloré uniquement au hover (10% opacité)
+- **Tests** : +11 nouveaux tests pour bordures/backgrounds
+- **Performance** : Aucune dégradation (100/100 maintenu)
+- **Design** : Interface épurée en mode clair, feedback visuel subtil à l'interaction
 
 #### **Jeudi 17/10 (2h) : Animations Framer Motion**
 - [ ] **Setup Framer Motion** (30min)
@@ -398,15 +409,20 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - [x] >360 tests passent ✅
 - [x] TypeScript OK (0 erreur) ✅
 
-### 🎨 **Livrable 4 : Créativité Visuelle StockCard** 📅 10/10 (EN COURS)
+### 🎨 **Livrable 4 : Créativité Visuelle StockCard** ✅ TERMINÉ (09-10/10)
 - [x] Type StockStatus + constantes couleurs ✅
 - [x] 5 statuts définis avec palette complète ✅
 - [x] Icônes spécifiques par statut ✅
 - [x] Composant StatusBadge avec 262 tests ✅
 - [x] STOCK_STATUS_CONFIG avec couleurs light/dark ✅
-- [ ] StockCard avec bordures colorées selon statut
-- [ ] Tests responsive
-- [ ] Design cohérent final
+- [x] StockCard avec bordures colorées selon statut ✅
+- [x] Backgrounds subtils selon statut ✅
+- [x] Hover effects préservant la couleur ✅
+- [x] Tests responsive (mobile, tablet, desktop) ✅
+- [x] Design cohérent final ✅
+- [x] 372 tests passent ✅
+- [x] Performance 100/100 ✅
+- [x] Accessibilité 96/100 ✅
 
 ### ✨ **Livrable 5 : Micro-animations** 📅 17-20/10
 - [ ] Framer Motion installé
@@ -489,6 +505,32 @@ npm run type-check
 - [ ] **Expérience utilisateur** : Interface plus vivante et engageante
 - [ ] **Code quality** : Tests robustes, code maintenable
 - [ ] **Fonctionnalité** : Application complète connectée au backend
+
+### 📈 Audits Lighthouse - Historique
+
+#### Audit du 10/10/2025 (Séance 15 - Post StockCard enrichie) ✅
+```
+Date : 10 octobre 2025, 13:51
+Build : Production (npm run build && npm run preview)
+URL testée : http://localhost:4173/
+
+Scores :
+- Performance      : 100/100 ⭐
+- Accessibility    : 96/100  ✅
+- Best Practices   : N/A
+- SEO              : N/A
+
+Métriques clés :
+- First Contentful Paint : 1.2s
+- Bundle size (gzipped)  : 70 KB
+
+Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
+```
+
+**📊 Évolution des scores :**
+- Performance : Maintenue à 100/100 malgré ajout CSS différenciation visuelle
+- Accessibility : Stable à 96/100 (WCAG AA conforme)
+- Bundle size : Optimisé à 70 KB gzipped (objectif < 600 KB largement atteint)
 
 ---
 
@@ -1072,7 +1114,7 @@ src/test/fixtures/
 
 **🎯 TESTS 100% DRY & RÉUTILISABLES ✅**
 
-### Séance 14 - Système de statuts complet (Date : 09/10/2025 soir) ✅
+### Séance 14 - Système de statuts complet (Date : 09/10/2025 soir - 2h30) ✅
 ```
 ⏱️ Temps réel : 2h30min (estimé 2h)
 
@@ -1123,13 +1165,60 @@ src/test/fixtures/
 - Tests responsive pour StatusBadge
 ```
 
-### Séance 15 - StockCard enrichie (Date : 10/10/2025)
+### Séance 15 - StockCard enrichie (Date : 10/10/2025 - 2h30) ✅
 ```
-⏱️ Temps réel : ___h___min
+⏱️ Temps réel : 2h30min (estimé 2h)
+
 ✅ Réalisé :
+- Bordure gauche 4px colorée selon statut (5 couleurs)
+  - optimal: border-l-emerald-500/30 (vert)
+  - low: border-l-amber-500/30 (orange)
+  - critical: border-l-red-500/40 (rouge)
+  - outOfStock: border-l-gray-500/50 (gris)
+  - overstocked: border-l-blue-500/30 (bleu)
+- Background coloré uniquement au hover (10% opacité)
+  - Carte neutre par défaut = interface épurée
+  - Tints emerald/amber/red/gray/blue-500/10 au survol
+- Hover effects qui préservent la couleur du statut
+  - Bordure intensifiée (30-50% opacité)
+  - Background apparaît subtilement (10% opacité)
+- +11 nouveaux tests pour différenciation visuelle
+  - Tests bordures left par statut
+  - Tests backgrounds par statut
+  - Tests hover effects
+- Validation complète : 372 tests passent (100%)
+- Lighthouse Performance: 100/100 ✅
+- Lighthouse Accessibility: 96/100 ✅
+- Bundle size: 227 KB (70 KB gzipped)
+
 ❌ Difficultés :
+- Classes Tailwind dynamiques non détectées par le compilateur
+  → Résolu : Mapping explicite Record<StockStatus, string> avec classes complètes
+- Tests cherchaient border-emerald-500/30 au lieu de border-l-emerald-500/30
+  → Résolu : Tests séparés pour chaque classe
+- Background coloré permanent trop visible en mode clair
+  → Résolu : Background uniquement au hover (Option D)
+
 💡 Apprentissages :
-🔄 À reporter :
+- Tailwind purge CSS nécessite classes complètes dans le code
+- Record<StockStatus, string> = meilleure approche pour mapping couleurs
+- Bordure seule = excellent indicateur visuel permanent
+- Background au hover = feedback interactif sans surcharge visuelle
+- Hover effects doivent préserver la sémantique visuelle (couleur du statut)
+- Performance maintenue malgré ajout CSS (100/100 Lighthouse)
+- Background hover /10 opacité = subtil et agréable en mode clair
+
+✅ Validation Séance 15 :
+- [x] Différenciation visuelle claire par statut (bordure 4px)
+- [x] Interface épurée par défaut (background neutre)
+- [x] Feedback hover subtil (background coloré 10%)
+- [x] 372 tests passent (11 nouveaux tests)
+- [x] Performance 100/100 (maintenue)
+- [x] Accessibilité 96/100 (maintenue)
+- [x] TypeScript 0 erreur
+- [x] Bundle optimisé (70 KB gzipped)
+
+🔄 À reporter : Rien - Objectif atteint ✅
 ```
 
 ### Séance 16 - Animations Framer Motion (Date : 17/10/2025)

@@ -4,7 +4,7 @@ import {Card} from '@/components/common/Card';
 import {Button} from '@/components/common/Button';
 import {StatusBadge} from '@/components/common/StatusBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
-import {STOCK_STATUS_CONFIG} from '@/types/stock';
+import {STOCK_STATUS_CONFIG, type StockStatus} from '@/types/stock';
 import type {StockCardProps} from '@/types';
 
 export const StockCard: React.FC<StockCardProps> = ({
@@ -28,6 +28,24 @@ export const StockCard: React.FC<StockCardProps> = ({
         textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
     };
 
+    // Mapping des couleurs de bordure par statut (fixe, ne change pas au hover)
+    const borderColorMap: Record<StockStatus, string> = {
+        optimal: 'border-l-emerald-500/30 hover:border-l-emerald-500/50',
+        low: 'border-l-amber-500/30 hover:border-l-amber-500/50',
+        critical: 'border-l-red-500/40 hover:border-l-red-500/60',
+        outOfStock: 'border-l-gray-500/50 hover:border-l-gray-500/70',
+        overstocked: 'border-l-blue-500/30 hover:border-l-blue-500/50'
+    };
+
+    // Mapping des couleurs de fond par statut (uniquement au hover)
+    const backgroundColorMap: Record<StockStatus, string> = {
+        optimal: 'hover:bg-emerald-500/10',
+        low: 'hover:bg-amber-500/10',
+        critical: 'hover:bg-red-500/10',
+        outOfStock: 'hover:bg-gray-500/10',
+        overstocked: 'hover:bg-blue-500/10'
+    };
+
     return (
         <article
             className={`transform transition-all duration-500 ${
@@ -38,7 +56,11 @@ export const StockCard: React.FC<StockCardProps> = ({
             style={{ transitionDelay: `${index * 150}ms` }}
             aria-labelledby={`stock-${stock.id}-name`}
         >
-            <Card>
+            <Card className={`
+                border-l-4 ${borderColorMap[stock.status]}
+                ${backgroundColorMap[stock.status]}
+                transition-colors duration-200
+            `}>
                 {/* Indicateur de statut accessible avec couleurs dynamiques */}
                 <div
                     className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${statusColors.border} ${
