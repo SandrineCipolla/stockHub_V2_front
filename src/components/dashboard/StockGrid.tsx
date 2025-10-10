@@ -18,7 +18,7 @@ export const StockGrid: React.FC<StockGridProps> = ({
             className={`grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 ${className}`}
             role="region"
             aria-labelledby="stocks-list-heading"
-            layout // Animation fluide lors des changements de layout (filtrage/tri)
+            layout
         >
             <h3 id="stocks-list-heading" className="sr-only">
                 Liste des stocks ({stocks.length} éléments)

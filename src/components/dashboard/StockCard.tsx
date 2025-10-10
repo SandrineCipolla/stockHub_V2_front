@@ -6,6 +6,7 @@ import {StatusBadge} from '@/components/common/StatusBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {useReducedMotion} from '@/hooks/useReducedMotion';
 import {STOCK_STATUS_CONFIG, type StockStatus} from '@/types/stock';
+import {STOCK_CARD_ANIMATION, REDUCED_MOTION_DURATION} from '@/constants/animations';
 import type {StockCardProps} from '@/types';
 
 export const StockCard: React.FC<StockCardProps> = ({
@@ -21,7 +22,6 @@ export const StockCard: React.FC<StockCardProps> = ({
     const { theme } = useTheme();
     const prefersReducedMotion = useReducedMotion();
 
-    // Récupération de la config du statut pour les couleurs
     const statusConfig = STOCK_STATUS_CONFIG[stock.status];
     const statusColors = theme === 'dark' ? statusConfig.colors.dark : statusConfig.colors.light;
 
@@ -29,7 +29,6 @@ export const StockCard: React.FC<StockCardProps> = ({
         textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
     };
 
-    // Mapping des couleurs de bordure par statut (fixe, ne change pas au hover)
     const borderColorMap: Record<StockStatus, string> = {
         optimal: 'border-l-emerald-500/30 hover:border-l-emerald-500/50',
         low: 'border-l-amber-500/30 hover:border-l-amber-500/50',
@@ -38,29 +37,28 @@ export const StockCard: React.FC<StockCardProps> = ({
         overstocked: 'border-l-blue-500/30 hover:border-l-blue-500/50'
     };
 
-    // Animations Framer Motion avec effet de cascade basé sur l'index
     const cardVariants = {
         hidden: {
             opacity: 0,
-            y: prefersReducedMotion ? 0 : 50,
-            scale: prefersReducedMotion ? 1 : 0.95, // Effet de zoom subtil
+            y: prefersReducedMotion ? 0 : STOCK_CARD_ANIMATION.INITIAL_Y_OFFSET,
+            scale: prefersReducedMotion ? 1 : STOCK_CARD_ANIMATION.INITIAL_SCALE,
         },
         visible: {
             opacity: 1,
             y: 0,
             scale: 1,
             transition: {
-                duration: prefersReducedMotion ? 0.01 : 0.6,
-                delay: prefersReducedMotion ? 0 : index * 0.12, // Délai en cascade
-                ease: [0.25, 0.46, 0.45, 0.94] as const,
+                duration: prefersReducedMotion ? REDUCED_MOTION_DURATION : STOCK_CARD_ANIMATION.ENTRANCE_DURATION,
+                delay: prefersReducedMotion ? 0 : index * STOCK_CARD_ANIMATION.CASCADE_DELAY,
+                ease: STOCK_CARD_ANIMATION.EASING,
             },
         },
         exit: {
             opacity: 0,
-            y: prefersReducedMotion ? 0 : -16,
-            scale: prefersReducedMotion ? 1 : 0.95,
+            y: prefersReducedMotion ? 0 : STOCK_CARD_ANIMATION.EXIT_Y_OFFSET,
+            scale: prefersReducedMotion ? 1 : STOCK_CARD_ANIMATION.EXIT_SCALE,
             transition: {
-                duration: prefersReducedMotion ? 0.01 : 0.3,
+                duration: prefersReducedMotion ? REDUCED_MOTION_DURATION : STOCK_CARD_ANIMATION.EXIT_DURATION,
                 ease: 'easeOut' as const,
             },
         },
@@ -91,15 +89,15 @@ export const StockCard: React.FC<StockCardProps> = ({
             initial="hidden"
             animate="visible"
             exit="exit"
-            layout // Animation automatique lors des changements de position (filtrage/tri)
+            layout
             whileHover={
                 prefersReducedMotion
                     ? undefined
                     : {
-                          scale: 1.02,
-                          y: -4,
+                          scale: STOCK_CARD_ANIMATION.HOVER_SCALE,
+                          y: STOCK_CARD_ANIMATION.HOVER_Y_OFFSET,
                           transition: {
-                              duration: 0.2,
+                              duration: STOCK_CARD_ANIMATION.HOVER_DURATION,
                               ease: 'easeOut' as const,
                           },
                       }
@@ -120,7 +118,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                         : {
                               backgroundColor: getHoverBackground(),
                               transition: {
-                                  duration: 0.2,
+                                  duration: STOCK_CARD_ANIMATION.HOVER_DURATION,
                               },
                           }
                 }
@@ -148,7 +146,6 @@ export const StockCard: React.FC<StockCardProps> = ({
                             </p>
                         )}
                     </div>
-                    {/* ✨ Utilisation du nouveau StatusBadge */}
                     <StatusBadge status={stock.status} size="sm" />
                 </header>
 
