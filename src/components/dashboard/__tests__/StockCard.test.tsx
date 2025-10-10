@@ -134,20 +134,20 @@ describe('StockCard Component', () => {
                 expect(card).toHaveClass('border-l-emerald-500/30');
             });
 
-            it('should apply emerald background to Card', () => {
+            it('should apply emerald background only on hover', () => {
                 const stock = stockHubStockUseCases.optimalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('bg-emerald-950/20');
+                expect(card).toHaveClass('hover:bg-emerald-500/10');
             });
 
-            it('should apply hover effect classes', () => {
+            it('should apply hover effect classes for border', () => {
                 const stock = stockHubStockUseCases.optimalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('hover:bg-emerald-950/30', 'hover:border-l-emerald-500/50');
+                expect(card).toHaveClass('hover:border-l-emerald-500/50');
             });
         });
 
@@ -161,12 +161,12 @@ describe('StockCard Component', () => {
                 expect(card).toHaveClass('border-l-amber-500/30');
             });
 
-            it('should apply amber background to Card', () => {
+            it('should apply amber background only on hover', () => {
                 const stock = stockHubStockUseCases.lowStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('bg-amber-950/20');
+                expect(card).toHaveClass('hover:bg-amber-500/10');
             });
         });
 
@@ -180,12 +180,12 @@ describe('StockCard Component', () => {
                 expect(card).toHaveClass('border-l-red-500/40');
             });
 
-            it('should apply red background to Card', () => {
+            it('should apply red background only on hover', () => {
                 const stock = stockHubStockUseCases.criticalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('bg-red-950/20');
+                expect(card).toHaveClass('hover:bg-red-500/10');
             });
         });
 
