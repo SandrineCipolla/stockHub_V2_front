@@ -274,18 +274,18 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 **🎯 Objectif** : Cartes animées ✅
 
-#### **Samedi 19/10 Soirée (3h) : Animations StockGrid + Dashboard**
-- [ ] **Animations StockGrid** (90min)
-  - [ ] Stagger children
-  - [ ] Layout animation
-  - [ ] Tests animations
+#### **Samedi 19/10 Soirée (3h) : Animations StockGrid + Dashboard** ✅
+- [x] **Animations StockGrid** (90min)
+  - [x] Stagger children
+  - [x] Layout animation
+  - [x] Tests animations
 
-- [ ] **Compteurs animés** (90min)
-  - [ ] MetricCard count-up animation
-  - [ ] Format numbers
-  - [ ] Easing et durées
+- [x] **Compteurs animés** (90min)
+  - [x] MetricCard count-up animation
+  - [x] Format numbers
+  - [x] Easing et durées
 
-**🎯 Objectif** : Dashboard animé
+**🎯 Objectif** : Dashboard animé ✅
 
 #### **Dimanche 20/10 Matin (4h) : Tests Performance + Polish**
 - [ ] **Tests performance** (2h)
@@ -425,15 +425,17 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - [x] Performance 100/100 ✅
 - [x] Accessibilité 96/100 ✅
 
-### ✨ **Livrable 5 : Micro-animations** 📅 17-20/10
+### ✨ **Livrable 5 : Micro-animations** ✅ TERMINÉ (17-19/10)
 - [x] Framer Motion installé
 - [x] Animations entrance/exit StockCard
 - [x] Animations hover fluides
 - [x] Stagger animation StockGrid (délai échelonné basé sur index)
-- [ ] Compteurs animés dashboard
+- [x] Compteurs animés dashboard (react-countup)
+- [x] Layout animation pour filtrage fluide
 - [x] useReducedMotion hook
 - [x] Performance maintenue 100/100
 - [x] Tests accessibilité animations
+- [x] 369 tests passent
 
 ### 🤖 **Livrable 6 : IA Visible** 📅 22-24/10
 - [ ] SmartSuggestions avec animations
@@ -1303,13 +1305,63 @@ src/test/fixtures/
 - Tests performance FPS avec animations
 ```
 
-### Séance 17 - Animations Dashboard (Date : 19/10/2025)
+### Séance 17 - Animations StockGrid + Dashboard (Date : 19/10/2025) ✅
 ```
-⏱️ Temps réel : ___h___min
+⏱️ Temps réel : 3h (estimé 3h)
+
 ✅ Réalisé :
+- Installation react-countup pour animations de compteurs
+- Animations MetricCard avec CountUp
+  - Compteurs animés de 0 à valeur finale (1.2s)
+  - Parsing intelligent des valeurs (nombres, préfixes +/-, suffixes %, €, $)
+  - Easing easeOutExpo pour ralentissement progressif
+  - Prop enableAnimation pour désactiver dans tests
+  - Support prefers-reduced-motion
+- Animations StockGrid
+  - Layout animation pour transitions fluides lors filtrage/tri
+  - Délai en cascade : index * 0.12s (effet vague)
+  - Effet de zoom subtil ajouté : scale 0.95 → 1.0
+  - Duration : 0.6s avec easing easeOutQuad
+  - Suppression message d'état vide dupliqué
+- Tests mis à jour
+  - MetricCard.test.tsx : enableAnimation={false} (18 tests)
+  - Dashboard.test.tsx : Mock MetricCard sans animation (18 tests)
+  - 369 tests passent (100% succès)
+- TypeScript : 0 erreur
+- Performance maintenue : 100/100 Lighthouse
+
 ❌ Difficultés :
+- CountUp affiche "0" initialement → Tests échouent
+  → Résolu : Prop enableAnimation={false} dans tests
+- Message "Aucun stock trouvé" dupliqué (StockGrid + Dashboard)
+  → Résolu : Suppression état vide dans StockGrid
+- Effet de vague pas visible
+  → Résolu : Delay basé sur index dans StockCard au lieu de staggerChildren
+- Animations apparaissent toutes en même temps
+  → Résolu : Restauration delay individuel avec index * 0.12
+
 💡 Apprentissages :
+- react-countup nécessite parsing manuel pour préfixes/suffixes
+- Prop enableAnimation pattern = solution propre pour tests d'animations
+- staggerChildren ne fonctionne pas si enfants ont déjà leur propre delay
+- Layout animation Framer Motion = transitions automatiques lors filtrage
+- Mock de composants animés dans tests nécessite valeurs statiques
+- Effet cascade visible : délai 0.12s + effet zoom scale 0.95 → 1.0
+- État vide doit être géré par le parent (Dashboard) pas l'enfant (StockGrid)
+
+✅ Validation Séance 17 :
+- [x] Compteurs animés MetricCard fonctionnels
+- [x] Effet cascade StockCard visible et fluide
+- [x] Layout animation pour filtrage/tri
+- [x] Message état vide unique (Dashboard)
+- [x] 369 tests passent (100%)
+- [x] TypeScript 0 erreur
+- [x] Performance 100/100 maintenue
+- [x] Accessibilité respectée (prefers-reduced-motion)
+
 🔄 À reporter :
+- Tests performance FPS avec animations (Dimanche 20/10)
+- Polish final animations (durées, easings)
 ```
 
 ### Séance 18 - Performance + Polish (Date : 20/10/2025)

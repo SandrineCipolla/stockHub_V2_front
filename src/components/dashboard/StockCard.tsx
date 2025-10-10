@@ -38,24 +38,27 @@ export const StockCard: React.FC<StockCardProps> = ({
         overstocked: 'border-l-blue-500/30 hover:border-l-blue-500/50'
     };
 
-    // Animations Framer Motion
+    // Animations Framer Motion avec effet de cascade basé sur l'index
     const cardVariants = {
         hidden: {
             opacity: 0,
-            y: prefersReducedMotion ? 0 : 50, // Plus de mouvement vertical
+            y: prefersReducedMotion ? 0 : 50,
+            scale: prefersReducedMotion ? 1 : 0.95, // Effet de zoom subtil
         },
         visible: {
             opacity: 1,
             y: 0,
+            scale: 1,
             transition: {
-                duration: prefersReducedMotion ? 0.01 : 0.8, // Animation plus lente
-                delay: prefersReducedMotion ? 0 : index * 0.15, // Délai échelonné plus visible
-                ease: [0.25, 0.46, 0.45, 0.94] as const, // easeOutQuad
+                duration: prefersReducedMotion ? 0.01 : 0.6,
+                delay: prefersReducedMotion ? 0 : index * 0.12, // Délai en cascade
+                ease: [0.25, 0.46, 0.45, 0.94] as const,
             },
         },
         exit: {
             opacity: 0,
             y: prefersReducedMotion ? 0 : -16,
+            scale: prefersReducedMotion ? 1 : 0.95,
             transition: {
                 duration: prefersReducedMotion ? 0.01 : 0.3,
                 ease: 'easeOut' as const,
@@ -88,6 +91,7 @@ export const StockCard: React.FC<StockCardProps> = ({
             initial="hidden"
             animate="visible"
             exit="exit"
+            layout // Animation automatique lors des changements de position (filtrage/tri)
             whileHover={
                 prefersReducedMotion
                     ? undefined
