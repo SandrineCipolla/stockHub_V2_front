@@ -1,16 +1,16 @@
 import React from 'react';
+import {motion} from 'framer-motion';
 import {Edit3, Eye, Trash2} from 'lucide-react';
-import {Card} from '@/components/common/Card';
 import {Button} from '@/components/common/Button';
 import {StatusBadge} from '@/components/common/StatusBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
+import {useReducedMotion} from '@/hooks/useReducedMotion';
 import {STOCK_STATUS_CONFIG, type StockStatus} from '@/types/stock';
 import type {StockCardProps} from '@/types';
 
 export const StockCard: React.FC<StockCardProps> = ({
                                                         stock,
                                                         index = 0,
-                                                        isLoaded = true,
                                                         onView,
                                                         onEdit,
                                                         onDelete,
@@ -19,6 +19,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                                                         className = ''
                                                     }) => {
     const { theme } = useTheme();
+    const prefersReducedMotion = useReducedMotion();
 
     // Récupération de la config du statut pour les couleurs
     const statusConfig = STOCK_STATUS_CONFIG[stock.status];
@@ -37,30 +38,89 @@ export const StockCard: React.FC<StockCardProps> = ({
         overstocked: 'border-l-blue-500/30 hover:border-l-blue-500/50'
     };
 
-    // Mapping des couleurs de fond par statut (uniquement au hover)
-    const backgroundColorMap: Record<StockStatus, string> = {
-        optimal: 'hover:bg-emerald-500/10',
-        low: 'hover:bg-amber-500/10',
-        critical: 'hover:bg-red-500/10',
-        outOfStock: 'hover:bg-gray-500/10',
-        overstocked: 'hover:bg-blue-500/10'
+    // Animations Framer Motion
+    const cardVariants = {
+        hidden: {
+            opacity: 0,
+            y: prefersReducedMotion ? 0 : 50, // Plus de mouvement vertical
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: prefersReducedMotion ? 0.01 : 0.8, // Animation plus lente
+                delay: prefersReducedMotion ? 0 : index * 0.15, // Délai échelonné plus visible
+                ease: [0.25, 0.46, 0.45, 0.94] as const, // easeOutQuad
+            },
+        },
+        exit: {
+            opacity: 0,
+            y: prefersReducedMotion ? 0 : -16,
+            transition: {
+                duration: prefersReducedMotion ? 0.01 : 0.3,
+                ease: 'easeOut' as const,
+            },
+        },
     };
 
+    // Mapping des couleurs de fond par statut pour Framer Motion
+    const getHoverBackground = () => {
+        // En mode light, on utilise une opacité plus forte car le background est blanc
+        const opacity = theme === 'dark' ? 0.1 : 0.15;
+
+        const colorMap = {
+            optimal: `rgb(16 185 129 / ${opacity})`,     // emerald-500
+            low: `rgb(245 158 11 / ${opacity})`,         // amber-500
+            critical: `rgb(239 68 68 / ${opacity})`,     // red-500
+            outOfStock: `rgb(107 114 128 / ${opacity})`, // gray-500
+            overstocked: `rgb(59 130 246 / ${opacity})`  // blue-500
+        };
+        return colorMap[stock.status];
+    };
+
+    const cardBaseClasses = theme === 'dark'
+        ? "bg-white/5 border-white/10"
+        : "bg-white/80 border-gray-200 shadow-sm";
+
     return (
-        <article
-            className={`transform transition-all duration-500 ${
-                isLoaded
-                    ? 'translate-y-0 opacity-100'
-                    : 'translate-y-8 opacity-0'
-            } ${className}`}
-            style={{ transitionDelay: `${index * 150}ms` }}
+        <motion.article
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            whileHover={
+                prefersReducedMotion
+                    ? undefined
+                    : {
+                          scale: 1.02,
+                          y: -4,
+                          transition: {
+                              duration: 0.2,
+                              ease: 'easeOut' as const,
+                          },
+                      }
+            }
+            className={className}
             aria-labelledby={`stock-${stock.id}-name`}
         >
-            <Card className={`
-                border-l-4 ${borderColorMap[stock.status]}
-                ${backgroundColorMap[stock.status]}
-                transition-colors duration-200
-            `}>
+            <motion.div
+                className={`
+                    ${cardBaseClasses}
+                    backdrop-blur-sm border rounded-xl p-6
+                    border-l-4 ${borderColorMap[stock.status]}
+                    transition-all duration-200 h-full relative
+                `}
+                whileHover={
+                    prefersReducedMotion
+                        ? undefined
+                        : {
+                              backgroundColor: getHoverBackground(),
+                              transition: {
+                                  duration: 0.2,
+                              },
+                          }
+                }
+            >
                 {/* Indicateur de statut accessible avec couleurs dynamiques */}
                 <div
                     className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${statusColors.border} ${
@@ -158,7 +218,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                         />
                     )}
                 </div>
-            </Card>
-        </article>
+            </motion.div>
+        </motion.article>
     );
 };

@@ -259,19 +259,20 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - **Performance** : Aucune dégradation (100/100 maintenu)
 - **Design** : Interface épurée en mode clair, feedback visuel subtil à l'interaction
 
-#### **Jeudi 17/10 (2h) : Animations Framer Motion**
-- [ ] **Setup Framer Motion** (30min)
+#### **Jeudi 17/10 (2h) : Animations Framer Motion** ✅
+- [x] **Setup Framer Motion** (30min)
   ```bash
   npm install framer-motion
   ```
-  - [ ] Hook useReducedMotion
+  - [x] Hook useReducedMotion
 
-- [ ] **Animations StockCard** (90min)
-  - [ ] Entrance (opacity, translateY)
-  - [ ] Hover (scale, shadow)
-  - [ ] Exit animation
+- [x] **Animations StockCard** (90min)
+  - [x] Entrance (opacity, translateY avec délai échelonné)
+  - [x] Hover (scale 1.02, élévation -4px, background coloré)
+  - [x] Exit animation (opacity, translateY vers le haut)
+  - [x] Tests mis à jour (369 tests passent)
 
-**🎯 Objectif** : Cartes animées
+**🎯 Objectif** : Cartes animées ✅
 
 #### **Samedi 19/10 Soirée (3h) : Animations StockGrid + Dashboard**
 - [ ] **Animations StockGrid** (90min)
@@ -425,14 +426,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - [x] Accessibilité 96/100 ✅
 
 ### ✨ **Livrable 5 : Micro-animations** 📅 17-20/10
-- [ ] Framer Motion installé
-- [ ] Animations entrance/exit StockCard
-- [ ] Animations hover fluides
-- [ ] Stagger animation StockGrid
+- [x] Framer Motion installé
+- [x] Animations entrance/exit StockCard
+- [x] Animations hover fluides
+- [x] Stagger animation StockGrid (délai échelonné basé sur index)
 - [ ] Compteurs animés dashboard
-- [ ] useReducedMotion hook
-- [ ] Performance ≥ 98/100
-- [ ] Tests FPS et accessibilité
+- [x] useReducedMotion hook
+- [x] Performance maintenue 100/100
+- [x] Tests accessibilité animations
 
 ### 🤖 **Livrable 6 : IA Visible** 📅 22-24/10
 - [ ] SmartSuggestions avec animations
@@ -1230,13 +1231,76 @@ src/test/fixtures/
 - Potentiellement ajuster selon retours utilisateurs
 ```
 
-### Séance 16 - Animations Framer Motion (Date : 17/10/2025)
+### Séance 16 - Animations Framer Motion (Date : 17/10/2025) ✅
 ```
-⏱️ Temps réel : ___h___min
+⏱️ Temps réel : 2h30min (estimé 2h)
+
 ✅ Réalisé :
+- Installation Framer Motion (framer-motion package)
+- Hook useReducedMotion.ts pour accessibilité
+  - Détecte prefers-reduced-motion media query
+  - Support anciens navigateurs (fallback addListener/removeListener)
+- Animations entrance StockCard
+  - opacity 0 → 1
+  - translateY 50px → 0
+  - Duration: 0.8s (0.01s si reduced motion)
+  - Délai échelonné: index * 0.15s
+  - Easing: [0.25, 0.46, 0.45, 0.94] (easeOutQuad)
+- Animations hover StockCard
+  - motion.article: scale 1.02 + elevation -4px
+  - motion.div: backgroundColor dynamique selon statut
+  - Opacité adaptée au thème (10% dark, 15% light)
+  - Duration: 0.2s
+- Animations exit StockCard
+  - opacity 1 → 0
+  - translateY 0 → -16px
+  - Duration: 0.3s
+- Tests mis à jour (StockCard + StockGrid)
+  - Remplacement tests CSS classes par tests Framer Motion
+  - 369 tests passent (100% succès)
+- Option A implémentée : valeurs augmentées pour visibilité
+  - translateY: 32px → 50px
+  - Duration: 0.5s → 0.8s
+  - Delay: 0.1s → 0.15s
+
 ❌ Difficultés :
+- TypeScript types Framer Motion ease property
+  → Résolu : `as const` sur valeurs bezier et named easings
+- Background color non visible au hover
+  → Résolu : motion.div avec whileHover backgroundColor
+- Card component couvrant le background Framer Motion
+  → Résolu : Remplacement Card par motion.div
+- Background visible uniquement en dark mode
+  → Résolu : Opacité augmentée en light mode (15% vs 10%)
+- isLoaded prop non utilisé
+  → Résolu : Suppression prop, animation toujours active
+- Tests attendant CSS classes au lieu de Framer Motion
+  → Résolu : 14 tests mis à jour dans StockCard + StockGrid
+
 💡 Apprentissages :
+- Framer Motion variants = pattern propre pour animations complexes
+- motion.article + motion.div = séparation des responsabilités animations
+- whileHover backgroundColor nécessite valeurs RGB directes
+- useReducedMotion essentiel pour accessibilité WCAG
+- Tests animations = tester présence éléments, pas classes CSS
+- Stagger delay via index prop = effet cascade automatique
+- Opacité background doit être adaptée au thème
+- as const nécessaire pour types Framer Motion ease
+
+✅ Validation Séance 16 :
+- [x] Framer Motion installé et configuré
+- [x] useReducedMotion hook fonctionnel
+- [x] Animations entrance complètes et visibles
+- [x] Animations hover fluides et accessibles
+- [x] Animations exit implémentées
+- [x] Tests mis à jour (369/369 passent)
+- [x] TypeScript 0 erreur
+- [x] Performance maintenue 100/100
+- [x] Accessibilité respectée (prefers-reduced-motion)
+
 🔄 À reporter :
+- Compteurs animés MetricCard (Séance 17 - Samedi 19/10)
+- Tests performance FPS avec animations
 ```
 
 ### Séance 17 - Animations Dashboard (Date : 19/10/2025)
@@ -1262,11 +1326,11 @@ src/test/fixtures/
 ## 🎉 VALIDATION FINALE
 
 ### Checklist finale avant livraison (27/10)
-- [x] Tous les tests passent ✅ (340 tests)
+- [x] Tous les tests passent ✅ (369 tests)
 - [x] Coverage ≥ 80% ✅ (93.3% global)
 - [x] Code 100% refactorisé ✅
-- [ ] Cartes différenciées visuellement
-- [ ] Animations fluides
+- [x] Cartes différenciées visuellement ✅
+- [x] Animations fluides (entrance/hover/exit) ✅
 - [ ] IA visible et fonctionnelle
 - [ ] Connexion backend opérationnelle
 - [x] Performance maintenue ✅

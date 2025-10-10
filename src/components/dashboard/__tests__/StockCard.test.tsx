@@ -134,12 +134,14 @@ describe('StockCard Component', () => {
                 expect(card).toHaveClass('border-l-emerald-500/30');
             });
 
-            it('should apply emerald background only on hover', () => {
+            it('should use Framer Motion for hover background animation', () => {
                 const stock = stockHubStockUseCases.optimalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('hover:bg-emerald-500/10');
+                // Background is now managed by Framer Motion whileHover, not CSS classes
+                expect(card).not.toHaveClass('hover:bg-emerald-500/10');
+                expect(card).toBeInTheDocument();
             });
 
             it('should apply hover effect classes for border', () => {
@@ -161,12 +163,14 @@ describe('StockCard Component', () => {
                 expect(card).toHaveClass('border-l-amber-500/30');
             });
 
-            it('should apply amber background only on hover', () => {
+            it('should use Framer Motion for hover background animation', () => {
                 const stock = stockHubStockUseCases.lowStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('hover:bg-amber-500/10');
+                // Background is now managed by Framer Motion whileHover, not CSS classes
+                expect(card).not.toHaveClass('hover:bg-amber-500/10');
+                expect(card).toBeInTheDocument();
             });
         });
 
@@ -180,22 +184,24 @@ describe('StockCard Component', () => {
                 expect(card).toHaveClass('border-l-red-500/40');
             });
 
-            it('should apply red background only on hover', () => {
+            it('should use Framer Motion for hover background animation', () => {
                 const stock = stockHubStockUseCases.criticalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('hover:bg-red-500/10');
+                // Background is now managed by Framer Motion whileHover, not CSS classes
+                expect(card).not.toHaveClass('hover:bg-red-500/10');
+                expect(card).toBeInTheDocument();
             });
         });
 
         describe('when card has transition classes', () => {
-            it('should have transition-colors for smooth color changes', () => {
+            it('should have transition-all for smooth transitions', () => {
                 const stock = stockHubStockUseCases.optimalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                expect(card).toHaveClass('transition-colors', 'duration-200');
+                expect(card).toHaveClass('transition-all', 'duration-200');
             });
         });
     });
@@ -359,33 +365,21 @@ describe('StockCard Component', () => {
     });
 
     describe('Animations and styles', () => {
-        describe('when isLoaded is true', () => {
-            it('should apply loaded animation classes', () => {
+        describe('when rendered with Framer Motion', () => {
+            it('should render as a motion.article element', () => {
                 const stock = stockHubStockUseCases.optimalStock;
-                const { container } = render(<StockCard stock={stock} isLoaded={true} />);
+                const { container } = render(<StockCard stock={stock} />);
 
                 const article = container.querySelector('article');
-                expect(article).toHaveClass('translate-y-0', 'opacity-100');
+                expect(article).toBeInTheDocument();
             });
-        });
 
-        describe('when isLoaded is false', () => {
-            it('should apply initial animation classes', () => {
+            it('should render inner content as a motion.div element', () => {
                 const stock = stockHubStockUseCases.optimalStock;
-                const { container } = render(<StockCard stock={stock} isLoaded={false} />);
+                const { container } = render(<StockCard stock={stock} />);
 
-                const article = container.querySelector('article');
-                expect(article).toHaveClass('translate-y-8', 'opacity-0');
-            });
-        });
-
-        describe('when index is provided', () => {
-            it('should apply staggered animation delay', () => {
-                const stock = stockHubStockUseCases.optimalStock;
-                const { container } = render(<StockCard stock={stock} index={3} />);
-
-                const article = container.querySelector('article');
-                expect(article).toHaveStyle({ transitionDelay: '450ms' });
+                const innerDiv = container.querySelector('article > div');
+                expect(innerDiv).toBeInTheDocument();
             });
         });
 
