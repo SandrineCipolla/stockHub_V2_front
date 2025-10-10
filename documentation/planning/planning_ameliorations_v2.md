@@ -1176,7 +1176,7 @@ src/test/fixtures/
   - critical: border-l-red-500/40 (rouge)
   - outOfStock: border-l-gray-500/50 (gris)
   - overstocked: border-l-blue-500/30 (bleu)
-- Background coloré uniquement au hover (10% opacité)
+- Background coloré uniquement au hover (10% opacité) - Option D
   - Carte neutre par défaut = interface épurée
   - Tints emerald/amber/red/gray/blue-500/10 au survol
 - Hover effects qui préservent la couleur du statut
@@ -1184,12 +1184,14 @@ src/test/fixtures/
   - Background apparaît subtilement (10% opacité)
 - +11 nouveaux tests pour différenciation visuelle
   - Tests bordures left par statut
-  - Tests backgrounds par statut
+  - Tests backgrounds hover par statut
   - Tests hover effects
 - Validation complète : 372 tests passent (100%)
 - Lighthouse Performance: 100/100 ✅
 - Lighthouse Accessibility: 96/100 ✅
 - Bundle size: 227 KB (70 KB gzipped)
+- Commit tests Option D effectué ✅
+- Prêt pour déploiement démo ✅
 
 ❌ Difficultés :
 - Classes Tailwind dynamiques non détectées par le compilateur
@@ -1198,6 +1200,8 @@ src/test/fixtures/
   → Résolu : Tests séparés pour chaque classe
 - Background coloré permanent trop visible en mode clair
   → Résolu : Background uniquement au hover (Option D)
+- Tests à mettre à jour après passage à Option D
+  → Résolu : Tests updated pour hover:bg-{color}-500/10
 
 💡 Apprentissages :
 - Tailwind purge CSS nécessite classes complètes dans le code
@@ -1207,6 +1211,7 @@ src/test/fixtures/
 - Hover effects doivent préserver la sémantique visuelle (couleur du statut)
 - Performance maintenue malgré ajout CSS (100/100 Lighthouse)
 - Background hover /10 opacité = subtil et agréable en mode clair
+- Option D permet démo feedback sur design avant finalisation
 
 ✅ Validation Séance 15 :
 - [x] Différenciation visuelle claire par statut (bordure 4px)
@@ -1217,8 +1222,12 @@ src/test/fixtures/
 - [x] Accessibilité 96/100 (maintenue)
 - [x] TypeScript 0 erreur
 - [x] Bundle optimisé (70 KB gzipped)
+- [x] Tests mis à jour pour Option D
+- [x] Prêt pour déploiement feedback design
 
-🔄 À reporter : Rien - Objectif atteint ✅
+🔄 À reporter :
+- Feedback design Option D vs Option A (après démo informelle)
+- Potentiellement ajuster selon retours utilisateurs
 ```
 
 ### Séance 16 - Animations Framer Motion (Date : 17/10/2025)

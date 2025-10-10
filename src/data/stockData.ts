@@ -9,6 +9,9 @@ export const stockData: Stock[] = [
         value: 2450,
         status: "optimal",
         lastUpdate: "2h",
+        category: "Électronique",
+        minThreshold: 10,
+        maxThreshold: 100,
     },
     {
         id: 2,
@@ -17,6 +20,9 @@ export const stockData: Stock[] = [
         value: 1780,
         status: "optimal",
         lastUpdate: "1h",
+        category: "Accessoires",
+        minThreshold: 10,
+        maxThreshold: 100,
     },
     {
         id: 3,
@@ -25,6 +31,9 @@ export const stockData: Stock[] = [
         value: 150,
         status: "low",
         lastUpdate: "30min",
+        category: "Fournitures",
+        minThreshold: 10,
+        maxThreshold: 100,
     },
     {
         id: 4,
@@ -33,6 +42,9 @@ export const stockData: Stock[] = [
         value: 0,
         status: "critical",
         lastUpdate: "5min",
+        category: "Urgence",
+        minThreshold: 10,
+        maxThreshold: 100,
     },
     {
         id: 6,
