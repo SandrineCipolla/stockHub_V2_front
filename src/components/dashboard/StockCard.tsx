@@ -3,6 +3,7 @@ import {motion} from 'framer-motion';
 import {Edit3, Eye, Trash2} from 'lucide-react';
 import {Button} from '@/components/common/Button';
 import {StatusBadge} from '@/components/common/StatusBadge';
+import {StockAIBadge} from '@/components/ai/StockAIBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {useReducedMotion} from '@/hooks/useReducedMotion';
 import {STOCK_STATUS_CONFIG, type StockStatus} from '@/types/stock';
@@ -17,7 +18,8 @@ export const StockCard: React.FC<StockCardProps> = ({
                                                         onDelete,
                                                         isUpdating = false,
                                                         isDeleting = false,
-                                                        className = ''
+                                                        className = '',
+                                                        aiSuggestions = []
                                                     }) => {
     const { theme } = useTheme();
     const prefersReducedMotion = useReducedMotion();
@@ -146,7 +148,15 @@ export const StockCard: React.FC<StockCardProps> = ({
                             </p>
                         )}
                     </div>
-                    <StatusBadge status={stock.status} size="sm" />
+                    <div className="flex flex-col items-end gap-2">
+                        <StatusBadge status={stock.status} size="sm" />
+                        {aiSuggestions.length > 0 && (
+                            <StockAIBadge
+                                stockId={stock.id}
+                                suggestions={aiSuggestions}
+                            />
+                        )}
+                    </div>
                 </header>
 
                 {/* Métriques avec description accessible */}

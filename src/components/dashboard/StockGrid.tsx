@@ -11,7 +11,8 @@ export const StockGrid: React.FC<StockGridProps> = ({
                                                         onDelete,
                                                         isUpdating = false,
                                                         isDeleting = false,
-                                                        className = ''
+                                                        className = '',
+                                                        aiSuggestions = []
                                                     }) => {
     return (
         <motion.section
@@ -35,6 +36,7 @@ export const StockGrid: React.FC<StockGridProps> = ({
                     {...(onDelete && { onDelete })}
                     isUpdating={isUpdating}
                     isDeleting={isDeleting}
+                    aiSuggestions={aiSuggestions}
                 />
             ))}
         </motion.section>

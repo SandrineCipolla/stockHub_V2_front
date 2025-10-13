@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {BarChart3, Download, Plus, Search,} from 'lucide-react';
 
 
@@ -7,6 +7,7 @@ import {NavSection} from '@/components/layout/NavSection';
 import {Footer} from '@/components/layout/Footer';
 import {MetricCard} from '@/components/dashboard/MetricCard';
 import {StockGrid} from '@/components/dashboard/StockGrid';
+import {AISummaryWidget} from '@/components/ai/AISummaryWidget';
 import {Button} from '@/components/common/Button';
 import {Input} from '@/components/common/Input';
 import {Card} from '@/components/common/Card';
@@ -15,6 +16,7 @@ import {Card} from '@/components/common/Card';
 import {useStocks} from '@/hooks/useStocks';
 import {useDataExport} from '@/hooks/useFrontendState';
 import {useTheme} from '@/hooks/useTheme.ts';
+import {generateAISuggestions} from '@/utils/aiPredictions';
 
 export const Dashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -44,6 +46,13 @@ export const Dashboard: React.FC = () => {
 
     const loadStocksRef = useRef(loadStocks);
     loadStocksRef.current = loadStocks;
+
+    // Generate all AI suggestions (memoized for performance)
+    const allAISuggestions = useMemo(() => {
+        const suggestions = generateAISuggestions(stocks);
+        console.log('🤖 AI Suggestions generated:', suggestions.length, suggestions);
+        return suggestions;
+    }, [stocks]);
 
     // Classes CSS basées sur le thème
     const themeClasses = {
@@ -247,6 +256,14 @@ export const Dashboard: React.FC = () => {
                     />
                 </section>
 
+                {/* AI Smart Suggestions Section - Summary Widget */}
+                <section className="mb-8" aria-labelledby="ai-suggestions-heading">
+                    <h2 id="ai-suggestions-heading" className="sr-only">Suggestions intelligentes</h2>
+                    <AISummaryWidget
+                        suggestions={allAISuggestions.slice(0, 5)}
+                    />
+                </section>
+
                 {/* Recherche accessible */}
                 <section className="mb-8" role="search" aria-labelledby="search-heading">
                     <h2 id="search-heading" className="sr-only">Recherche de produits</h2>
@@ -313,6 +330,7 @@ export const Dashboard: React.FC = () => {
                         onDelete={handleDeleteStock}
                         isUpdating={isLoading.update}
                         isDeleting={isLoading.delete}
+                        aiSuggestions={allAISuggestions}
                     />
                 )}
 

@@ -1,6 +1,7 @@
 import React from "react";
 import type {BadgeVariant, ButtonVariant, ComponentSize, InputType} from './ui';
 import type {Stock, StockStatus} from './stock';
+import type {AISuggestion} from '@/utils/aiPredictions';
 
 // ========================================
 // INTERFACES PROPS COMPOSANTS
@@ -57,6 +58,7 @@ export interface StockCardProps {
     isUpdating?: boolean;
     isDeleting?: boolean;
     className?: string;
+    aiSuggestions?: AISuggestion[];
 }
 
 export interface StockGridProps {
@@ -68,4 +70,5 @@ export interface StockGridProps {
     isUpdating?: boolean;
     isDeleting?: boolean;
     className?: string;
+    aiSuggestions?: AISuggestion[];
 }
