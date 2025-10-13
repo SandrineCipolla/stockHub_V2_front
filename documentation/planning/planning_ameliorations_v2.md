@@ -316,55 +316,109 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
-### 🤖 **SEMAINE 4 - IA & Backend (21-27/10)**
+### 🤖 **SEMAINE 4 - IA Métier & Backend (21-27/10)**
 
-#### **Mardi 22/10 (2h) : Composant SmartSuggestions**
-- [ ] **Design composant** (60min)
-  - [ ] Card avec icône AI sparkles
-  - [ ] Liste suggestions mockées
-  - [ ] Design gradient subtil
+> **🎯 Objectif RNCP (C2.5)** : Analyses descriptives et prédictives sur données avec Machine Learning pour extraire de la valeur métier
 
-- [ ] **Animations** (60min)
-  - [ ] Apparition suggestions (stagger)
-  - [ ] Hover effects
-  - [ ] Bouton "Appliquer"
+#### **Mardi 22/10 (4h) : SmartSuggestions - IA Prédictive** 📅 PRIORITÉ 1
+- [ ] **Algorithmes intelligents** (2h30)
+  - [ ] Analyse tendances consommation (prédiction rupture)
+  - [ ] Détection surstock (analyse seuils optimaux)
+  - [ ] Suggestions réapprovisionnement avec calcul quantité optimale
+  - [ ] Niveau de confiance des prédictions (70-95%)
+  - [ ] Tri par priorité et pertinence
 
-#### **Jeudi 24/10 (2h) : Composant StockPrediction**
-- [ ] **Design composant** (60min)
-  - [ ] Prédiction rupture stock
-  - [ ] Barre de progression
-  - [ ] Indicateur risque
+- [ ] **Composant SmartSuggestions.tsx** (90min)
+  - [ ] Card avec icône ✨ AI en évidence
+  - [ ] Liste 5 suggestions intelligentes avec badges priorité
+  - [ ] Design gradient subtil (emerald/blue)
+  - [ ] Bouton "Appliquer" par suggestion
+  - [ ] Animations stagger (apparition en cascade)
+  - [ ] Intégration dashboard (section dédiée)
 
-- [ ] **Animations & intégration** (60min)
-  - [ ] Animation barre
+**Livrables** :
+- `src/components/ai/SmartSuggestions.tsx`
+- `src/utils/aiPredictions.ts` (algorithmes)
+- Tests unitaires (fixtures)
+
+---
+
+#### **Jeudi 24/10 (2h) : StockPrediction - ML Simulé** 📅 PRIORITÉ 1
+- [ ] **Algorithme prédictif** (60min)
+  - [ ] Calcul moyenne consommation quotidienne
+  - [ ] Prédiction jours avant rupture (régression linéaire)
+  - [ ] Niveau de confiance basé sur variance historique
+  - [ ] Calcul date recommandée de commande
+  - [ ] Quantité optimale de réapprovisionnement
+
+- [ ] **Composant StockPrediction.tsx** (60min)
+  - [ ] Barre de progression du risque (0-100%)
+  - [ ] Indicateur visuel (vert/orange/rouge)
+  - [ ] Message "🤖 IA détecte : Rupture dans X jours"
+  - [ ] Niveau de confiance affiché (%)
   - [ ] Actions recommandées
-  - [ ] Intégration dashboard
+  - [ ] Animation barre progressive
+  - [ ] Intégration StockCard ou Dashboard
 
-#### **Samedi 26/10 Soirée (3h) : Setup Backend**
+**Livrables** :
+- `src/components/ai/StockPrediction.tsx`
+- `src/utils/mlSimulation.ts` (modèle ML simulé)
+- Tests unitaires
+
+---
+
+#### **Samedi 26/10 Soirée (2h) : Documentation IA** 📅 PRIORITÉ 2
+- [ ] **Documentation technique IA** (90min)
+  - [ ] Créer `documentation/AI-FEATURES.md`
+  - [ ] Décrire algorithmes prédictifs utilisés
+  - [ ] Expliquer calculs de confiance
+  - [ ] Documenter formules ML (régression linéaire)
+  - [ ] Cas d'usage métier StockHub
+
+- [ ] **Documentation prompts** (30min)
+  - [ ] Créer `documentation/PROMPTS.md`
+  - [ ] Lister algorithmes avec justifications
+  - [ ] Expliquer choix des métriques
+  - [ ] Documenter seuils et paramètres
+
+**Livrables** :
+- `documentation/AI-FEATURES.md` (obligatoire RNCP)
+- `documentation/PROMPTS.md` (obligatoire RNCP)
+
+---
+
+#### **Dimanche 27/10 Matin (3h) : Setup Backend** 📅 PRIORITÉ 3
 - [ ] **Services API** (90min)
   - [ ] Installer @tanstack/react-query
-  - [ ] `services/api/client.ts`
-  - [ ] `services/api/stockService.ts`
-  - [ ] Configuration React Query
+  - [ ] Créer `services/api/client.ts`
+  - [ ] Créer `services/api/stockService.ts`
+  - [ ] Configuration React Query Provider
 
-- [ ] **Tests connexion** (90min)
-  - [ ] Test client API
-  - [ ] Test authentification Azure AD
+- [ ] **Hooks React Query** (90min)
+  - [ ] Créer `hooks/api/useStocksQuery.ts`
+  - [ ] Créer `hooks/api/useStockMutation.ts`
+  - [ ] Adapter composants existants
+  - [ ] Gestion états loading/error
 
-#### **Dimanche 27/10 Matin (4h) : Connexion finale**
-- [ ] **Hooks React Query** (2h)
-  - [ ] useStocksQuery
-  - [ ] Adapter composants
+**Livrables** :
+- Services API configurés
+- Hooks React Query fonctionnels
+- (Backend connection en standby si backend pas prêt)
 
-- [ ] **Tests & validation** (2h)
-  - [ ] Données réelles affichées
-  - [ ] Gestion erreurs/loading
-  - [ ] Tests end-to-end
+---
 
-**✅ BILAN SEMAINE 4** :
-- IA visible et fonctionnelle
-- Backend connecté
-- Application complète
+**✅ BILAN SEMAINE 4** : ⭐ Résultat attendu
+- ✅ IA métier visible et concrète (SmartSuggestions + StockPrediction)
+- ✅ Analyses descriptives ET prédictives (RNCP C2.5)
+- ✅ Machine Learning simulé avec algorithmes réalistes
+- ✅ Documentation technique complète (AI-FEATURES.md + PROMPTS.md)
+- ✅ Services backend préparés (React Query)
+- ✅ Note IA : 15/20 → 18-20/20
+
+**🎯 Impact RNCP** :
+- Démontre capacité à implémenter analyses prédictives
+- Utilisation techniques ML pour valeur métier
+- Documentation professionnelle des algorithmes
 
 ---
 
