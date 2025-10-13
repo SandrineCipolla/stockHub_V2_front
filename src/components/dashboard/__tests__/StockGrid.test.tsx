@@ -85,7 +85,6 @@ describe('StockGrid Component', () => {
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const article = container.querySelector('article');
-                // Animation delays are now managed by Framer Motion variants
                 expect(article).toBeInTheDocument();
             });
         });
@@ -105,7 +104,6 @@ describe('StockGrid Component', () => {
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
-                // Animation delays are now managed by Framer Motion variants based on index prop
                 expect(articles).toHaveLength(3);
                 expect(articles[0]).toBeInTheDocument();
                 expect(articles[1]).toBeInTheDocument();
@@ -172,7 +170,6 @@ describe('StockGrid Component', () => {
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
-                // Framer Motion manages animation states via variants, not CSS classes
                 expect(articles).toHaveLength(2);
                 articles.forEach(article => {
                     expect(article).toBeInTheDocument();
@@ -262,7 +259,6 @@ describe('StockGrid Component', () => {
                     expect(screen.getByText(stock.name)).toBeInTheDocument();
                 });
 
-                // Vérifier les badges de statut
                 expect(screen.getByText('Optimal')).toBeInTheDocument();
                 expect(screen.getByText('Low')).toBeInTheDocument();
                 expect(screen.getByText('Critical')).toBeInTheDocument();
@@ -296,7 +292,6 @@ describe('StockGrid Component', () => {
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
-                // Framer Motion manages staggered delays via variants based on index prop
                 expect(articles).toHaveLength(10);
                 expect(articles[0]).toBeInTheDocument();
                 expect(articles[9]).toBeInTheDocument();
@@ -320,7 +315,6 @@ describe('StockGrid Component', () => {
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
-                // Framer Motion manages animation states via variants
                 expect(articles).toHaveLength(2);
                 articles.forEach(article => {
                     expect(article).toBeInTheDocument();

@@ -1,4 +1,3 @@
-// components/common/StatusBadge.tsx
 import React from 'react';
 import {STOCK_STATUS_CONFIG} from '@/types/stock';
 import {useTheme} from '@/hooks/useTheme';

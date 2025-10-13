@@ -2,7 +2,6 @@ import {render, screen} from '@testing-library/react';
 import {describe, expect, it, vi} from 'vitest';
 import {StatusBadge} from '../StatusBadge';
 
-// Mock du hook useTheme
 vi.mock('@/hooks/useTheme', () => ({
     useTheme: () => ({ theme: 'light' })
 }));

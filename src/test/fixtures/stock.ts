@@ -85,7 +85,6 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         minThreshold: 5,
         maxThreshold: 20,
     },
-    // 🆕 NOUVEAU : Stock en rupture
     outOfStockItem: {
         id: 9,
         name: 'Toner Imprimante',

@@ -139,7 +139,7 @@ describe('StockCard Component', () => {
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                // Background is now managed by Framer Motion whileHover, not CSS classes
+                
                 expect(card).not.toHaveClass('hover:bg-emerald-500/10');
                 expect(card).toBeInTheDocument();
             });
@@ -168,7 +168,7 @@ describe('StockCard Component', () => {
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                // Background is now managed by Framer Motion whileHover, not CSS classes
+                
                 expect(card).not.toHaveClass('hover:bg-amber-500/10');
                 expect(card).toBeInTheDocument();
             });
@@ -189,7 +189,7 @@ describe('StockCard Component', () => {
                 const { container } = render(<StockCard stock={stock} />);
 
                 const card = container.querySelector('article > div');
-                // Background is now managed by Framer Motion whileHover, not CSS classes
+                
                 expect(card).not.toHaveClass('hover:bg-red-500/10');
                 expect(card).toBeInTheDocument();
             });

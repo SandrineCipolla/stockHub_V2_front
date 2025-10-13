@@ -6,7 +6,7 @@ import type {Stock, StockStatus} from './stock';
 // INTERFACES PROPS COMPOSANTS
 // ========================================
 
-// Props composants UI communs
+
 export interface BadgeProps {
     variant: BadgeVariant;
     children: React.ReactNode;
@@ -14,7 +14,6 @@ export interface BadgeProps {
     size?: ComponentSize;
 }
 
-// 🆕 Props pour le badge de statut de stock
 export interface StatusBadgeProps {
     status: StockStatus;
     showIcon?: boolean;
@@ -48,7 +47,6 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
     type?: InputType;
 }
 
-// Props composants métier Stock
 export interface StockCardProps {
     stock: Stock;
     index?: number;
