@@ -27,7 +27,7 @@ vi.mock('@/components/layout/NavSection', () => ({
 }));
 
 vi.mock('@/components/dashboard/MetricCard', () => ({
-    MetricCard: ({ title, value, ...props }: any) => (
+    MetricCard: ({ title, value }: any) => (
         <div data-testid="metric-card" aria-label={`${title}: ${value}`}>
             <div>{title}</div>
             <div>{value}</div>
