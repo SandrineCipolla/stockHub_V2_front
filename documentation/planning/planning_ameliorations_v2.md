@@ -447,9 +447,17 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - Affichage formaté intelligent (65%, 0.5m, 150ml, etc.)
   - Algorithmes IA adaptés avec calcul de sessions créatives
   - 18 exemples de données réalistes (peinture, tissu, cellier)
-- ⏳ **Option B - Fréquence d'Activité** : À VENIR
-- ⏳ **Option C - Mode Projets** : OPTIONNEL
-- ⏳ **Documentation** : À VENIR
+- ✅ **Gestion Containers** : COMPLÉTÉ (2h)
+  - Types étendus avec containerCapacity, containersOwned
+  - Utility `containerManager.ts` avec purchaseContainers() et recordUsage()
+  - Bouton "Enregistrer session" interactif sur cartes peinture
+  - Feedback visuel temps réel
+- ✅ **Documentation** : COMPLÉTÉ (1h)
+  - `MODE-LOISIRS-CREATIF.md` : Guide complet unités flexibles
+  - `container-management-example.ts` : Exemples d'usage
+  - `ROADMAP-ARCHITECTURE-EVOLUTION.md` : Vision future (Options B & C)
+- 📋 **Option B - Architecture Catégories** : PLANIFIÉ (voir Roadmap)
+- 📋 **Option C - Shopping List** : PLANIFIÉ (voir Roadmap)
 
 #### **Lundi 28/10 (3h) : Phase Analyse & Design** ✅ COMPLÉTÉ
 - [x] **Analyse besoins usage familial** (1h)
@@ -497,7 +505,40 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
-#### **Jeudi 31/10 (2h) : Option B - Fréquence d'Activité** 📅 PRIORITÉ 3
+#### **Mardi 29/10 Après-midi (3h) : Gestion Containers & Usage Tracking** ✅ COMPLÉTÉ
+- [x] **Extension types pour containers** (30min)
+  - [x] Ajouter `containerCapacity`, `containersOwned`, `totalCapacity` dans Stock
+  - [x] Permettre tracking nombre de tubes/bouteilles possédés
+
+- [x] **Création utility containerManager.ts** (60min)
+  - [x] `purchaseContainers()` : Acheter nouveaux tubes (calcul auto %)
+  - [x] `recordUsage()` : Enregistrer session d'usage (-12% par défaut)
+  - [x] `calculateSessionsRemaining()` : Estimer sessions restantes
+  - [x] Fonctions de conversion % ↔ volume
+
+- [x] **Interactivité StockCard** (60min)
+  - [x] Bouton "Enregistrer session" sur cartes peinture
+  - [x] État local avec useState pour updates temps réel
+  - [x] Feedback visuel animé (Framer Motion)
+  - [x] Messages contextuels ("Session enregistrée : -12%. Reste : 53%")
+
+- [x] **Cleanup & Cohérence** (30min)
+  - [x] Suppression bouton "Acheter" incohérent
+  - [x] Création `ROADMAP-ARCHITECTURE-EVOLUTION.md` pour futures évolutions
+  - [x] Documentation exemples dans `container-management-example.ts`
+
+**Livrables** :
+- ✅ `utils/containerManager.ts` (210 lignes) - Gestion complète containers
+- ✅ `StockCard.tsx` mis à jour avec bouton "Session" interactif
+- ✅ `stockData.ts` avec containerCapacity/containersOwned sur tubes peinture
+- ✅ `ROADMAP-ARCHITECTURE-EVOLUTION.md` - Planification Options B & C futures
+- ✅ `container-management-example.ts` - Exemples d'usage détaillés
+
+**Build** : 384.52 KB (121.99 KB gzipped) ✅
+
+---
+
+#### **Jeudi 31/10 (2h) : Option B - Fréquence d'Activité** 📅 REPORTÉ
 - [ ] **Extension types pour usage irrégulier** (45min)
   - [ ] Ajouter `activityFrequency?: ActivityFrequency` (daily/weekly/monthly/seasonal/sporadic)
   - [ ] Ajouter `lastUsedDate?: Date`
@@ -569,13 +610,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
-**✅ BILAN SEMAINE 5** : ⭐ Résultat attendu
-- ✅ Système unités flexibles (pièces, %, ml, m, etc.)
-- ✅ Gestion consommation irrégulière (sporadique vs régulier)
-- ✅ Suggestions IA adaptées au contexte familial/créatif
-- ✅ Interface intuitive pour usage non-professionnel
-- ✅ Documentation complète mode loisirs
-- ⏸️ Système projets (optionnel selon temps disponible)
+**✅ BILAN SEMAINE 5** : ⭐ COMPLÉTÉ À 70%
+- ✅ Système unités flexibles (pièces, %, ml, m, etc.) - **FAIT**
+- ✅ Gestion containers (tubes, bouteilles) avec tracking usage - **FAIT**
+- ✅ Suggestions IA adaptées au contexte familial/créatif - **FAIT**
+- ✅ Interface intuitive pour usage non-professionnel - **FAIT**
+- ✅ Documentation complète mode loisirs - **FAIT**
+- ⏸️ Fréquence d'activité (sporadic vs régulier) - **REPORTÉ**
+- ⏸️ Système projets - **REPORTÉ (voir Roadmap)**
 
 **🎯 Impact Utilisateur** :
 - Usage quotidien simplifié (cellier, loisirs créatifs)
@@ -613,6 +655,302 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 }
 // IA: "Stock suffisant pour 4 semaines de pâtisserie hebdomadaire"
 ```
+
+---
+
+## 🔮 PROCHAINES ÉTAPES - STORYBOOK + ARCHITECTURE
+
+> **Important** : Consulter `documentation/planning/ROADMAP-ARCHITECTURE-EVOLUTION.md` pour détails complets
+
+### 📌 Décision Stratégique : STORYBOOK EN PRIORITÉ
+
+**🎯 Constat** : Avant d'ajouter de nouvelles features (Options B & C), il est stratégique de mettre en place **Storybook avec Web Components** pour :
+- ✅ Éviter duplication de code
+- ✅ Créer un Design System réutilisable
+- ✅ Partager composants entre Web (React) et Mobile (React Native/Capacitor)
+- ✅ Documenter visuellement toutes les variantes
+- ✅ Prototyper nouvelles features avant implémentation
+
+**📅 Nouveau Planning** :
+1. **MAINTENANT (Semaine 5 bis)** : Storybook + Web Components (4-5h)
+2. **SEMAINE 6** : Option B (Architecture Catégories) en utilisant Storybook
+3. **SEMAINE 7** : Option C (Shopping List) en utilisant Storybook
+
+---
+
+### 🎨 **PRIORITÉ 1 - Storybook + Architecture (6-7h)** 📅 À FAIRE MAINTENANT
+
+> **📖 Documentation complète** : `documentation/planning/STORYBOOK-ARCHITECTURE-STRATEGY.md`
+> **🎯 Objectif** : Design System réutilisable (web + mobile) + Architecture finale à 2 niveaux
+> **🔑 Stratégie** : Storybook AVANT refactoring pour prototyper visuellement
+
+**📅 Timeline** :
+1. **Session 1 (2h)** : Setup Storybook + Lit + Button WC
+2. **Session 2 (2h)** : 4 composants WC + Stories
+3. **Session 3 (1h)** : Prototypage CategoryCard dans Storybook
+4. **Session 4 (2-3h)** : Refactoring architecture finale
+
+---
+
+#### **Session 1 (2h) : Setup Storybook + Web Components Base**
+- [ ] **Installation Storybook** (30min)
+  ```bash
+  npx storybook@latest init
+  ```
+  - [ ] Configuration React 19 + TypeScript + Vite
+  - [ ] Setup thèmes dark/light
+  - [ ] Vérifier `http://localhost:6006`
+
+- [ ] **Setup Web Components avec Lit** (60min)
+  ```bash
+  npm install lit @lit/react
+  ```
+  - [ ] Configuration Lit Element + TypeScript
+  - [ ] Build Vite pour WC
+  - [ ] Tests compatibilité React 19
+
+- [ ] **Conversion Button en WC** (30min)
+  - [ ] `src/components/web-components/wc-button.ts`
+  - [ ] Wrapper React `src/components/common/Button.tsx`
+  - [ ] Story `Button.stories.tsx` avec playground
+
+**Livrables Session 1** :
+- ✅ Storybook fonctionnel
+- ✅ Lit Element configuré
+- ✅ Button en WC + wrapper (backward compatible)
+- ✅ Story Button interactive
+
+---
+
+#### **Session 2 (2h) : Migration Composants UI + Stories**
+- [ ] **Conversion en Web Components** (90min)
+  - [ ] Badge → `wc-badge.ts` + wrapper + story
+  - [ ] Card → `wc-card.ts` + wrapper + story
+  - [ ] StatusBadge → `wc-status-badge.ts` + wrapper + story
+  - [ ] Input → `wc-input.ts` + wrapper + story
+
+- [ ] **Design Tokens** (30min)
+  - [ ] `src/styles/design-tokens.css`
+  - [ ] CSS custom properties (couleurs, espacements, fonts)
+  - [ ] Page documentation tokens dans Storybook
+
+**Livrables Session 2** :
+- ✅ 5 composants UI en WC + wrappers React
+- ✅ 5 stories complètes avec playground
+- ✅ Design tokens documentés
+- ✅ Code existant toujours fonctionnel
+
+**📦 Architecture après Session 2** :
+```
+src/
+├── components/
+│   ├── web-components/       # 5 WC avec Lit
+│   │   ├── wc-button.ts
+│   │   ├── wc-badge.ts
+│   │   ├── wc-card.ts
+│   │   ├── wc-status-badge.ts
+│   │   └── wc-input.ts
+│   ├── common/               # Wrappers React (backward compatible)
+│   │   ├── Button.tsx
+│   │   ├── Badge.tsx
+│   │   ├── Card.tsx
+│   │   ├── StatusBadge.tsx
+│   │   └── Input.tsx
+│   └── dashboard/
+│       └── StockCard.tsx     # Toujours utilisé (pas encore renommé)
+├── stories/
+│   ├── Button.stories.tsx
+│   ├── Badge.stories.tsx
+│   ├── Card.stories.tsx
+│   ├── StatusBadge.stories.tsx
+│   └── Input.stories.tsx
+└── styles/
+    └── design-tokens.css
+```
+
+---
+
+#### **Session 3 (1h) : Prototypage CategoryCard dans Storybook**
+- [ ] **Design visuel CategoryCard** (30min)
+  - [ ] Story `CategoryCard.stories.tsx` avec mock data
+  - [ ] Tester layouts : icône, métriques agrégées, mini preview items
+  - [ ] Hover states, responsive
+  - [ ] Thèmes dark/light
+
+- [ ] **Validation variantes** (15min)
+  - [ ] Catégorie vide (0 items)
+  - [ ] Catégorie avec items critiques
+  - [ ] Catégorie tout optimal
+  - [ ] Catégorie mixte
+
+- [ ] **Documentation props** (15min)
+  - [ ] Interface `CategoryCardProps` dans story
+  - [ ] Playground interactif
+
+**Livrables Session 3** :
+- ✅ Story CategoryCard avec toutes variantes visuelles
+- ✅ Interface `CategoryCardProps` définie
+- ✅ **Validation visuelle AVANT implémentation**
+- ✅ Décisions de design prises
+
+⚠️ **Note** : CategoryCard n'est PAS encore implémenté, c'est juste un prototype visuel.
+
+---
+
+#### **Session 4 (2-3h) : Refactoring Architecture Finale**
+
+**🎯 Objectif** : Architecture à 2 niveaux
+```
+Dashboard (accueil)
+├── CategoryCard : "Peinture" (7 items, 2 critiques)
+├── CategoryCard : "Tissus" (4 items, 1 critique)
+└── CategoryCard : "Cellier" (7 items, 2 low)
+
+Click CategoryCard → Page Détails
+├── StockItemCard : "Acrylique Bleu" (65%)
+├── StockItemCard : "Acrylique Rouge" (15%)
+└── etc.
+```
+
+- [ ] **Renommage composants** (30min)
+  - [ ] `StockCard.tsx` → `StockItemCard.tsx`
+  - [ ] `StockCard.test.tsx` → `StockItemCard.test.tsx`
+  - [ ] `StockCard.stories.tsx` → `StockItemCard.stories.tsx`
+  - [ ] Types : `StockCardProps` → `StockItemCardProps`
+  - [ ] Mettre à jour tous les imports
+
+- [ ] **Types catégories** (20min)
+  - [ ] Créer `src/types/category.ts`
+  - [ ] Interface `StockCategory` avec métriques agrégées
+
+- [ ] **Implémentation CategoryCard** (45min)
+  - [ ] `src/components/dashboard/CategoryCard.tsx`
+  - [ ] Utilise Web Components existants
+  - [ ] Animations Framer Motion
+  - [ ] Tests unitaires
+
+- [ ] **Adaptation Dashboard** (30min)
+  - [ ] Modifier `Dashboard.tsx` pour afficher CategoryCard
+  - [ ] Utility `categoryAggregator.ts` pour grouper stocks
+
+- [ ] **Page détails** (30min)
+  - [ ] `src/pages/CategoryDetailsPage.tsx`
+  - [ ] Affiche StockItemCard pour items de la catégorie
+  - [ ] Routing `/category/:categoryId`
+
+- [ ] **Tests & Validation** (30min)
+  - [ ] Tests CategoryCard
+  - [ ] Tests categoryAggregator
+  - [ ] Tests navigation Dashboard → Détails
+  - [ ] Coverage ≥ 93%
+
+**Livrables Session 4** :
+- ✅ Architecture finale implémentée
+- ✅ Dashboard affiche 3-5 CategoryCard (au lieu de 18 StockItemCard)
+- ✅ Page CategoryDetailsPage fonctionnelle
+- ✅ Navigation Dashboard → Détails OK
+- ✅ Tous les tests passent
+- ✅ Build OK, Performance maintenue
+
+**📦 Architecture finale** :
+```
+src/
+├── components/
+│   ├── web-components/       # 5 WC
+│   ├── common/               # 5 wrappers React
+│   └── dashboard/
+│       ├── CategoryCard.tsx       # NOUVEAU - Catégorie agrégée
+│       └── StockItemCard.tsx      # RENOMMÉ - Item individuel
+├── pages/
+│   ├── Dashboard.tsx              # Affiche CategoryCard
+│   └── CategoryDetailsPage.tsx   # NOUVEAU - Affiche StockItemCard
+├── types/
+│   ├── stock.ts
+│   └── category.ts               # NOUVEAU
+├── utils/
+│   └── categoryAggregator.ts     # NOUVEAU
+└── stories/
+    ├── Button/Badge/Card/StatusBadge/Input.stories.tsx
+    ├── CategoryCard.stories.tsx  # NOUVEAU
+    └── StockItemCard.stories.tsx # RENOMMÉ
+```
+
+**🎯 Bénéfices finaux** :
+- ✅ Design System complet (web + mobile)
+- ✅ Architecture scalable (1000+ items)
+- ✅ Dashboard épuré (3-5 cartes)
+- ✅ 0 duplication de code
+- ✅ Documentation interactive complète
+
+---
+
+### 📌 Évolutions Architecture (APRÈS Storybook)
+
+L'architecture actuelle (1 carte = 1 item) fonctionne mais n'est pas scalable. Deux évolutions majeures ont été identifiées et documentées :
+
+#### **Option B - Architecture par Catégories** (Estimé: 4-6h)
+**Problème actuel** : 18 cartes sur le dashboard, sera ingérable avec 50+ items
+
+**Solution** :
+```
+Dashboard compacte (3-5 cartes)
+├── Catégorie "Peinture" (7 items, 2 critiques)
+├── Catégorie "Tissus" (4 items, 1 critique)
+└── Catégorie "Cellier" (7 items, 2 critiques)
+```
+
+Click "Détails" → Modal avec liste items de la catégorie
+
+**Avantages** :
+- Dashboard épuré (toujours 3-5 cartes max)
+- Organisation naturelle
+- Scalable jusqu'à 1000+ items
+
+**Quand faire** : SEMAINE 6 (recommandé avant d'avoir trop d'items)
+
+---
+
+#### **Option C - Shopping List** (Estimé: 3-4h MVP)
+**Problème actuel** : Pas de workflow "acheter"
+
+**Solution** :
+```
+Workflow cohérent
+1. Click "Ajouter à acheter" → Shopping List
+2. Aller au magasin (cocher items achetés)
+3. Click "Réceptionner" → Ajout au stock réel
+```
+
+**Features MVP** :
+- Liste de courses dédiée
+- Bouton "Ajouter à acheter" sur cartes
+- Page Shopping List avec tracking
+- Réception dans stock
+
+**Avantages** :
+- Workflow cohérent vs "Acheter" magique
+- Budget tracking possible
+- Historique achats
+- Feature "killer" pour usage familial
+
+**Quand faire** : SEMAINE 7 (après Option B)
+
+---
+
+### 🎯 Recommandation
+
+**Séquence optimale** :
+1. **Cette semaine** : Finir Semaine 5 (tests, polish)
+2. **SEMAINE 6** : Option B (Architecture catégories)
+3. **SEMAINE 7** : Option C (Shopping List MVP)
+4. **SEMAINE 8+** : Features avancées shopping list (multi-magasins, scanner, etc.)
+
+**Alternative Quick Win** (si manque temps) :
+- Garder architecture actuelle
+- Implémenter juste Shopping List
+- Reporter catégories pour plus tard
+
+**Voir fichier détaillé** : `documentation/planning/ROADMAP-ARCHITECTURE-EVOLUTION.md`
 
 ---
 

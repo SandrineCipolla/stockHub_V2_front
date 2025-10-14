@@ -38,6 +38,11 @@ export interface Stock {
     supplier?: string;
     minThreshold?: number;
     maxThreshold?: number;
+
+    // Gestion des containers (tubes, bouteilles, etc.) pour unités en %
+    containerCapacity?: number;    // Capacité d'un container (ex: 100ml pour un tube)
+    containersOwned?: number;      // Nombre de containers possédés
+    totalCapacity?: number;        // Capacité totale = containerCapacity × containersOwned
 }
 
 export interface SearchFilters {

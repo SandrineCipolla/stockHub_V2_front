@@ -11,52 +11,60 @@ export const stockData: Stock[] = [
         name: "Acrylique Bleu Cobalt",
         quantity: 65,
         unit: 'percentage',
+        containerCapacity: 100,    // Tube de 100ml
+        containersOwned: 1,        // 1 tube possédé
         value: 12,
         status: "optimal",
         lastUpdate: "3j",
         category: "Peinture",
         minThreshold: 20,
         maxThreshold: 100,
-        description: "Tube d'acrylique 100ml"
+        description: "Tube d'acrylique 100ml - environ 5 sessions"
     },
     {
         id: 2,
         name: "Acrylique Rouge Vermillon",
         quantity: 15,
         unit: 'percentage',
+        containerCapacity: 100,    // Tube de 100ml
+        containersOwned: 1,        // 1 tube possédé
         value: 12,
         status: "low",
         lastUpdate: "1sem",
         category: "Peinture",
         minThreshold: 20,
         maxThreshold: 100,
-        description: "Tube presque vide"
+        description: "Tube presque vide - 1 session restante"
     },
     {
         id: 3,
         name: "Acrylique Blanc Titane",
         quantity: 90,
         unit: 'percentage',
+        containerCapacity: 100,    // Tube de 100ml
+        containersOwned: 1,        // 1 tube possédé
         value: 12,
         status: "optimal",
         lastUpdate: "2j",
         category: "Peinture",
         minThreshold: 20,
         maxThreshold: 100,
-        description: "Tube presque neuf"
+        description: "Tube presque neuf - 7 sessions"
     },
     {
         id: 4,
         name: "Acrylique Jaune Cadmium",
         quantity: 5,
         unit: 'percentage',
+        containerCapacity: 100,    // Tube de 100ml
+        containersOwned: 1,        // 1 tube possédé
         value: 12,
         status: "critical",
         lastUpdate: "2sem",
         category: "Peinture",
         minThreshold: 20,
         maxThreshold: 100,
-        description: "Urgent : tube presque vide"
+        description: "URGENT : tube presque vide"
     },
     {
         id: 5,
