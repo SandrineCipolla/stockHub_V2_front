@@ -8,6 +8,7 @@ import {useTheme} from '@/hooks/useTheme.ts';
 import {useReducedMotion} from '@/hooks/useReducedMotion';
 import {STOCK_STATUS_CONFIG, type StockStatus} from '@/types/stock';
 import {STOCK_CARD_ANIMATION, REDUCED_MOTION_DURATION} from '@/constants/animations';
+import {formatQuantityWithUnit} from '@/utils/unitFormatter';
 import type {StockCardProps} from '@/types';
 
 export const StockCard: React.FC<StockCardProps> = ({
@@ -164,9 +165,9 @@ export const StockCard: React.FC<StockCardProps> = ({
                     <div className="text-center">
                         <div
                             className="text-2xl font-bold"
-                            aria-label={`Quantité: ${stock.quantity} unités`}
+                            aria-label={`Quantité: ${formatQuantityWithUnit(stock.quantity, stock.unit)}`}
                         >
-                            {stock.quantity}
+                            {formatQuantityWithUnit(stock.quantity, stock.unit)}
                         </div>
                         <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}>
                             Quantité

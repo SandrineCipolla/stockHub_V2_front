@@ -320,26 +320,40 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 > **🎯 Objectif RNCP (C2.5)** : Analyses descriptives et prédictives sur données avec Machine Learning pour extraire de la valeur métier
 
-#### **Mardi 22/10 (4h) : SmartSuggestions - IA Prédictive** 📅 PRIORITÉ 1
-- [ ] **Algorithmes intelligents** (2h30)
-  - [ ] Analyse tendances consommation (prédiction rupture)
-  - [ ] Détection surstock (analyse seuils optimaux)
-  - [ ] Suggestions réapprovisionnement avec calcul quantité optimale
-  - [ ] Niveau de confiance des prédictions (70-95%)
-  - [ ] Tri par priorité et pertinence
+#### **Mardi 22/10 (4h) : SmartSuggestions - IA Prédictive** ✅ TERMINÉ
+- [x] **Algorithmes intelligents** (2h30)
+  - [x] Analyse tendances consommation (prédiction rupture)
+  - [x] Détection surstock (analyse seuils optimaux)
+  - [x] Suggestions réapprovisionnement avec calcul quantité optimale
+  - [x] Niveau de confiance des prédictions (70-95%)
+  - [x] Tri par priorité et pertinence
 
-- [ ] **Composant SmartSuggestions.tsx** (90min)
-  - [ ] Card avec icône ✨ AI en évidence
-  - [ ] Liste 5 suggestions intelligentes avec badges priorité
-  - [ ] Design gradient subtil (emerald/blue)
-  - [ ] Bouton "Appliquer" par suggestion
-  - [ ] Animations stagger (apparition en cascade)
-  - [ ] Intégration dashboard (section dédiée)
+- [x] **Refactoring UI/UX** (3h30) - Approche Option 2
+  - [x] AISummaryWidget avec icône sparkles pour Dashboard
+  - [x] StockAIBadge contextuel dans chaque StockCard
+  - [x] Popover avec React Portal (positionnement intelligent)
+  - [x] Design épuré avec bordure colorée selon priorité
+  - [x] Responsive mobile + desktop (< 800px full-width)
+  - [x] Backdrop semi-transparent pour visibilité
+  - [x] Fermeture automatique au scroll
+  - [x] Animations Framer Motion
+  - [x] Nettoyage des console.log (build optimisé)
 
 **Livrables** :
-- `src/components/ai/SmartSuggestions.tsx`
-- `src/utils/aiPredictions.ts` (algorithmes)
-- Tests unitaires (fixtures)
+- `src/components/ai/AISummaryWidget.tsx` (200+ lignes) ✅
+- `src/components/ai/StockAIBadge.tsx` (388 lignes, popover contextuel) ✅
+- `src/components/ai/SmartSuggestions.tsx` (modifié pour filtrage optionnel) ✅
+- `src/utils/aiPredictions.ts` (397 lignes, algorithmes ML) ✅
+- Intégrations Dashboard + StockCard + StockGrid ✅
+- Types mis à jour (StockCardProps, StockGridProps avec aiSuggestions) ✅
+
+**🎯 Résultat Final** :
+- Interface IA non intrusive et élégante ✅
+- Suggestions contextuelles par stock (badge "IA (X)") ✅
+- Résumé global dans Dashboard (widget compact) ✅
+- Popover responsive avec smart positioning ✅
+- Bundle: 377.00 KB (119.80 KB gzipped) ✅
+- Build production sans warnings ✅
 
 ---
 
@@ -419,6 +433,186 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - Démontre capacité à implémenter analyses prédictives
 - Utilisation techniques ML pour valeur métier
 - Documentation professionnelle des algorithmes
+
+---
+
+### 🎨 **SEMAINE 5 - Mode Loisirs/Créatif (28/10-03/11)** 📅 EN COURS
+
+> **🎯 Objectif** : Adapter StockHub pour usage familial/créatif (cellier, matériel peinture, tissus, etc.)
+> **🎯 Focus** : Quantités fractionnaires, consommation irrégulière, gestion par projets
+
+**📊 STATUT GLOBAL** :
+- ✅ **Option A - Unités Flexibles** : COMPLÉTÉ (2h30)
+  - 7 unités supportées : piece, percentage, ml, g, meter, liter, kg
+  - Affichage formaté intelligent (65%, 0.5m, 150ml, etc.)
+  - Algorithmes IA adaptés avec calcul de sessions créatives
+  - 18 exemples de données réalistes (peinture, tissu, cellier)
+- ⏳ **Option B - Fréquence d'Activité** : À VENIR
+- ⏳ **Option C - Mode Projets** : OPTIONNEL
+- ⏳ **Documentation** : À VENIR
+
+#### **Lundi 28/10 (3h) : Phase Analyse & Design** ✅ COMPLÉTÉ
+- [x] **Analyse besoins usage familial** (1h)
+  - [x] Identifier différences vs usage professionnel
+  - [x] Cas d'usage : peinture acrylique, tissus, cellier
+  - [x] Problèmes : quantités fractionnaires (0.5m, 65%), consommation irrégulière
+  - [x] Définir 3 options d'implémentation (Simple, Complète, Projet)
+
+- [x] **Design système unités flexibles** (2h)
+  - [x] Ajouter champ `unit: StockUnit` au type Stock
+  - [x] Types: 'piece' | 'percentage' | 'ml' | 'g' | 'meter' | 'liter' | 'kg'
+  - [x] Adapter affichage selon l'unité
+  - [x] Adapter algorithmes IA selon l'unité
+  - [x] Maquettes UI pour sélection d'unité
+
+**Livrables** :
+- ✅ Types définis dans `types/stock.ts`
+- ✅ Utility `unitFormatter.ts` créé
+
+---
+
+#### **Mardi 29/10 (2h) : Option A - Unités Flexibles** ✅ COMPLÉTÉ
+- [x] **Extension types Stock** (30min)
+  - [x] Ajouter `unit?: StockUnit` dans types/stock.ts
+  - [x] Type StockUnit avec 7 unités supportées
+  - [x] Mise à jour CreateStockData et UpdateStockData
+
+- [x] **Adaptation affichage** (60min)
+  - [x] StockCard: afficher unité à côté de la quantité avec `formatQuantityWithUnit()`
+  - [x] Format intelligent: "0.5m", "65%", "150ml", "2.5kg"
+  - [x] Tests avec différentes unités dans stockData.ts
+
+- [x] **Adaptation algorithmes IA** (30min)
+  - [x] aiPredictions.ts: `calculateSessionsRemaining()` selon type d'unité
+  - [x] `getUsageAdaptedMessage()` pour messages contextuels
+  - [x] Suggestions adaptées: "5 sessions restantes" vs "3 jours avant rupture"
+  - [x] Intégration dans tous les générateurs (rupture, reorder, overstock, optimize)
+
+**Livrables** :
+- ✅ `types/stock.ts` enrichi avec StockUnit (7 unités)
+- ✅ `utils/unitFormatter.ts` (formatQuantityWithUnit, parseQuantityInput)
+- ✅ `StockCard.tsx` avec affichage formaté
+- ✅ `aiPredictions.ts` adapté pour sessions créatives
+- ✅ `stockData.ts` avec 18 exemples usage familial (peinture, tissu, cellier)
+
+---
+
+#### **Jeudi 31/10 (2h) : Option B - Fréquence d'Activité** 📅 PRIORITÉ 3
+- [ ] **Extension types pour usage irrégulier** (45min)
+  - [ ] Ajouter `activityFrequency?: ActivityFrequency` (daily/weekly/monthly/seasonal/sporadic)
+  - [ ] Ajouter `lastUsedDate?: Date`
+  - [ ] Ajouter `usagePattern?: 'regular' | 'seasonal' | 'sporadic'`
+
+- [ ] **Algorithme adapté consommation irrégulière** (45min)
+  - [ ] analyzeCreativeConsumption() pour usage sporadique
+  - [ ] calculateSessionsRemaining() par type d'unité
+  - [ ] Prédictions basées sur sessions, pas temps
+  - [ ] Confiance réduite pour usage irrégulier (65-75%)
+
+- [ ] **UI configuration fréquence** (30min)
+  - [ ] Dropdown sélection fréquence dans formulaire stock
+  - [ ] Affichage "Dernière utilisation : il y a X jours"
+  - [ ] Message IA adapté : "~5 sessions restantes selon ton activité"
+
+**Livrables** :
+- Système de fréquence d'activité fonctionnel
+- Algorithmes IA adaptés usage irrégulier
+
+---
+
+#### **Samedi 02/11 Soirée (3h) : Option C - Mode Projets (optionnel)** 📅 PRIORITÉ 4
+- [ ] **Types projet créatif** (60min)
+  - [ ] Interface CreativeProject (id, name, status, materials)
+  - [ ] Relation Stock ↔ Project (materialsNeeded)
+  - [ ] États: 'planning' | 'in_progress' | 'paused' | 'completed'
+
+- [ ] **Vérification matériaux avant projet** (90min)
+  - [ ] Composant ProjectMaterialCheck.tsx
+  - [ ] Analyse stocks disponibles vs nécessaires
+  - [ ] Alertes: "Stock insuffisant pour ce projet"
+  - [ ] Suggestions commande intelligentes
+
+- [ ] **Tracking consommation en temps réel** (30min)
+  - [ ] Mise à jour stock pendant projet
+  - [ ] Alertes si consommation > prévision
+  - [ ] Historique consommation par projet
+
+**Livrables** :
+- Système de projets créatifs complet (si temps disponible)
+- Documentation PROJECTS.md
+
+---
+
+#### **Dimanche 03/11 Matin (4h) : Tests & Documentation** 📅 PRIORITÉ 5
+- [ ] **Tests unités flexibles** (90min)
+  - [ ] Tests StockCard avec 7 types d'unités
+  - [ ] Tests affichage formaté (0.5m, 65%, etc.)
+  - [ ] Tests algorithmes IA adaptés
+  - [ ] Factory fixtures avec unités diverses
+
+- [ ] **Tests fréquence activité** (60min)
+  - [ ] Tests usage sporadique vs régulier
+  - [ ] Tests sessions restantes
+  - [ ] Tests confiance ajustée
+
+- [ ] **Documentation complète** (90min)
+  - [ ] Créer `documentation/MODE-LOISIRS-CREATIF.md`
+  - [ ] Guide utilisateur : comment configurer son stock créatif
+  - [ ] Exemples concrets : peinture, tissus, cellier
+  - [ ] FAQ : "Comment gérer les tubes partiellement vides ?"
+  - [ ] Mise à jour README avec mode familial
+
+**Livrables** :
+- Tests couvrant tous les cas d'usage créatifs
+- Documentation MODE-LOISIRS-CREATIF.md complète
+- Coverage maintenu ≥ 93%
+
+---
+
+**✅ BILAN SEMAINE 5** : ⭐ Résultat attendu
+- ✅ Système unités flexibles (pièces, %, ml, m, etc.)
+- ✅ Gestion consommation irrégulière (sporadique vs régulier)
+- ✅ Suggestions IA adaptées au contexte familial/créatif
+- ✅ Interface intuitive pour usage non-professionnel
+- ✅ Documentation complète mode loisirs
+- ⏸️ Système projets (optionnel selon temps disponible)
+
+**🎯 Impact Utilisateur** :
+- Usage quotidien simplifié (cellier, loisirs créatifs)
+- Prédictions réalistes pour consommation irrégulière
+- Pas besoin d'historique complexe pour commencer
+- S'améliore avec le temps (apprentissage léger)
+
+**📊 Exemples concrets** :
+```typescript
+// Tube de peinture
+{
+  name: "Peinture Acrylique Bleu Cobalt",
+  quantity: 65,
+  unit: 'percentage',
+  activityFrequency: 'sporadic',
+  minThreshold: 30
+}
+// IA: "Il reste ~5 sessions de peinture (2-6 mois selon ton activité)"
+
+// Tissu
+{
+  name: "Tissu Liberty Rouge",
+  quantity: 0.5,
+  unit: 'meter',
+  minThreshold: 1
+}
+// IA: "Insuffisant pour 1 projet couture standard (besoin 1.5-2m)"
+
+// Cellier
+{
+  name: "Farine T55",
+  quantity: 2,
+  unit: 'kg',
+  activityFrequency: 'weekly'
+}
+// IA: "Stock suffisant pour 4 semaines de pâtisserie hebdomadaire"
+```
 
 ---
 

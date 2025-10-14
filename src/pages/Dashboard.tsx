@@ -49,9 +49,7 @@ export const Dashboard: React.FC = () => {
 
     // Generate all AI suggestions (memoized for performance)
     const allAISuggestions = useMemo(() => {
-        const suggestions = generateAISuggestions(stocks);
-        console.log('🤖 AI Suggestions generated:', suggestions.length, suggestions);
-        return suggestions;
+        return generateAISuggestions(stocks);
     }, [stocks]);
 
     // Classes CSS basées sur le thème

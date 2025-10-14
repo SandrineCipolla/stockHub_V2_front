@@ -11,10 +11,24 @@ export type StockStatus =
     | 'outOfStock'   // Rupture de stock
     | 'overstocked'; // Surstockage
 
+/**
+ * Unités de mesure pour usage familial/créatif
+ * Permet de gérer des quantités fractionnaires (0.5m, 65%, etc.)
+ */
+export type StockUnit =
+    | 'piece'        // Pièces entières (défaut) - ex: 2 tubes, 5 boîtes
+    | 'percentage'   // Pourcentage de remplissage - ex: 65% d'un tube
+    | 'ml'           // Millilitres - ex: 150ml de peinture
+    | 'g'            // Grammes - ex: 250g de farine
+    | 'meter'        // Mètres - ex: 2.5m de tissu
+    | 'liter'        // Litres - ex: 1.5L de vernis
+    | 'kg';          // Kilogrammes - ex: 2kg de farine
+
 export interface Stock {
     id: number;
     name: string;
     quantity: number;
+    unit?: StockUnit;          // Unité de mesure (défaut: 'piece')
     value: number;
     status: StockStatus;
     lastUpdate: string;
@@ -50,6 +64,7 @@ export interface StockStats {
 export interface CreateStockData {
     name: string;
     quantity: number;
+    unit?: StockUnit;
     value: number;
     description?: string;
     category?: string;

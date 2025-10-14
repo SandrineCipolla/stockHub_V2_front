@@ -12,6 +12,7 @@
  */
 
 import type { Stock } from '@/types/stock';
+import { formatQuantityWithUnit } from '@/utils/unitFormatter';
 
 /**
  * Priority levels for AI suggestions
@@ -161,6 +162,103 @@ function predictDaysUntilRupture(
 }
 
 /**
+ * Calculates remaining sessions for creative/hobby usage
+ * Adapts estimation based on unit type (percentage, meters, etc.)
+ *
+ * @param stock - Stock item with unit information
+ * @returns Estimated sessions remaining, or null if not applicable
+ *
+ * @example
+ * ```ts
+ * calculateSessionsRemaining({ quantity: 65, unit: 'percentage' })  // ~5 sessions
+ * calculateSessionsRemaining({ quantity: 0.5, unit: 'meter' })      // ~0 sessions
+ * ```
+ */
+function calculateSessionsRemaining(stock: Stock): number | null {
+  const unit = stock.unit ?? 'piece';
+
+  // Pour les pourcentages (tubes de peinture, etc.)
+  if (unit === 'percentage') {
+    // 1 session créative = 10-15% de consommation moyenne
+    const avgConsumptionPerSession = 12;
+    return Math.floor(stock.quantity / avgConsumptionPerSession);
+  }
+
+  // Pour les mètres (tissu)
+  if (unit === 'meter') {
+    // 1 projet couture = 1.5m en moyenne
+    const avgConsumptionPerProject = 1.5;
+    return Math.floor(stock.quantity / avgConsumptionPerProject);
+  }
+
+  // Pour les ml/litres (peinture liquide, vernis)
+  if (unit === 'ml' || unit === 'liter') {
+    const quantityInMl = unit === 'liter' ? stock.quantity * 1000 : stock.quantity;
+    // 1 session = 50-100ml selon le produit
+    const avgConsumptionPerSession = 75;
+    return Math.floor(quantityInMl / avgConsumptionPerSession);
+  }
+
+  // Pour les grammes/kg (peinture en poudre, farine, etc.)
+  if (unit === 'g' || unit === 'kg') {
+    const quantityInG = unit === 'kg' ? stock.quantity * 1000 : stock.quantity;
+    // 1 utilisation = 200g en moyenne
+    const avgConsumptionPerUse = 200;
+    return Math.floor(quantityInG / avgConsumptionPerUse);
+  }
+
+  // Pour les pièces : utiliser la logique classique
+  if (unit === 'piece') {
+    // 1 session consomme environ 1 pièce tous les 2 usages
+    return Math.floor(stock.quantity * 2);
+  }
+
+  return null;
+}
+
+/**
+ * Generates usage-adapted message based on unit type
+ * For creative/hobby usage, replaces "days until rupture" with "sessions remaining"
+ *
+ * @param stock - Stock item
+ * @param daysUntilRupture - Traditional days-based prediction (can be null)
+ * @param sessionsRemaining - Sessions-based prediction for creative usage
+ * @returns Human-readable message
+ */
+function getUsageAdaptedMessage(
+  stock: Stock,
+  daysUntilRupture: number | null,
+  sessionsRemaining: number | null
+): string {
+  const unit = stock.unit ?? 'piece';
+  const formattedQuantity = formatQuantityWithUnit(stock.quantity, unit);
+
+  // Pour unités créatives, privilégier sessions restantes
+  if (unit === 'percentage' && sessionsRemaining !== null) {
+    return `Il reste ${formattedQuantity} de ${stock.name}. Estimation : ~${sessionsRemaining} session${sessionsRemaining > 1 ? 's' : ''} créative${sessionsRemaining > 1 ? 's' : ''} avant d'être vide.`;
+  }
+
+  if (unit === 'meter' && sessionsRemaining !== null) {
+    if (sessionsRemaining === 0) {
+      return `Il reste ${formattedQuantity} de ${stock.name}. Insuffisant pour la plupart des projets couture (besoin d'environ 1.5-2m par projet).`;
+    }
+    return `Il reste ${formattedQuantity} de ${stock.name}. Suffisant pour ${sessionsRemaining} projet${sessionsRemaining > 1 ? 's' : ''} de couture environ.`;
+  }
+
+  if ((unit === 'ml' || unit === 'liter') && sessionsRemaining !== null) {
+    return `Il reste ${formattedQuantity} de ${stock.name}. Estimation : ~${sessionsRemaining} utilisation${sessionsRemaining > 1 ? 's' : ''} restante${sessionsRemaining > 1 ? 's' : ''}.`;
+  }
+
+  // Pour unités standard (g, kg, pièces), utiliser message classique avec jours
+  if (daysUntilRupture !== null) {
+    return `Stock ${stock.name} (${formattedQuantity}) sera épuisé dans ${daysUntilRupture} jour${daysUntilRupture > 1 ? 's' : ''} selon l'analyse des tendances.`;
+  }
+
+  // Fallback générique
+  return `Stock ${stock.name} nécessite votre attention (${formattedQuantity} restant${unit === 'piece' && stock.quantity > 1 ? 's' : ''}).`;
+}
+
+/**
  * Calculates optimal reorder quantity using economic order quantity (EOQ) simulation
  *
  * @param stock - Stock item
@@ -215,6 +313,15 @@ function generateRuptureRiskSuggestion(
   );
 
   const quantityRecommended = calculateOptimalReorderQuantity(stock, trend);
+  const sessionsRemaining = calculateSessionsRemaining(stock);
+
+  // Message adapté selon l'unité
+  const message = getUsageAdaptedMessage(stock, daysUntilRupture, sessionsRemaining);
+
+  // Action adaptée avec unité
+  const formattedQuantityAction = formatQuantityWithUnit(quantityRecommended, stock.unit);
+  const unit = stock.unit ?? 'piece';
+  const actionVerb = unit === 'piece' ? 'Commander' : 'Prévoir';
 
   return {
     id: `rupture-${stock.id}`,
@@ -224,8 +331,8 @@ function generateRuptureRiskSuggestion(
     priority,
     confidence: Math.round(confidence),
     title: `⚠️ Risque de rupture détecté`,
-    message: `Stock ${stock.name} sera en rupture dans ${daysUntilRupture} jour${daysUntilRupture > 1 ? 's' : ''} selon l'analyse des tendances.`,
-    action: `Commander ${quantityRecommended} unités`,
+    message,
+    action: `${actionVerb} ${formattedQuantityAction}`,
     impact: `Évite une rupture de stock et maintient la continuité de service`,
     quantityRecommended,
     daysUntilRupture,
@@ -247,6 +354,10 @@ function generateOverstockSuggestion(
   const storageCostPerUnit = 2; // €/unité/mois (simulation)
   const savingsEstimate = Math.round(excessQuantity * storageCostPerUnit);
 
+  // Message adapté avec unité
+  const formattedQuantity = formatQuantityWithUnit(stock.quantity, stock.unit);
+  const formattedMaxThreshold = formatQuantityWithUnit(maxThreshold, stock.unit);
+
   return {
     id: `overstock-${stock.id}`,
     stockId: stock.id,
@@ -255,7 +366,7 @@ function generateOverstockSuggestion(
     priority: excessRatio > 2.5 ? 'high' : 'medium',
     confidence: Math.round(trend.confidence),
     title: `📦 Surstock détecté`,
-    message: `Stock ${stock.name} dépasse le seuil optimal de ${Math.round((excessRatio - 1) * 100)}%.`,
+    message: `Stock ${stock.name} (${formattedQuantity}) dépasse le seuil optimal (${formattedMaxThreshold}) de ${Math.round((excessRatio - 1) * 100)}%.`,
     action: `Réduire les commandes ou promouvoir le produit`,
     impact: `Économie estimée : ${savingsEstimate}€/mois en coûts de stockage`,
     savingsEstimate,
@@ -272,6 +383,22 @@ function generateReorderSuggestion(
 ): AISuggestion {
   const quantityRecommended = calculateOptimalReorderQuantity(stock, trend);
   const isUrgent = daysUntilRupture !== null && daysUntilRupture <= AI_CONFIG.HIGH_PRIORITY_DAYS;
+  const sessionsRemaining = calculateSessionsRemaining(stock);
+
+  // Messages adaptés selon l'unité
+  const formattedCurrentQuantity = formatQuantityWithUnit(stock.quantity, stock.unit);
+  const formattedRecommendedQuantity = formatQuantityWithUnit(quantityRecommended, stock.unit);
+  const unit = stock.unit ?? 'piece';
+
+  // Message principal avec contexte de sessions si applicable
+  let message = `Stock ${stock.name} (${formattedCurrentQuantity}) nécessite un réapprovisionnement optimal de ${formattedRecommendedQuantity}.`;
+
+  if (sessionsRemaining !== null && (unit === 'percentage' || unit === 'meter' || unit === 'ml' || unit === 'liter')) {
+    message = `Stock ${stock.name} (${formattedCurrentQuantity}, ~${sessionsRemaining} utilisation${sessionsRemaining > 1 ? 's' : ''} restante${sessionsRemaining > 1 ? 's' : ''}) nécessite un réapprovisionnement.`;
+  }
+
+  // Action adaptée
+  const actionVerb = unit === 'piece' ? 'Commander' : 'Prévoir';
 
   return {
     id: `reorder-${stock.id}`,
@@ -281,8 +408,8 @@ function generateReorderSuggestion(
     priority: isUrgent ? 'high' : 'medium',
     confidence: Math.round(trend.confidence),
     title: isUrgent ? `🔔 Réapprovisionnement urgent` : `📅 Planifier réapprovisionnement`,
-    message: `Stock ${stock.name} nécessite un réapprovisionnement optimal de ${quantityRecommended} unités.`,
-    action: `Commander ${quantityRecommended} unités`,
+    message,
+    action: `${actionVerb} ${formattedRecommendedQuantity}`,
     impact: `Maintient le stock à un niveau optimal et évite les ruptures`,
     quantityRecommended,
     daysUntilRupture: daysUntilRupture ?? undefined,
@@ -303,6 +430,12 @@ function generateOptimizeSuggestion(
   const recommendedMin = Math.round(trend.dailyAverage * AI_CONFIG.LEAD_TIME_DAYS * 1.5);
   const recommendedMax = Math.round(recommendedMin * 3);
 
+  // Formater les seuils avec unité
+  const formattedCurrentMin = formatQuantityWithUnit(minThreshold, stock.unit);
+  const formattedCurrentMax = formatQuantityWithUnit(maxThreshold, stock.unit);
+  const formattedRecommendedMin = formatQuantityWithUnit(recommendedMin, stock.unit);
+  const formattedRecommendedMax = formatQuantityWithUnit(recommendedMax, stock.unit);
+
   return {
     id: `optimize-${stock.id}`,
     stockId: stock.id,
@@ -311,7 +444,7 @@ function generateOptimizeSuggestion(
     priority: 'low',
     confidence: Math.round(trend.confidence * 0.9), // Moins certain pour optimisation
     title: `⚙️ Optimisation des seuils recommandée`,
-    message: `Les seuils actuels (${minThreshold}-${maxThreshold}) pourraient être ajustés à (${recommendedMin}-${recommendedMax}) selon la consommation réelle.`,
+    message: `Les seuils actuels (${formattedCurrentMin}-${formattedCurrentMax}) pourraient être ajustés à (${formattedRecommendedMin}-${formattedRecommendedMax}) selon la consommation réelle.`,
     action: `Ajuster les seuils min/max`,
     impact: `Optimise la gestion du stock et réduit les coûts de stockage`,
   };
