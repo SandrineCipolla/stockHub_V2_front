@@ -24,8 +24,12 @@
   "include": [
     "src/**/*",
     "src/types/**/*.d.ts",
-    "documentation/V2/ARCHITECTURE.md",
     "node_modules/vitest/globals.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.md"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

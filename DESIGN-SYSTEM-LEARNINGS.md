@@ -30,6 +30,43 @@
 
 ---
 
+### Problème Build - Bundle trop volumineux
+
+**Symptôme :** Bundle JavaScript de 1.1 MB, avertissement Vite
+
+**Impact :** Temps de chargement lent, pas de mise en cache efficace
+
+**Solution complète :** Voir [`documentation/BUILD-OPTIMIZATIONS.md`](./documentation/BUILD-OPTIMIZATIONS.md)
+
+**Optimisations appliquées :**
+1. ✅ Code-splitting avec `manualChunks` (5 chunks au lieu de 1)
+2. ✅ Minification avancée avec Terser
+3. ✅ Suppression automatique des `console.log` en production
+4. ✅ Meilleure mise en cache des vendors (React, Design System, etc.)
+
+**Résultats :**
+- **Taille réduite** : 1,137 kB → 882 kB (-22%)
+- **Plus gros chunk** : 1,137 kB → 472 kB (-58%)
+- **Chargement parallèle** : 5 chunks en parallèle
+- **Cache optimisé** : Vendors stables (842 kB) + App (235 kB)
+
+**Fichiers modifiés :**
+- `vite.config.ts` - Configuration build optimisée
+- `package.json` - Ajout terser
+- `src/main.tsx` - Correction import Design System
+
+---
+
+### Nettoyage des fichiers obsolètes
+
+**Fichier supprimé :** `src/react-app-env.d.ts`
+
+**Raison :** Fichier redondant et inutile dans un projet Vite (legacy Create React App)
+
+**Impact :** Configuration TypeScript plus claire et maintenable
+
+---
+
 ## 📊 Résultats Globaux
 
 ### Composants Testés: 10/16 (62.5%)

@@ -4,8 +4,8 @@ import App from './App';
 import './index.css';
 
 // Import du Design System StockHub (Web Components)
-import './lib/design-system';
-import '@stockhub/design-system/dist/tokens/design-tokens.css';
+// Importer tous les composants web depuis le package npm
+import '@stockhub/design-system';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

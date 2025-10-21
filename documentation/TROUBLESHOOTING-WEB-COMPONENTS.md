@@ -1,4 +1,4 @@
-# Troubleshooting - Web Components & TypeScript
+# TROUBLESHOOTING-WEB-COMPONENTS.md - Résolution des erreurs TypeScript et optimisations
 
 ## Problème : Erreur TS2339 sur les Web Components
 
@@ -233,4 +233,3 @@ npx tsc --noEmit
 - [TypeScript - Global Augmentation](https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-modifying-module-d-ts.html)
 - [React TypeScript - JSX.IntrinsicElements](https://react-typescript-cheatsheet.netlify.app/docs/advanced/misc_concerns/#custom-elements--web-components)
 - [Vite - TypeScript Configuration](https://vitejs.dev/guide/features.html#typescript)
-
