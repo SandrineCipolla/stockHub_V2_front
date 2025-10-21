@@ -24,7 +24,9 @@ export default defineConfig({
         },
       },
     },
-    // Augmenter la limite d'avertissement à 1000 kB (temporaire)
+    // Limite d'avertissement ajustée après optimisations (code-splitting + terser)
+    // Le plus gros chunk actuel est design-system.js (472 kB) ce qui est acceptable
+    // Objectif futur: Réduire design-system en chargeant uniquement les composants utilisés
     chunkSizeWarningLimit: 1000,
     // Activer la minification
     minify: 'terser',

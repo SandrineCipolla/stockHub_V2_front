@@ -21,12 +21,32 @@
 2. ✅ Utiliser `vite-env.d.ts` pour les déclarations globales (toujours chargé par Vite)
 3. ✅ Créer des fonctions de conversion pour mapper camelCase → kebab-case
 4. ✅ Redémarrer le serveur TypeScript après modifications des `.d.ts`
+5. ✅ **Toujours typer les CustomEvent** au lieu d'utiliser `any`
+6. ✅ **Spécifier des valeurs explicites** pour les attributs boolean
 
 **Fichiers corrigés :**
 - `src/types/web-components.d.ts` - Correction syntaxe
 - `src/vite-env.d.ts` - Ajout déclarations web components
 - `src/components/dashboard/StockCard.tsx` - Fonction convertStatusToWebComponent()
-- `tsconfig.json` - Configuration typeRoots
+- `src/pages/Dashboard.tsx` - Typage CustomEvent + attributs boolean explicites
+- `tsconfig.json` - Configuration typeRoots + exclusion .md
+- `tsconfig.app.json` - Exclusion .md
+
+**Exemples de corrections :**
+
+```typescript
+// ❌ AVANT (Type any - pas sûr)
+onsh-search-change={(e: any) => handleSearchChange(e.detail.value)}
+
+// ✅ APRÈS (Type strict - sûr)
+onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.detail.query)}
+
+// ❌ AVANT (Attribut boolean ambigu)
+<sh-search-input clearable />
+
+// ✅ APRÈS (Attribut boolean explicite)
+<sh-search-input clearable={true} />
+```
 
 ---
 
@@ -64,6 +84,20 @@
 **Raison :** Fichier redondant et inutile dans un projet Vite (legacy Create React App)
 
 **Impact :** Configuration TypeScript plus claire et maintenable
+
+---
+
+### Fausses erreurs TypeScript dans fichiers Markdown
+
+**Symptôme :** L'IDE générait des erreurs TypeScript dans les fichiers `.md`
+
+**Cause :** Les fichiers `ARCHITECTURE.md` et autres `.md` étaient inclus dans `tsconfig.json`, TypeScript essayait d'analyser les blocs de code
+
+**Solution :**
+- Ajout de `"exclude": ["**/*.md"]` dans `tsconfig.json` et `tsconfig.app.json`
+- Suppression de `documentation/V2/ARCHITECTURE.md` de la liste `include`
+
+**Impact :** Plus d'erreurs parasites dans les fichiers de documentation
 
 ---
 

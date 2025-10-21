@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
-import {BarChart3, Download, Plus, Search,} from 'lucide-react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {BarChart3, Download, Plus, Search} from 'lucide-react';
 
 
 import {Header} from '@/components/layout/Header';
@@ -268,8 +268,8 @@ export const Dashboard: React.FC = () => {
                             placeholder="Rechercher un produit..."
                             value={searchTerm}
                             debounce={300}
-                            clearable
-                            onsh-search-change={(e: any) => handleSearchChange(e.detail.value)}
+                            clearable={true}
+                            onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.detail.query)}
                             onsh-search-clear={() => setSearchTerm('')}
                             aria-label="Rechercher un produit"
                         />

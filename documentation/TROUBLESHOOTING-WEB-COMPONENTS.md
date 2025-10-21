@@ -17,6 +17,8 @@ Lors de l'utilisation du web component `<sh-status-badge>` dans le composant `St
 1. **TS2339** : Property 'sh-status-badge' does not exist on type 'JSX.IntrinsicElements'
 2. **TS1005** : '}' expected (erreur de syntaxe dans web-components.d.ts)
 3. **TS2322** : Type 'StockStatus' is not assignable (incompatibilité camelCase vs kebab-case)
+4. **Type safety** : Utilisation de `any` dans les CustomEvent (recommandation Copilot)
+5. **Attributs boolean** : Attributs sans valeur explicite (recommandation Copilot)
 
 ---
 
@@ -53,6 +55,26 @@ type StockStatus = 'optimal' | 'low' | 'critical' | 'outOfStock' | 'overstocked'
 Mais le web component `sh-status-badge` attend le format **kebab-case** :
 ```typescript
 status?: 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked';
+```
+
+### 4. Utilisation du type `any` pour les CustomEvent
+
+**Fichier :** `src/pages/Dashboard.tsx`
+
+Le code utilisait le type `any` pour les événements custom, ce qui désactive la vérification de types TypeScript :
+
+```typescript
+// ❌ AVANT (INCORRECT)
+onsh-search-change={(e: any) => handleSearchChange(e.detail.value)}
+```
+
+### 5. Attributs boolean sans valeur explicite
+
+Les attributs boolean des web components n'avaient pas de valeur explicite, générant des avertissements :
+
+```typescript
+// ❌ AVANT (AVERTISSEMENT)
+<sh-search-input clearable />
 ```
 
 ---
@@ -145,6 +167,42 @@ Utilisation dans le JSX :
 }
 ```
 
+### Solution 5 : Typage strict des CustomEvent
+
+**Fichier modifié :** `src/pages/Dashboard.tsx`
+
+Remplacement du type `any` par le type exact du CustomEvent :
+
+```typescript
+// ✅ APRÈS (CORRECT)
+onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.detail.query)}
+```
+
+**Avantages :**
+- ✅ Type safety complète
+- ✅ Autocomplétion fonctionnelle dans l'IDE
+- ✅ Détection d'erreurs à la compilation
+- ✅ Correspondance exacte avec la signature du web component
+
+### Solution 6 : Valeurs explicites pour attributs boolean
+
+**Fichier modifié :** `src/pages/Dashboard.tsx`
+
+Ajout de valeurs explicites pour les attributs boolean :
+
+```typescript
+// ✅ APRÈS (CORRECT)
+<sh-search-input
+  clearable={true}
+  onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.detail.query)}
+/>
+```
+
+**Bonnes pratiques :**
+- Toujours spécifier `={true}` ou `={false}` pour les attributs boolean
+- Évite les ambiguïtés dans le code
+- Plus clair pour les autres développeurs
+
 ---
 
 ## 📝 Bonnes pratiques identifiées
@@ -167,6 +225,15 @@ const convert = (status: StockStatus): string => { ... }
 const convert = (status: StockStatus): 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked' => { ... }
 ```
 
+**Pour les CustomEvent, toujours typer la structure du détail :**
+```typescript
+// ❌ INCORRECT
+onsh-search-change={(e: any) => handleSearch(e.detail.query)}
+
+// ✅ CORRECT
+onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearch(e.detail.query)}
+```
+
 ### 3. **Conventions de nommage**
 
 - **Types TypeScript** : camelCase (`outOfStock`)
@@ -186,6 +253,18 @@ declare global {
 }      // ← Fermeture global
 
 export {};  // ← Ne PAS ajouter d'accolade ici
+```
+
+### 5. **Attributs boolean explicites**
+
+Toujours spécifier des valeurs explicites pour les attributs boolean :
+
+```typescript
+// ❌ DÉCONSEILLÉ (génère avertissements)
+<sh-search-input clearable disabled />
+
+// ✅ RECOMMANDÉ (clair et sans avertissement)
+<sh-search-input clearable={true} disabled={false} />
 ```
 
 ---
@@ -212,9 +291,10 @@ npx tsc --noEmit
 ## 📊 Impact
 
 - ✅ **Compilation TypeScript** : Plus d'erreurs
-- ✅ **Type safety** : Conservation du typage strict
+- ✅ **Type safety** : Conservation du typage strict + CustomEvent typés
 - ✅ **DX (Developer Experience)** : Autocomplétion fonctionnelle
 - ✅ **Maintenabilité** : Code documenté et patterns réutilisables
+- ✅ **Qualité du code** : Respect des recommandations Copilot AI
 
 ---
 
@@ -223,8 +303,10 @@ npx tsc --noEmit
 1. `src/types/web-components.d.ts` - Correction syntaxe
 2. `src/vite-env.d.ts` - Ajout déclarations web components
 3. `src/components/dashboard/StockCard.tsx` - Fonction de conversion
-4. `tsconfig.json` - Configuration typeRoots
-5. `src/react-app-env.d.ts` - Nettoyage des doublons
+4. `src/pages/Dashboard.tsx` - Typage CustomEvent + attributs boolean explicites
+5. `tsconfig.json` - Configuration typeRoots + exclusion .md
+6. `tsconfig.app.json` - Suppression référence react-app-env + exclusion .md
+7. `src/react-app-env.d.ts` - ❌ Supprimé (obsolète)
 
 ---
 
@@ -233,3 +315,4 @@ npx tsc --noEmit
 - [TypeScript - Global Augmentation](https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-modifying-module-d-ts.html)
 - [React TypeScript - JSX.IntrinsicElements](https://react-typescript-cheatsheet.netlify.app/docs/advanced/misc_concerns/#custom-elements--web-components)
 - [Vite - TypeScript Configuration](https://vitejs.dev/guide/features.html#typescript)
+- [TypeScript - CustomEvent Typing](https://www.typescriptlang.org/docs/handbook/dom-manipulation.html#customevent)
