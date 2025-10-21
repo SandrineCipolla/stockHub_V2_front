@@ -30,6 +30,28 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     const shouldAnimate = enableAnimation && !prefersReducedMotion;
     const { number, prefix, suffix, isNumeric } = parseValue(value);
 
+    /**
+     * Détermine le nombre de décimales à afficher pour un nombre
+     * @param value - Le nombre à analyser
+     * @returns 1 si le nombre a des décimales, 0 sinon
+     */
+    const getDecimalPlaces = (value: number): number => {
+        return value % 1 !== 0 ? 1 : 0;
+    };
+
+    /**
+     * Calcule la fonction d'easing exponentielle pour l'animation du compteur
+     * @param t - Temps actuel
+     * @param b - Valeur de début
+     * @param c - Changement de valeur
+     * @param d - Durée totale
+     * @returns La valeur interpolée
+     */
+    const exponentialEasing = (t: number, b: number, c: number, d: number): number => {
+        if (t === d) return b + c;
+        return c * (-Math.pow(2, METRIC_CARD_ANIMATION.EASING_FACTOR * t / d) + 1) + b;
+    };
+
     const getIconBackground = (type: 'success' | 'warning' | 'info'): string => {
         const backgrounds = {
             success: theme === 'dark' ? 'bg-emerald-500/20' : 'bg-emerald-100',
@@ -91,12 +113,10 @@ export const MetricCard: React.FC<MetricCardProps> = ({
                         <CountUp
                             end={number}
                             duration={METRIC_CARD_ANIMATION.COUNTER_DURATION}
-                            decimals={number % 1 !== 0 ? 1 : 0}
+                            decimals={getDecimalPlaces(number)}
                             separator={isNumeric ? ' ' : ''}
                             useEasing={true}
-                            easingFn={(t: number, b: number, c: number, d: number) => {
-                                return t === d ? b + c : c * (-Math.pow(2, METRIC_CARD_ANIMATION.EASING_FACTOR * t / d) + 1) + b;
-                            }}
+                            easingFn={exponentialEasing}
                         />
                         {suffix}
                     </>
