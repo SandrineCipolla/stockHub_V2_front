@@ -52,6 +52,15 @@ export const Dashboard: React.FC = () => {
         return generateAISuggestions(stocks);
     }, [stocks]);
 
+    // Calculate severity for alert banner
+    const alertSeverity = useMemo(() => {
+        const hasCritical = allAISuggestions.some(s => s.priority === 'critical');
+        const hasHigh = allAISuggestions.some(s => s.priority === 'high');
+        if (hasCritical) return 'critical';
+        if (hasHigh) return 'warning';
+        return 'info';
+    }, [allAISuggestions]);
+
     // Classes CSS basées sur le thème
     const themeClasses = {
         background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -266,17 +275,14 @@ export const Dashboard: React.FC = () => {
                 <section className="mb-8" role="search" aria-labelledby="search-heading">
                     <h2 id="search-heading" className="sr-only">Recherche de produits</h2>
                     <div className="relative max-w-md">
-                        <label htmlFor="search-input" className="sr-only">
-                            Rechercher un produit
-                        </label>
-                        <Input
-                            id="search-input"
-                            type="text"
+                        <sh-search-input
                             placeholder="Rechercher un produit..."
                             value={searchTerm}
-                            onChange={(e) => handleSearchChange(e.target.value)}
-                            icon={Search}
-                            aria-describedby="search-help"
+                            debounce={300}
+                            clearable
+                            onsh-search-change={(e: any) => handleSearchChange(e.detail.value)}
+                            onsh-search-clear={() => setSearchTerm('')}
+                            aria-label="Rechercher un produit"
                         />
                         <div id="search-help" className="sr-only">
                             Tapez le nom, la catégorie ou le SKU du produit que vous recherchez
@@ -370,8 +376,12 @@ export const Dashboard: React.FC = () => {
 
 
             </main>
-            
-            <Footer />
+
+            <sh-footer
+                app-name="STOCK HUB"
+                year="2025"
+                data-theme="dark"
+            />
         </div>
     );
 };

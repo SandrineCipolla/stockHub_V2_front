@@ -174,7 +174,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                         )}
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                        <StatusBadge status={stock.status} size="sm" />
+                        <sh-status-badge status={stock.status} />
                         {aiSuggestions.length > 0 && (
                             <StockAIBadge
                                 stockId={stock.id}
