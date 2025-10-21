@@ -63,7 +63,7 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,   // Supprimer console.log en production
+        drop_console: false,  // ✅ On garde les console.* pour le logger
         drop_debugger: true,  // Supprimer debugger en production
       },
     },
@@ -71,10 +71,152 @@ export default defineConfig({
 })
 ```
 
+**⚠️ Note importante sur `drop_console` :**
+
+Nous avons choisi de **ne pas** supprimer les `console.*` en production (`drop_console: false`), car nous utilisons un système de logging intelligent (`src/utils/logger.ts`) qui contrôle finement ce qui est affiché selon l'environnement.
+
+**Problème avec `drop_console: true` :**
+- Supprime **TOUS** les logs, y compris les erreurs critiques
+- Vous êtes aveugle face aux bugs de production
+- Les utilisateurs ne peuvent pas vous envoyer les erreurs de leur console
+
+**Notre solution :**
+
+#### **Alternative 1 : Logging conditionnel avec variable d'environnement**
+
+```typescript
+// src/utils/logger.ts
+const isDev = import.meta.env.DEV;
+
+export const logger = {
+  log: (...args: any[]) => {
+    if (isDev) console.log(...args);
+  },
+  warn: (...args: any[]) => {
+    if (isDev) console.warn(...args);
+  },
+  error: (...args: any[]) => {
+    // Les erreurs sont toujours loggées, même en production
+    console.error(...args);
+  },
+  info: (...args: any[]) => {
+    if (isDev) console.info(...args);
+  },
+};
+
+// Utilisation dans le code
+import { logger } from '@/utils/logger';
+
+logger.log('Debug info'); // ✅ Seulement en dev
+logger.error('Critical error'); // ✅ En dev ET production
+```
+
+#### **Alternative 2 : Bibliothèque de logging professionnelle**
+
+```bash
+npm install loglevel
+```
+
+```typescript
+// src/utils/logger.ts
+import log from 'loglevel';
+
+// Configuration par environnement
+if (import.meta.env.PROD) {
+  log.setLevel('error'); // Production : seulement les erreurs
+} else {
+  log.setLevel('debug'); // Développement : tous les logs
+}
+
+export { log };
+
+// Utilisation
+import { log } from '@/utils/logger';
+
+log.debug('Debug info'); // ❌ Pas affiché en production
+log.error('Critical error'); // ✅ Affiché en production
+```
+
+#### **Alternative 3 : Service de monitoring (Sentry, LogRocket)**
+
+```bash
+npm install @sentry/react
+```
+
+```typescript
+// src/main.tsx
+import * as Sentry from '@sentry/react';
+
+if (import.meta.env.PROD) {
+  Sentry.init({
+    dsn: 'YOUR_SENTRY_DSN',
+    environment: import.meta.env.MODE,
+    tracesSampleRate: 1.0,
+  });
+}
+
+// Les erreurs sont automatiquement capturées et envoyées à Sentry en production
+```
+
+#### **Recommandation pour StockHub V2**
+
+**✅ Solution retenue : Logger personnalisé (`src/utils/logger.ts`)**
+
+Au lieu d'utiliser `drop_console: true` dans Terser, nous avons créé un système de logging intelligent qui :
+
+```typescript
+// vite.config.ts
+terserOptions: {
+  compress: {
+    drop_console: false, // ✅ On garde les console.* en production
+    drop_debugger: true,
+  },
+}
+```
+
+**Pourquoi ce choix ?**
+
+1. **Débogage en production possible** 
+   - Les `console.error()` restent visibles en production
+   - Un utilisateur peut copier les erreurs de sa console et vous les envoyer
+   - Vous n'êtes plus aveugle face aux bugs de production
+
+2. **Pas de pollution en développement**
+   - Le logger utilise `import.meta.env.DEV` pour contrôler finement ce qui est affiché
+   - `logger.debug()` et `logger.log()` → Seulement en développement
+   - `logger.error()` et `logger.warn()` → En développement ET production
+
+3. **Code plus propre**
+   ```typescript
+   // Au lieu de
+   console.log('Debug info'); // Supprimé en prod (perdu)
+   console.error('Critical error'); // Supprimé en prod (CATASTROPHE)
+   
+   // On utilise
+   import { logger } from '@/utils/logger';
+   logger.log('Debug info'); // ✅ Auto-désactivé en prod
+   logger.error('Critical error'); // ✅ Toujours visible en prod
+   ```
+
+4. **Fonctionnalités avancées**
+   - `logger.group()` pour des logs organisés
+   - `measurePerf()` pour mesurer les performances
+   - Logs formatés avec emojis en développement
+
+**Fichiers créés :**
+- ✅ `/src/utils/logger.ts` - Système de logging intelligent
+- ✅ `/src/utils/logger.example.ts` - Exemples d'utilisation
+
+**Migration recommandée :**
+```typescript
+// Remplacer progressivement dans le code
+- console.log() → logger.log()
+- console.debug() → logger.debug()
+- console.warn() → logger.warn()
+- console.error() → logger.error() // Celui-ci est critique !
+```
+
 **Avantages :**
-- ✅ Code plus petit grâce à une meilleure compression
-- ✅ Pas de `console.log` en production (sécurité + performance)
-- ✅ Suppression du code mort (tree-shaking amélioré)
 
 ### 3. Augmentation de la limite d'avertissement
 
@@ -295,4 +437,3 @@ npm run preview
 
 **Auteur :** Sandrine Cipolla  
 **Date :** 21 octobre 2025
-

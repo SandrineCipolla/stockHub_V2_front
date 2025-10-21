@@ -268,7 +268,11 @@ export const Dashboard: React.FC = () => {
                             value={searchTerm}
                             debounce={300}
                             clearable={true}
-                            onsh-search-change={(e: SearchChangeEvent) => handleSearchChange(e.detail.query)}
+                            onsh-search-change={(e: SearchChangeEvent) => {
+                                if (e.detail && typeof e.detail.query === 'string') {
+                                    handleSearchChange(e.detail.query);
+                                }
+                            }}
                             onsh-search-clear={() => setSearchTerm('')}
                             aria-label="Rechercher un produit"
                         />

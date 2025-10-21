@@ -32,8 +32,14 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // Supprimer les console.log en production
-        drop_debugger: true,
+        // ✅ Ne PAS supprimer les console.* en production
+        // On utilise src/utils/logger.ts pour un contrôle fin des logs
+        // Avantages :
+        // - Les erreurs critiques restent visibles en production pour le débogage
+        // - Les logs de debug sont automatiquement désactivés en production
+        // - Pas besoin de drop_console qui supprime TOUT (y compris les erreurs)
+        drop_console: false,
+        drop_debugger: true, // Supprimer les debugger (ceux-ci sont toujours inutiles en prod)
       },
     },
   },

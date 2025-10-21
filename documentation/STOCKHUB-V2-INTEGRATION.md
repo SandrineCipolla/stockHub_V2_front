@@ -225,7 +225,7 @@ Remplacer les composants React simples par les Web Components équivalents.
   value={name}
   error={!!errors.name}
   errorMessage={errors.name}
-  onsh-input-change={(e: CustomEvent) => setName(e.detail.value)}
+  onsh-input-change={(e: CustomEvent<{ value: string }>) => setName(e.detail.value)}
 />
 ```
 

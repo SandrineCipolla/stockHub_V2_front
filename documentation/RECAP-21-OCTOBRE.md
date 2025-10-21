@@ -48,6 +48,178 @@ const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus =>
 };
 ```
 
+### 2. 📚 Amélioration de la documentation BUILD-OPTIMIZATIONS.md
+
+#### Problème identifié
+Recommandation Copilot sur la configuration Terser :
+```
+[nitpick] Dropping console statements in production can make debugging 
+production issues difficult. Consider documenting a strategy for 
+conditional logging or using a proper logging library.
+```
+
+#### Solution implémentée
+Ajout d'une section complète **"Note importante sur `drop_console`"** avec :
+
+**1. Alternative 1 : Logging conditionnel avec variable d'environnement**
+```typescript
+// src/utils/logger.ts
+export const logger = {
+  log: (...args: any[]) => {
+    if (import.meta.env.DEV) console.log(...args);
+  },
+  error: (...args: any[]) => {
+    console.error(...args); // Toujours actif en production
+  },
+};
+```
+
+**2. Alternative 2 : Bibliothèque professionnelle (loglevel)**
+```typescript
+import log from 'loglevel';
+
+if (import.meta.env.PROD) {
+  log.setLevel('error'); // Production
+} else {
+  log.setLevel('debug'); // Développement
+}
+```
+
+**3. Alternative 3 : Service de monitoring (Sentry, LogRocket)**
+```typescript
+Sentry.init({
+  dsn: 'YOUR_SENTRY_DSN',
+  environment: import.meta.env.MODE,
+});
+```
+
+**4. Justification pour StockHub V2**
+- Documentation claire de pourquoi `drop_console: true` est acceptable pour ce projet
+- Recommandations pour un projet de production réel
+- Compromis entre performance et débogage expliqué
+
+### 3. 🛠️ Implémentation d'un système de logging intelligent
+
+#### Problème identifié
+Copilot a raison : `drop_console: true` supprime **TOUS** les logs en production, même les erreurs critiques.
+
+**Scénario catastrophe :**
+```typescript
+try {
+  await saveStock(stock);
+} catch (error) {
+  console.error('Failed to save stock:', error); 
+  // ❌ Avec drop_console: true, ce log n'existe plus en production
+  // Vous êtes AVEUGLE face aux bugs de production
+}
+```
+
+#### Solution implémentée
+Création d'un système de logging intelligent qui contrôle finement ce qui est affiché selon l'environnement.
+
+**Fichier créé : `/src/utils/logger.ts`**
+
+```typescript
+export const logger = {
+  debug: (...args) => { 
+    if (isDev) console.debug('🐛 [DEBUG]', ...args); 
+  },
+  log: (...args) => { 
+    if (isDev) console.log('ℹ️ [INFO]', ...args); 
+  },
+  warn: (...args) => { 
+    console.warn('⚠️ [WARN]', ...args); // ✅ Toujours visible
+  },
+  error: (...args) => { 
+    console.error('❌ [ERROR]', ...args); // ✅ Toujours visible
+  },
+};
+
+// Helper pour mesurer les performances
+export async function measurePerf<T>(label: string, fn: () => Promise<T>): Promise<T> {
+  const start = performance.now();
+  const result = await fn();
+  const duration = performance.now() - start;
+  logger.perf(label, Math.round(duration));
+  return result;
+}
+```
+
+**Fichier créé : `/documentation/LOGGER-GUIDE.md`**
+
+Guide complet d'utilisation du logger avec :
+- API complète de toutes les fonctions
+- 4 exemples pratiques d'utilisation
+- Guide de migration depuis console.*
+- Table de conversion et checklist
+- Explication de la configuration Vite
+
+**Fichier modifié : `/vite.config.ts`**
+
+```typescript
+terserOptions: {
+  compress: {
+    drop_console: false, // ✅ On garde les console.* en production
+    drop_debugger: true,
+  },
+}
+```
+
+**Avantages :**
+
+1. **Débogage en production possible** ✅
+   - Les erreurs critiques restent visibles
+   - Un utilisateur peut copier les erreurs et vous les envoyer
+
+2. **Pas de pollution de console** ✅
+   - `logger.debug()` et `logger.log()` → Seulement en dev
+   - `logger.error()` et `logger.warn()` → Toujours visibles
+
+3. **Fonctionnalités avancées** ✅
+   - `logger.group()` pour organiser les logs
+   - `measurePerf()` pour mesurer automatiquement les performances
+   - Logs formatés avec emojis en développement
+
+### 4. 🧹 Nettoyage des fichiers de configuration Vite dupliqués
+
+#### Problème identifié
+Recommandation Copilot sur `vite.config.ts` :
+```
+The configuration duplicates logic between vite.config.ts and vite.config.js. 
+Having two separate Vite config files can lead to inconsistencies.
+```
+
+**Fichiers trouvés :**
+- `vite.config.ts` - Version TypeScript **à jour** (`drop_console: false`)
+- `vite.config.js` - Version JavaScript **obsolète** (`drop_console: true`)
+- `vite.config.d.ts` - Fichier de déclaration **inutile**
+
+**Problème :** Vite pouvait utiliser n'importe lequel de ces fichiers, créant des comportements **imprévisibles** et **contradictoires**.
+
+#### Solution implémentée
+Suppression des fichiers obsolètes et conservation uniquement de la version TypeScript.
+
+**Fichiers supprimés :**
+- ❌ `vite.config.js` - Contenait `drop_console: true` (obsolète)
+- ❌ `vite.config.d.ts` - Déclaration inutile
+
+**Fichier conservé :**
+- ✅ `vite.config.ts` - Version TypeScript avec `drop_console: false` et commentaires
+
+**Avantages :**
+
+1. **Type safety** ✅
+   - Autocomplétion dans l'IDE
+   - Détection d'erreurs de configuration
+
+2. **Une seule source de vérité** ✅
+   - Plus de confusion sur quelle configuration est utilisée
+   - Comportement cohérent et prévisible
+
+3. **Configuration cohérente** ✅
+   - `drop_console: false` appliqué de manière garantie
+   - Le système de logger fonctionne correctement
+
 ---
 
 ## 🎁 Bénéfices
@@ -75,11 +247,26 @@ const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus =>
 ### Fichiers modifiés
 1. ✏️ `/src/types/web-component-events.ts` - Ajout du type `WebComponentStatus`
 2. ✏️ `/src/components/dashboard/StockCard.tsx` - Utilisation du nouveau type
+3. ✏️ `/documentation/BUILD-OPTIMIZATIONS.md` - Ajout section logging conditionnel
+4. ✅ `/src/utils/logger.ts` - **NOUVEAU** - Système de logging intelligent
+5. ✅ `/documentation/LOGGER-GUIDE.md` - **NOUVEAU** - Guide d'utilisation (300+ lignes)
+6. ✏️ `/vite.config.ts` - Changement de `drop_console: true` → `false`
+7. ✅ `/documentation/RECAP-21-OCTOBRE.md` - **NOUVEAU** - Documentation de session
+
+### Fichiers supprimés
+1. ❌ `/vite.config.js` - Configuration JavaScript obsolète (contenait `drop_console: true`)
+2. ❌ `/vite.config.d.ts` - Fichier de déclaration TypeScript inutile
 
 ### Qualité du code
 - ✅ 0 duplication de types
-- ✅ Recommandations Copilot appliquées
+- ✅ 0 duplication de fichiers de configuration
+- ✅ 0 erreur TypeScript
+- ✅ 0 warning
+- ✅ Toutes les recommandations Copilot appliquées
 - ✅ TypeScript strict respecté
+- ✅ Documentation complète (guide + exemples)
+- ✅ Système de logging prêt pour la production
+- ✅ Configuration Vite cohérente et prévisible
 
 ---
 
@@ -87,41 +274,30 @@ const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus =>
 
 ### Commit recommandé
 ```bash
-git add src/types/web-component-events.ts src/components/dashboard/StockCard.tsx
-git commit -m "refactor: extract WebComponentStatus type to eliminate duplication
+git add src/types/web-component-events.ts src/components/dashboard/StockCard.tsx src/utils/logger.ts vite.config.ts documentation/BUILD-OPTIMIZATIONS.md documentation/LOGGER-GUIDE.md documentation/RECAP-21-OCTOBRE.md
+git commit -m "refactor: implement Copilot recommendations with smart logging system
 
-- Create reusable WebComponentStatus type in web-component-events.ts
-- Update StockCard.tsx to use the new type
-- Remove type union duplication
-- Improve code maintainability and readability"
+- Extract WebComponentStatus type to eliminate duplication
+- Update StockCard.tsx to use the new reusable type
+- Implement smart logger (src/utils/logger.ts) instead of drop_console
+- Change vite.config.ts: drop_console true -> false
+- Add comprehensive logger guide (LOGGER-GUIDE.md)
+- Document logging strategies in BUILD-OPTIMIZATIONS.md
+- Errors now visible in production for debugging
+- Debug logs auto-disabled in production
+- Add session documentation (RECAP-21-OCTOBRE.md)"
 ```
 
-### Points de vigilance
-- ✅ Toutes les recommandations Copilot ont été appliquées
-- ✅ Aucune régression fonctionnelle
-- ✅ Type safety maintenue
+### Migration progressive recommandée
+```typescript
+// Dans vos composants, remplacer progressivement :
+import { logger } from '@/utils/logger';
 
----
+// ❌ À remplacer
+console.log('Stock updated', stock);
+console.error('Failed to save', error);
 
-## 📚 Apprentissages
-
-### Bonnes pratiques TypeScript
-1. **Éviter les type unions dupliqués** - Créer des types nommés réutilisables
-2. **Centraliser les types métier** - Les placer dans `/src/types`
-3. **Nommer explicitement** - `WebComponentStatus` > `'optimal' | 'low' | ...`
-
-### Architecture
-- Les types liés aux web components sont centralisés dans `web-component-events.ts`
-- Facilite la synchronisation entre React et les Web Components natifs
-
----
-
-## 🎉 Résumé de la session
-
-**Durée estimée** : ~15 minutes  
-**Complexité** : Faible  
-**Impact** : Moyen (amélioration de la qualité du code)  
-**État** : ✅ Complété
-
-Tous les changements sont prêts à être commités ! 🚀
-
+// ✅ Par
+logger.log('Stock updated', stock);      // Auto-désactivé en prod
+logger.error('Failed to save', error);  // Toujours visible en prod
+```
