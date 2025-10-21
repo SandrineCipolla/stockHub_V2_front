@@ -18,6 +18,14 @@ Le Design System a été installé depuis GitHub :
 }
 ```
 
+### Solution Technique
+
+L'intégration utilise une **solution hybride** :
+- Le dossier `dist/` reste dans `.gitignore` (bonne pratique)
+- Le script `prepare` dans le Design System build automatiquement lors de `npm install`
+- Les CSS tokens sont copiés automatiquement dans `dist/tokens/` pendant le build
+- Le champ `exports` expose le fichier CSS pour Vite
+
 ---
 
 ## 📦 Composants Disponibles
@@ -227,10 +235,18 @@ npm install git+https://github.com/SandrineCipolla/stockhub_design_system.git#v2
 1. Utiliser le nom complet : `onsh-button-click` (pas `onClick`)
 2. Vérifier la console : `CustomEvent` émis ?
 
-### Style cassé
+### Style cassé / Composant non stylisé
 
 1. Vérifier `data-theme="dark"` sur le parent
-2. Vérifier que les CSS variables sont chargées
+2. Vérifier que les CSS variables sont chargées : `import '@stockhub/design-system/dist/tokens/design-tokens.css';`
+3. Vérifier dans la console que les variables CSS existent : `getComputedStyle(document.documentElement).getPropertyValue('--color-primary-500')`
+
+### Erreur "Failed to resolve import @stockhub/design-system/dist/tokens/design-tokens.css"
+
+Ce problème est résolu dans la version actuelle. Si vous rencontrez cette erreur :
+1. Réinstaller le package : `npm install git+https://github.com/SandrineCipolla/stockhub_design_system.git#feature/stockhub-v2-components --force`
+2. Redémarrer le serveur de dev : `npm run dev`
+3. Vérifier que le fichier existe : `node_modules/@stockhub/design-system/dist/tokens/design-tokens.css`
 
 ---
 
