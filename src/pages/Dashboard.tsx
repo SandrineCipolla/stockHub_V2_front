@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {BarChart3, Download, Plus, Search} from 'lucide-react';
 
-
 import {Header} from '@/components/layout/Header';
 import {NavSection} from '@/components/layout/NavSection';
 import {MetricCard} from '@/components/dashboard/MetricCard';
@@ -10,11 +9,11 @@ import {AISummaryWidget} from '@/components/ai/AISummaryWidget';
 import {Button} from '@/components/common/Button';
 import {Card} from '@/components/common/Card';
 
-
 import {useStocks} from '@/hooks/useStocks';
 import {useDataExport} from '@/hooks/useFrontendState';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {generateAISuggestions} from '@/utils/aiPredictions';
+import type {SearchChangeEvent} from '@/types/web-component-events';
 
 export const Dashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -269,7 +268,7 @@ export const Dashboard: React.FC = () => {
                             value={searchTerm}
                             debounce={300}
                             clearable={true}
-                            onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.detail.query)}
+                            onsh-search-change={(e: SearchChangeEvent) => handleSearchChange(e.detail.query)}
                             onsh-search-clear={() => setSearchTerm('')}
                             aria-label="Rechercher un produit"
                         />

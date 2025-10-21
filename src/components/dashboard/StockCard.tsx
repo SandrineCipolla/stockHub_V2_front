@@ -10,10 +10,11 @@ import {REDUCED_MOTION_DURATION, STOCK_CARD_ANIMATION} from '@/constants/animati
 import {formatQuantityWithUnit} from '@/utils/unitFormatter';
 import {getContainerLabel, recordUsage} from '@/utils/containerManager';
 import type {StockCardProps} from '@/types';
+import type {WebComponentStatus} from '@/types/web-component-events';
 
 // Conversion du format StockStatus (camelCase) vers le format du web component (kebab-case)
-const convertStatusToWebComponent = (status: StockStatus): 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked' => {
-    const statusMap: Record<StockStatus, 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked'> = {
+const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus => {
+    const statusMap: Record<StockStatus, WebComponentStatus> = {
         optimal: 'optimal',
         low: 'low',
         critical: 'critical',
