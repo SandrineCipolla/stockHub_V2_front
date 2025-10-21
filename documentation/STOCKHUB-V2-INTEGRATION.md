@@ -725,7 +725,7 @@ Tester après chaque phase.
 <sh-stock-card
   name="Acrylique Bleu Cobalt"
   category="Peinture"
-  last-update="Mis à jour il y a 3i"
+  last-update="Mis à jour il y a 3h"
   percentage="65"
   quantity="1 tube"
   value="€12"
