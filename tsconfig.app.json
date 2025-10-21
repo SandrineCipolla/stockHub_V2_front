@@ -50,6 +50,7 @@
   },
   "include": [
     "src/**/*",
+    "src/types/web-components.d.ts",
     "documentation/V2/ARCHITECTURE.md"
   ]
 }

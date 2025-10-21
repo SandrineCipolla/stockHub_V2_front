@@ -1,6 +1,6 @@
 # Guide d'Intégration StockHub V2
 
-**Date** : 20 Octobre 2025
+**Date** : 21 Octobre 2025 *(Mis à jour)*
 **Version Design System** : 2.0.0-rc
 **Cible** : StockHub V2 (React + TypeScript)
 
@@ -13,6 +13,22 @@ Intégrer les Web Components du Design System dans l'application React StockHub 
 - ✅ Maintenir une cohérence visuelle
 - ✅ Faciliter la maintenance
 - ✅ Préparer la future application mobile
+
+---
+
+## ⚠️ Problèmes connus et solutions
+
+### TypeScript - Erreur TS2339 sur Web Components
+
+**Problème :** TypeScript ne reconnaît pas les web components (`sh-status-badge`, etc.)
+
+**Solution complète documentée dans :** [`TROUBLESHOOTING-WEB-COMPONENTS.md`](./TROUBLESHOOTING-WEB-COMPONENTS.md)
+
+**Résumé rapide :**
+1. ✅ Corriger la syntaxe de `src/types/web-components.d.ts`
+2. ✅ Ajouter les déclarations dans `src/vite-env.d.ts`
+3. ✅ Créer une fonction de conversion pour mapper camelCase → kebab-case
+4. ✅ Redémarrer le serveur TypeScript de l'IDE
 
 ---
 

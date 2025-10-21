@@ -6,6 +6,30 @@
 
 ---
 
+## 🚨 Nouveaux Problèmes Résolus (21 Octobre 2025)
+
+### Problème TypeScript TS2339 sur Web Components
+
+**Symptôme :** `TS2339: Property 'sh-status-badge' does not exist on type 'JSX.IntrinsicElements'`
+
+**Impact :** Blocage compilation TypeScript, impossible d'utiliser les web components
+
+**Solution complète :** Voir [`documentation/TROUBLESHOOTING-WEB-COMPONENTS.md`](./documentation/TROUBLESHOOTING-WEB-COMPONENTS.md)
+
+**Leçons apprises :**
+1. ✅ Les fichiers `.d.ts` doivent avoir une syntaxe parfaite (attention aux accolades)
+2. ✅ Utiliser `vite-env.d.ts` pour les déclarations globales (toujours chargé par Vite)
+3. ✅ Créer des fonctions de conversion pour mapper camelCase → kebab-case
+4. ✅ Redémarrer le serveur TypeScript après modifications des `.d.ts`
+
+**Fichiers corrigés :**
+- `src/types/web-components.d.ts` - Correction syntaxe
+- `src/vite-env.d.ts` - Ajout déclarations web components
+- `src/components/dashboard/StockCard.tsx` - Fonction convertStatusToWebComponent()
+- `tsconfig.json` - Configuration typeRoots
+
+---
+
 ## 📊 Résultats Globaux
 
 ### Composants Testés: 10/16 (62.5%)

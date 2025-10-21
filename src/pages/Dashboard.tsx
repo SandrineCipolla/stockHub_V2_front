@@ -4,12 +4,10 @@ import {BarChart3, Download, Plus, Search,} from 'lucide-react';
 
 import {Header} from '@/components/layout/Header';
 import {NavSection} from '@/components/layout/NavSection';
-import {Footer} from '@/components/layout/Footer';
 import {MetricCard} from '@/components/dashboard/MetricCard';
 import {StockGrid} from '@/components/dashboard/StockGrid';
 import {AISummaryWidget} from '@/components/ai/AISummaryWidget';
 import {Button} from '@/components/common/Button';
-import {Input} from '@/components/common/Input';
 import {Card} from '@/components/common/Card';
 
 
@@ -51,15 +49,6 @@ export const Dashboard: React.FC = () => {
     const allAISuggestions = useMemo(() => {
         return generateAISuggestions(stocks);
     }, [stocks]);
-
-    // Calculate severity for alert banner
-    const alertSeverity = useMemo(() => {
-        const hasCritical = allAISuggestions.some(s => s.priority === 'critical');
-        const hasHigh = allAISuggestions.some(s => s.priority === 'high');
-        if (hasCritical) return 'critical';
-        if (hasHigh) return 'warning';
-        return 'info';
-    }, [allAISuggestions]);
 
     // Classes CSS basées sur le thème
     const themeClasses = {
