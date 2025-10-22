@@ -96,7 +96,6 @@ export interface StockEvent {
     details: Record<string, unknown>;
 }
 
-
 export const STOCK_STATUSES: readonly StockStatus[] = [OPTIMAL, LOW, CRITICAL, OUT_OF_STOCK, OVERSTOCKED];
 
 export const isStockStatus = (status: string): status is StockStatus => {

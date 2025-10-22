@@ -17,28 +17,9 @@ export interface BaseComponentProps {
     'data-testid'?: string;
 }
 
-export interface AccessibleComponentProps extends BaseComponentProps {
-    'aria-label'?: string;
-    'aria-labelledby'?: string;
-    'aria-describedby'?: string;
-    'aria-hidden'?: boolean;
-    role?: string;
-}
-
 // Constantes typées UI
-export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost'] ;
-export const BUTTON_SIZES = ['sm', 'md', 'lg'];
-export const BADGE_VARIANTS = ['success', 'warning', 'danger'] ;
-export const THEMES = ['light', 'dark'] ;
-
-// Type guards UI
-export const isTheme = (theme: string): theme is Theme => {
-    return THEMES.some(validTheme => validTheme === theme);
-};
-
-export const isButtonVariant = (variant: string): variant is ButtonVariant => {
-    return BUTTON_VARIANTS.some(validVariant => validVariant === variant);
-};
+export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost'];
+export const THEMES = ['light', 'dark'];
 
 // Props pour les providers
 export interface ThemeProviderProps {

@@ -3,7 +3,7 @@
 // Séparée des types métier pour respecter la séparation des responsabilités
 // ========================================
 
-import {AlertCircle, AlertTriangle, CheckCircle, TrendingUp, XCircle, type LucideIcon} from "lucide-react";
+import {AlertCircle, AlertTriangle, CheckCircle, type LucideIcon, TrendingUp, XCircle} from "lucide-react";
 import type {StockStatus} from '@/types/stock';
 
 /**
@@ -161,22 +161,22 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
     }
 };
 
-/**
- * Récupère la configuration visuelle d'un statut
- */
-export const getStatusConfig = (status: StockStatus): StockStatusConfig => {
-    return STOCK_STATUS_CONFIG[status];
-};
-
-/**
- * Trie les stocks par priorité de statut (rupture en premier)
- */
-export const sortByStatusPriority = <T extends { status: StockStatus }>(
-    items: T[]
-): T[] => {
-    return [...items].sort((a, b) => {
-        const priorityA = STOCK_STATUS_CONFIG[a.status].priority;
-        const priorityB = STOCK_STATUS_CONFIG[b.status].priority;
-        return priorityA - priorityB;
-    });
-};
+// /**
+//  * Récupère la configuration visuelle d'un statut
+//  */
+// const getStatusConfig = (status: StockStatus): StockStatusConfig => {
+//     return STOCK_STATUS_CONFIG[status];
+// };
+//
+// /**
+//  * Trie les stocks par priorité de statut (rupture en premier)
+//  */
+// const sortByStatusPriority = <T extends { status: StockStatus }>(
+//     items: T[]
+// ): T[] => {
+//     return [...items].sort((a, b) => {
+//         const priorityA = STOCK_STATUS_CONFIG[a.status].priority;
+//         const priorityB = STOCK_STATUS_CONFIG[b.status].priority;
+//         return priorityA - priorityB;
+//     });
+// };

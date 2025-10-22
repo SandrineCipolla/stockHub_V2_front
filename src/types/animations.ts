@@ -40,3 +40,14 @@ export interface AnimationVariants {
     exit?: Record<string, unknown>;
     hover?: Record<string, unknown>;
 }
+
+/**
+ * Configuration complète d'animation
+ */
+export interface AnimationConfig {
+    variants?: AnimationVariants;
+    transition?: AnimationTransition;
+    initial?: string | Record<string, unknown>;
+    animate?: string | Record<string, unknown>;
+    exit?: string | Record<string, unknown>;
+}

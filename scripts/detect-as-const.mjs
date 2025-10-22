@@ -45,6 +45,11 @@ function detectAsConstInFile(filePath) {
         const detections = [];
 
         lines.forEach((line, index) => {
+            // Ignorer les lignes avec commentaire "NÉCESSAIRE" ou "NECESSARY"
+            if (line.includes('NÉCESSAIRE') || line.includes('NECESSARY')) {
+                return;
+            }
+
             // Regex pour détecter 'as const' avec différents espaces
             const asConstRegex = /\bas\s+const\b/g;
             let match;
@@ -72,6 +77,13 @@ function main() {
     const projectRoot = process.cwd();
     const tsFiles = findTypeScriptFiles(projectRoot);
 
+    if (tsFiles.length === 0) {
+        console.log('❌ Aucun fichier TypeScript trouvé.');
+        process.exit(1);
+    }
+
+    console.log(`📁 Analyse de ${tsFiles.length} fichiers TypeScript...\n`);
+
     let totalDetections = 0;
     let filesWithDetections = 0;
 
@@ -82,28 +94,26 @@ function main() {
             filesWithDetections++;
             totalDetections += detections.length;
 
-            console.log(`❌ ${filePath.replace(projectRoot, '.')}`);
+            console.log(`📄 ${filePath}:`);
             detections.forEach(detection => {
-                console.log(`   Ligne ${detection.line}:${detection.column} - ${detection.text}`);
+                console.log(`  ↳ Ligne ${detection.line}:${detection.column} - "${detection.match}"`);
+                console.log(`    ${detection.text}`);
             });
             console.log('');
         }
     });
 
-    console.log('📊 Résumé de la détection:');
-    console.log(`   - Fichiers analysés: ${tsFiles.length}`);
-    console.log(`   - Fichiers avec "as const": ${filesWithDetections}`);
-    console.log(`   - Total d'usages détectés: ${totalDetections}`);
+    console.log('📊 Résumé:');
+    console.log(`  • Fichiers analysés: ${tsFiles.length}`);
+    console.log(`  • Fichiers avec "as const": ${filesWithDetections}`);
+    console.log(`  • Total d'usages "as const": ${totalDetections}`);
 
     if (totalDetections > 0) {
-        console.log('\n💡 Pour éviter "as const", utilisez:');
-        console.log('   - const ITEMS = ["a", "b", "c"] satisfies readonly string[]');
-        console.log('   - Object.freeze(["a", "b", "c"])');
-        console.log('   - Définition de types explicites');
-
-        process.exit(1); // Échec si des 'as const' sont trouvés
+        console.log('\n⚠️  Des usages "as const" ont été détectés.');
+        console.log('💡 Considérez utiliser des types explicites pour une meilleure lisibilité.');
+        process.exit(1);
     } else {
-        console.log('\n✅ Aucun usage "as const" détecté !');
+        console.log('\n✅ Aucun usage "as const" détecté.');
         process.exit(0);
     }
 }

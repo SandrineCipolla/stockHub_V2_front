@@ -25,7 +25,17 @@
     "clean:check": "npm run type-check && npm run lint && npm run clean:deadcode",
     "pre-commit": "npm run clean:check",
     "detect:as-const": "node scripts/detect-as-const.mjs",
-    "check:strict": "npm run detect:as-const && npm run lint"
+    "check:strict": "npm run detect:as-const && npm run lint",
+    "ci:quality": "npm run type-check && npm run lint && npm run clean:deadcode && npm run detect:as-const",
+    "ci:test": "npm run test:run",
+    "ci:build": "npm run build",
+    "ci:check": "npm run ci:quality && npm run ci:test && npm run ci:build",
+    "ci:fix": "npm run lint:fix && npm run clean:fix && npm run ci:check",
+    "ci:fast": "npm run type-check && npm run lint && npm run test:run",
+    "ci:full": "npm run ci:check && npm run audit:full",
+    "debug:ci": "node scripts/debug-ci.mjs",
+    "typecheck": "npm run type-check"
+
   },
   "dependencies": {
     "framer-motion": "^12.23.24",

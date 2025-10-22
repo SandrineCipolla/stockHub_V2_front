@@ -2,24 +2,20 @@
 // TYPES API ET ÉTAT ASYNCHRONE
 // ========================================
 
-import type {LoadingState} from './error';
-
+/**
+ * État asynchrone générique pour les opérations API
+ */
 export interface AsyncState<T> {
-    status: LoadingState;
     data: T | null;
-    error: ApiError | null;
+    loading: boolean;
+    error: string | null;
 }
 
-export interface ApiError {
-    readonly code: string;
-    message: string;
-    details?: Record<string, unknown>;
-    timestamp: Date;
-    statusCode?: number;
-}
-
+/**
+ * Structure d'erreur de validation
+ */
 export interface ValidationError {
     field: string;
     message: string;
-    code: 'required' | 'invalid' | 'min' | 'max' | 'pattern';
+    code?: string;
 }
