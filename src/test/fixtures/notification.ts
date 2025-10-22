@@ -118,13 +118,13 @@ export const mockNotificationScenarios = {
     ...mockNotifications,
     ...Array.from({ length: 15 }, (_, i) => ({
       id: `notif-bulk-${i + 6}`,
-      type: 'info' as const,
+      type: 'info' as const, // NÉCESSAIRE pour le type union strict
       title: `Notification ${i + 6}`,
       message: `Message de notification automatique ${i + 6}`,
       timestamp: new Date(Date.now() - i * 3600000).toISOString(),
       isRead: i % 3 === 0,
-      priority: 'low' as const,
-      category: 'system' as const
+      priority: 'low' as const, // NÉCESSAIRE pour le type union strict
+      category: 'system' as const // NÉCESSAIRE pour le type union strict
     }))
   ]
 };

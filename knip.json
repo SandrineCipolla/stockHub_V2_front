@@ -1,0 +1,32 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/main.tsx",
+    "src/vite-env.d.ts",
+    "scripts/**/*.{ts,mts,mjs}",
+    "vitest.config.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}",
+    "scripts/**/*.{ts,mts,mjs}"
+  ],
+  "ignore": [
+    "src/test/**",
+    "coverage/**",
+    "dist/**",
+    "documentation/**",
+    "audits/**"
+  ],
+  "ignoreDependencies": [
+    "stockhub_design_system"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": false,
+  "ignoreBinaries": ["tsx"],
+  "workspaces": {
+    ".": {
+      "entry": "src/main.tsx"
+    }
+  }
+}
+

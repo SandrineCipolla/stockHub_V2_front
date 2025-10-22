@@ -26,18 +26,18 @@ export interface AccessibleComponentProps extends BaseComponentProps {
 }
 
 // Constantes typées UI
-export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost'] as const;
-export const BUTTON_SIZES = ['sm', 'md', 'lg'] as const;
-export const BADGE_VARIANTS = ['success', 'warning', 'danger'] as const;
-export const THEMES = ['light', 'dark'] as const;
+export const BUTTON_VARIANTS = ['primary', 'secondary', 'ghost'] ;
+export const BUTTON_SIZES = ['sm', 'md', 'lg'];
+export const BADGE_VARIANTS = ['success', 'warning', 'danger'] ;
+export const THEMES = ['light', 'dark'] ;
 
 // Type guards UI
 export const isTheme = (theme: string): theme is Theme => {
-    return THEMES.includes(theme as Theme);
+    return THEMES.some(validTheme => validTheme === theme);
 };
 
 export const isButtonVariant = (variant: string): variant is ButtonVariant => {
-    return BUTTON_VARIANTS.includes(variant as ButtonVariant);
+    return BUTTON_VARIANTS.some(validVariant => validVariant === variant);
 };
 
 // Props pour les providers

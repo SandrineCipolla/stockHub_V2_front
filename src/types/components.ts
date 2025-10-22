@@ -51,9 +51,9 @@ export interface StockCardProps {
     stock: Stock;
     index?: number;
     isLoaded?: boolean;
-    onView?: (stockId: number) => void;
-    onEdit?: (stockId: number) => void;
-    onDelete?: (stockId: number) => void;
+    onView?: (stockId: number | string) => void;
+    onEdit?: (stockId: number | string) => void;
+    onDelete?: (stockId: number | string) => void;
     isUpdating?: boolean;
     isDeleting?: boolean;
     className?: string;
@@ -62,9 +62,9 @@ export interface StockCardProps {
 export interface StockGridProps {
     stocks: Stock[];
     isLoaded?: boolean;
-    onView?: (stockId: number) => void;
-    onEdit?: (stockId: number) => void;
-    onDelete?: (stockId: number) => void;
+    onView?: (stockId: number | string) => void;
+    onEdit?: (stockId: number | string) => void;
+    onDelete?: (stockId: number | string) => void;
     isUpdating?: boolean;
     isDeleting?: boolean;
     className?: string;

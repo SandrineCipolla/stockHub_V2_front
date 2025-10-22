@@ -6,6 +6,17 @@ import {stockData} from "@/data/stockData.ts";
 
 export type {CreateStockData, UpdateStockData};
 
+/**
+ * Génère un ID temporaire unique pour les nouveaux stocks.
+ * Ces IDs temporaires commencent par 'temp-' et seront remplacés
+ * par l'ID réel de la base de données lors de la sauvegarde.
+ *
+ * @returns Un ID temporaire unique sous forme de string
+ */
+const generateTemporaryId = (): string => {
+    return `temp-${crypto.randomUUID()}`;
+};
+
 // ===== HOOK PRINCIPAL POUR GESTION DES STOCKS =====
 export const useStocks = () => {
     // Persistance dans localStorage avec gestion d'erreurs
@@ -91,8 +102,10 @@ export const useStocks = () => {
                 stockData.maxThreshold || 100
             );
 
+            // ✅ CORRIGÉ : Utilisation d'un UUID temporaire pour éviter les conflits
+            // Cet ID sera remplacé par l'ID réel de la BD lors de la sauvegarde côté serveur
             const newStock: Stock = {
-                id: Math.max(...(stocks || []).map(s => s.id), 0) + 1,
+                id: generateTemporaryId(),
                 ...stockData,
                 status,
                 lastUpdate: 'maintenant'
@@ -185,7 +198,7 @@ export const useStocks = () => {
 
     // Supprimer un stock - FIX: useCallback avec dépendances stables
     const deleteStockAction = useAsyncAction(
-        useCallback(async (stockId: number): Promise<void> => {
+        useCallback(async (stockId: number | string): Promise<void> => {
             if (!stocks) {
                 throw createFrontendError(
                     'unknown',
@@ -213,7 +226,7 @@ export const useStocks = () => {
 
     // Supprimer plusieurs stocks - FIX: useCallback avec dépendances stables
     const deleteMultipleStocksAction = useAsyncAction(
-        useCallback(async (stockIds: number[]): Promise<void> => {
+        useCallback(async (stockIds: (number | string)[]): Promise<void> => {
             if (!stocks) {
                 throw createFrontendError(
                     'unknown',
@@ -295,7 +308,7 @@ export const useStocks = () => {
 
     // ===== FONCTIONS UTILITAIRES - FIX: useCallback pour éviter re-création =====
 
-    const getStockById = useCallback((id: number): Stock | undefined => {
+    const getStockById = useCallback((id: number | string): Stock | undefined => {
         return stocks?.find(stock => stock.id === id);
     }, [stocks]);
 
@@ -311,8 +324,8 @@ export const useStocks = () => {
     const loadStocks = useCallback(() => loadStocksAction.execute(), [loadStocksAction]);
     const createStock = useCallback((data: CreateStockData) => createStockAction.execute(data), [createStockAction]);
     const updateStock = useCallback((data: UpdateStockData) => updateStockAction.execute(data), [updateStockAction]);
-    const deleteStock = useCallback((id: number) => deleteStockAction.execute(id), [deleteStockAction]);
-    const deleteMultipleStocks = useCallback((ids: number[]) => deleteMultipleStocksAction.execute(ids), [deleteMultipleStocksAction]);
+    const deleteStock = useCallback((id: number | string) => deleteStockAction.execute(id), [deleteStockAction]);
+    const deleteMultipleStocks = useCallback((ids: (number | string)[]) => deleteMultipleStocksAction.execute(ids), [deleteMultipleStocksAction]);
 
     // ===== RETURN OBJECT =====
     return {

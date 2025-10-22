@@ -1,9 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import type {
-    AsyncFrontendState,
-    FrontendError,
-    FrontendErrorType
-} from '@/types';
+import type {AsyncFrontendState, FrontendError, FrontendErrorType} from '@/types';
 
 // ===== HOOK PRINCIPAL POUR GESTION D'ÉTATS =====
 export const useFrontendState = <T>(initialData: T | null = null) => {
@@ -123,11 +119,22 @@ export const createFrontendError = (
         timestamp: new Date()
     };
 
-
     if (field) error.field = field;
     if (details) error.details = details;
 
     return error;
+};
+
+// ===== FONCTION UTILITAIRE POUR VALIDER LES ERREURS =====
+const isFrontendError = (error: unknown): error is FrontendError => {
+    return (
+        typeof error === 'object' &&
+        error !== null &&
+        'type' in error &&
+        'message' in error &&
+        'id' in error &&
+        'timestamp' in error
+    );
 };
 
 // ===== HOOK POUR VALIDATION DE FORMULAIRES =====
@@ -349,8 +356,8 @@ export const useDataExport = () => {
             exportState.setData(blob);
             return true;
         } catch (error) {
-            if (error instanceof Object && 'type' in error) {
-                exportState.setError(error as FrontendError);
+            if (isFrontendError(error)) {
+                exportState.setError(error);
             } else {
                 exportState.setError(createFrontendError(
                     'export',

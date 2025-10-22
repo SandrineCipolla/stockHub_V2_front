@@ -17,6 +17,6 @@ export interface UseAsyncReturn<T> {
     data: T | null;
     loading: boolean;
     error: Error | null;
-    execute: (...args: any[]) => Promise<T>;
+    execute: (...args: unknown[]) => Promise<T>;
     reset: () => void;
 }

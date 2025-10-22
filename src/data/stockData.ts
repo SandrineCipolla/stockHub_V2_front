@@ -1,4 +1,4 @@
-import {Stock} from '@/types';
+import {CRITICAL, LOW, OPTIMAL, OVERSTOCKED, Stock} from '@/types';
 
 // Données de stock mockées
 export const stockData: Stock[] = [
@@ -7,7 +7,7 @@ export const stockData: Stock[] = [
         name: "MyFirstStock",
         quantity: 156,
         value: 2450,
-        status: "optimal",
+        status: OPTIMAL,
         lastUpdate: "2h",
         category: "Électronique",
         minThreshold: 10,
@@ -18,7 +18,7 @@ export const stockData: Stock[] = [
         name: "MonTest",
         quantity: 89,
         value: 1780,
-        status: "optimal",
+        status: OPTIMAL,
         lastUpdate: "1h",
         category: "Accessoires",
         minThreshold: 10,
@@ -29,7 +29,7 @@ export const stockData: Stock[] = [
         name: "StockFaible",
         quantity: 3,
         value: 150,
-        status: "low",
+        status: LOW,
         lastUpdate: "30min",
         category: "Fournitures",
         minThreshold: 10,
@@ -40,7 +40,7 @@ export const stockData: Stock[] = [
         name: "Stock Critique",
         quantity: 0,
         value: 0,
-        status: "critical",
+        status: CRITICAL,
         lastUpdate: "5min",
         category: "Urgence",
         minThreshold: 10,
@@ -51,7 +51,7 @@ export const stockData: Stock[] = [
         name: 'SurStock',
         quantity: 250,  // > maxThreshold
         value: 3750,
-        status: 'overstocked',
+        status: OVERSTOCKED,
         lastUpdate: '1h',
         category: 'Bureau',
         minThreshold: 10,
@@ -59,34 +59,3 @@ export const stockData: Stock[] = [
         description: 'Stock en surstockage'
     }
 ];
-
-// Statistiques métrique
-// export const metricsData = [
-//     {
-//         id: 1,
-//         title: "Total Produits",
-//         value: "248",
-//         change: "+8",
-//         isPositive: true,
-//         iconType: "success" as const,
-//         icon: "Package"
-//     },
-//     {
-//         id: 2,
-//         title: "Stock Faible",
-//         value: "12",
-//         change: "-3",
-//         isPositive: false,
-//         iconType: "warning" as const,
-//         icon: "AlertTriangle"
-//     },
-//     {
-//         id: 3,
-//         title: "Ce mois",
-//         value: "+15%",
-//         change: "+2%",
-//         isPositive: true,
-//         iconType: "info" as const,
-//         icon: "TrendingUp"
-//     }
-// ];

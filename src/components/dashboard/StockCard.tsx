@@ -5,9 +5,13 @@ import {Button} from '@/components/common/Button';
 import {StatusBadge} from '@/components/common/StatusBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {useReducedMotion} from '@/hooks/useReducedMotion';
-import {STOCK_STATUS_CONFIG, type StockStatus} from '@/types/stock';
+import {STOCK_STATUS_CONFIG} from '@/constants/stockConfig';
+import type {StockStatus} from '@/types/stock';
 import {STOCK_CARD_ANIMATION, REDUCED_MOTION_DURATION} from '@/constants/animations';
-import type {StockCardProps} from '@/types';
+import type {StockCardProps, EasingType} from '@/types';
+
+// Easing par défaut pour les animations de carte
+const CARD_EASING: EasingType = 'easeOut';
 
 export const StockCard: React.FC<StockCardProps> = ({
                                                         stock,
@@ -59,7 +63,7 @@ export const StockCard: React.FC<StockCardProps> = ({
             scale: prefersReducedMotion ? 1 : STOCK_CARD_ANIMATION.EXIT_SCALE,
             transition: {
                 duration: prefersReducedMotion ? REDUCED_MOTION_DURATION : STOCK_CARD_ANIMATION.EXIT_DURATION,
-                ease: 'easeOut' as const,
+                ease: CARD_EASING,
             },
         },
     };
@@ -98,7 +102,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                           y: STOCK_CARD_ANIMATION.HOVER_Y_OFFSET,
                           transition: {
                               duration: STOCK_CARD_ANIMATION.HOVER_DURATION,
-                              ease: 'easeOut' as const,
+                              ease: CARD_EASING,
                           },
                       }
             }

@@ -8,6 +8,11 @@ export default tseslint.config(
   { ignores: [
       'dist',
           'src/propositionIA.tsx',
+      'src/**/__tests__/**',
+      'src/test/**',
+      'coverage/**',
+      '**/*.test.{ts,tsx}',
+      '**/*.spec.{ts,tsx}',
       ] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
@@ -26,6 +31,17 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      // 🚨 Règles strictes pour détecter les problèmes de types
+      '@typescript-eslint/no-explicit-any': 'error', // Interdit 'any'
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'never' // Interdit TOUS les casts 'as' (y compris 'as const')
+        }
+      ],
+      '@typescript-eslint/prefer-as-const': 'off', // Désactivé car on interdit tous les 'as'
+      // '@typescript-eslint/no-non-null-assertion': 'error', // Autorisé maintenant
+      '@typescript-eslint/ban-ts-comment': 'error', // Interdit @ts-ignore, @ts-nocheck
     },
   },
 )

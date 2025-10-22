@@ -22,3 +22,6 @@ export * from './error';
 
 // Types utilitaires
 export * from './utils';
+
+// Types animations
+export * from './animations';

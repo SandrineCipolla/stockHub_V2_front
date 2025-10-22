@@ -118,10 +118,11 @@ describe('StatusBadge Component', () => {
                 render(<StatusBadge status="optimal" size="sm" />);
 
                 const badge = screen.getByRole('status');
-                expect(badge.className).toContain('px-2 py-0.5 text-xs');
+                expect(badge.className).toContain('status-badge--sm');
 
                 const icon = badge.querySelector('svg');
-                expect(icon).toHaveClass('w-3', 'h-3');
+                expect(icon).toBeInTheDocument();
+                expect(icon?.getAttribute('class')).toContain('status-badge__icon--sm');
             });
         });
 
@@ -130,10 +131,11 @@ describe('StatusBadge Component', () => {
                 render(<StatusBadge status="optimal" size="md" />);
 
                 const badge = screen.getByRole('status');
-                expect(badge.className).toContain('px-3 py-1 text-sm');
+                expect(badge.className).toContain('status-badge--md');
 
                 const icon = badge.querySelector('svg');
-                expect(icon).toHaveClass('w-4', 'h-4');
+                expect(icon).toBeInTheDocument();
+                expect(icon?.getAttribute('class')).toContain('status-badge__icon--md');
             });
         });
 
@@ -142,10 +144,11 @@ describe('StatusBadge Component', () => {
                 render(<StatusBadge status="optimal" size="lg" />);
 
                 const badge = screen.getByRole('status');
-                expect(badge.className).toContain('px-4 py-1.5 text-base');
+                expect(badge.className).toContain('status-badge--lg');
 
                 const icon = badge.querySelector('svg');
-                expect(icon).toHaveClass('w-5', 'h-5');
+                expect(icon).toBeInTheDocument();
+                expect(icon?.getAttribute('class')).toContain('status-badge__icon--lg');
             });
         });
     });
@@ -187,8 +190,7 @@ describe('StatusBadge Component', () => {
                 render(<StatusBadge status="optimal" className="custom-class" />);
 
                 const badge = screen.getByRole('status');
-                expect(badge.className).toContain('inline-flex');
-                expect(badge.className).toContain('rounded-full');
+                expect(badge.className).toContain('status-badge');
                 expect(badge.className).toContain('custom-class');
             });
         });
@@ -212,7 +214,7 @@ describe('StatusBadge Component', () => {
                 expect(screen.getByText('Low')).toBeInTheDocument();
                 const badge = screen.getByRole('status');
                 expect(badge.className).toContain('bg-amber');
-                expect(badge.className).toContain('px-2 py-0.5 text-xs');
+                expect(badge.className).toContain('status-badge--sm');
             });
 
             it('should handle optimal stock status with success styling', () => {
@@ -221,7 +223,7 @@ describe('StatusBadge Component', () => {
                 expect(screen.getByText('Optimal')).toBeInTheDocument();
                 const badge = screen.getByRole('status');
                 expect(badge.className).toContain('bg-emerald');
-                expect(badge.className).toContain('px-4 py-1.5 text-base');
+                expect(badge.className).toContain('status-badge--lg');
             });
         });
 
@@ -232,7 +234,7 @@ describe('StatusBadge Component', () => {
                 const badge = screen.getByRole('status');
                 expect(badge.querySelector('svg')).not.toBeInTheDocument();
                 expect(screen.getByText('Critical')).toBeInTheDocument();
-                expect(badge.className).toContain('px-2 py-0.5 text-xs');
+                expect(badge.className).toContain('status-badge--sm');
             });
         });
     });

@@ -64,7 +64,7 @@ export const createMockUseDataExport = (overrides = {}) => ({
     data: null,
     loading: false,
     error: null,
-    status: 'idle' as const,
+    status: 'idle' as const, // NÉCESSAIRE pour le type LoadingState
     setLoading: vi.fn(),
     setData: vi.fn(),
     setError: vi.fn(),

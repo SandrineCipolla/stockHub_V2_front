@@ -1,5 +1,5 @@
 import React from 'react';
-import {STOCK_STATUS_CONFIG} from '@/types/stock';
+import {STOCK_STATUS_CONFIG} from '@/constants/stockConfig';
 import {useTheme} from '@/hooks/useTheme';
 
 import {StatusBadgeProps} from "@/types";

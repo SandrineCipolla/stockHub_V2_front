@@ -176,7 +176,7 @@ describe('Header Component', () => {
             });
 
             it('should work with user theme preferences', () => {
-                const userWithLightTheme = { ...mockDefaultUser, preferences: { ...mockDefaultUser.preferences, theme: 'light' as const } };
+                const userWithLightTheme = { ...mockDefaultUser, preferences: { ...mockDefaultUser.preferences, theme: 'light' as const } }; // NÉCESSAIRE pour le type Theme strict
 
                 vi.mocked(useThemeModule.useTheme).mockReturnValue({
                     theme: userWithLightTheme.preferences.theme,

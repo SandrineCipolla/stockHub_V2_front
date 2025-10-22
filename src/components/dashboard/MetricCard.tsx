@@ -14,6 +14,22 @@ const iconMap: IconComponentMap = {
     'trending-up': TrendingUp,
 };
 
+/**
+ * Calcule la fonction d'easing exponentielle pour l'animation du compteur.
+ * Optimisée en dehors du composant pour éviter les re-créations à chaque render.
+ * Utilise easeOutExpo pour un effet d'accélération puis de ralentissement progressif.
+ *
+ * @param t - Temps actuel (0 à d)
+ * @param b - Valeur de début
+ * @param c - Changement de valeur (différence entre fin et début)
+ * @param d - Durée totale
+ * @returns La valeur interpolée selon la courbe d'easing
+ */
+const exponentialEasing = (t: number, b: number, c: number, d: number): number => {
+    if (t === d) return b + c;
+    return c * (-Math.pow(2, METRIC_CARD_ANIMATION.EASING_FACTOR * t / d) + 1) + b;
+};
+
 export const MetricCard: React.FC<MetricCardProps> = ({
                                                           title,
                                                           value,
@@ -37,19 +53,6 @@ export const MetricCard: React.FC<MetricCardProps> = ({
      */
     const getDecimalPlaces = (value: number): number => {
         return value % 1 !== 0 ? 1 : 0;
-    };
-
-    /**
-     * Calcule la fonction d'easing exponentielle pour l'animation du compteur
-     * @param t - Temps actuel
-     * @param b - Valeur de début
-     * @param c - Changement de valeur
-     * @param d - Durée totale
-     * @returns La valeur interpolée
-     */
-    const exponentialEasing = (t: number, b: number, c: number, d: number): number => {
-        if (t === d) return b + c;
-        return c * (-Math.pow(2, METRIC_CARD_ANIMATION.EASING_FACTOR * t / d) + 1) + b;
     };
 
     const getIconBackground = (type: 'success' | 'warning' | 'info'): string => {
