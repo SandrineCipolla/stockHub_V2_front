@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {BarChart3, Download, Plus, Search} from 'lucide-react';
 
-import {Header} from '@/components/layout/Header';
+import {HeaderWrapper} from '@/components/layout/HeaderWrapper';
 import {NavSection} from '@/components/layout/NavSection';
 import {MetricCard} from '@/components/dashboard/MetricCard';
 import {StockGrid} from '@/components/dashboard/StockGrid';
@@ -168,7 +168,7 @@ export const Dashboard: React.FC = () => {
     return (
         <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
 
-            <Header />
+            <HeaderWrapper />
 
             {/* Navigation Section */}
             <NavSection>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {motion} from 'framer-motion';
-import {StockCard} from './StockCard';
+import {StockCardWrapper} from './StockCardWrapper';
 import type {StockGridProps} from '@/types';
 
 export const StockGrid: React.FC<StockGridProps> = ({
@@ -26,7 +26,7 @@ export const StockGrid: React.FC<StockGridProps> = ({
             </h3>
 
             {stocks.map((stock, index) => (
-                <StockCard
+                <StockCardWrapper
                     key={stock.id}
                     stock={stock}
                     index={index}
