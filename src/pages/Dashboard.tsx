@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {BarChart3, Download, Plus, Search} from 'lucide-react';
+import {useNavigate} from 'react-router-dom';
 
 import {HeaderWrapper} from '@/components/layout/HeaderWrapper';
 import {NavSection} from '@/components/layout/NavSection';
@@ -19,7 +20,7 @@ export const Dashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-
+    const navigate = useNavigate();
     const { theme } = useTheme();
 
     const {
@@ -193,11 +194,11 @@ export const Dashboard: React.FC = () => {
                         </Button>
                         <Button variant="secondary"
                                 icon={BarChart3}
-                                aria-label="Générer et télécharger un rapport détaillé des stocks"
-                                onClick={() => console.log('📊 Rapport détaillé')}
+                                aria-label="Voir les analyses IA et prédictions ML"
+                                onClick={() => navigate('/analytics')}
                                 className="w-auto max-w-[150px]"
                         >
-                            <span className="hidden md:hidden lg:inline">Rapport Détaillé</span>
+                            <span className="hidden md:hidden lg:inline">Analyses IA</span>
                         </Button>
                         <Button variant="secondary"
                                 icon={Search}
