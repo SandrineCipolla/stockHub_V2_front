@@ -44,7 +44,7 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
         if (cardRef.current && aiSuggestions.length > 0) {
             customElements.whenDefined('sh-stock-card').then(() => {
                 if (cardRef.current) {
-                    // @ts-ignore - propriété native du web component
+                    // @ts-expect-error - propriété native du web component
                     cardRef.current.iaCount = aiSuggestions.length;
                 }
             });

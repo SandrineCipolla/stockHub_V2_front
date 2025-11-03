@@ -48,7 +48,7 @@ export const ButtonWrapper: React.FC<ButtonProps> = ({
     const handleClick = (e: Event) => {
         if (onClick && !disabled && !loading) {
             // Créer un event synthétique React-like pour compatibilité
-            onClick(e as any);
+            onClick(e as unknown as React.MouseEvent<HTMLButtonElement>);
         }
     };
 

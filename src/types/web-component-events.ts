@@ -25,7 +25,7 @@ export interface SearchChangeEventDetail {
 
 export type SearchChangeEvent = CustomEvent<SearchChangeEventDetail>;
 
-export interface SearchClearEvent extends CustomEvent<void> {}
+export type SearchClearEvent = CustomEvent<void>;
 
 // ============================================
 // Button Events

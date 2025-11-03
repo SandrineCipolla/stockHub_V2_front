@@ -17,7 +17,7 @@ export const logger = {
    * Logs de débogage - Seulement en développement
    * @example logger.debug('User clicked button', { userId: 123 });
    */
-  debug: (...args: any[]) => {
+  debug: (...args: unknown[]) => {
     if (isDev) {
       console.debug('🐛 [DEBUG]', ...args);
     }
@@ -27,7 +27,7 @@ export const logger = {
    * Logs d'information - Seulement en développement
    * @example logger.log('Fetching stocks...');
    */
-  log: (...args: any[]) => {
+  log: (...args: unknown[]) => {
     if (isDev) {
       console.log('ℹ️ [INFO]', ...args);
     }
@@ -37,7 +37,7 @@ export const logger = {
    * Warnings - Affichés en dev ET production
    * @example logger.warn('Stock level is low', { stockId: 'ABC123' });
    */
-  warn: (...args: any[]) => {
+  warn: (...args: unknown[]) => {
     if (isDev) {
       console.warn('⚠️ [WARN]', ...args);
     } else {
@@ -50,7 +50,7 @@ export const logger = {
    * Erreurs - TOUJOURS affichées (dev ET production)
    * @example logger.error('Failed to save stock', error);
    */
-  error: (...args: any[]) => {
+  error: (...args: unknown[]) => {
     if (isDev) {
       console.error('❌ [ERROR]', ...args);
     } else {

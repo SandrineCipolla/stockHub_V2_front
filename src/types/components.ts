@@ -1,4 +1,5 @@
 import React from "react";
+import type {LucideIcon} from 'lucide-react';
 import type {BadgeVariant, ButtonVariant, ComponentSize, InputType} from './ui';
 import type {Stock, StockStatus} from './stock';
 import type {AISuggestion} from '@/utils/aiPredictions';
@@ -25,7 +26,7 @@ export interface StatusBadgeProps {
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonVariant;
     size?: ComponentSize;
-    icon?: React.ElementType;
+    icon?: LucideIcon;
     loading?: boolean;
     children?: React.ReactNode;
 }
