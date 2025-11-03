@@ -3,7 +3,6 @@ import {describe, expect, it, vi} from 'vitest'
 
 import {MetricCard} from '../MetricCard'
 import {stockHubMetricUseCases} from '@/test/fixtures/metric'
-import {DISABLE_ANIMATION_PROPS} from '@/test/fixtures/testProps'
 import type {MetricCardProps} from '@/types'
 
 vi.mock('@/hooks/useTheme', () => ({
@@ -11,10 +10,15 @@ vi.mock('@/hooks/useTheme', () => ({
 }))
 
 /**
- * Helper pour rendre un MetricCard avec les animations désactivées
+ * Props par défaut pour désactiver l'animation dans les tests
+ */
+const DISABLE_ANIMATION_PROPS = { enableAnimation: false };
+
+/**
+ * Helper pour rendre un MetricCard avec les animations désactivées par défaut
  */
 const renderMetricCard = (props: MetricCardProps) => {
-    return render(<MetricCard {...props} {...DISABLE_ANIMATION_PROPS} />)
+    return render(<MetricCard {...DISABLE_ANIMATION_PROPS} {...props} />)
 }
 
 describe('MetricCard Component', () => {
