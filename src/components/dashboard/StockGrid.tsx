@@ -25,20 +25,27 @@ export const StockGrid: React.FC<StockGridProps> = ({
                 Liste des stocks ({stocks.length} éléments)
             </h3>
 
-            {stocks.map((stock, index) => (
-                <StockCardWrapper
-                    key={stock.id}
-                    stock={stock}
-                    index={index}
-                    isLoaded={isLoaded}
-                    {...(onView && { onView })}
-                    {...(onEdit && { onEdit })}
-                    {...(onDelete && { onDelete })}
-                    isUpdating={isUpdating}
-                    isDeleting={isDeleting}
-                    aiSuggestions={aiSuggestions}
-                />
-            ))}
+            {stocks.map((stock, index) => {
+                // Filtrer les suggestions IA pour ce stock spécifique
+                const stockSuggestions = aiSuggestions.filter(
+                    suggestion => suggestion.stockId === stock.id
+                );
+
+                return (
+                    <StockCardWrapper
+                        key={stock.id}
+                        stock={stock}
+                        index={index}
+                        isLoaded={isLoaded}
+                        {...(onView && { onView })}
+                        {...(onEdit && { onEdit })}
+                        {...(onDelete && { onDelete })}
+                        isUpdating={isUpdating}
+                        isDeleting={isDeleting}
+                        aiSuggestions={stockSuggestions}
+                    />
+                );
+            })}
         </motion.section>
     );
 };

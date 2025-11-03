@@ -259,6 +259,183 @@ Le problème des couleurs venait d'une propriété Lit Element non reflétée. S
 
 ---
 
+---
+
+## 🔄 SESSION 2 : Migrations Button et IA Alert Banner
+
+### Composants migrés
+
+**Button → sh-button** :
+- Créé `ButtonWrapper.tsx` avec mapping manuel des icônes Lucide
+- Mapping : Plus, Download, BarChart3, Search
+- Gestion du thème et des événements
+- Conservé taille par défaut (md) après test utilisateur
+
+**AISummaryWidget → sh-ia-alert-banner** :
+- Créé `AIAlertBannerWrapper.tsx`
+- Conversion AISuggestion → IaAlert
+- Calcul de la severity dominante (critical/warning/info)
+- État replié par défaut pour UX améliorée
+
+### Corrections apportées
+
+**StockGrid : Filtrage des suggestions IA**
+- **Problème** : Toutes les suggestions IA étaient passées à chaque carte
+- **Symptôme** : Badge IA (1) identique sur tous les stocks
+- **Fix** : Ajout d'un filtre par `stockId` dans StockGrid.tsx
+```typescript
+const stockSuggestions = aiSuggestions.filter(
+    suggestion => suggestion.stockId === stock.id
+);
+```
+
+**Espacement amélioré** :
+- Augmentation de `mb-8` à `mb-12` entre métriques et bannière IA
+- Meilleure respiration visuelle
+
+### Points UX identifiés
+
+**Test taille des boutons** :
+- Essayé `size="lg"` sur les boutons principaux
+- Retour utilisateur : trop imposants
+- **Décision** : Conservé `size="md"` par défaut
+- Noté dans DESIGN-SYSTEM-IMPROVEMENTS.md pour ajuster le padding dans le DS
+
+**Bannière IA** :
+- Changée à `expanded: false` par défaut
+- Utilisateur peut développer au besoin
+
+---
+
+## 📝 DESIGN-SYSTEM-IMPROVEMENTS.md créé
+
+Document exhaustif des améliorations à apporter au DS :
+
+### 1. sh-button : Padding insuffisant
+- Padding actuel md : `8px 12px`
+- Suggestion : `10px 16px` (+2px vertical, +4px horizontal)
+
+### 2. sh-button : Centrage icônes mobile
+- Problème avec `hide-text-mobile`
+- Suggestion CSS pour centrage parfait
+
+### 3. sh-button : Variant primary dans cards ?
+- Question ouverte : boutons cards trop discrets ?
+- Actuellement tous en `variant="ghost"`
+
+### 4. sh-stock-card : Badge IA toujours rouge
+- **Problème critique** : Couleur rouge fixe pour tous les badges
+- Devrait adapter la couleur selon priorité (rouge/orange/bleu)
+- Nécessite ajout prop `iaSeverity` au composant
+
+### 5. sh-ia-alert-banner : Doublon d'icônes
+- Puce "•" + icône AlertTriangle
+- À retirer ligne 373 du DS
+
+### 6. sh-metric-card : Espacement mobile
+- Vérifier gap en responsive
+
+### 7. Audit responsive général
+- Checklist complète pour mobile
+
+---
+
+## 📊 État final de la migration
+
+### Composants DS intégrés ✅
+```
+✅ sh-header           (HeaderWrapper)
+✅ sh-footer           (Utilisé directement)
+✅ sh-stock-card       (StockCardWrapper)
+✅ sh-metric-card      (MetricCardWrapper)
+✅ sh-button           (ButtonWrapper)
+✅ sh-ia-alert-banner  (AIAlertBannerWrapper)
+✅ sh-search-input     (Utilisé directement)
+✅ sh-status-badge     (Dans sh-stock-card)
+```
+
+### Composants React conservés
+```
+- Card (utilisé uniquement pour écran d'erreur)
+- NavSection (wrapper layout custom)
+```
+
+### Fichiers créés
+```
+src/components/
+├── common/ButtonWrapper.tsx               (57 lignes)
+├── ai/AIAlertBannerWrapper.tsx           (86 lignes)
+├── dashboard/MetricCardWrapper.tsx       (56 lignes)
+└── dashboard/StockGrid.tsx               (Modifié - filtrage IA)
+
+documentation/
+└── DESIGN-SYSTEM-IMPROVEMENTS.md         (180 lignes)
+```
+
+---
+
+## 🐛 Problèmes connus (à corriger dans DS)
+
+### Bloquants UX
+1. **Badge IA rouge partout** - Manque de distinction visuelle urgence
+2. **Doublon icônes** dans liste alerts
+
+### Nice-to-have
+3. Padding boutons insuffisant
+4. Centrage icônes mobile
+5. Espacement metric cards mobile
+
+**Action** : Une fois ces corrections appliquées dans le DS, réinstaller le package et tout fonctionnera automatiquement sans toucher au code front.
+
+---
+
+## 💡 Décisions techniques
+
+### Pattern d'intégration web components
+```typescript
+// Pattern utilisé pour tous les wrappers
+return React.createElement('sh-component', {
+    prop1: value1,
+    'kebab-case-prop': value2,
+    'data-theme': theme,
+    'onsh-event': handleEvent
+}, children);
+```
+
+**Avantages** :
+- Pas de conflit avec TypeScript JSX
+- Props passées directement au web component
+- Support des événements custom
+
+### Gestion des icônes Lucide → String
+```typescript
+// Mapping manuel pour garantir la correspondance
+const iconMap = new Map<LucideIcon, string>([
+    [Plus, 'Plus'],
+    [Download, 'Download'],
+    // ...
+]);
+```
+
+**Pourquoi** : Les web components Lit utilisent des noms d'icônes en string, pas des composants React.
+
+---
+
+## ✅ Tests à effectuer
+
+- [ ] Vérifier affichage tous composants en light/dark mode
+- [ ] Tester responsiveness mobile
+- [ ] Vérifier accessibilité (ARIA, navigation clavier)
+- [ ] Tester tous les boutons (clicks, loading states)
+- [ ] Vérifier badges IA différenciés (après fix DS)
+- [ ] Tester expand/collapse bannière IA
+- [ ] Vérifier search input
+- [ ] Tester enregistrement session sur tubes
+
+---
+
 **Date** : 03 Novembre 2024
-**Temps passé** : ~2-3h (Migration MetricCard + Debug status colors + Fix DS)
-**Prochaine session** : Continuer migration Button → sh-button
+**Temps passé session 1** : ~2-3h (MetricCard + Debug status colors + Fix DS)
+**Temps passé session 2** : ~2-3h (Button + IA Alert + Corrections UX)
+**Temps total** : ~5h
+**Prochaine session** : Corriger le DS selon DESIGN-SYSTEM-IMPROVEMENTS.md, puis audit UI complet

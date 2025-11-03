@@ -5,8 +5,8 @@ import {HeaderWrapper} from '@/components/layout/HeaderWrapper';
 import {NavSection} from '@/components/layout/NavSection';
 import {MetricCardWrapper} from '@/components/dashboard/MetricCardWrapper';
 import {StockGrid} from '@/components/dashboard/StockGrid';
-import {AISummaryWidget} from '@/components/ai/AISummaryWidget';
-import {Button} from '@/components/common/Button';
+import {AIAlertBannerWrapper as AISummaryWidget} from '@/components/ai/AIAlertBannerWrapper';
+import {ButtonWrapper as Button} from '@/components/common/ButtonWrapper';
 import {Card} from '@/components/common/Card';
 
 import {useStocks} from '@/hooks/useStocks';
@@ -214,7 +214,7 @@ export const Dashboard: React.FC = () => {
             <main id="main-content" className="max-w-7xl mx-auto px-6 py-8" role="main">
 
                 {/* Métriques principales utilisant MetricCard */}
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" aria-labelledby="metrics-heading">
+                <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" aria-labelledby="metrics-heading">
                     <h2 id="metrics-heading" className="sr-only">Métriques principales</h2>
 
                     <MetricCardWrapper
