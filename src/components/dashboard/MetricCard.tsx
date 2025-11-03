@@ -1,14 +1,33 @@
 import React from 'react';
 import {AlertTriangle, Package, TrendingUp} from 'lucide-react';
+import CountUp from 'react-countup';
 import {Card} from '@/components/common/Card';
 import {useTheme} from '@/hooks/useTheme.ts';
+import {useReducedMotion} from '@/hooks/useReducedMotion';
+import {METRIC_CARD_ANIMATION} from '@/constants/animations';
+import {parseValue} from '@/utils/valueParser';
 import type {IconComponentMap, MetricCardProps} from '@/types';
 
-// Mapping des icônes avec typage strict
 const iconMap: IconComponentMap = {
     'package': Package,
     'alert-triangle': AlertTriangle,
     'trending-up': TrendingUp,
+};
+
+/**
+ * Calcule la fonction d'easing exponentielle pour l'animation du compteur.
+ * Optimisée en dehors du composant pour éviter les re-créations à chaque render.
+ * Utilise easeOutExpo pour un effet d'accélération puis de ralentissement progressif.
+ *
+ * @param t - Temps actuel (0 à d)
+ * @param b - Valeur de début
+ * @param c - Changement de valeur (différence entre fin et début)
+ * @param d - Durée totale
+ * @returns La valeur interpolée selon la courbe d'easing
+ */
+const exponentialEasing = (t: number, b: number, c: number, d: number): number => {
+    if (t === d) return b + c;
+    return c * (-Math.pow(2, METRIC_CARD_ANIMATION.EASING_FACTOR * t / d) + 1) + b;
 };
 
 export const MetricCard: React.FC<MetricCardProps> = ({
@@ -17,12 +36,25 @@ export const MetricCard: React.FC<MetricCardProps> = ({
                                                           icon,
                                                           color,
                                                           change,
-                                                          className = ''
+                                                          className = '',
+                                                          enableAnimation = true
                                                       }) => {
     const { theme } = useTheme();
+    const prefersReducedMotion = useReducedMotion();
     const IconComponent = iconMap[icon];
 
-    // Fonctions utilitaires pour les styles
+    const shouldAnimate = enableAnimation && !prefersReducedMotion;
+    const { number, prefix, suffix, isNumeric } = parseValue(value);
+
+    /**
+     * Détermine le nombre de décimales à afficher pour un nombre
+     * @param value - Le nombre à analyser
+     * @returns 1 si le nombre a des décimales, 0 sinon
+     */
+    const getDecimalPlaces = (value: number): number => {
+        return value % 1 !== 0 ? 1 : 0;
+    };
+
     const getIconBackground = (type: 'success' | 'warning' | 'info'): string => {
         const backgrounds = {
             success: theme === 'dark' ? 'bg-emerald-500/20' : 'bg-emerald-100',
@@ -78,7 +110,22 @@ export const MetricCard: React.FC<MetricCardProps> = ({
                 className="text-3xl font-bold mb-1"
                 aria-label={`${title}: ${value}`}
             >
-                {value}
+                {shouldAnimate ? (
+                    <>
+                        {prefix}
+                        <CountUp
+                            end={number}
+                            duration={METRIC_CARD_ANIMATION.COUNTER_DURATION}
+                            decimals={getDecimalPlaces(number)}
+                            separator={isNumeric ? ' ' : ''}
+                            useEasing={true}
+                            easingFn={exponentialEasing}
+                        />
+                        {suffix}
+                    </>
+                ) : (
+                    value
+                )}
             </div>
             <div className={`text-sm ${themeClasses.textSubtle}`}>
                 {title}

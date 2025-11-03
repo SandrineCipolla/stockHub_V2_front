@@ -25,6 +25,7 @@ export interface MetricCardData {
 
 export interface MetricCardProps extends MetricCardData {
     className?: string;
+    enableAnimation?: boolean; // Pour désactiver l'animation dans les tests
 }
 
 // Types pour la navigation

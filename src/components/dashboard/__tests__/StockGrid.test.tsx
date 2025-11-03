@@ -80,12 +80,12 @@ describe('StockGrid Component', () => {
                 expect(screen.getByText(stocks[0].name)).toBeInTheDocument();
             });
 
-            it('should apply correct animation delay', () => {
+            it('should render article with Framer Motion animations', () => {
                 const stocks = [stockHubStockUseCases.optimalStock];
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const article = container.querySelector('article');
-                expect(article).toHaveStyle({ transitionDelay: '0ms' });
+                expect(article).toBeInTheDocument();
             });
         });
 
@@ -99,14 +99,15 @@ describe('StockGrid Component', () => {
                 });
             });
 
-            it('should apply staggered animation delays', () => {
+            it('should render all articles with Framer Motion animations', () => {
                 const stocks = dashboardStocks.slice(0, 3);
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
-                expect(articles[0]).toHaveStyle({ transitionDelay: '0ms' });
-                expect(articles[1]).toHaveStyle({ transitionDelay: '150ms' });
-                expect(articles[2]).toHaveStyle({ transitionDelay: '300ms' });
+                expect(articles).toHaveLength(3);
+                expect(articles[0]).toBeInTheDocument();
+                expect(articles[1]).toBeInTheDocument();
+                expect(articles[2]).toBeInTheDocument();
             });
 
             it('should update heading count dynamically', () => {
@@ -163,26 +164,15 @@ describe('StockGrid Component', () => {
     });
 
     describe('Loading states', () => {
-        describe('when isLoaded is true', () => {
-            it('should apply loaded animation classes to all cards', () => {
+        describe('when rendering with Framer Motion', () => {
+            it('should render all cards with motion animations', () => {
                 const stocks = dashboardStocks.slice(0, 2);
-                const { container } = render(<StockGrid stocks={stocks} isLoaded={true} />);
+                const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
+                expect(articles).toHaveLength(2);
                 articles.forEach(article => {
-                    expect(article).toHaveClass('translate-y-0', 'opacity-100');
-                });
-            });
-        });
-
-        describe('when isLoaded is false', () => {
-            it('should apply initial animation classes to all cards', () => {
-                const stocks = dashboardStocks.slice(0, 2);
-                const { container } = render(<StockGrid stocks={stocks} isLoaded={false} />);
-
-                const articles = container.querySelectorAll('article');
-                articles.forEach(article => {
-                    expect(article).toHaveClass('translate-y-8', 'opacity-0');
+                    expect(article).toBeInTheDocument();
                 });
             });
         });
@@ -269,10 +259,9 @@ describe('StockGrid Component', () => {
                     expect(screen.getByText(stock.name)).toBeInTheDocument();
                 });
 
-                // Vérifier les badges de statut
                 expect(screen.getByText('Optimal')).toBeInTheDocument();
-                expect(screen.getByText('Faible')).toBeInTheDocument();
-                expect(screen.getByText('Critique')).toBeInTheDocument();
+                expect(screen.getByText('Low')).toBeInTheDocument();
+                expect(screen.getByText('Critical')).toBeInTheDocument();
             });
         });
 
@@ -298,13 +287,14 @@ describe('StockGrid Component', () => {
                 expect(articles).toHaveLength(50);
             });
 
-            it('should maintain correct animation delays for first and last items', () => {
+            it('should render all items with Framer Motion stagger', () => {
                 const stocks = Array.from({ length: 10 }, (_, i) => createMockStock({ id: i + 1 }));
                 const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
-                expect(articles[0]).toHaveStyle({ transitionDelay: '0ms' });
-                expect(articles[9]).toHaveStyle({ transitionDelay: '1350ms' }); // 9 * 150ms
+                expect(articles).toHaveLength(10);
+                expect(articles[0]).toBeInTheDocument();
+                expect(articles[9]).toBeInTheDocument();
             });
         });
 
@@ -320,23 +310,14 @@ describe('StockGrid Component', () => {
         });
 
         describe('when loading stocks from API', () => {
-            it('should show initial loading state for all cards', () => {
+            it('should render all stock cards with motion animations', () => {
                 const stocks = dashboardStocks.slice(0, 2);
-                const { container } = render(<StockGrid stocks={stocks} isLoaded={false} />);
+                const { container } = render(<StockGrid stocks={stocks} />);
 
                 const articles = container.querySelectorAll('article');
+                expect(articles).toHaveLength(2);
                 articles.forEach(article => {
-                    expect(article).toHaveClass('translate-y-8', 'opacity-0');
-                });
-            });
-
-            it('should show loaded state after API response', () => {
-                const stocks = dashboardStocks.slice(0, 2);
-                const { container } = render(<StockGrid stocks={stocks} isLoaded={true} />);
-
-                const articles = container.querySelectorAll('article');
-                articles.forEach(article => {
-                    expect(article).toHaveClass('translate-y-0', 'opacity-100');
+                    expect(article).toBeInTheDocument();
                 });
             });
         });

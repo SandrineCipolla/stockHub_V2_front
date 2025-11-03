@@ -1,11 +1,43 @@
 // ========================================
 // TYPES DOMAINE MÉTIER - STOCK
+// Types purs sans configuration visuelle
 // ========================================
 
-export type StockStatus = "optimal" | "low" | "critical";
+/**
+ * Constantes pour les statuts de stock
+ * Single source of truth - le type est dérivé de ces constantes
+ */
+export const OPTIMAL = 'optimal';
+export const LOW = 'low';
+export const CRITICAL = 'critical';
+export const OUT_OF_STOCK = 'outOfStock';
+export const OVERSTOCKED = 'overstocked';
+
+/**
+ * Type union basé sur les constantes
+ * Garantit la cohérence entre les constantes et le type
+ */
+export type StockStatus =
+    | typeof OPTIMAL
+    | typeof LOW
+    | typeof CRITICAL
+    | typeof OUT_OF_STOCK
+    | typeof OVERSTOCKED;
+
+/**
+ * Objet regroupant toutes les constantes pour faciliter l'import
+ * Usage: STOCK_STATUS.OPTIMAL ou directement OPTIMAL
+ */
+export const STOCK_STATUS = {
+    OPTIMAL,
+    LOW,
+    CRITICAL,
+    OUT_OF_STOCK,
+    OVERSTOCKED,
+};
 
 export interface Stock {
-    id: number;
+    id: number | string;
     name: string;
     quantity: number;
     value: number;
@@ -34,6 +66,8 @@ export interface StockStats {
     optimal: number;
     low: number;
     critical: number;
+    outOfStock: number;
+    overstocked: number;
     totalValue: number;
     averageValue: number;
 }
@@ -50,21 +84,50 @@ export interface CreateStockData {
 }
 
 export interface UpdateStockData extends Partial<CreateStockData> {
-    id: number;
+    id: number | string;
 }
 
 export interface StockEvent {
     readonly id: string;
-    stockId: number;
+    stockId: number | string;
     type: 'created' | 'updated' | 'deleted' | 'low_stock' | 'critical_stock';
     timestamp: Date;
     userId: string;
     details: Record<string, unknown>;
 }
 
-// Constantes et type guards pour Stock
-export const STOCK_STATUSES = ['optimal', 'low', 'critical'] as const;
+export const STOCK_STATUSES: readonly StockStatus[] = [OPTIMAL, LOW, CRITICAL, OUT_OF_STOCK, OVERSTOCKED];
 
 export const isStockStatus = (status: string): status is StockStatus => {
-    return STOCK_STATUSES.includes(status as StockStatus);
+    return STOCK_STATUSES.some(validStatus => validStatus === status);
+};
+
+/**
+ * Calcule le statut d'un stock basé sur sa quantité et ses seuils
+ * Logique enrichie avec les 5 statuts
+ *
+ * @param quantity - Quantité actuelle en stock
+ * @param minThreshold - Seuil minimum (défaut: 10)
+ * @param maxThreshold - Seuil maximum (défaut: 100)
+ * @returns Le statut calculé parmi les 5 possibles
+ */
+export const calculateStockStatus = (
+    quantity: number,
+    minThreshold: number = 10,
+    maxThreshold: number = 100
+): StockStatus => {
+    // Priorité 1 : Rupture de stock
+    if (quantity === 0) return OUT_OF_STOCK;
+
+    // Priorité 2 : Critique (< 50% du seuil minimum)
+    if (quantity < minThreshold * 0.5) return CRITICAL;
+
+    // Priorité 3 : Attention (< seuil minimum)
+    if (quantity < minThreshold) return LOW;
+
+    // Priorité 4 : Surstockage (> seuil maximum)
+    if (quantity > maxThreshold) return OVERSTOCKED;
+
+    // Priorité 5 : Normal (entre min et max)
+    return OPTIMAL;
 };

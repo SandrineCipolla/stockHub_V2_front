@@ -1,17 +1,24 @@
 import React from "react";
 import type {BadgeVariant, ButtonVariant, ComponentSize, InputType} from './ui';
-import type {Stock} from './stock';
+import type {Stock, StockStatus} from './stock';
 
 // ========================================
 // INTERFACES PROPS COMPOSANTS
 // ========================================
 
-// Props composants UI communs
+
 export interface BadgeProps {
     variant: BadgeVariant;
     children: React.ReactNode;
     className?: string;
     size?: ComponentSize;
+}
+
+export interface StatusBadgeProps {
+    status: StockStatus;
+    showIcon?: boolean;
+    size?: ComponentSize;
+    className?: string;
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -40,14 +47,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
     type?: InputType;
 }
 
-// Props composants métier Stock
 export interface StockCardProps {
     stock: Stock;
     index?: number;
     isLoaded?: boolean;
-    onView?: (stockId: number) => void;
-    onEdit?: (stockId: number) => void;
-    onDelete?: (stockId: number) => void;
+    onView?: (stockId: number | string) => void;
+    onEdit?: (stockId: number | string) => void;
+    onDelete?: (stockId: number | string) => void;
     isUpdating?: boolean;
     isDeleting?: boolean;
     className?: string;
@@ -56,9 +62,9 @@ export interface StockCardProps {
 export interface StockGridProps {
     stocks: Stock[];
     isLoaded?: boolean;
-    onView?: (stockId: number) => void;
-    onEdit?: (stockId: number) => void;
-    onDelete?: (stockId: number) => void;
+    onView?: (stockId: number | string) => void;
+    onEdit?: (stockId: number | string) => void;
+    onDelete?: (stockId: number | string) => void;
     isUpdating?: boolean;
     isDeleting?: boolean;
     className?: string;

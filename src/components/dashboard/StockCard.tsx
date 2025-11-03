@@ -1,15 +1,22 @@
 import React from 'react';
+import {motion} from 'framer-motion';
 import {Edit3, Eye, Trash2} from 'lucide-react';
-import {Card} from '@/components/common/Card';
 import {Button} from '@/components/common/Button';
-import {Badge} from '@/components/common/Badge';
+import {StatusBadge} from '@/components/common/StatusBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
-import type {StockCardProps, StockStatus} from '@/types';
+import {useReducedMotion} from '@/hooks/useReducedMotion';
+import {STOCK_STATUS_BG_COLORS, STOCK_STATUS_CONFIG} from '@/constants/stockConfig';
+import type {StockStatus} from '@/types/stock';
+import {REDUCED_MOTION_DURATION, STOCK_CARD_ANIMATION} from '@/constants/animations';
+import type {EasingType, StockCardProps} from '@/types';
+import '../../styles/StockCardStatus.css';
+
+// Easing par défaut pour les animations de carte
+const CARD_EASING: EasingType = 'easeOut';
 
 export const StockCard: React.FC<StockCardProps> = ({
                                                         stock,
                                                         index = 0,
-                                                        isLoaded = true,
                                                         onView,
                                                         onEdit,
                                                         onDelete,
@@ -18,43 +25,106 @@ export const StockCard: React.FC<StockCardProps> = ({
                                                         className = ''
                                                     }) => {
     const { theme } = useTheme();
+    const prefersReducedMotion = useReducedMotion();
+
+    const statusConfig = STOCK_STATUS_CONFIG[stock.status];
+    const statusColors = theme === 'dark' ? statusConfig.colors.dark : statusConfig.colors.light;
 
     const themeClasses = {
         textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
     };
 
-    const getStatusBadge = (status: StockStatus): React.ReactElement => {
-        const statusMap: Record<StockStatus, { variant: 'success' | 'warning' | 'danger'; label: string }> = {
-            optimal: { variant: 'success', label: 'Optimal' },
-            low: { variant: 'warning', label: 'Faible' },
-            critical: { variant: 'danger', label: 'Critique' },
-        };
-
-        const { variant, label } = statusMap[status];
-        return <Badge variant={variant}>{label}</Badge>;
+    const borderColorMap: Record<StockStatus, string> = {
+        optimal: 'border-stock-optimal',
+        low: 'border-stock-low',
+        critical: 'border-stock-critical',
+        outOfStock: 'border-stock-outOfStock',
+        overstocked: 'border-stock-overstocked'
     };
 
+    const cardVariants = {
+        hidden: {
+            opacity: 0,
+            y: prefersReducedMotion ? 0 : STOCK_CARD_ANIMATION.INITIAL_Y_OFFSET,
+            scale: prefersReducedMotion ? 1 : STOCK_CARD_ANIMATION.INITIAL_SCALE,
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                duration: prefersReducedMotion ? REDUCED_MOTION_DURATION : STOCK_CARD_ANIMATION.ENTRANCE_DURATION,
+                delay: prefersReducedMotion ? 0 : index * STOCK_CARD_ANIMATION.CASCADE_DELAY,
+                ease: STOCK_CARD_ANIMATION.EASING,
+            },
+        },
+        exit: {
+            opacity: 0,
+            y: prefersReducedMotion ? 0 : STOCK_CARD_ANIMATION.EXIT_Y_OFFSET,
+            scale: prefersReducedMotion ? 1 : STOCK_CARD_ANIMATION.EXIT_SCALE,
+            transition: {
+                duration: prefersReducedMotion ? REDUCED_MOTION_DURATION : STOCK_CARD_ANIMATION.EXIT_DURATION,
+                ease: CARD_EASING,
+            },
+        },
+    };
+
+    const getHoverBackground = () => {
+        const opacity = theme === 'dark' ? 0.1 : 0.15;
+        const rgb = STOCK_STATUS_BG_COLORS[stock.status];
+        return `rgb(${rgb} / ${opacity})`;
+    };
+
+    const cardBaseClasses = theme === 'dark'
+        ? "bg-white/5 border-white/10"
+        : "bg-white/80 border-gray-200 shadow-sm";
+
     return (
-        <article
-            className={`transform transition-all duration-500 ${
-                isLoaded
-                    ? 'translate-y-0 opacity-100'
-                    : 'translate-y-8 opacity-0'
-            } ${className}`}
-            style={{ transitionDelay: `${index * 150}ms` }}
+        <motion.article
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            layout
+            whileHover={
+                prefersReducedMotion
+                    ? undefined
+                    : {
+                          scale: STOCK_CARD_ANIMATION.HOVER_SCALE,
+                          y: STOCK_CARD_ANIMATION.HOVER_Y_OFFSET,
+                          transition: {
+                              duration: STOCK_CARD_ANIMATION.HOVER_DURATION,
+                              ease: CARD_EASING,
+                          },
+                      }
+            }
+            className={className}
             aria-labelledby={`stock-${stock.id}-name`}
         >
-            <Card>
-                {/* Indicateur de statut accessible */}
+            <motion.div
+                className={`
+                    ${cardBaseClasses}
+                    backdrop-blur-sm border rounded-xl p-6
+                    ${borderColorMap[stock.status]}
+                    transition-all duration-200 h-full relative
+                `}
+                whileHover={
+                    prefersReducedMotion
+                        ? undefined
+                        : {
+                              backgroundColor: getHoverBackground(),
+                              transition: {
+                                  duration: STOCK_CARD_ANIMATION.HOVER_DURATION,
+                              },
+                          }
+                }
+            >
+                {/* Indicateur de statut accessible avec couleurs dynamiques */}
                 <div
-                    className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${
-                        stock.status === 'optimal'
-                            ? 'bg-emerald-400'
-                            : stock.status === 'low'
-                                ? 'bg-amber-400'
-                                : 'bg-red-400'
+                    className={`absolute top-0 left-6 w-12 h-1 rounded-b-full ${statusColors.border} ${
+                        statusConfig.animate ? 'animate-pulse' : ''
                     }`}
-                    aria-label={`Statut du stock: ${stock.status}`}
+                    aria-label={`Statut du stock: ${statusConfig.label}`}
                 />
 
                 {/* Header avec nom et statut */}
@@ -72,7 +142,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                             </p>
                         )}
                     </div>
-                    {getStatusBadge(stock.status)}
+                    <StatusBadge status={stock.status} size="sm" />
                 </header>
 
                 {/* Métriques avec description accessible */}
@@ -145,7 +215,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                         />
                     )}
                 </div>
-            </Card>
-        </article>
+            </motion.div>
+        </motion.article>
     );
 };

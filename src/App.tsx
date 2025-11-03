@@ -1,4 +1,4 @@
-import "./index.css"
+import "./styles/index.css"
 import {Dashboard} from "@/pages/Dashboard.tsx";
 import {ThemeProvider} from "@/components/providers/ThemeProvider.tsx";
 

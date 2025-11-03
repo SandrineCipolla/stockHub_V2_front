@@ -1,0 +1,480 @@
+{
+  "contraste": {
+    "tests": [
+      {
+        "status": "optimal",
+        "background": "light",
+        "ratio": 2.5366569934610426,
+        "level": "FAIL",
+        "passes": false
+      },
+      {
+        "status": "optimal",
+        "background": "dark",
+        "ratio": 7.635728379274359,
+        "level": "AAA",
+        "passes": true
+      },
+      {
+        "status": "low",
+        "background": "light",
+        "ratio": 2.1476626917618766,
+        "level": "FAIL",
+        "passes": false
+      },
+      {
+        "status": "low",
+        "background": "dark",
+        "ratio": 8.793240441344162,
+        "level": "AAA",
+        "passes": true
+      },
+      {
+        "status": "critical",
+        "background": "light",
+        "ratio": 3.763127680148142,
+        "level": "UI",
+        "passes": true
+      },
+      {
+        "status": "critical",
+        "background": "dark",
+        "ratio": 5.306706499294051,
+        "level": "AA",
+        "passes": true
+      },
+      {
+        "status": "outOfStock",
+        "background": "light",
+        "ratio": 4.834490081424352,
+        "level": "AA",
+        "passes": true
+      },
+      {
+        "status": "outOfStock",
+        "background": "dark",
+        "ratio": 5.781818271859838,
+        "level": "AA",
+        "passes": true
+      },
+      {
+        "status": "overstocked",
+        "background": "light",
+        "ratio": 3.6779011537825332,
+        "level": "UI",
+        "passes": true
+      },
+      {
+        "status": "overstocked",
+        "background": "dark",
+        "ratio": 5.773673508144512,
+        "level": "AA",
+        "passes": true
+      }
+    ],
+    "allPass": false
+  },
+  "daltonisme": {
+    "protanopia": {
+      "description": "Protanopie (déficit rouge, ~1% hommes)",
+      "simulatedColors": {
+        "optimal": {
+          "original": "#10b981",
+          "simulated": "#595b8f"
+        },
+        "low": {
+          "original": "#f59e0b",
+          "simulated": "#cfcf2f"
+        },
+        "critical": {
+          "original": "#ef4444",
+          "simulated": "#a5a344"
+        },
+        "outOfStock": {
+          "original": "#6b7280",
+          "simulated": "#6e6e7d"
+        },
+        "overstocked": {
+          "original": "#3b82f6",
+          "simulated": "#5a5ada"
+        }
+      },
+      "differences": [
+        {
+          "pair": "Optimal ↔ Stock Faible",
+          "deltaOriginal": 259.02509530931553,
+          "deltaSimulated": 191.3008102439715,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Critique",
+          "deltaOriginal": 259.1119449195656,
+          "deltaSimulated": 128.78276282173792,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Rupture",
+          "deltaOriginal": 115.42530051942686,
+          "deltaSimulated": 33.555923471125034,
+          "differentiable": false
+        },
+        {
+          "pair": "Optimal ↔ Surstock",
+          "deltaOriginal": 136.24610086163935,
+          "deltaSimulated": 75.0133321483588,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Critique",
+          "deltaOriginal": 106.70051546267244,
+          "deltaSimulated": 64.35060217278468,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Rupture",
+          "deltaOriginal": 186.19613314996636,
+          "deltaSimulated": 157.80367549585148,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Surstock",
+          "deltaOriginal": 301.0066444449358,
+          "deltaSimulated": 237.94747319524114,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique ↔ Rupture",
+          "deltaOriginal": 152.11837495845134,
+          "deltaSimulated": 95.30477427705287,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique ↔ Surstock",
+          "deltaOriginal": 260.63000594712804,
+          "deltaSimulated": 182.90434658585892,
+          "differentiable": true
+        },
+        {
+          "pair": "Rupture ↔ Surstock",
+          "deltaOriginal": 128.39003076563228,
+          "deltaSimulated": 97.205966895042,
+          "differentiable": true
+        }
+      ],
+      "allDifferentiable": false
+    },
+    "deuteranopia": {
+      "description": "Deutéranopie (déficit vert, ~1% hommes)",
+      "simulatedColors": {
+        "optimal": {
+          "original": "#10b981",
+          "simulated": "#4f4392"
+        },
+        "low": {
+          "original": "#f59e0b",
+          "simulated": "#d4db37"
+        },
+        "critical": {
+          "original": "#ef4444",
+          "simulated": "#afbc44"
+        },
+        "outOfStock": {
+          "original": "#6b7280",
+          "simulated": "#6e6d7c"
+        },
+        "overstocked": {
+          "original": "#3b82f6",
+          "simulated": "#5650d3"
+        }
+      },
+      "differences": [
+        {
+          "pair": "Optimal ↔ Stock Faible",
+          "deltaOriginal": 259.02509530931553,
+          "deltaSimulated": 221.52652211417035,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Critique",
+          "deltaOriginal": 259.1119449195656,
+          "deltaSimulated": 173.03467860518597,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Rupture",
+          "deltaOriginal": 115.42530051942686,
+          "deltaSimulated": 56.64803615307419,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Surstock",
+          "deltaOriginal": 136.24610086163935,
+          "deltaSimulated": 66.65583245298194,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Critique",
+          "deltaOriginal": 106.70051546267244,
+          "deltaSimulated": 49.98999899979995,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Rupture",
+          "deltaOriginal": 186.19613314996636,
+          "deltaSimulated": 165.1211676315305,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Surstock",
+          "deltaOriginal": 301.0066444449358,
+          "deltaSimulated": 243.9938523815713,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique ↔ Rupture",
+          "deltaOriginal": 152.11837495845134,
+          "deltaSimulated": 116.62761251093156,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique ↔ Surstock",
+          "deltaOriginal": 260.63000594712804,
+          "deltaSimulated": 200.08498194517247,
+          "differentiable": true
+        },
+        {
+          "pair": "Rupture ↔ Surstock",
+          "deltaOriginal": 128.39003076563228,
+          "deltaSimulated": 94.79451460923254,
+          "differentiable": true
+        }
+      ],
+      "allDifferentiable": true
+    },
+    "tritanopia": {
+      "description": "Tritanopie (déficit bleu, ~0.01% population)",
+      "simulatedColors": {
+        "optimal": {
+          "original": "#10b981",
+          "simulated": "#18999c"
+        },
+        "low": {
+          "original": "#f59e0b",
+          "simulated": "#f14b51"
+        },
+        "critical": {
+          "original": "#ef4444",
+          "simulated": "#e64444"
+        },
+        "outOfStock": {
+          "original": "#6b7280",
+          "simulated": "#6b7a79"
+        },
+        "overstocked": {
+          "original": "#3b82f6",
+          "simulated": "#3fc4bf"
+        }
+      },
+      "differences": [
+        {
+          "pair": "Optimal ↔ Stock Faible",
+          "deltaOriginal": 259.02509530931553,
+          "deltaSimulated": 242.48298909408058,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Critique",
+          "deltaOriginal": 259.1119449195656,
+          "deltaSimulated": 239.59340558537917,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Rupture",
+          "deltaOriginal": 115.42530051942686,
+          "deltaSimulated": 95.26279441628824,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Surstock",
+          "deltaOriginal": 136.24610086163935,
+          "deltaSimulated": 67.7864293203293,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Critique",
+          "deltaOriginal": 106.70051546267244,
+          "deltaSimulated": 18.411952639521967,
+          "differentiable": false
+        },
+        {
+          "pair": "Stock Faible ↔ Rupture",
+          "deltaOriginal": 186.19613314996636,
+          "deltaSimulated": 147.52965803525743,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Surstock",
+          "deltaOriginal": 301.0066444449358,
+          "deltaSimulated": 241.7126393054364,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique ↔ Rupture",
+          "deltaOriginal": 152.11837495845134,
+          "deltaSimulated": 144.40914098491135,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique ↔ Surstock",
+          "deltaOriginal": 260.63000594712804,
+          "deltaSimulated": 243.72525515424124,
+          "differentiable": true
+        },
+        {
+          "pair": "Rupture ↔ Surstock",
+          "deltaOriginal": 128.39003076563228,
+          "deltaSimulated": 110.95945205344158,
+          "differentiable": true
+        }
+      ],
+      "allDifferentiable": false
+    },
+    "achromatopsia": {
+      "description": "Achromatopsie (monochrome, très rare)",
+      "simulatedColors": {
+        "optimal": {
+          "original": "#10b981",
+          "simulated": "#808080"
+        },
+        "low": {
+          "original": "#f59e0b",
+          "simulated": "#a7a7a7"
+        },
+        "critical": {
+          "original": "#ef4444",
+          "simulated": "#777777"
+        },
+        "outOfStock": {
+          "original": "#6b7280",
+          "simulated": "#727272"
+        },
+        "overstocked": {
+          "original": "#3b82f6",
+          "simulated": "#7a7a7a"
+        }
+      },
+      "differences": [
+        {
+          "pair": "Optimal ↔ Stock Faible",
+          "deltaOriginal": 259.02509530931553,
+          "deltaSimulated": 67.54998149518622,
+          "differentiable": true
+        },
+        {
+          "pair": "Optimal ↔ Critique",
+          "deltaOriginal": 259.1119449195656,
+          "deltaSimulated": 15.588457268119896,
+          "differentiable": false
+        },
+        {
+          "pair": "Optimal ↔ Rupture",
+          "deltaOriginal": 115.42530051942686,
+          "deltaSimulated": 24.24871130596428,
+          "differentiable": false
+        },
+        {
+          "pair": "Optimal ↔ Surstock",
+          "deltaOriginal": 136.24610086163935,
+          "deltaSimulated": 10.392304845413264,
+          "differentiable": false
+        },
+        {
+          "pair": "Stock Faible ↔ Critique",
+          "deltaOriginal": 106.70051546267244,
+          "deltaSimulated": 83.13843876330611,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Rupture",
+          "deltaOriginal": 186.19613314996636,
+          "deltaSimulated": 91.7986928011505,
+          "differentiable": true
+        },
+        {
+          "pair": "Stock Faible ↔ Surstock",
+          "deltaOriginal": 301.0066444449358,
+          "deltaSimulated": 77.94228634059948,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique ↔ Rupture",
+          "deltaOriginal": 152.11837495845134,
+          "deltaSimulated": 8.660254037844387,
+          "differentiable": false
+        },
+        {
+          "pair": "Critique ↔ Surstock",
+          "deltaOriginal": 260.63000594712804,
+          "deltaSimulated": 5.196152422706632,
+          "differentiable": false
+        },
+        {
+          "pair": "Rupture ↔ Surstock",
+          "deltaOriginal": 128.39003076563228,
+          "deltaSimulated": 13.856406460551018,
+          "differentiable": false
+        }
+      ],
+      "allDifferentiable": false
+    }
+  },
+  "differentiabilite": {},
+  "icones": {
+    "indicators": [
+      {
+        "name": "Icônes de statut",
+        "present": true,
+        "example": "✓ Optimal, ⚠ Faible, ! Critique"
+      },
+      {
+        "name": "Labels textuels",
+        "present": true,
+        "example": "StatusBadge avec label"
+      },
+      {
+        "name": "Bordures colorées",
+        "present": true,
+        "example": "Bordure gauche 4px"
+      },
+      {
+        "name": "Positions fixes",
+        "present": true,
+        "example": "Badge toujours visible"
+      },
+      {
+        "name": "Aria-labels",
+        "present": true,
+        "example": "role=\"status\", aria-label"
+      }
+    ],
+    "allPresent": true
+  },
+  "timestamp": "2025-10-13T13:48:21.330Z",
+  "recommandations": [
+    {
+      "type": "protanopia",
+      "issue": "1 paires de couleurs difficiles à différencier",
+      "solution": "Les icônes et labels compensent cette limitation ✅"
+    },
+    {
+      "type": "tritanopia",
+      "issue": "1 paires de couleurs difficiles à différencier",
+      "solution": "Les icônes et labels compensent cette limitation ✅"
+    },
+    {
+      "type": "achromatopsia",
+      "issue": "6 paires de couleurs difficiles à différencier",
+      "solution": "Les icônes et labels compensent cette limitation ✅"
+    }
+  ]
+}

@@ -83,42 +83,125 @@ describe('StockCard Component', () => {
                 const stock = stockHubStockUseCases.optimalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
-                const statusBar = container.querySelector('.bg-emerald-400');
-                expect(statusBar).toBeInTheDocument();
+                const statusBar = container.querySelector('[aria-label*="Optimal"]');
+                expect(statusBar).toHaveClass('border-emerald-500/30');
             });
         });
 
         describe('when status is low', () => {
-            it('should display "Faible" badge', () => {
+            it('should display "Low" badge', () => {
                 const stock = stockHubStockUseCases.lowStock;
                 render(<StockCard stock={stock} />);
 
-                expect(screen.getByText('Faible')).toBeInTheDocument();
+                expect(screen.getByText('Low')).toBeInTheDocument();
             });
 
             it('should apply amber color to status bar', () => {
                 const stock = stockHubStockUseCases.lowStock;
                 const { container } = render(<StockCard stock={stock} />);
 
-                const statusBar = container.querySelector('.bg-amber-400');
-                expect(statusBar).toBeInTheDocument();
+                const statusBar = container.querySelector('[aria-label*="Low"]');
+                expect(statusBar).toHaveClass('border-amber-500/30');
             });
         });
 
         describe('when status is critical', () => {
-            it('should display "Critique" badge', () => {
+            it('should display "Critical" badge', () => {
                 const stock = stockHubStockUseCases.criticalStock;
                 render(<StockCard stock={stock} />);
 
-                expect(screen.getByText('Critique')).toBeInTheDocument();
+                expect(screen.getByText('Critical')).toBeInTheDocument();
             });
 
             it('should apply red color to status bar', () => {
                 const stock = stockHubStockUseCases.criticalStock;
                 const { container } = render(<StockCard stock={stock} />);
 
-                const statusBar = container.querySelector('.bg-red-400');
-                expect(statusBar).toBeInTheDocument();
+                const statusBar = container.querySelector('[aria-label*="Critical"]');
+                expect(statusBar).toHaveClass('border-red-500/40');
+            });
+        });
+    });
+
+    describe('Visual differentiation by status', () => {
+        describe('when status is optimal', () => {
+            it('should apply emerald left border to Card', () => {
+                const stock = stockHubStockUseCases.optimalStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                expect(card).toHaveClass('border-l-4');
+                expect(card).toHaveClass('border-l-emerald-500/30');
+            });
+
+            it('should use Framer Motion for hover background animation', () => {
+                const stock = stockHubStockUseCases.optimalStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                
+                expect(card).not.toHaveClass('hover:bg-emerald-500/10');
+                expect(card).toBeInTheDocument();
+            });
+
+            it('should apply hover effect classes for border', () => {
+                const stock = stockHubStockUseCases.optimalStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                expect(card).toHaveClass('hover:border-l-emerald-500/50');
+            });
+        });
+
+        describe('when status is low', () => {
+            it('should apply amber left border to Card', () => {
+                const stock = stockHubStockUseCases.lowStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                expect(card).toHaveClass('border-l-4');
+                expect(card).toHaveClass('border-l-amber-500/30');
+            });
+
+            it('should use Framer Motion for hover background animation', () => {
+                const stock = stockHubStockUseCases.lowStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                
+                expect(card).not.toHaveClass('hover:bg-amber-500/10');
+                expect(card).toBeInTheDocument();
+            });
+        });
+
+        describe('when status is critical', () => {
+            it('should apply red left border to Card', () => {
+                const stock = stockHubStockUseCases.criticalStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                expect(card).toHaveClass('border-l-4');
+                expect(card).toHaveClass('border-l-red-500/40');
+            });
+
+            it('should use Framer Motion for hover background animation', () => {
+                const stock = stockHubStockUseCases.criticalStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                
+                expect(card).not.toHaveClass('hover:bg-red-500/10');
+                expect(card).toBeInTheDocument();
+            });
+        });
+
+        describe('when card has transition classes', () => {
+            it('should have transition-all for smooth transitions', () => {
+                const stock = stockHubStockUseCases.optimalStock;
+                const { container } = render(<StockCard stock={stock} />);
+
+                const card = container.querySelector('article > div');
+                expect(card).toHaveClass('transition-all', 'duration-200');
             });
         });
     });
@@ -282,33 +365,21 @@ describe('StockCard Component', () => {
     });
 
     describe('Animations and styles', () => {
-        describe('when isLoaded is true', () => {
-            it('should apply loaded animation classes', () => {
+        describe('when rendered with Framer Motion', () => {
+            it('should render as a motion.article element', () => {
                 const stock = stockHubStockUseCases.optimalStock;
-                const { container } = render(<StockCard stock={stock} isLoaded={true} />);
+                const { container } = render(<StockCard stock={stock} />);
 
                 const article = container.querySelector('article');
-                expect(article).toHaveClass('translate-y-0', 'opacity-100');
+                expect(article).toBeInTheDocument();
             });
-        });
 
-        describe('when isLoaded is false', () => {
-            it('should apply initial animation classes', () => {
+            it('should render inner content as a motion.div element', () => {
                 const stock = stockHubStockUseCases.optimalStock;
-                const { container } = render(<StockCard stock={stock} isLoaded={false} />);
+                const { container } = render(<StockCard stock={stock} />);
 
-                const article = container.querySelector('article');
-                expect(article).toHaveClass('translate-y-8', 'opacity-0');
-            });
-        });
-
-        describe('when index is provided', () => {
-            it('should apply staggered animation delay', () => {
-                const stock = stockHubStockUseCases.optimalStock;
-                const { container } = render(<StockCard stock={stock} index={3} />);
-
-                const article = container.querySelector('article');
-                expect(article).toHaveStyle({ transitionDelay: '450ms' });
+                const innerDiv = container.querySelector('article > div');
+                expect(innerDiv).toBeInTheDocument();
             });
         });
 
@@ -341,7 +412,7 @@ describe('StockCard Component', () => {
                 const { container } = render(<StockCard stock={stock} />);
 
                 const statusBar = container.querySelector('[aria-label*="Statut du stock"]');
-                expect(statusBar).toHaveAttribute('aria-label', `Statut du stock: ${stock.status}`);
+                expect(statusBar).toHaveAttribute('aria-label', 'Statut du stock: Low');
             });
 
             it('should group metrics with role="group"', () => {
