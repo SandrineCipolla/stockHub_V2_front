@@ -18,11 +18,11 @@ export const OVERSTOCKED = 'overstocked';
  * Garantit la cohérence entre les constantes et le type
  */
 export type StockStatus =
-    | typeof OPTIMAL      // Stock dans la plage idéale
-    | typeof LOW          // Stock faible, attention requise
-    | typeof CRITICAL     // Stock critique, réapprovisionnement urgent
-    | typeof OUT_OF_STOCK // Rupture de stock
-    | typeof OVERSTOCKED; // Surstockage
+    | typeof OPTIMAL
+    | typeof LOW
+    | typeof CRITICAL
+    | typeof OUT_OF_STOCK
+    | typeof OVERSTOCKED;
 
 /**
  * Objet regroupant toutes les constantes pour faciliter l'import
@@ -37,7 +37,7 @@ export const STOCK_STATUS = {
 };
 
 export interface Stock {
-    id: number | string; // Accepte number (BD) ou string (temporaire avant sauvegarde)
+    id: number | string;
     name: string;
     quantity: number;
     value: number;
@@ -84,12 +84,12 @@ export interface CreateStockData {
 }
 
 export interface UpdateStockData extends Partial<CreateStockData> {
-    id: number | string; // Accepte number (BD) ou string (temporaire)
+    id: number | string;
 }
 
 export interface StockEvent {
     readonly id: string;
-    stockId: number | string; // Accepte number (BD) ou string (temporaire)
+    stockId: number | string;
     type: 'created' | 'updated' | 'deleted' | 'low_stock' | 'critical_stock';
     timestamp: Date;
     userId: string;
@@ -117,17 +117,17 @@ export const calculateStockStatus = (
     maxThreshold: number = 100
 ): StockStatus => {
     // Priorité 1 : Rupture de stock
-    if (quantity === 0) return 'outOfStock';
+    if (quantity === 0) return OUT_OF_STOCK;
 
     // Priorité 2 : Critique (< 50% du seuil minimum)
-    if (quantity < minThreshold * 0.5) return 'critical';
+    if (quantity < minThreshold * 0.5) return CRITICAL;
 
     // Priorité 3 : Attention (< seuil minimum)
-    if (quantity < minThreshold) return 'low';
+    if (quantity < minThreshold) return LOW;
 
     // Priorité 4 : Surstockage (> seuil maximum)
-    if (quantity > maxThreshold) return 'overstocked';
+    if (quantity > maxThreshold) return OVERSTOCKED;
 
     // Priorité 5 : Normal (entre min et max)
-    return 'optimal';
+    return OPTIMAL;
 };
