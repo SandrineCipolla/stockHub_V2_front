@@ -5,10 +5,11 @@ import {Button} from '@/components/common/Button';
 import {StatusBadge} from '@/components/common/StatusBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {useReducedMotion} from '@/hooks/useReducedMotion';
-import {STOCK_STATUS_CONFIG} from '@/constants/stockConfig';
+import {STOCK_STATUS_BG_COLORS, STOCK_STATUS_CONFIG} from '@/constants/stockConfig';
 import type {StockStatus} from '@/types/stock';
-import {STOCK_CARD_ANIMATION, REDUCED_MOTION_DURATION} from '@/constants/animations';
-import type {StockCardProps, EasingType} from '@/types';
+import {REDUCED_MOTION_DURATION, STOCK_CARD_ANIMATION} from '@/constants/animations';
+import type {EasingType, StockCardProps} from '@/types';
+import '../../styles/StockCardStatus.css';
 
 // Easing par défaut pour les animations de carte
 const CARD_EASING: EasingType = 'easeOut';
@@ -34,11 +35,11 @@ export const StockCard: React.FC<StockCardProps> = ({
     };
 
     const borderColorMap: Record<StockStatus, string> = {
-        optimal: 'border-l-emerald-500/30 hover:border-l-emerald-500/50',
-        low: 'border-l-amber-500/30 hover:border-l-amber-500/50',
-        critical: 'border-l-red-500/40 hover:border-l-red-500/60',
-        outOfStock: 'border-l-gray-500/50 hover:border-l-gray-500/70',
-        overstocked: 'border-l-blue-500/30 hover:border-l-blue-500/50'
+        optimal: 'border-stock-optimal',
+        low: 'border-stock-low',
+        critical: 'border-stock-critical',
+        outOfStock: 'border-stock-outOfStock',
+        overstocked: 'border-stock-overstocked'
     };
 
     const cardVariants = {
@@ -68,19 +69,10 @@ export const StockCard: React.FC<StockCardProps> = ({
         },
     };
 
-    // Mapping des couleurs de fond par statut pour Framer Motion
     const getHoverBackground = () => {
-        // En mode light, on utilise une opacité plus forte car le background est blanc
         const opacity = theme === 'dark' ? 0.1 : 0.15;
-
-        const colorMap = {
-            optimal: `rgb(16 185 129 / ${opacity})`,     // emerald-500
-            low: `rgb(245 158 11 / ${opacity})`,         // amber-500
-            critical: `rgb(239 68 68 / ${opacity})`,     // red-500
-            outOfStock: `rgb(107 114 128 / ${opacity})`, // gray-500
-            overstocked: `rgb(59 130 246 / ${opacity})`  // blue-500
-        };
-        return colorMap[stock.status];
+        const rgb = STOCK_STATUS_BG_COLORS[stock.status];
+        return `rgb(${rgb} / ${opacity})`;
     };
 
     const cardBaseClasses = theme === 'dark'
@@ -113,7 +105,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                 className={`
                     ${cardBaseClasses}
                     backdrop-blur-sm border rounded-xl p-6
-                    border-l-4 ${borderColorMap[stock.status]}
+                    ${borderColorMap[stock.status]}
                     transition-all duration-200 h-full relative
                 `}
                 whileHover={

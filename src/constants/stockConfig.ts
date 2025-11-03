@@ -14,15 +14,13 @@ export interface StockStatusConfig {
     label: string;
     icon: LucideIcon;
     colors: {
-        // Thème clair
         light: {
             background: string;
             border: string;
             text: string;
             badge: string;
-            hover: string; // Pour hover effects
+            hover: string;
         };
-        // Thème sombre
         dark: {
             background: string;
             border: string;
@@ -31,8 +29,8 @@ export interface StockStatusConfig {
             hover: string;
         };
     };
-    priority: number; // Pour le tri (1 = plus urgent)
-    animate?: boolean; // Animation pulse pour statuts critiques
+    priority: number;
+    animate?: boolean;
 }
 
 /**
@@ -40,7 +38,6 @@ export interface StockStatusConfig {
  * Ordre de priorité : Rupture > Critique > Attention > Normal > Surstockage
  */
 export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
-    // ⛔ RUPTURE DE STOCK - Gris (priorité 1 - LA PLUS URGENTE)
     outOfStock: {
         label: 'Out of Stock',
         icon: XCircle,
@@ -64,7 +61,6 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
         animate: true
     },
 
-    // 🔴 CRITIQUE - Rouge (priorité 2)
     critical: {
         label: 'Critical',
         icon: AlertTriangle,
@@ -88,7 +84,6 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
         animate: true
     },
 
-    // ⚠️ ATTENTION - Orange (priorité 3)
     low: {
         label: 'Low',
         icon: AlertCircle,
@@ -112,7 +107,6 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
         animate: false
     },
 
-    // ✅ NORMAL/OPTIMAL - Vert (priorité 4)
     optimal: {
         label: 'Optimal',
         icon: CheckCircle,
@@ -135,8 +129,7 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
         priority: 4,
         animate: false
     },
-
-    // 📈 SURSTOCKAGE - Bleu (priorité 5)
+    
     overstocked: {
         label: 'Overstocked',
         icon: TrendingUp,
@@ -161,22 +154,10 @@ export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
     }
 };
 
-// /**
-//  * Récupère la configuration visuelle d'un statut
-//  */
-// const getStatusConfig = (status: StockStatus): StockStatusConfig => {
-//     return STOCK_STATUS_CONFIG[status];
-// };
-//
-// /**
-//  * Trie les stocks par priorité de statut (rupture en premier)
-//  */
-// const sortByStatusPriority = <T extends { status: StockStatus }>(
-//     items: T[]
-// ): T[] => {
-//     return [...items].sort((a, b) => {
-//         const priorityA = STOCK_STATUS_CONFIG[a.status].priority;
-//         const priorityB = STOCK_STATUS_CONFIG[b.status].priority;
-//         return priorityA - priorityB;
-//     });
-// };
+export const STOCK_STATUS_BG_COLORS: Record<string, string> = {
+    optimal: '16 185 129',     // emerald-500
+    low: '245 158 11',         // amber-500
+    critical: '239 68 68',     // red-500
+    outOfStock: '107 114 128', // gray-500
+    overstocked: '59 130 246'  // blue-500
+};
