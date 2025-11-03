@@ -1,16 +1,28 @@
 import React, {useState} from 'react';
 import {motion} from 'framer-motion';
-import {Edit3, Eye, Trash2, Palette} from 'lucide-react';
+import {Edit3, Eye, Palette, Trash2} from 'lucide-react';
 import {Button} from '@/components/common/Button';
-import {StatusBadge} from '@/components/common/StatusBadge';
 import {StockAIBadge} from '@/components/ai/StockAIBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {useReducedMotion} from '@/hooks/useReducedMotion';
 import {STOCK_STATUS_CONFIG, type StockStatus} from '@/types/stock';
-import {STOCK_CARD_ANIMATION, REDUCED_MOTION_DURATION} from '@/constants/animations';
+import {REDUCED_MOTION_DURATION, STOCK_CARD_ANIMATION} from '@/constants/animations';
 import {formatQuantityWithUnit} from '@/utils/unitFormatter';
 import {getContainerLabel, recordUsage} from '@/utils/containerManager';
 import type {StockCardProps} from '@/types';
+import type {WebComponentStatus} from '@/types/web-component-events';
+
+// Conversion du format StockStatus (camelCase) vers le format du web component (kebab-case)
+const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus => {
+    const statusMap: Record<StockStatus, WebComponentStatus> = {
+        optimal: 'optimal',
+        low: 'low',
+        critical: 'critical',
+        outOfStock: 'out-of-stock',
+        overstocked: 'overstocked'
+    };
+    return statusMap[status];
+};
 
 export const StockCard: React.FC<StockCardProps> = ({
                                                         stock,
@@ -174,7 +186,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                         )}
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                        <StatusBadge status={stock.status} size="sm" />
+                        <sh-status-badge status={convertStatusToWebComponent(stock.status)} />
                         {aiSuggestions.length > 0 && (
                             <StockAIBadge
                                 stockId={stock.id}

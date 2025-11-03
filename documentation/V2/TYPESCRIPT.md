@@ -4,6 +4,22 @@
 
 Ce document présente les conventions de typage adoptées pour StockHub V2, garantissant un code robuste, maintenable et cohérent.
 
+---
+
+## 🔧 Troubleshooting TypeScript
+
+### Problèmes Web Components
+
+Pour les erreurs liées aux web components (TS2339, TS1005, etc.), consulter :
+👉 **[TROUBLESHOOTING-WEB-COMPONENTS.md](../TROUBLESHOOTING-WEB-COMPONENTS.md)**
+
+**Problèmes courants :**
+- ✅ Web component non reconnu par TypeScript
+- ✅ Incompatibilité camelCase vs kebab-case
+- ✅ Erreurs de syntaxe dans fichiers `.d.ts`
+
+---
+
 ## ⚙️ Configuration TypeScript
 
 ### tsconfig.json - Configuration stricte

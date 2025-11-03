@@ -50,6 +50,9 @@
   },
   "include": [
     "src/**/*",
-    "documentation/V2/ARCHITECTURE.md"
+    "src/types/web-components.d.ts"
+  ],
+  "exclude": [
+    "**/*.md"
   ]
 }

@@ -74,7 +74,7 @@ acryliqueBleu.quantity = usageResult2.newQuantity; // 233%
 
 console.log("\n=== Workflow complet sur nouveau stock ===");
 
-let stock: Stock = {
+const stock: Stock = {
   id: 2,
   name: "Acrylique Rouge",
   quantity: 15,              // Tube presque vide
