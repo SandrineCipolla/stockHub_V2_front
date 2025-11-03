@@ -3,7 +3,7 @@ import {BarChart3, Download, Plus, Search} from 'lucide-react';
 
 import {HeaderWrapper} from '@/components/layout/HeaderWrapper';
 import {NavSection} from '@/components/layout/NavSection';
-import {MetricCard} from '@/components/dashboard/MetricCard';
+import {MetricCardWrapper} from '@/components/dashboard/MetricCardWrapper';
 import {StockGrid} from '@/components/dashboard/StockGrid';
 import {AISummaryWidget} from '@/components/ai/AISummaryWidget';
 import {Button} from '@/components/common/Button';
@@ -217,7 +217,7 @@ export const Dashboard: React.FC = () => {
                 <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" aria-labelledby="metrics-heading">
                     <h2 id="metrics-heading" className="sr-only">Métriques principales</h2>
 
-                    <MetricCard
+                    <MetricCardWrapper
                         title="Total Produits"
                         value={stats?.total || 0}
                         change={{
@@ -228,7 +228,7 @@ export const Dashboard: React.FC = () => {
                         color="success"
                     />
 
-                    <MetricCard
+                    <MetricCardWrapper
                         title="Stock Faible"
                         value={stats?.low || 0}
                         change={{
@@ -239,7 +239,7 @@ export const Dashboard: React.FC = () => {
                         color="warning"
                     />
 
-                    <MetricCard
+                    <MetricCardWrapper
                         title="Valeur Totale"
                         value={`€${stats?.totalValue?.toLocaleString() || 0}`}
                         change={{

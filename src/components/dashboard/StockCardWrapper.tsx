@@ -1,9 +1,10 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useTheme} from '@/hooks/useTheme';
 import type {StockCardProps} from '@/types';
 import type {WebComponentStatus} from '@/types/web-component-events';
-import type {StockStatus} from '@/types/stock';
+import type {StockStatus, Stock} from '@/types/stock';
 import {formatQuantityWithUnit} from '@/utils/unitFormatter';
+import {recordUsage} from '@/utils/containerManager';
 
 // Conversion du format StockStatus vers le format du web component
 const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus => {
@@ -31,6 +32,12 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
 }) => {
     const { theme } = useTheme();
     const cardRef = useRef<HTMLElement>(null);
+    const [localStock, setLocalStock] = useState<Stock>(stock);
+
+    // Mettre à jour le stock local quand le stock parent change
+    useEffect(() => {
+        setLocalStock(stock);
+    }, [stock]);
 
     // Assigner les propriétés complexes via JavaScript (iaCount)
     useEffect(() => {
@@ -46,8 +53,18 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
 
     // Handler pour le bouton "Enregistrer session"
     const handleSessionClick = () => {
-        console.log('Session clicked for stock:', stock.id);
-        // TODO: Implémenter la logique de session
+        if (localStock.unit !== 'percentage') return;
+
+        try {
+            const result = recordUsage(localStock);
+            setLocalStock({
+                ...localStock,
+                quantity: result.newQuantity,
+            });
+            console.log(`🎨 ${result.message}`);
+        } catch (error) {
+            console.error(`❌ ${(error as Error).message}`);
+        }
     };
 
     // Handler pour le bouton "Détails"
@@ -73,14 +90,14 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
 
     return React.createElement('sh-stock-card', {
         ref: cardRef,
-        id: `stock-card-${stock.id}`,
-        name: stock.name,
-        category: stock.category || '',
-        'last-update': `Mis à jour il y a ${stock.lastUpdate}`,
-        percentage: stock.unit === 'percentage' ? stock.quantity.toString() : '',
-        quantity: formatQuantityWithUnit(stock.quantity, stock.unit),
-        value: `€${stock.value.toLocaleString()}`,
-        status: convertStatusToWebComponent(stock.status),
+        id: `stock-card-${localStock.id}`,
+        name: localStock.name,
+        category: localStock.category || '',
+        'last-update': `Mis à jour il y a ${localStock.lastUpdate}`,
+        percentage: localStock.unit === 'percentage' ? localStock.quantity.toString() : undefined,
+        quantity: formatQuantityWithUnit(localStock.quantity, localStock.unit),
+        value: `€${localStock.value.toLocaleString()}`,
+        status: convertStatusToWebComponent(localStock.status),
         'data-theme': theme,
         className: className,
         'onsh-session-click': handleSessionClick,
@@ -89,3 +106,5 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
         'onsh-delete-click': handleDeleteClick
     });
 };
+
+
