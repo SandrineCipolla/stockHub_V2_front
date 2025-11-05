@@ -1,16 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {motion} from 'framer-motion';
-import {Edit3, Eye, Trash2} from 'lucide-react';
+import {Edit3, Eye, Palette, Trash2} from 'lucide-react';
 import {Button} from '@/components/common/Button';
-import {StatusBadge} from '@/components/common/StatusBadge';
+import {StockAIBadge} from '@/components/ai/StockAIBadge';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {useReducedMotion} from '@/hooks/useReducedMotion';
-import {STOCK_STATUS_BG_COLORS, STOCK_STATUS_CONFIG} from '@/constants/stockConfig';
 import type {StockStatus} from '@/types/stock';
+import {STOCK_STATUS_CONFIG, STOCK_STATUS_BG_COLORS} from '@/constants/stockConfig';
 import {REDUCED_MOTION_DURATION, STOCK_CARD_ANIMATION} from '@/constants/animations';
-import type {EasingType, StockCardProps} from '@/types';
-import '../../styles/StockCardStatus.css';
+import type {EasingType} from '@/types/animations';
+import {formatQuantityWithUnit} from '@/utils/unitFormatter';
+import {getContainerLabel, recordUsage} from '@/utils/containerManager';
+import type {StockCardProps} from '@/types';
+import type {WebComponentStatus} from '@/types/web-component-events';
 
+// Conversion du format StockStatus (camelCase) vers le format du web component (kebab-case)
+const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus => {
+    const statusMap: Record<StockStatus, WebComponentStatus> = {
+        optimal: 'optimal',
+        low: 'low',
+        critical: 'critical',
+        outOfStock: 'out-of-stock',
+        overstocked: 'overstocked'
+    };
+    return statusMap[status];
+};
 // Easing par défaut pour les animations de carte
 const CARD_EASING: EasingType = 'easeOut';
 
@@ -22,17 +36,42 @@ export const StockCard: React.FC<StockCardProps> = ({
                                                         onDelete,
                                                         isUpdating = false,
                                                         isDeleting = false,
-                                                        className = ''
+                                                        className = '',
+                                                        aiSuggestions = []
                                                     }) => {
     const { theme } = useTheme();
     const prefersReducedMotion = useReducedMotion();
+    const [localStock, setLocalStock] = useState(stock);
+    const [actionFeedback, setActionFeedback] = useState<string | null>(null);
 
-    const statusConfig = STOCK_STATUS_CONFIG[stock.status];
+    const statusConfig = STOCK_STATUS_CONFIG[localStock.status];
     const statusColors = theme === 'dark' ? statusConfig.colors.dark : statusConfig.colors.light;
 
     const themeClasses = {
         textSubtle: theme === 'dark' ? 'text-gray-400' : 'text-gray-500',
     };
+
+    // Handler pour enregistrer une session d'utilisation
+    const handleRecordSession = () => {
+        if (localStock.unit !== 'percentage') return;
+
+        try {
+            const result = recordUsage(localStock);
+            setLocalStock({
+                ...localStock,
+                quantity: result.newQuantity,
+            });
+            setActionFeedback(`🎨 ${result.message}`);
+            setTimeout(() => setActionFeedback(null), 3000);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue';
+            setActionFeedback(`❌ ${errorMessage}`);
+            setTimeout(() => setActionFeedback(null), 3000);
+        }
+    };
+
+    // Vérifier si c'est un stock avec containers (peinture)
+    const hasContainers = localStock.unit === 'percentage' && localStock.containerCapacity !== undefined;
 
     const borderColorMap: Record<StockStatus, string> = {
         optimal: 'border-stock-optimal',
@@ -142,7 +181,15 @@ export const StockCard: React.FC<StockCardProps> = ({
                             </p>
                         )}
                     </div>
-                    <StatusBadge status={stock.status} size="sm" />
+                    <div className="flex flex-col items-end gap-2">
+                        <sh-status-badge status={convertStatusToWebComponent(stock.status)} />
+                        {aiSuggestions.length > 0 && (
+                            <StockAIBadge
+                                stockId={stock.id}
+                                suggestions={aiSuggestions}
+                            />
+                        )}
+                    </div>
                 </header>
 
                 {/* Métriques avec description accessible */}
@@ -150,26 +197,68 @@ export const StockCard: React.FC<StockCardProps> = ({
                     <div className="text-center">
                         <div
                             className="text-2xl font-bold"
-                            aria-label={`Quantité: ${stock.quantity} unités`}
+                            aria-label={`Quantité: ${formatQuantityWithUnit(localStock.quantity, localStock.unit)}`}
                         >
-                            {stock.quantity}
+                            {formatQuantityWithUnit(localStock.quantity, localStock.unit)}
                         </div>
-                        <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}>
+                        {/* Affichage nombre de containers pour unités en % */}
+                        {localStock.unit === 'percentage' && localStock.containersOwned !== undefined && localStock.containersOwned > 0 && (
+                            <div className={`text-xs ${themeClasses.textSubtle} mt-1`}>
+                                {getContainerLabel(localStock.containersOwned)}
+                            </div>
+                        )}
+                        <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle} ${localStock.unit === 'percentage' && localStock.containersOwned ? '' : 'mt-1'}`}>
                             Quantité
                         </div>
                     </div>
                     <div className="text-center">
                         <div
                             className="text-2xl font-bold"
-                            aria-label={`Valeur: ${stock.value} euros`}
+                            aria-label={`Valeur: ${localStock.value} euros`}
                         >
-                            €{stock.value.toLocaleString()}
+                            €{localStock.value.toLocaleString()}
                         </div>
                         <div className={`text-xs uppercase tracking-wide ${themeClasses.textSubtle}`}>
                             Valeur
                         </div>
                     </div>
                 </div>
+
+                {/* Action usage - uniquement pour les tubes */}
+                {hasContainers && (
+                    <div className="flex gap-2 mb-3" role="group" aria-label="Actions containers">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className={`flex-1 ${
+                                theme === 'dark'
+                                    ? 'text-purple-400 hover:text-purple-300 hover:bg-purple-500/20'
+                                    : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
+                            }`}
+                            icon={Palette}
+                            onClick={handleRecordSession}
+                            aria-label="Enregistrer session de peinture"
+                        >
+                            Enregistrer session
+                        </Button>
+                    </div>
+                )}
+
+                {/* Feedback visuel des actions */}
+                {actionFeedback && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className={`text-xs p-2 rounded mb-3 ${
+                            theme === 'dark'
+                                ? 'bg-white/10 text-gray-300'
+                                : 'bg-gray-100 text-gray-700'
+                        }`}
+                    >
+                        {actionFeedback}
+                    </motion.div>
+                )}
 
                 {/* Actions avec labels accessibles */}
                 <div className="flex gap-2" role="group" aria-label={`Actions pour ${stock.name}`}>

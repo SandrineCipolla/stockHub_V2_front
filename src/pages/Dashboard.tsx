@@ -1,26 +1,26 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {BarChart3, Download, Plus, Search,} from 'lucide-react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {BarChart3, Download, Plus, Search} from 'lucide-react';
+import {useNavigate} from 'react-router-dom';
 
-
-import {Header} from '@/components/layout/Header';
+import {HeaderWrapper} from '@/components/layout/HeaderWrapper';
 import {NavSection} from '@/components/layout/NavSection';
-import {Footer} from '@/components/layout/Footer';
-import {MetricCard} from '@/components/dashboard/MetricCard';
+import {MetricCardWrapper} from '@/components/dashboard/MetricCardWrapper';
 import {StockGrid} from '@/components/dashboard/StockGrid';
-import {Button} from '@/components/common/Button';
-import {Input} from '@/components/common/Input';
+import {AIAlertBannerWrapper as AISummaryWidget} from '@/components/ai/AIAlertBannerWrapper';
+import {ButtonWrapper as Button} from '@/components/common/ButtonWrapper';
 import {Card} from '@/components/common/Card';
-
 
 import {useStocks} from '@/hooks/useStocks';
 import {useDataExport} from '@/hooks/useFrontendState';
 import {useTheme} from '@/hooks/useTheme.ts';
+import {generateAISuggestions} from '@/utils/aiPredictions';
+import type {SearchChangeEvent} from '@/types/web-component-events';
 
 export const Dashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-
+    const navigate = useNavigate();
     const { theme } = useTheme();
 
     const {
@@ -44,6 +44,11 @@ export const Dashboard: React.FC = () => {
 
     const loadStocksRef = useRef(loadStocks);
     loadStocksRef.current = loadStocks;
+
+    // Generate all AI suggestions (memoized for performance)
+    const allAISuggestions = useMemo(() => {
+        return generateAISuggestions(stocks);
+    }, [stocks]);
 
     // Classes CSS basées sur le thème
     const themeClasses = {
@@ -164,7 +169,7 @@ export const Dashboard: React.FC = () => {
     return (
         <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
 
-            <Header />
+            <HeaderWrapper />
 
             {/* Navigation Section */}
             <NavSection>
@@ -189,11 +194,11 @@ export const Dashboard: React.FC = () => {
                         </Button>
                         <Button variant="secondary"
                                 icon={BarChart3}
-                                aria-label="Générer et télécharger un rapport détaillé des stocks"
-                                onClick={() => console.log('📊 Rapport détaillé')}
+                                aria-label="Voir les analyses IA et prédictions ML"
+                                onClick={() => navigate('/analytics')}
                                 className="w-auto max-w-[150px]"
                         >
-                            <span className="hidden md:hidden lg:inline">Rapport Détaillé</span>
+                            <span className="hidden md:hidden lg:inline">Analyses IA</span>
                         </Button>
                         <Button variant="secondary"
                                 icon={Search}
@@ -210,10 +215,10 @@ export const Dashboard: React.FC = () => {
             <main id="main-content" className="max-w-7xl mx-auto px-6 py-8" role="main">
 
                 {/* Métriques principales utilisant MetricCard */}
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" aria-labelledby="metrics-heading">
+                <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" aria-labelledby="metrics-heading">
                     <h2 id="metrics-heading" className="sr-only">Métriques principales</h2>
 
-                    <MetricCard
+                    <MetricCardWrapper
                         title="Total Produits"
                         value={stats?.total || 0}
                         change={{
@@ -224,7 +229,7 @@ export const Dashboard: React.FC = () => {
                         color="success"
                     />
 
-                    <MetricCard
+                    <MetricCardWrapper
                         title="Stock Faible"
                         value={stats?.low || 0}
                         change={{
@@ -235,7 +240,7 @@ export const Dashboard: React.FC = () => {
                         color="warning"
                     />
 
-                    <MetricCard
+                    <MetricCardWrapper
                         title="Valeur Totale"
                         value={`€${stats?.totalValue?.toLocaleString() || 0}`}
                         change={{
@@ -247,21 +252,30 @@ export const Dashboard: React.FC = () => {
                     />
                 </section>
 
+                {/* AI Smart Suggestions Section - Summary Widget */}
+                <section className="mb-8" aria-labelledby="ai-suggestions-heading">
+                    <h2 id="ai-suggestions-heading" className="sr-only">Suggestions intelligentes</h2>
+                    <AISummaryWidget
+                        suggestions={allAISuggestions.slice(0, 5)}
+                    />
+                </section>
+
                 {/* Recherche accessible */}
                 <section className="mb-8" role="search" aria-labelledby="search-heading">
                     <h2 id="search-heading" className="sr-only">Recherche de produits</h2>
                     <div className="relative max-w-md">
-                        <label htmlFor="search-input" className="sr-only">
-                            Rechercher un produit
-                        </label>
-                        <Input
-                            id="search-input"
-                            type="text"
+                        <sh-search-input
                             placeholder="Rechercher un produit..."
                             value={searchTerm}
-                            onChange={(e) => handleSearchChange(e.target.value)}
-                            icon={Search}
-                            aria-describedby="search-help"
+                            debounce={300}
+                            clearable={true}
+                            onsh-search-change={(e: SearchChangeEvent) => {
+                                if (e.detail && typeof e.detail.query === 'string') {
+                                    handleSearchChange(e.detail.query);
+                                }
+                            }}
+                            onsh-search-clear={() => setSearchTerm('')}
+                            aria-label="Rechercher un produit"
                         />
                         <div id="search-help" className="sr-only">
                             Tapez le nom, la catégorie ou le SKU du produit que vous recherchez
@@ -313,6 +327,7 @@ export const Dashboard: React.FC = () => {
                         onDelete={handleDeleteStock}
                         isUpdating={isLoading.update}
                         isDeleting={isLoading.delete}
+                        aiSuggestions={allAISuggestions}
                     />
                 )}
 
@@ -354,8 +369,12 @@ export const Dashboard: React.FC = () => {
 
 
             </main>
-            
-            <Footer />
+
+            <sh-footer
+                app-name="STOCK HUB"
+                year="2025"
+                data-theme="dark"
+            />
         </div>
     );
 };

@@ -1,6 +1,6 @@
-/// <reference types="vite/client" />
+import 'react';
 
-declare global {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'sh-status-badge': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
@@ -30,3 +30,4 @@ declare global {
     }
   }
 }
+

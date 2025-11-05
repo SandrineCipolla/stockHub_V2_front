@@ -9,7 +9,7 @@ export interface Notification {
   category: 'stock' | 'portfolio' | 'system' | 'alert';
   actionUrl?: string;
   actionLabel?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Notifications par défaut
