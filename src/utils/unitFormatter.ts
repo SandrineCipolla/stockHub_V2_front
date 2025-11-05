@@ -199,8 +199,10 @@ export function parseQuantityInput(input: string): {
  * @returns Array d'objets { value, label } pour chaque unité
  */
 export function getAvailableUnits(): Array<{ value: StockUnit; label: string }> {
-  return Object.entries(UNIT_CONFIG).map(([value, config]) => ({
+  return Object.keys(UNIT_CONFIG).map((value) => ({
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     value: value as StockUnit,
-    label: config.label,
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    label: UNIT_CONFIG[value as StockUnit].label,
   }));
 }

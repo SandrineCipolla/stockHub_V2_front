@@ -64,7 +64,8 @@ export const StockCard: React.FC<StockCardProps> = ({
             setActionFeedback(`🎨 ${result.message}`);
             setTimeout(() => setActionFeedback(null), 3000);
         } catch (error) {
-            setActionFeedback(`❌ ${(error as Error).message}`);
+            const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue';
+            setActionFeedback(`❌ ${errorMessage}`);
             setTimeout(() => setActionFeedback(null), 3000);
         }
     };

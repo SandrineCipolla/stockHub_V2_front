@@ -48,6 +48,8 @@ export const ButtonWrapper: React.FC<ButtonProps> = ({
     const handleClick = (e: Event) => {
         if (onClick && !disabled && !loading) {
             // Créer un event synthétique React-like pour compatibilité
+            // Note: Conversion nécessaire car web component Event !== React MouseEvent
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
             onClick(e as unknown as React.MouseEvent<HTMLButtonElement>);
         }
     };

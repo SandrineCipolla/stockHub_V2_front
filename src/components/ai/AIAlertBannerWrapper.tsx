@@ -67,7 +67,7 @@ export const AIAlertBannerWrapper: React.FC<AIAlertBannerWrapperProps> = ({
 
     // Handler pour le clic sur un item
     const handleItemClick = (e: Event) => {
-        const detail = (e as CustomEvent).detail;
+        const detail = e instanceof CustomEvent ? e.detail : null;
         console.log('🤖 Alert item clicked:', detail);
         // TODO: Navigation vers le stock concerné
     };

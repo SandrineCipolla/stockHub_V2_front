@@ -63,7 +63,8 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
             });
             console.log(`🎨 ${result.message}`);
         } catch (error) {
-            console.error(`❌ ${(error as Error).message}`);
+            const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+            console.error(`❌ ${errorMessage}`);
         }
     };
 

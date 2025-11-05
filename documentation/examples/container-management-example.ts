@@ -125,7 +125,8 @@ try {
   // Erreur : essayer d'acheter 0 tube
   purchaseContainers(stock, 0);
 } catch (error) {
-  console.error("❌ Erreur:", (error as Error).message);
+  const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+  console.error("❌ Erreur:", errorMessage);
   // Sortie: "❌ Erreur: Le nombre de containers doit être positif"
 }
 
@@ -133,7 +134,8 @@ try {
   // Erreur : essayer d'utiliser une quantité négative
   recordUsage(stock, -10);
 } catch (error) {
-  console.error("❌ Erreur:", (error as Error).message);
+  const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+  console.error("❌ Erreur:", errorMessage);
   // Sortie: "❌ Erreur: La quantité consommée doit être positive"
 }
 
@@ -151,7 +153,8 @@ try {
   };
   purchaseContainers(stockKg, 1);
 } catch (error) {
-  console.error("❌ Erreur:", (error as Error).message);
+  const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+  console.error("❌ Erreur:", errorMessage);
   // Sortie: "❌ Erreur: purchaseContainers() est réservé aux stocks en pourcentage (tubes, bouteilles)"
 }
 
