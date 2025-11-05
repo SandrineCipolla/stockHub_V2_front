@@ -34,7 +34,7 @@ export type SuggestionType =
  */
 export interface AISuggestion {
   id: string;
-  stockId: number;
+  stockId: number | string;
   stockName: string;
   type: SuggestionType;
   priority: SuggestionPriority;

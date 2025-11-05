@@ -37,7 +37,7 @@ export interface LinearRegressionResult {
  * Stock prediction with confidence intervals
  */
 export interface StockPrediction {
-  stockId: number;
+  stockId: number | string;
   stockName: string;
   currentQuantity: number;
 

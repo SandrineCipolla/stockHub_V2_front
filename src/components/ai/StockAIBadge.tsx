@@ -15,7 +15,7 @@ import type { AISuggestion, SuggestionPriority, SuggestionType } from '@/utils/a
  */
 export interface StockAIBadgeProps {
   /** Stock ID to filter suggestions */
-  stockId: number;
+  stockId: number | string;
   /** All AI suggestions (will be filtered by stockId) */
   suggestions: AISuggestion[];
   /** Optional CSS class name */

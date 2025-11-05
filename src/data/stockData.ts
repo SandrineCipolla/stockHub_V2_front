@@ -1,4 +1,4 @@
-import {CRITICAL, LOW, OPTIMAL, OVERSTOCKED, Stock} from '@/types';
+import {CRITICAL, LOW, OPTIMAL, Stock} from '@/types';
 
 /**
  * Données de démonstration pour usage familial/créatif
