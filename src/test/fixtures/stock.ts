@@ -1,9 +1,16 @@
 import type {Stock, StockStatus} from '@/types';
+import {CRITICAL, LOW, OPTIMAL, OUT_OF_STOCK, OVERSTOCKED} from '@/types';
 
 /**
  * Statuts de stock disponibles pour les tests (5 statuts)
  */
-export const stockStatuses: StockStatus[] = ['optimal', 'low', 'critical', 'outOfStock', 'overstocked'];
+export const stockStatuses: StockStatus[] = [
+    OPTIMAL,
+    LOW,
+    CRITICAL,
+    OUT_OF_STOCK,
+    OVERSTOCKED
+];
 
 /**
  * Catégories de stock pour les tests
@@ -48,7 +55,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: productNames.apple,
         quantity: 150,
         value: 225.5,
-        status: 'optimal',
+        status: OPTIMAL,
         lastUpdate: '2024-10-08T10:30:00Z',
         category: stockCategories.food,
         sku: 'FOOD-001',
@@ -62,7 +69,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: productNames.laptop,
         quantity: 8,
         value: 7200.0,
-        status: 'low',
+        status: LOW,
         lastUpdate: '2024-10-08T09:15:00Z',
         category: stockCategories.electronics,
         sku: 'ELEC-042',
@@ -76,7 +83,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: productNames.printer,
         quantity: 2,
         value: 450.0,
-        status: 'critical',
+        status: CRITICAL,
         lastUpdate: '2024-10-08T08:00:00Z',
         category: stockCategories.electronics,
         sku: 'ELEC-089',
@@ -90,7 +97,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: 'Toner Imprimante',
         quantity: 0,
         value: 0,
-        status: 'outOfStock',
+        status: OUT_OF_STOCK,
         lastUpdate: '2024-10-08T12:00:00Z',
         category: stockCategories.office,
         sku: 'OFF-089',
@@ -104,7 +111,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: 'Ramettes Papier A4',
         quantity: 250,
         value: 3750.0,
-        status: 'overstocked',
+        status: OVERSTOCKED,
         lastUpdate: '2024-10-08T11:30:00Z',
         category: stockCategories.office,
         sku: 'OFF-150',
@@ -118,7 +125,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: productNames.table,
         quantity: 25,
         value: 12500.0,
-        status: 'optimal',
+        status: OPTIMAL,
         lastUpdate: '2024-10-07T16:45:00Z',
         category: stockCategories.furniture,
         sku: 'FURN-015',
@@ -132,7 +139,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: productNames.chair,
         quantity: 100,
         value: 4500.0,
-        status: 'optimal',
+        status: OPTIMAL,
         lastUpdate: '2024-10-08T11:00:00Z',
         category: stockCategories.furniture,
         sku: 'FURN-023',
@@ -142,7 +149,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: productNames.phone,
         quantity: 30,
         value: 9000.0,
-        status: 'optimal',
+        status: OPTIMAL,
         lastUpdate: '2024-10-08T07:30:00Z',
         category: stockCategories.electronics,
         sku: 'ELEC-156',
@@ -154,7 +161,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: 'Stylos Bille',
         quantity: 500,
         value: 150.0,
-        status: 'optimal',
+        status: OPTIMAL,
         lastUpdate: new Date().toISOString(),
         category: stockCategories.office,
         sku: 'OFF-001',
@@ -168,7 +175,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
         name: 'Câble HDMI',
         quantity: 1,
         value: 15.0,
-        status: 'critical',
+        status: CRITICAL,
         lastUpdate: '2024-10-08T06:00:00Z',
         category: stockCategories.electronics,
         sku: 'ELEC-200',
@@ -196,24 +203,24 @@ export const dashboardStocks: Stock[] = [
  * Stocks filtrés par statut (5 statuts)
  */
 export const stocksByStatus: Record<StockStatus, Stock[]> = {
-    outOfStock: [
+    [OUT_OF_STOCK]: [
         stockHubStockUseCases.outOfStockItem,
     ],
-    critical: [
+    [CRITICAL]: [
         stockHubStockUseCases.criticalStock,
         stockHubStockUseCases.criticalLowQuantity,
     ],
-    low: [
+    [LOW]: [
         stockHubStockUseCases.lowStock
     ],
-    optimal: [
+    [OPTIMAL]: [
         stockHubStockUseCases.optimalStock,
         stockHubStockUseCases.highValueStock,
         stockHubStockUseCases.minimalStock,
         stockHubStockUseCases.stockWithoutThresholds,
         stockHubStockUseCases.recentlyUpdatedStock,
     ],
-    overstocked: [
+    [OVERSTOCKED]: [
         stockHubStockUseCases.overstockedItem,
     ],
 };
@@ -248,7 +255,7 @@ export const createMockStock = (overrides: Partial<Stock> = {}): Stock => ({
     name: 'Stock de Test',
     quantity: 50,
     value: 100.0,
-    status: 'optimal',
+    status: OPTIMAL,
     lastUpdate: new Date().toISOString(),
     category: stockCategories.office,
     sku: 'TEST-001',

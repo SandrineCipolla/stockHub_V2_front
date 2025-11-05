@@ -19,7 +19,23 @@
     "audit:a11y": "node scripts/test-reduced-motion.mjs",
     "audit:datasets": "node scripts/test-animations-datasets.mjs",
     "audit:daltonisme": "node scripts/test-daltonisme.mjs",
-    "audit:full": "node scripts/audit-complet.mjs"
+    "audit:full": "node scripts/audit-complet.mjs",
+    "clean:deadcode": "knip",
+    "clean:fix": "knip --fix",
+    "clean:check": "npm run type-check && npm run lint && npm run clean:deadcode",
+    "pre-commit": "npm run clean:check",
+    "detect:as-const": "node scripts/detect-as-const.mjs",
+    "check:strict": "npm run detect:as-const && npm run lint",
+    "ci:quality": "npm run type-check && npm run lint && npm run clean:deadcode && npm run detect:as-const",
+    "ci:test": "npm run test:run",
+    "ci:build": "npm run build",
+    "ci:check": "npm run ci:quality && npm run ci:test && npm run ci:build",
+    "ci:fix": "npm run lint:fix && npm run clean:fix && npm run ci:check",
+    "ci:fast": "npm run type-check && npm run lint && npm run test:run",
+    "ci:full": "npm run ci:check && npm run audit:full",
+    "debug:ci": "node scripts/debug-ci.mjs",
+    "typecheck": "npm run type-check"
+
   },
   "dependencies": {
     "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#master",
@@ -33,7 +49,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
-    "@tailwindcss/postcss": "^4.1.10",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -50,8 +65,8 @@
     "globals": "^16.0.0",
     "happy-dom": "^18.0.1",
     "jsdom": "^27.0.0",
+    "knip": "^5.66.2",
     "postcss": "^8.4.38",
-    "postcss-import": "^16.1.1",
     "puppeteer": "^24.24.0",
     "tailwindcss": "^3.4.1",
     "terser": "^5.44.0",
@@ -59,7 +74,6 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",
-    "vite-plugin-sitemap": "^0.8.2",
     "vitest": "^3.2.4"
   }
 }

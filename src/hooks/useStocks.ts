@@ -3,8 +3,20 @@ import type {CreateStockData, SearchFilters, Stock, UpdateStockData} from '@/typ
 import {calculateStockStatus} from '@/types/stock'; // 🆕 AJOUTÉ
 import {createFrontendError, useAsyncAction, useLocalStorageState} from './useFrontendState';
 import {stockData} from "@/data/stockData.ts";
+import {STOCK_MAX_THRESHOLD_DEFAULT, STOCK_MIN_THRESHOLD_DEFAULT} from '@/constants/stock';
 
 export type {CreateStockData, UpdateStockData};
+
+/**
+ * Génère un ID temporaire unique pour les nouveaux stocks.
+ * Ces IDs temporaires commencent par 'temp-' et seront remplacés
+ * par l'ID réel de la base de données lors de la sauvegarde.
+ *
+ * @returns Un ID temporaire unique sous forme de string
+ */
+const generateTemporaryId = (): string => {
+    return `temp-${crypto.randomUUID()}`;
+};
 
 // ===== HOOK PRINCIPAL POUR GESTION DES STOCKS =====
 export const useStocks = () => {
@@ -17,7 +29,6 @@ export const useStocks = () => {
 
     const [storageLoading, setStorageLoading] = useState(true);
     useEffect(() => {
-        // Simulation du temps de chargement initial du localStorage
         const timer = setTimeout(() => {
             setStorageLoading(false);
         }, 100);
@@ -28,10 +39,9 @@ export const useStocks = () => {
 
     // ===== ACTIONS AVEC GESTION D'ERREURS =====
 
-    // Charger les stocks (simulé) - FIX: useCallback pour éviter re-création
     const loadStocksAction = useAsyncAction(
         useCallback(async (): Promise<Stock[]> => {
-            // Simulation d'un chargement
+
             await new Promise(resolve => setTimeout(resolve, 800));
 
             if (!stocks || stocks.length === 0) {
@@ -43,10 +53,9 @@ export const useStocks = () => {
         { simulateDelay: 0 }
     );
 
-    // Créer un stock - FIX: useCallback avec dépendances stables
     const createStockAction = useAsyncAction(
         useCallback(async (stockData: CreateStockData): Promise<Stock> => {
-            // Validation
+
             if (!stockData.name.trim()) {
                 throw createFrontendError(
                     'validation',
@@ -74,7 +83,6 @@ export const useStocks = () => {
                 );
             }
 
-            // Vérifier si le nom existe déjà
             if (stocks?.some(stock => stock.name.toLowerCase() === stockData.name.toLowerCase())) {
                 throw createFrontendError(
                     'validation',
@@ -84,24 +92,23 @@ export const useStocks = () => {
                 );
             }
 
-            // ✅ CORRIGÉ : Calculer le statut avec les 5 statuts
             const status = calculateStockStatus(
                 stockData.quantity,
-                stockData.minThreshold || 10,
-                stockData.maxThreshold || 100
+                stockData.minThreshold || STOCK_MIN_THRESHOLD_DEFAULT,
+                stockData.maxThreshold || STOCK_MAX_THRESHOLD_DEFAULT
             );
 
+            // Utilisation d'un UUID temporaire pour éviter les conflits
+            // Cet ID sera remplacé par l'ID réel de la BD lors de la sauvegarde côté serveur
             const newStock: Stock = {
-                id: Math.max(...(stocks || []).map(s => s.id), 0) + 1,
+                id: generateTemporaryId(),
                 ...stockData,
                 status,
                 lastUpdate: 'maintenant'
             };
 
-            // Simulation de sauvegarde
             await new Promise(resolve => setTimeout(resolve, 600));
 
-            // Mettre à jour la liste
             const updatedStocks = [...(stocks || []), newStock];
             setStocks(updatedStocks);
 
@@ -115,7 +122,6 @@ export const useStocks = () => {
         }
     );
 
-    // Mettre à jour un stock - FIX: useCallback avec dépendances stables
     const updateStockAction = useAsyncAction(
         useCallback(async (updateData: UpdateStockData): Promise<Stock> => {
             if (!stocks) {
@@ -132,7 +138,6 @@ export const useStocks = () => {
                 );
             }
 
-            // Validation des champs modifiés
             if (updateData.name && !updateData.name.trim()) {
                 throw createFrontendError(
                     'validation',
@@ -151,10 +156,9 @@ export const useStocks = () => {
                 );
             }
 
-            // ✅ CORRIGÉ : Calculer le nouveau statut avec les 5 statuts
             const newQuantity = updateData.quantity ?? existingStock.quantity;
-            const newMinThreshold = updateData.minThreshold ?? existingStock.minThreshold ?? 10;
-            const newMaxThreshold = updateData.maxThreshold ?? existingStock.maxThreshold ?? 100;
+            const newMinThreshold = updateData.minThreshold ?? existingStock.minThreshold ?? STOCK_MIN_THRESHOLD_DEFAULT;
+            const newMaxThreshold = updateData.maxThreshold ?? existingStock.maxThreshold ?? STOCK_MAX_THRESHOLD_DEFAULT;
 
             const newStatus = calculateStockStatus(
                 newQuantity,
@@ -169,10 +173,8 @@ export const useStocks = () => {
                 lastUpdate: 'maintenant'
             };
 
-            // Simulation de sauvegarde
             await new Promise(resolve => setTimeout(resolve, 500));
 
-            // Mettre à jour la liste
             const updatedStocks = stocks.map(stock =>
                 stock.id === updateData.id ? updatedStock : stock
             );
@@ -183,9 +185,8 @@ export const useStocks = () => {
         { simulateDelay: 0 }
     );
 
-    // Supprimer un stock - FIX: useCallback avec dépendances stables
     const deleteStockAction = useAsyncAction(
-        useCallback(async (stockId: number): Promise<void> => {
+        useCallback(async (stockId: number | string): Promise<void> => {
             if (!stocks) {
                 throw createFrontendError(
                     'unknown',
@@ -201,19 +202,16 @@ export const useStocks = () => {
                 );
             }
 
-            // Simulation de suppression
             await new Promise(resolve => setTimeout(resolve, 400));
 
-            // Mettre à jour la liste
             const updatedStocks = stocks.filter(stock => stock.id !== stockId);
             setStocks(updatedStocks);
         }, [stocks, setStocks]),
         { simulateDelay: 0 }
     );
 
-    // Supprimer plusieurs stocks - FIX: useCallback avec dépendances stables
     const deleteMultipleStocksAction = useAsyncAction(
-        useCallback(async (stockIds: number[]): Promise<void> => {
+        useCallback(async (stockIds: (number | string)[]): Promise<void> => {
             if (!stocks) {
                 throw createFrontendError(
                     'unknown',
@@ -228,7 +226,6 @@ export const useStocks = () => {
                 );
             }
 
-            // Vérifier que tous les stocks existent
             const missingIds = stockIds.filter(id => !stocks.some(s => s.id === id));
             if (missingIds.length > 0) {
                 throw createFrontendError(
@@ -237,10 +234,8 @@ export const useStocks = () => {
                 );
             }
 
-            // Simulation de suppression en lot
             await new Promise(resolve => setTimeout(resolve, 800));
 
-            // Mettre à jour la liste
             const updatedStocks = stocks.filter(stock => !stockIds.includes(stock.id));
             setStocks(updatedStocks);
         }, [stocks, setStocks]),
@@ -249,12 +244,11 @@ export const useStocks = () => {
 
     // ===== COMPUTED VALUES =====
 
-    // Stocks filtrés - FIX: useMemo avec dépendances correctes
     const filteredStocks = useMemo(() => {
         if (!stocks) return [];
 
         return stocks.filter(stock => {
-            // Filtre par nom/recherche
+
             if (filters.query) {
                 const query = filters.query.toLowerCase();
                 if (!stock.name.toLowerCase().includes(query)) {
@@ -262,14 +256,12 @@ export const useStocks = () => {
                 }
             }
 
-            // Filtre par statut
             if (filters.status && filters.status.length > 0) {
                 if (!filters.status.includes(stock.status)) {
                     return false;
                 }
             }
 
-            // Filtre par valeur min/max
             if (filters.minValue !== undefined && stock.value < filters.minValue) {
                 return false;
             }
@@ -277,7 +269,6 @@ export const useStocks = () => {
         });
     }, [stocks, filters]);
 
-    // Statistiques - FIX: useMemo avec dépendances correctes
     const stats = useMemo(() => {
         if (!stocks) return null;
 
@@ -293,9 +284,9 @@ export const useStocks = () => {
         };
     }, [stocks]);
 
-    // ===== FONCTIONS UTILITAIRES - FIX: useCallback pour éviter re-création =====
+    // ===== FONCTIONS UTILITAIRES=====
 
-    const getStockById = useCallback((id: number): Stock | undefined => {
+    const getStockById = useCallback((id: number | string): Stock | undefined => {
         return stocks?.find(stock => stock.id === id);
     }, [stocks]);
 
@@ -311,8 +302,8 @@ export const useStocks = () => {
     const loadStocks = useCallback(() => loadStocksAction.execute(), [loadStocksAction]);
     const createStock = useCallback((data: CreateStockData) => createStockAction.execute(data), [createStockAction]);
     const updateStock = useCallback((data: UpdateStockData) => updateStockAction.execute(data), [updateStockAction]);
-    const deleteStock = useCallback((id: number) => deleteStockAction.execute(id), [deleteStockAction]);
-    const deleteMultipleStocks = useCallback((ids: number[]) => deleteMultipleStocksAction.execute(ids), [deleteMultipleStocksAction]);
+    const deleteStock = useCallback((id: number | string) => deleteStockAction.execute(id), [deleteStockAction]);
+    const deleteMultipleStocks = useCallback((ids: (number | string)[]) => deleteMultipleStocksAction.execute(ids), [deleteMultipleStocksAction]);
 
     // ===== RETURN OBJECT =====
     return {
@@ -322,14 +313,13 @@ export const useStocks = () => {
         stats,
         filters,
 
-        // Actions avec états de chargement
+
         loadStocks,
         createStock,
         updateStock,
         deleteStock,
         deleteMultipleStocks,
 
-        // États de chargement (par action)
         isLoading: {
             load: loadStocksAction.isLoading,
             create: createStockAction.isLoading,
@@ -339,7 +329,6 @@ export const useStocks = () => {
             storage: storageLoading
         },
 
-        // Erreurs (par action)
         errors: {
             load: loadStocksAction.error,
             create: createStockAction.error,
@@ -349,7 +338,6 @@ export const useStocks = () => {
             storage: storageError
         },
 
-        // États globaux
         hasAnyError: !!(
             loadStocksAction.error ||
             createStockAction.error ||
@@ -368,12 +356,10 @@ export const useStocks = () => {
             storageLoading
         ),
 
-        // Utilitaires
         getStockById,
         updateFilters,
         resetFilters,
 
-        // Reset des erreurs par action
         resetErrors: {
             load: loadStocksAction.reset,
             create: createStockAction.reset,

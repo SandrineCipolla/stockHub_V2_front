@@ -91,7 +91,7 @@ export const Dashboard: React.FC = () => {
     const handleExport = useCallback(async (): Promise<void> => {
         if (stocks.length === 0) return;
 
-        const stocksForExport = stocks.map(stock => ({ ...stock })) as Record<string, unknown>[];
+        const stocksForExport: Record<string, unknown>[] = stocks.map(stock => ({ ...stock }));
 
         const success = await exportToCsv(stocksForExport, 'stocks-export.csv');
         if (success) {
@@ -112,11 +112,11 @@ export const Dashboard: React.FC = () => {
         }
     }, [createStock]);
 
-    const handleDeleteStock = useCallback(async (stockId: number): Promise<void> => {
+    const handleDeleteStock = useCallback(async (stockId: number | string): Promise<void> => {
         await deleteStock(stockId);
     }, [deleteStock]);
 
-    const handleUpdateStock = useCallback(async (stockId: number): Promise<void> => {
+    const handleUpdateStock = useCallback(async (stockId: number | string): Promise<void> => {
         const currentStock = getStockById(stockId);
         if (currentStock) {
             await updateStock({
@@ -126,7 +126,7 @@ export const Dashboard: React.FC = () => {
         }
     }, [getStockById, updateStock]);
 
-    const handleViewStock = useCallback((stockId: number): void => {
+    const handleViewStock = useCallback((stockId: number | string): void => {
         console.log('Voir détails:', getStockById(stockId));
     }, [getStockById]);
 

@@ -23,6 +23,8 @@ const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus =>
     };
     return statusMap[status];
 };
+// Easing par défaut pour les animations de carte
+const CARD_EASING: EasingType = 'easeOut';
 
 export const StockCard: React.FC<StockCardProps> = ({
                                                         stock,
@@ -69,11 +71,11 @@ export const StockCard: React.FC<StockCardProps> = ({
     const hasContainers = localStock.unit === 'percentage' && localStock.containerCapacity !== undefined;
 
     const borderColorMap: Record<StockStatus, string> = {
-        optimal: 'border-l-emerald-500/30 hover:border-l-emerald-500/50',
-        low: 'border-l-amber-500/30 hover:border-l-amber-500/50',
-        critical: 'border-l-red-500/40 hover:border-l-red-500/60',
-        outOfStock: 'border-l-gray-500/50 hover:border-l-gray-500/70',
-        overstocked: 'border-l-blue-500/30 hover:border-l-blue-500/50'
+        optimal: 'border-stock-optimal',
+        low: 'border-stock-low',
+        critical: 'border-stock-critical',
+        outOfStock: 'border-stock-outOfStock',
+        overstocked: 'border-stock-overstocked'
     };
 
     const cardVariants = {
@@ -98,24 +100,15 @@ export const StockCard: React.FC<StockCardProps> = ({
             scale: prefersReducedMotion ? 1 : STOCK_CARD_ANIMATION.EXIT_SCALE,
             transition: {
                 duration: prefersReducedMotion ? REDUCED_MOTION_DURATION : STOCK_CARD_ANIMATION.EXIT_DURATION,
-                ease: 'easeOut' as const,
+                ease: CARD_EASING,
             },
         },
     };
 
-    // Mapping des couleurs de fond par statut pour Framer Motion
     const getHoverBackground = () => {
-        // En mode light, on utilise une opacité plus forte car le background est blanc
         const opacity = theme === 'dark' ? 0.1 : 0.15;
-
-        const colorMap = {
-            optimal: `rgb(16 185 129 / ${opacity})`,     // emerald-500
-            low: `rgb(245 158 11 / ${opacity})`,         // amber-500
-            critical: `rgb(239 68 68 / ${opacity})`,     // red-500
-            outOfStock: `rgb(107 114 128 / ${opacity})`, // gray-500
-            overstocked: `rgb(59 130 246 / ${opacity})`  // blue-500
-        };
-        return colorMap[stock.status];
+        const rgb = STOCK_STATUS_BG_COLORS[stock.status];
+        return `rgb(${rgb} / ${opacity})`;
     };
 
     const cardBaseClasses = theme === 'dark'
@@ -137,7 +130,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                           y: STOCK_CARD_ANIMATION.HOVER_Y_OFFSET,
                           transition: {
                               duration: STOCK_CARD_ANIMATION.HOVER_DURATION,
-                              ease: 'easeOut' as const,
+                              ease: CARD_EASING,
                           },
                       }
             }
@@ -148,7 +141,7 @@ export const StockCard: React.FC<StockCardProps> = ({
                 className={`
                     ${cardBaseClasses}
                     backdrop-blur-sm border rounded-xl p-6
-                    border-l-4 ${borderColorMap[stock.status]}
+                    ${borderColorMap[stock.status]}
                     transition-all duration-200 h-full relative
                 `}
                 whileHover={

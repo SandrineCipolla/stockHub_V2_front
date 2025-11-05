@@ -1,8 +1,9 @@
-import "./index.css"
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Dashboard } from "@/pages/Dashboard.tsx";
 import { Analytics } from "@/pages/Analytics.tsx";
 import { ThemeProvider } from "@/components/providers/ThemeProvider.tsx";
+import "./styles/index.css"
 
 
 function App() {

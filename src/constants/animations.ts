@@ -12,7 +12,7 @@ export const STOCK_CARD_ANIMATION = {
   INITIAL_SCALE: 0.95,
   ENTRANCE_DURATION: 0.6,
   CASCADE_DELAY: 0.12, // Delay between each card in grid
-  EASING: [0.25, 0.46, 0.45, 0.94] as const, // easeOutQuad
+  EASING: [0.25, 0.46, 0.45, 0.94] as const, // easeOutQuad - NÉCESSAIRE pour Framer Motion
 
   // Exit animation
   EXIT_Y_OFFSET: -16,
@@ -23,7 +23,7 @@ export const STOCK_CARD_ANIMATION = {
   HOVER_SCALE: 1.02,
   HOVER_Y_OFFSET: -4,
   HOVER_DURATION: 0.2,
-} as const;
+};
 
 /**
  * MetricCard counter animation configuration
@@ -31,7 +31,7 @@ export const STOCK_CARD_ANIMATION = {
 export const METRIC_CARD_ANIMATION = {
   COUNTER_DURATION: 1.2,
   EASING_FACTOR: -10, // For easeOutExpo calculation
-} as const;
+};
 
 /**
  * Reduced motion fallback duration (for accessibility)

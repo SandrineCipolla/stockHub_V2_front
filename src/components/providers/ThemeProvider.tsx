@@ -8,8 +8,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     const [theme, setTheme] = useState<Theme>("dark")
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem("stockhub-theme") as Theme
-        if (savedTheme) {
+        const savedTheme = localStorage.getItem("stockhub-theme")
+        if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
             setTheme(savedTheme)
         }
     }, [])
