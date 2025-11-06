@@ -4,6 +4,8 @@
 > Projet RNCP 7 - Développeur Web Full Stack
 > Développé par: Sandrine Cipolla
 
+> 💡 **Documents liés**: Pour les justifications et décisions architecturales (pourquoi ces choix), voir [AI-DECISIONS.md](AI-DECISIONS.md)
+
 ---
 
 ## 📋 Table des matières

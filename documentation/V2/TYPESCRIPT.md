@@ -653,4 +653,60 @@ export const StockCard: React.FC<StockCardProps> = ({
 };
 ```
 
+---
+
+## 🎯 Union Types - Bonnes Pratiques
+
+### Pourquoi utiliser `as const` ?
+
+Quand vous définissez un type union strict dans une interface ou un type, TypeScript peut inférer les valeurs comme des `string` génériques au lieu de la valeur littérale attendue.
+
+**Exemple de problème :**
+```typescript
+export interface Notification {
+  type: 'info' | 'warning' | 'error' | 'success';
+  priority: 'low' | 'medium' | 'high';
+  category: 'stock' | 'portfolio' | 'system' | 'alert';
+}
+
+const notif = {
+  type: 'info', // ❌ inféré comme string, pas comme 'info'
+};
+```
+
+### Solution : utiliser `as const`
+
+```typescript
+const notif = {
+  type: 'info' as const, // ✅ inféré comme 'info'
+  priority: 'low' as const,
+  category: 'system' as const,
+};
+```
+
+Cela garantit que la valeur est bien du type littéral attendu par l'union strict.
+
+### Alternative : assertion de type complète
+
+```typescript
+const notif = {
+  type: 'info',
+  priority: 'low',
+  category: 'system',
+  // ...
+} as Notification;
+```
+
+**⚠️ Attention :** TypeScript ne vérifie pas toujours la correspondance exacte des valeurs avec cette méthode, donc `as const` reste la méthode la plus sûre pour les valeurs littérales individuelles.
+
+### Résumé des bonnes pratiques
+
+- ✅ Utilisez `as const` pour les propriétés de type union strict lors de la création dynamique d'objets
+- ✅ Cela évite les erreurs de typage et garantit la sécurité du code
+- ✅ Préférez `as const` pour les valeurs littérales dans les objets générés dynamiquement
+- ⚠️ Vous pouvez aussi utiliser une assertion de type complète, mais soyez vigilant sur la validité des valeurs
+- 📝 Documentez cette règle dans votre projet pour faciliter la relecture du code
+
+---
+
 Ce guide garantit un code TypeScript robuste, maintenable et professionnel pour StockHub V2. 🚀
