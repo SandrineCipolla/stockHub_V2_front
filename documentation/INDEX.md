@@ -18,7 +18,7 @@
 
 ### Design System & Composants
 - [Design System Integration](STOCKHUB-V2-INTEGRATION.md) - Guide de migration vers le Design System
-- [Design System Wrappers Explained](DESIGN-SYSTEM-WRAPPERS.md) - Pourquoi et comment utiliser les wrappers
+- [Design System Wrappers Explained](V2/DESIGN-SYSTEM-WRAPPERS.md) - Pourquoi et comment utiliser les wrappers
 - [Animations Guide](ANIMATIONS.md) - Système d'animations et transitions
 - [Build Optimizations](BUILD-OPTIMIZATIONS.md) - Optimisations de build et performance
 
@@ -103,11 +103,12 @@ Documentation archivée (historique du projet) :
 
 ```
 documentation/
-├── README.md (ce fichier)           # Index principal
+├── INDEX.md (ce fichier)             # Index principal
 ├── V2/                               # Documentation V2
 │   ├── ARCHITECTURE.md
 │   ├── TYPESCRIPT.md
-│   └── AI-AGENT.md
+│   ├── AI-AGENT.md
+│   └── DESIGN-SYSTEM-WRAPPERS.md    # Explication wrappers
 ├── planning/                         # Planification
 │   ├── ROADMAP-ARCHITECTURE-EVOLUTION.md
 │   ├── STORYBOOK-ARCHITECTURE-STRATEGY.md
@@ -122,7 +123,8 @@ documentation/
     ├── recaps/                       # Sessions anciennes
     ├── design-system/                # Docs DS archivées
     ├── planning/                     # Planning ancien
-    └── status/                       # Status docs complétés
+    ├── status/                       # Status docs complétés
+    └── pr-analyses/                  # Analyses PR archivées
 ```
 
 ---
@@ -137,7 +139,7 @@ documentation/
 
 **Design System**
 - Intégration → [STOCKHUB-V2-INTEGRATION.md](STOCKHUB-V2-INTEGRATION.md)
-- Wrappers → [DESIGN-SYSTEM-WRAPPERS.md](DESIGN-SYSTEM-WRAPPERS.md)
+- Wrappers → [V2/DESIGN-SYSTEM-WRAPPERS.md](V2/DESIGN-SYSTEM-WRAPPERS.md)
 
 **Intelligence Artificielle**
 - Technique → [AI-FEATURES.md](AI-FEATURES.md)
