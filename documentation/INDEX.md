@@ -26,6 +26,7 @@
 - [Web Components Troubleshooting](TROUBLESHOOTING-WEB-COMPONENTS.md) - Résolution problèmes web components
 - [Logger Guide](LOGGER-GUIDE.md) - Utilisation du système de logging
 - [Maintenance Automation](MAINTENANCE-AUTO.md) - Scripts et automatisation
+- [Scripts d'Audit](SCRIPTS-AUDIT.md) - Guide scripts d'audit (FPS, a11y, daltonisme)
 
 ---
 
