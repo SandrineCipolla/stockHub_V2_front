@@ -68,7 +68,7 @@
 ### Documentation Essentielle RNCP
 - [RNCP Checklist](RNCP-CHECKLIST.md) ⭐ **IMPORTANT** - Suivi compétences et livrables
 - [AI Decisions & Justifications](AI-DECISIONS.md) ⭐ - Décisions architecturales (C2.5)
-- [Sessions Log](RECAP-03-NOVEMBRE.md) - Journal de développement
+- [Sessions Log](SESSIONS.md) - Index chronologique des sessions de développement
 
 ### Améliorations & Issues
 - [Améliorations Futures](../AMELIORATIONS-FUTURES.md) - Améliorations planifiées
