@@ -35,10 +35,9 @@
     "ci:full": "npm run ci:check && npm run audit:full",
     "debug:ci": "node scripts/debug-ci.mjs",
     "typecheck": "npm run type-check"
-
   },
   "dependencies": {
-    "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#master",
+    "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#v1.2.2",
     "framer-motion": "^12.23.24",
     "lit": "^3.3.1",
     "lucide-react": "^0.517.0",
