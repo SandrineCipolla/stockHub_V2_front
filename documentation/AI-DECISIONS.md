@@ -4,6 +4,8 @@
 > Projet RNCP 7 - Développeur Web Full Stack
 > Développé par: Sandrine Cipolla
 
+> 💡 **Documents liés**: Pour la documentation technique détaillée des algorithmes et formules, voir [AI-FEATURES.md](AI-FEATURES.md)
+
 ---
 
 ## 🎯 Objectif du Document

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Bell, Moon, Sun, User} from 'lucide-react';
-import {Button} from '@/components/common/Button';
+import {ButtonWrapper as Button} from '@/components/common/ButtonWrapper';
 import {useTheme} from '@/hooks/useTheme.ts';
 import type {HeaderProps} from '@/types';
 
