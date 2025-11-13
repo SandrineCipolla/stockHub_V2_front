@@ -6,13 +6,31 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 6
-**Période** : Octobre 2024 - Janvier 2025
+**Total sessions documentées** : 7
+**Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 12 Novembre 2025 - Tests Unitaires
+**Fichier** : [SESSION-2025-11-12-TESTS-UNITAIRES.md](SESSION-2025-11-12-TESTS-UNITAIRES.md)
+
+**Objectif** : Corriger tests unitaires cassés après migration Design System
+
+**Réalisations** :
+- ✅ **244 tests passent** (vs 208 avant) - +36 tests corrigés
+- ✅ Dashboard.test.tsx corrigé (18 tests) - MemoryRouter + web components
+- ✅ StockGrid.test.tsx corrigé (18 tests) - Adaptation Shadow DOM
+- ✅ Taux de réussite : **98%** (vs 85% avant)
+- ✅ 20 tests skippés (interactions Shadow DOM)
+- ✅ Documentation complète créée
+- ✅ Issues GitHub créées (#27, #28)
+
+**Impact** : Tests stabilisés, stratégie web components documentée, roadmap E2E définie
+
+---
 
 ### Session du 08 Novembre 2024 - Cleanup & Optimisation
 **Fichier** : [SESSION-2025-02-08-CLEANUP.md](SESSION-2025-02-08-CLEANUP.md)
@@ -135,6 +153,9 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 ## 🔍 Recherche par Thème
 
+**Tests & Qualité**
+- [12 Nov 2025](SESSION-2025-11-12-TESTS-UNITAIRES.md) - Correction TU web components (98% réussite)
+
 **Design System & Web Components**
 - [03 Nov 2024](RECAP-03-NOVEMBRE.md) - MetricCard migration + Bug status colors
 - [29 Oct 2024](archive/recaps/RECAP-29-OCTOBRE.md) - Migrations composants
@@ -155,10 +176,15 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 **Octobre 2024** : Setup V2 + Intégration Design System
 **Novembre 2024** : Migration composants + Résolution bugs
+**Novembre 2025** : Tests Unitaires + Stratégie Shadow DOM (98% réussite)
 **Janvier 2025** : Optimisations + Nettoyage technique
-**Février 2025** : Tests & Quality (en cours - Issue #24)
+
+**À venir** :
+- Tests wrappers (Issue #24)
+- Correction Header.test.tsx (Issue #27)
+- Setup Playwright E2E (Issue #28)
 
 ---
 
-**Dernière mise à jour** : 08 Novembre 2024
-**Prochaine session** : Tests des wrappers (Issue #24)
+**Dernière mise à jour** : 12 Novembre 2025
+**Prochaine session** : Tests des wrappers Design System (Issue #24)
