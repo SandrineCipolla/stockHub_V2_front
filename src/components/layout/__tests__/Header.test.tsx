@@ -34,8 +34,11 @@ describe('Header Component', () => {
             });
 
             it('should display logout button', () => {
-                render(<Header />);
-                expect(screen.getByRole('button', { name: /Se déconnecter/i })).toBeInTheDocument();
+                const { container } = render(<Header />);
+                // ButtonWrapper crée un web component sh-button avec Shadow DOM
+                // On vérifie la présence du web component et son aria-label
+                const logoutButton = container.querySelector('sh-button[aria-label*="Se déconnecter"]');
+                expect(logoutButton).toBeInTheDocument();
             });
         });
 
@@ -134,7 +137,6 @@ describe('Header Component', () => {
 
         describe('when clicking theme toggle', () => {
             it('should call toggleTheme', async () => {
-                const user = userEvent.setup();
                 const mockToggleTheme = vi.fn();
 
                 vi.mocked(useThemeModule.useTheme).mockReturnValue({
@@ -143,10 +145,16 @@ describe('Header Component', () => {
                     setTheme: vi.fn()
                 });
 
-                render(<Header />);
+                const { container } = render(<Header />);
 
-                const themeButton = screen.getByLabelText(/Changer vers le thème/i);
-                await user.click(themeButton);
+                // ButtonWrapper crée un sh-button qui émet sh-button-click
+                // On doit déclencher cet événement custom directement
+                const themeButton = container.querySelector('sh-button[aria-label*="Changer vers le thème"]');
+                expect(themeButton).toBeInTheDocument();
+
+                // Simuler le clic en déclenchant l'événement sh-button-click
+                const clickEvent = new Event('sh-button-click', { bubbles: true });
+                themeButton?.dispatchEvent(clickEvent);
 
                 expect(mockToggleTheme).toHaveBeenCalledTimes(1);
             });
@@ -192,23 +200,23 @@ describe('Header Component', () => {
 
         describe('when clicking logout button', () => {
             it('should render logout button', () => {
-                render(<Header />);
+                const { container } = render(<Header />);
 
-                const logoutButton = screen.getByRole('button', {
-                    name: /Se déconnecter de l'application StockHub/i
-                });
+                // ButtonWrapper crée un web component sh-button avec Shadow DOM
+                const logoutButton = container.querySelector('sh-button[aria-label*="Se déconnecter"]');
 
                 expect(logoutButton).toBeInTheDocument();
+                expect(logoutButton?.getAttribute('aria-label')).toContain('StockHub');
             });
 
             it('should render logout button for different users', () => {
-                render(<Header userName={getUserDisplayName(mockUserScenarios.wealthyUser)} />);
+                const { container } = render(<Header userName={getUserDisplayName(mockUserScenarios.wealthyUser)} />);
 
-                const logoutButton = screen.getByRole('button', {
-                    name: /Se déconnecter de l'application StockHub/i
-                });
+                // ButtonWrapper crée un web component sh-button avec Shadow DOM
+                const logoutButton = container.querySelector('sh-button[aria-label*="Se déconnecter"]');
 
                 expect(logoutButton).toBeInTheDocument();
+                expect(logoutButton?.getAttribute('aria-label')).toContain('StockHub');
             });
         });
     });
@@ -216,14 +224,19 @@ describe('Header Component', () => {
     describe('Accessibility', () => {
         it('should have proper ARIA labels', () => {
             const unreadCount = getNotificationStats(mockNotificationScenarios.unreadOnly).unread;
-            render(<Header notificationCount={unreadCount} />);
+            const { container } = render(<Header notificationCount={unreadCount} />);
 
+            // Bouton notifications (natif HTML)
             expect(screen.getByRole('button', {
                 name: new RegExp(`Notifications \\(${unreadCount} non lues\\)`, 'i')
             })).toBeInTheDocument();
 
-            expect(screen.getByLabelText(/Changer vers le thème/i)).toBeInTheDocument();
-            expect(screen.getByRole('button', { name: /Se déconnecter/i })).toBeInTheDocument();
+            // Boutons thème et logout (web components sh-button avec Shadow DOM)
+            const themeButton = container.querySelector('sh-button[aria-label*="Changer vers le thème"]');
+            expect(themeButton).toBeInTheDocument();
+
+            const logoutButton = container.querySelector('sh-button[aria-label*="Se déconnecter"]');
+            expect(logoutButton).toBeInTheDocument();
         });
     });
 });

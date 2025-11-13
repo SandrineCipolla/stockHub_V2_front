@@ -1,0 +1,4 @@
+{
+  "installCommand": "npm ci --no-optional && npm install --no-save @rollup/rollup-linux-x64-gnu || npm ci",
+  "buildCommand": "npm run build"
+}
