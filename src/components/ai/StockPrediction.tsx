@@ -7,6 +7,7 @@ import { AlertTriangle, TrendingDown, Clock, Package, Info } from 'lucide-react'
 import { motion, type Variants } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import type { StockPrediction as StockPredictionData } from '@/utils/mlSimulation';
+import { CardWrapper } from '@/components/common/CardWrapper';
 
 /**
  * Props for StockPrediction component
@@ -22,29 +23,31 @@ export interface StockPredictionProps {
 
 /**
  * Get color scheme based on risk level
+ * Uses default variant with custom border colors
+ * Background colors only on hover (managed by Tailwind)
  */
 function getRiskColors(riskLevel: StockPredictionData['riskLevel']) {
   switch (riskLevel) {
     case 'critical':
       return {
-        bg: 'bg-red-50 dark:bg-red-950/30',
-        border: 'border-red-200 dark:border-red-800',
+        borderColor: 'border-l-4 border-l-red-500 dark:border-l-red-400',
+        hoverBg: 'hover:bg-red-50 dark:hover:bg-red-950/30',
         text: 'text-red-700 dark:text-red-400',
         progress: 'bg-red-500',
         icon: 'text-red-600 dark:text-red-400',
       };
     case 'high':
       return {
-        bg: 'bg-orange-50 dark:bg-orange-950/30',
-        border: 'border-orange-200 dark:border-orange-800',
+        borderColor: 'border-l-4 border-l-orange-500 dark:border-l-orange-400',
+        hoverBg: 'hover:bg-orange-50 dark:hover:bg-orange-950/30',
         text: 'text-orange-700 dark:text-orange-400',
         progress: 'bg-orange-500',
         icon: 'text-orange-600 dark:text-orange-400',
       };
     case 'medium':
       return {
-        bg: 'bg-amber-50 dark:bg-amber-950/30',
-        border: 'border-amber-200 dark:border-amber-800',
+        borderColor: 'border-l-4 border-l-amber-500 dark:border-l-amber-400',
+        hoverBg: 'hover:bg-amber-50 dark:hover:bg-amber-950/30',
         text: 'text-amber-700 dark:text-amber-400',
         progress: 'bg-amber-500',
         icon: 'text-amber-600 dark:text-amber-400',
@@ -52,8 +55,8 @@ function getRiskColors(riskLevel: StockPredictionData['riskLevel']) {
     case 'low':
     default:
       return {
-        bg: 'bg-emerald-50 dark:bg-emerald-950/30',
-        border: 'border-emerald-200 dark:border-emerald-800',
+        borderColor: 'border-l-4 border-l-emerald-500 dark:border-l-emerald-400',
+        hoverBg: 'hover:bg-emerald-50 dark:hover:bg-emerald-950/30',
         text: 'text-emerald-700 dark:text-emerald-400',
         progress: 'bg-emerald-500',
         icon: 'text-emerald-600 dark:text-emerald-400',
@@ -99,20 +102,8 @@ function formatDate(date: Date): string {
 }
 
 /**
- * Animation variants
+ * Animation variants for progress bar
  */
-const containerVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.3,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  },
-};
-
 const progressVariants: Variants = {
   hidden: { width: 0 },
   visible: (percentage: number) => ({
@@ -171,11 +162,9 @@ export function StockPrediction({
   };
 
   return (
-    <motion.div
-      className={`rounded-lg border ${colors.border} ${colors.bg} p-4 ${className}`}
-      variants={shouldReduceMotion ? undefined : containerVariants}
-      initial={shouldReduceMotion ? undefined : 'hidden'}
-      animate={shouldReduceMotion ? undefined : 'visible'}
+    <CardWrapper
+      variant="default"
+      className={`${colors.borderColor} ${colors.hoverBg} transition-colors [&:hover]:!border-transparent ${className}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-3">
@@ -278,7 +267,7 @@ export function StockPrediction({
 
           {/* Recommended action */}
           {prediction.recommendedReorderDate && prediction.recommendedReorderQuantity > 0 && (
-            <div className={`mt-3 p-3 rounded-lg ${colors.bg} border ${colors.border}`}>
+            <div className="mt-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
               <div className="flex items-start gap-2">
                 <Package className={`w-4 h-4 ${colors.icon} mt-0.5 flex-shrink-0`} />
                 <div className="flex-1 min-w-0">
@@ -295,6 +284,6 @@ export function StockPrediction({
           )}
         </div>
       )}
-    </motion.div>
+    </CardWrapper>
   );
 }

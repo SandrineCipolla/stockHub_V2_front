@@ -29,7 +29,15 @@
 - ✅ Build maintenu à 103.31 KB gzipped
 - ✅ 0 erreur TypeScript
 
+**Suite - Décision Architecture StockPrediction** :
+- ⚠️ Tentative migration StockPrediction vers sh-card : limitations Shadow DOM
+- ✅ **Décision RNCP** : Créer `sh-stock-prediction-card` dans DS
+- ✅ Issue #32 créée (StockHub V2) - Tracking
+- ✅ Issue stockhub_design_system#18 créée - Implémentation DS
+- ⏳ StockPrediction reste HTML/Tailwind temporairement
+
 **Impact** : 🎉 **Application 100% Design System - Migration complète!**
+**Note** : Composant DS dédié en cours de création pour StockPrediction
 
 ---
 

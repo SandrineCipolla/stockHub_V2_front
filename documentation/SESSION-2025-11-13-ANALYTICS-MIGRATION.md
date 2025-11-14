@@ -517,9 +517,151 @@ predictions.push({
 
 ---
 
+## 🔄 Suite de Session - Migration StockPrediction
+
+### Contexte Post-Migration
+Après avoir atteint 100% de migration DS, analyse visuelle a révélé un problème de styling sur les StockPrediction cards.
+
+### Problème Identifié
+**Composant concerné** : `src/components/ai/StockPrediction.tsx`
+
+**Tentatives de migration vers sh-card** :
+1. ❌ Utilisation de `sh-card` avec variant="default" + Tailwind classes
+2. ❌ Ajout de `border-l-4` colorées selon riskLevel
+3. ❌ Ajout de `hover:bg-{color}-50` pour background au hover
+
+**Limitations rencontrées** :
+- ❌ Bordures droites au lieu d'arrondies (comme sh-stock-card)
+- ❌ Fine bordure violette indésirable au hover (vient du DS)
+- ❌ Impossible d'override styles internes à cause du Shadow DOM
+- ❌ `sh-card` générique ne supporte pas status-based styling
+
+**Constat** :
+- ✅ `sh-stock-card` a un prop `status` qui gère automatiquement les bordures colorées arrondies
+- ✅ `sh-card` est un composant générique sans styling status
+- ❌ StockPrediction a du contenu spécifique ML (progress bar, confidence, métriques) différent des stock items
+
+### Décision Architecture RNCP
+
+**Après analyse**, décision de créer un nouveau composant Design System dédié :
+
+**Nom du composant** : `sh-stock-prediction-card`
+
+**Justification RNCP Bloc 2** :
+1. **Architecture Design System professionnelle**
+   - Composants spécialisés pour cas d'usage spécifiques
+   - Séparation des responsabilités (DS vs Application)
+   - Pattern déjà établi : sh-stock-card, sh-stock-item-card
+
+2. **Documentation Storybook obligatoire**
+   - Stories pour tous les risk levels (critical, high, medium, low)
+   - Documentation props et exemples d'utilisation
+   - Démo visuelle pour référence
+
+3. **Réutilisabilité et maintenabilité**
+   - Centralisé dans le DS pour usage futur
+   - Styling cohérent avec les autres sh-stock-* components
+   - Évolutif pour de nouvelles features ML
+
+4. **Bonnes pratiques web components**
+   - Encapsulation Shadow DOM appropriée
+   - Props typés et documentés
+   - Events custom pour interactions
+
+**Composants DS actuels pour référence** :
+- `sh-stock-card` : Affichage produits en stock (status prop avec bordures colorées)
+- `sh-stock-item-card` : Vue liste inventaire
+- `sh-metric-card` : Affichage métriques Dashboard
+
+**Nouveau composant à créer** :
+- `sh-stock-prediction-card` : Affichage prédictions ML avec métriques spécifiques
+
+### Props Prévu pour sh-stock-prediction-card
+
+```typescript
+interface StockPredictionCardProps {
+  // Identité
+  stockName: string;
+  stockId?: string;
+
+  // Prédiction
+  riskLevel: 'critical' | 'high' | 'medium' | 'low';
+  daysUntilRupture: number | null;
+  dateOfRupture?: Date;
+
+  // Métriques ML
+  confidence: number; // 0-100
+  dailyConsumptionRate: number;
+  currentQuantity: number;
+
+  // Intervalle de confiance (optionnel)
+  daysUntilRupturePessimistic?: number;
+  daysUntilRuptureOptimistic?: number;
+
+  // Recommandations (optionnel)
+  recommendedReorderDate?: Date;
+  recommendedReorderQuantity?: number;
+
+  // UI
+  showDetails?: boolean; // Afficher section détails
+  className?: string;
+}
+```
+
+### Fonctionnalités Requises
+
+**Styling automatique selon riskLevel** :
+- ✅ Bordure colorée arrondie (gauche) - critical=red, high=orange, medium=amber, low=green
+- ✅ Pas de background à l'état statique
+- ✅ Background coloré léger au hover uniquement
+- ✅ Icône adaptée (AlertTriangle pour critical/high, TrendingDown pour medium/low)
+
+**Affichage contenu** :
+- ✅ Header avec nom stock + icône risque
+- ✅ Message principal (ex: "Rupture prévue dans 5 jours")
+- ✅ Badge confidence ML (%)
+- ✅ Progress bar niveau de risque
+- ✅ Intervalle confiance (pessimiste/optimiste)
+- ✅ Section détails (optionnelle) : consommation, date rupture, recommandations
+
+**Interactions** :
+- ✅ Effet hover (background coloré)
+- ✅ Event `sh-stock-prediction-click` (optionnel)
+- ✅ Transitions animations (respect prefers-reduced-motion)
+
+### Actions Immédiates
+
+**Issue StockHub V2 (#XX)** :
+- Documenter décision architecture
+- Référencer future issue DS
+- Statut : EN ATTENTE création composant DS
+
+**Issue Design System (stockhub_design_system)** :
+- Créer issue dédiée pour sh-stock-prediction-card
+- Design composant + props
+- Implémentation Lit Element
+- Storybook stories
+- Tests unitaires
+- Publication version DS (v1.2.3 ou v1.3.0)
+
+**Workflow** :
+1. ✅ Documenter session actuelle
+2. ⏳ Créer issue StockHub V2 (tracking)
+3. ⏳ Créer issue Design System (implémentation)
+4. ⏳ Développer composant DS
+5. ⏳ Publier nouvelle version DS
+6. ⏳ Migrer StockPrediction vers nouveau composant
+7. ⏳ Tests E2E Playwright
+
+**Temporaire** : StockPrediction reste avec HTML/Tailwind en attendant composant DS
+
+---
+
 **Date création** : 13 Novembre 2025
+**Dernière mise à jour** : 13 Novembre 2025 (suite migration)
 **Auteure** : Sandrine Cipolla
 **Encadrante** : Koni
 **Projet** : StockHub V2 - Certification RNCP 7
 
 **Statut** : ✅ **MIGRATION COMPLÈTE - 100% DESIGN SYSTEM**
+**Note** : StockPrediction en attente composant DS dédié (sh-stock-prediction-card)
