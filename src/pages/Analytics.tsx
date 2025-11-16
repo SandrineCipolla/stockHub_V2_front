@@ -16,7 +16,7 @@ import { predictStockRuptures } from '@/utils/mlSimulation';
 type RiskFilter = 'all' | 'critical' | 'high' | 'medium' | 'low';
 
 export const Analytics: React.FC = () => {
-  const [riskFilter, setRiskFilter] = useState<RiskFilter>('all');
+  const [riskFilter, setRiskFilter] = useState<RiskFilter | null>(null);
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { stocks } = useStocks();
@@ -28,7 +28,7 @@ export const Analytics: React.FC = () => {
 
   // Filter predictions based on selected risk level
   const filteredPredictions = useMemo(() => {
-    if (riskFilter === 'all') return allPredictions;
+    if (riskFilter === 'all' || riskFilter === null) return allPredictions;
     return allPredictions.filter(p => p.riskLevel === riskFilter);
   }, [allPredictions, riskFilter]);
 
@@ -78,7 +78,7 @@ export const Analytics: React.FC = () => {
             <StatCard
               value={stats.total}
               label="Total Stocks"
-              variant="primary"
+              riskLevel="default"
               selected={riskFilter === 'all'}
               onClick={() => setRiskFilter('all')}
             />
@@ -86,7 +86,7 @@ export const Analytics: React.FC = () => {
             <StatCard
               value={stats.critical}
               label="Critique (≤3j)"
-              variant="error"
+              riskLevel="critical"
               selected={riskFilter === 'critical'}
               onClick={() => setRiskFilter('critical')}
             />
@@ -94,7 +94,7 @@ export const Analytics: React.FC = () => {
             <StatCard
               value={stats.high}
               label="Élevé (4-7j)"
-              variant="warning"
+              riskLevel="high"
               selected={riskFilter === 'high'}
               onClick={() => setRiskFilter('high')}
             />
@@ -102,7 +102,7 @@ export const Analytics: React.FC = () => {
             <StatCard
               value={stats.medium}
               label="Moyen (8-14j)"
-              variant="warning"
+              riskLevel="medium"
               selected={riskFilter === 'medium'}
               onClick={() => setRiskFilter('medium')}
             />
@@ -110,7 +110,7 @@ export const Analytics: React.FC = () => {
             <StatCard
               value={stats.low}
               label="Faible (15j+)"
-              variant="success"
+              riskLevel="low"
               selected={riskFilter === 'low'}
               onClick={() => setRiskFilter('low')}
             />
@@ -123,15 +123,15 @@ export const Analytics: React.FC = () => {
         {/* Filter Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">
-            {riskFilter === 'all' ? 'Toutes les prédictions' : `Prédictions : ${riskFilter}`}
+            {riskFilter === 'all' || riskFilter === null ? 'Toutes les prédictions' : `Prédictions : ${riskFilter}`}
             <span className={themeClasses.textMuted}> ({filteredPredictions.length})</span>
           </h2>
 
-          {riskFilter !== 'all' && (
+          {riskFilter !== 'all' && riskFilter !== null && (
             <Button
               variant="ghost"
               icon={Filter}
-              onClick={() => setRiskFilter('all')}
+              onClick={() => setRiskFilter(null)}
             >
               Réinitialiser filtre
             </Button>
