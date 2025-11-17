@@ -1,11 +1,11 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
-import {render} from '@testing-library/react';
-import {StockCardWrapper} from '../StockCardWrapper';
-import type {Stock} from '@/types/stock';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render } from '@testing-library/react';
+import { StockCardWrapper } from '../StockCardWrapper';
+import type { Stock } from '@/types/stock';
 
 // Mock useTheme
 vi.mock('@/hooks/useTheme', () => ({
-  useTheme: () => ({ theme: 'dark' })
+  useTheme: () => ({ theme: 'dark' }),
 }));
 
 // Mock formatQuantityWithUnit
@@ -13,15 +13,15 @@ vi.mock('@/utils/unitFormatter', () => ({
   formatQuantityWithUnit: (quantity: number, unit?: string) => {
     if (unit === 'percentage') return `${quantity}%`;
     return `${quantity} unités`;
-  }
+  },
 }));
 
 // Mock containerManager
 vi.mock('@/utils/containerManager', () => ({
   recordUsage: (stock: Stock) => ({
     newQuantity: stock.quantity - 10,
-    message: 'Usage recorded'
-  })
+    message: 'Usage recorded',
+  }),
 }));
 
 // Mock stock data
@@ -35,7 +35,7 @@ const mockStock: Stock = {
   status: 'optimal',
   lastUpdate: '2 heures',
   minThreshold: 20,
-  maxThreshold: 200
+  maxThreshold: 200,
 };
 
 const mockPercentageStock: Stock = {
@@ -44,7 +44,7 @@ const mockPercentageStock: Stock = {
   name: 'Paint Product',
   unit: 'percentage',
   quantity: 75,
-  status: 'optimal'
+  status: 'optimal',
 };
 
 describe('StockCardWrapper', () => {
@@ -207,7 +207,7 @@ describe('StockCardWrapper', () => {
       const event = new Event('sh-details-click', { bubbles: true });
       card?.dispatchEvent(event);
 
-      expect(onView).toHaveBeenCalledWith('1');
+      expect(onView).toHaveBeenCalledWith(1);
     });
 
     it('should call onEdit when edit button is clicked', () => {
@@ -218,7 +218,7 @@ describe('StockCardWrapper', () => {
       const event = new Event('sh-edit-click', { bubbles: true });
       card?.dispatchEvent(event);
 
-      expect(onEdit).toHaveBeenCalledWith('1');
+      expect(onEdit).toHaveBeenCalledWith(1);
     });
 
     it('should call onDelete when delete button is clicked', () => {
@@ -229,7 +229,7 @@ describe('StockCardWrapper', () => {
       const event = new Event('sh-delete-click', { bubbles: true });
       card?.dispatchEvent(event);
 
-      expect(onDelete).toHaveBeenCalledWith('1');
+      expect(onDelete).toHaveBeenCalledWith(1);
     });
 
     it('should not throw when handlers are not provided', () => {

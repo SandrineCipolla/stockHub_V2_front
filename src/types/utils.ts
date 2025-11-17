@@ -14,9 +14,9 @@ export type FormSubmitHandler<T> = (data: T) => void | Promise<void>;
 
 // Types pour les hooks personnalisés
 export interface UseAsyncReturn<T> {
-    data: T | null;
-    loading: boolean;
-    error: Error | null;
-    execute: (...args: unknown[]) => Promise<T>;
-    reset: () => void;
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+  execute: (...args: unknown[]) => Promise<T>;
+  reset: () => void;
 }

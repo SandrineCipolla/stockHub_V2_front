@@ -6,48 +6,48 @@
  * Types d'easing supportés par Framer Motion
  */
 export type EasingType =
-    | 'linear'
-    | 'easeIn'
-    | 'easeOut'
-    | 'easeInOut'
-    | 'circIn'
-    | 'circOut'
-    | 'circInOut'
-    | 'backIn'
-    | 'backOut'
-    | 'backInOut'
-    | 'anticipate';
+  | 'linear'
+  | 'easeIn'
+  | 'easeOut'
+  | 'easeInOut'
+  | 'circIn'
+  | 'circOut'
+  | 'circInOut'
+  | 'backIn'
+  | 'backOut'
+  | 'backInOut'
+  | 'anticipate';
 
 /**
  * Configuration de transition pour Framer Motion
  */
 export interface AnimationTransition {
-    duration?: number;
-    delay?: number;
-    ease?: EasingType | number[];
-    type?: 'spring' | 'tween' | 'inertia';
-    stiffness?: number;
-    damping?: number;
-    mass?: number;
+  duration?: number;
+  delay?: number;
+  ease?: EasingType | number[];
+  type?: 'spring' | 'tween' | 'inertia';
+  stiffness?: number;
+  damping?: number;
+  mass?: number;
 }
 
 /**
  * Variantes d'animation pour un composant
  */
 export interface AnimationVariants {
-    hidden?: Record<string, unknown>;
-    visible?: Record<string, unknown>;
-    exit?: Record<string, unknown>;
-    hover?: Record<string, unknown>;
+  hidden?: Record<string, unknown>;
+  visible?: Record<string, unknown>;
+  exit?: Record<string, unknown>;
+  hover?: Record<string, unknown>;
 }
 
 /**
  * Configuration complète d'animation
  */
 export interface AnimationConfig {
-    variants?: AnimationVariants;
-    transition?: AnimationTransition;
-    initial?: string | Record<string, unknown>;
-    animate?: string | Record<string, unknown>;
-    exit?: string | Record<string, unknown>;
+  variants?: AnimationVariants;
+  transition?: AnimationTransition;
+  initial?: string | Record<string, unknown>;
+  animate?: string | Record<string, unknown>;
+  exit?: string | Record<string, unknown>;
 }

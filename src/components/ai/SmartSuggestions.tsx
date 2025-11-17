@@ -53,7 +53,7 @@ const PRIORITY_COLORS: Record<SuggestionPriority, { bg: string; text: string; bo
  */
 const TYPE_ICONS: Record<SuggestionType, typeof AlertCircle> = {
   'rupture-risk': AlertCircle,
-  'overstock': Package,
+  overstock: Package,
   'reorder-now': TrendingUp,
   'reorder-soon': TrendingUp,
   'optimize-stock': Settings,
@@ -120,12 +120,12 @@ export function SmartSuggestions({
 
   if (filteredSuggestions.length === 0) {
     return (
-      <div className={`rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 ${className}`}>
+      <div
+        className={`rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 ${className}`}
+      >
         <div className="flex items-center gap-3 mb-4">
           <Sparkles className="w-6 h-6 text-emerald-500" />
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Suggestions IA
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Suggestions IA</h2>
         </div>
         <p className="text-gray-600 dark:text-gray-400 text-sm">
           Aucune suggestion pour le moment. L'IA analyse vos stocks en continu.
@@ -135,18 +135,19 @@ export function SmartSuggestions({
   }
 
   return (
-    <div className={`rounded-lg border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-6 ${className}`}>
+    <div
+      className={`rounded-lg border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-6 ${className}`}
+    >
       {/* Header with AI icon */}
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500 to-blue-500">
           <Sparkles className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Suggestions IA
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Suggestions IA</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            {filteredSuggestions.length} recommandation{filteredSuggestions.length > 1 ? 's' : ''} basée{filteredSuggestions.length > 1 ? 's' : ''} sur l'analyse prédictive
+            {filteredSuggestions.length} recommandation{filteredSuggestions.length > 1 ? 's' : ''}{' '}
+            basée{filteredSuggestions.length > 1 ? 's' : ''} sur l'analyse prédictive
           </p>
         </div>
       </div>
@@ -158,7 +159,7 @@ export function SmartSuggestions({
         initial={shouldReduceMotion ? undefined : 'hidden'}
         animate={shouldReduceMotion ? undefined : 'visible'}
       >
-        {filteredSuggestions.map((suggestion) => {
+        {filteredSuggestions.map(suggestion => {
           const Icon = TYPE_ICONS[suggestion.type];
           const colors = PRIORITY_COLORS[suggestion.priority];
 
@@ -204,29 +205,19 @@ export function SmartSuggestions({
               {/* Action & Impact */}
               <div className="ml-8 space-y-2">
                 <div className="flex items-start gap-2 text-sm">
-                  <span className="font-medium text-gray-700 dark:text-gray-300">
-                    Action :
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {suggestion.action}
-                  </span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Action :</span>
+                  <span className="text-gray-600 dark:text-gray-400">{suggestion.action}</span>
                 </div>
 
                 <div className="flex items-start gap-2 text-sm">
-                  <span className="font-medium text-gray-700 dark:text-gray-300">
-                    Impact :
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {suggestion.impact}
-                  </span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Impact :</span>
+                  <span className="text-gray-600 dark:text-gray-400">{suggestion.impact}</span>
                 </div>
 
                 {/* Footer: Confidence + Apply button */}
                 <div className="flex items-center justify-between gap-3 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 dark:text-gray-500">
-                      Confiance :
-                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-500">Confiance :</span>
                     <div className="flex items-center gap-1">
                       <div className="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div
@@ -234,8 +225,8 @@ export function SmartSuggestions({
                             suggestion.confidence >= 85
                               ? 'bg-emerald-500'
                               : suggestion.confidence >= 75
-                              ? 'bg-blue-500'
-                              : 'bg-amber-500'
+                                ? 'bg-blue-500'
+                                : 'bg-amber-500'
                           }`}
                           style={{ width: `${suggestion.confidence}%` }}
                         />

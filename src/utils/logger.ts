@@ -95,10 +95,7 @@ export const logger = {
  * @example
  * const result = await measurePerf('Fetch stocks', () => fetchStocks());
  */
-export async function measurePerf<T>(
-  label: string,
-  fn: () => Promise<T> | T
-): Promise<T> {
+export async function measurePerf<T>(label: string, fn: () => Promise<T> | T): Promise<T> {
   if (!isDev) {
     return await fn();
   }

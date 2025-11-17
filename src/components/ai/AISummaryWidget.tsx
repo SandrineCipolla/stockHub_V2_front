@@ -132,7 +132,8 @@ export function AISummaryWidget({ suggestions, className = '' }: AISummaryWidget
           </div>
           <div className="text-left">
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-              🤖 {totalCount} stock{totalCount > 1 ? 's' : ''} nécessite{totalCount > 1 ? 'nt' : ''} votre attention
+              🤖 {totalCount} stock{totalCount > 1 ? 's' : ''} nécessite{totalCount > 1 ? 'nt' : ''}{' '}
+              votre attention
             </p>
             <div className="flex items-center gap-2 mt-1 flex-wrap">
               {counts.critical > 0 && (
@@ -179,11 +180,8 @@ export function AISummaryWidget({ suggestions, className = '' }: AISummaryWidget
                   Suggestions détaillées disponibles dans chaque carte de stock
                 </p>
                 <ul className="space-y-2">
-                  {suggestions.map((suggestion) => (
-                    <li
-                      key={suggestion.id}
-                      className="flex items-start gap-2 text-xs"
-                    >
+                  {suggestions.map(suggestion => (
+                    <li key={suggestion.id} className="flex items-start gap-2 text-xs">
                       <span className="mt-0.5">•</span>
                       <div className="flex-1">
                         <span className="font-medium text-gray-900 dark:text-gray-100">

@@ -1,10 +1,10 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
-import {render} from '@testing-library/react';
-import {MetricCardWrapper} from '../MetricCardWrapper';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render } from '@testing-library/react';
+import { MetricCardWrapper } from '../MetricCardWrapper';
 
 // Mock useTheme
 vi.mock('@/hooks/useTheme', () => ({
-  useTheme: () => ({ theme: 'dark' })
+  useTheme: () => ({ theme: 'dark' }),
 }));
 
 describe('MetricCardWrapper', () => {
@@ -128,10 +128,9 @@ describe('MetricCardWrapper', () => {
       expect(card?.getAttribute('variant')).toBe('default');
     });
 
-    it('should default to default variant for edge cases', () => {
-      // Test avec info qui devrait mapper vers default
+    it('should default to default variant for unknown colors', () => {
       const { container } = render(
-        <MetricCardWrapper title="Test" value="10" icon="package" color="info" />
+        <MetricCardWrapper title="Test" value="10" icon="package" color={'purple' as any} />
       );
       const card = container.querySelector('sh-metric-card');
       expect(card?.getAttribute('variant')).toBe('default');

@@ -5,7 +5,7 @@ import type { AISuggestion } from '@/utils/aiPredictions';
 
 // Mock useTheme
 vi.mock('@/hooks/useTheme', () => ({
-  useTheme: () => ({ theme: 'dark' })
+  useTheme: () => ({ theme: 'dark' }),
 }));
 
 // Mock console.log to avoid noise in tests
@@ -22,7 +22,7 @@ const criticalSuggestion: AISuggestion = {
   impact: 'Risque de rupture de stock',
   priority: 'critical',
   type: 'rupture-risk',
-  confidence: 95
+  confidence: 95,
 };
 
 const highSuggestion: AISuggestion = {
@@ -35,7 +35,7 @@ const highSuggestion: AISuggestion = {
   impact: 'Optimisation des stocks',
   priority: 'high',
   type: 'reorder-now',
-  confidence: 85
+  confidence: 85,
 };
 
 const mediumSuggestion: AISuggestion = {
@@ -44,11 +44,11 @@ const mediumSuggestion: AISuggestion = {
   stockName: 'Test Product Medium',
   title: 'Surveillez le stock',
   message: 'Tendance à la baisse',
-  action: 'Surveiller l\'évolution',
+  action: "Surveiller l'évolution",
   impact: 'Prévention des ruptures',
   priority: 'medium',
   type: 'reorder-soon',
-  confidence: 75
+  confidence: 75,
 };
 
 describe('AIAlertBannerWrapper', () => {
@@ -58,16 +58,12 @@ describe('AIAlertBannerWrapper', () => {
 
   describe('Basic rendering', () => {
     it('should render without crashing with suggestions', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       expect(container.querySelector('sh-ia-alert-banner')).toBeInTheDocument();
     });
 
     it('should create web component with sh-ia-alert-banner tag', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[highSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[highSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner).toBeInTheDocument();
     });
@@ -85,16 +81,16 @@ describe('AIAlertBannerWrapper', () => {
 
   describe('Props mapping', () => {
     it('should set count prop correctly with single suggestion', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('count')).toBe('1');
     });
 
     it('should set count prop correctly with multiple suggestions', () => {
       const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion, highSuggestion, mediumSuggestion]} />
+        <AIAlertBannerWrapper
+          suggestions={[criticalSuggestion, highSuggestion, mediumSuggestion]}
+        />
       );
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('count')).toBe('3');
@@ -109,9 +105,7 @@ describe('AIAlertBannerWrapper', () => {
     });
 
     it('should set expanded to false by default', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       // Boolean false doesn't create attribute in React.createElement
       // Check it's falsy or not 'true'
@@ -122,25 +116,19 @@ describe('AIAlertBannerWrapper', () => {
 
   describe('Priority to severity conversion', () => {
     it('should convert critical priority to critical severity', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('severity')).toBe('critical');
     });
 
     it('should convert high priority to warning severity', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[highSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[highSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('severity')).toBe('warning');
     });
 
     it('should convert medium priority to info severity', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[mediumSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[mediumSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('severity')).toBe('info');
     });
@@ -166,9 +154,7 @@ describe('AIAlertBannerWrapper', () => {
     });
 
     it('should use info when only medium/low priorities', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[mediumSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[mediumSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('severity')).toBe('info');
     });
@@ -184,9 +170,7 @@ describe('AIAlertBannerWrapper', () => {
 
   describe('Message customization', () => {
     it('should use singular message for single suggestion', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('message')).toBe('stock nécessite votre attention');
     });
@@ -212,9 +196,7 @@ describe('AIAlertBannerWrapper', () => {
 
   describe('Alerts array transformation', () => {
     it('should transform AISuggestion to IaAlert format', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
 
       // Note: alerts is an object, check it exists
@@ -223,18 +205,14 @@ describe('AIAlertBannerWrapper', () => {
 
     it('should map stockName to product field', () => {
       // This is internal transformation, validated by web component rendering
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner).toBeInTheDocument();
     });
 
     it('should map title to message field', () => {
       // This is internal transformation, validated by web component rendering
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[highSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[highSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner).toBeInTheDocument();
     });
@@ -252,9 +230,7 @@ describe('AIAlertBannerWrapper', () => {
 
   describe('Theme integration', () => {
     it('should apply theme via data-theme attribute', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('data-theme')).toBe('dark');
     });
@@ -262,15 +238,13 @@ describe('AIAlertBannerWrapper', () => {
 
   describe('Event handling', () => {
     it('should have event handler for item clicks', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
 
       // Simulate sh-ia-alert-item-click event
       const event = new CustomEvent('sh-ia-alert-item-click', {
         detail: { product: 'Test Product', index: 0 },
-        bubbles: true
+        bubbles: true,
       });
       banner?.dispatchEvent(event);
 
@@ -282,9 +256,7 @@ describe('AIAlertBannerWrapper', () => {
     });
 
     it('should not crash on event without detail', () => {
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
 
       const event = new Event('sh-ia-alert-item-click', { bubbles: true });
@@ -296,9 +268,7 @@ describe('AIAlertBannerWrapper', () => {
   describe('Edge cases', () => {
     it('should handle suggestion without priority', () => {
       const invalidSuggestion = { ...criticalSuggestion, priority: 'unknown' as any };
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[invalidSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[invalidSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       // Should default to 'info'
       expect(banner?.getAttribute('severity')).toBe('info');
@@ -307,24 +277,22 @@ describe('AIAlertBannerWrapper', () => {
     it('should handle very long stock names', () => {
       const longNameSuggestion = {
         ...criticalSuggestion,
-        stockName: 'A'.repeat(100)
+        stockName: 'A'.repeat(100),
       };
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={[longNameSuggestion]} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={[longNameSuggestion]} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner).toBeInTheDocument();
     });
 
     it('should handle large number of suggestions', () => {
-      const manySuggestions = Array(20).fill(null).map((_, i) => ({
-        ...mediumSuggestion,
-        id: `${i}`,
-        stockName: `Product ${i}`
-      }));
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={manySuggestions} />
-      );
+      const manySuggestions = Array(20)
+        .fill(null)
+        .map((_, i) => ({
+          ...mediumSuggestion,
+          id: `${i}`,
+          stockName: `Product ${i}`,
+        }));
+      const { container } = render(<AIAlertBannerWrapper suggestions={manySuggestions} />);
       const banner = container.querySelector('sh-ia-alert-banner');
       expect(banner?.getAttribute('count')).toBe('20');
     });
@@ -336,11 +304,9 @@ describe('AIAlertBannerWrapper', () => {
         criticalSuggestion,
         highSuggestion,
         mediumSuggestion,
-        { ...mediumSuggestion, id: '4', stockName: 'Product 4' }
+        { ...mediumSuggestion, id: '4', stockName: 'Product 4' },
       ];
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={mixedAlerts} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={mixedAlerts} />);
       const banner = container.querySelector('sh-ia-alert-banner');
 
       expect(banner?.getAttribute('count')).toBe('4');
@@ -352,11 +318,9 @@ describe('AIAlertBannerWrapper', () => {
       const warningAlerts = [
         highSuggestion,
         { ...highSuggestion, id: '5', stockName: 'Product 5' },
-        { ...highSuggestion, id: '6', stockName: 'Product 6' }
+        { ...highSuggestion, id: '6', stockName: 'Product 6' },
       ];
-      const { container } = render(
-        <AIAlertBannerWrapper suggestions={warningAlerts} />
-      );
+      const { container } = render(<AIAlertBannerWrapper suggestions={warningAlerts} />);
       const banner = container.querySelector('sh-ia-alert-banner');
 
       expect(banner?.getAttribute('severity')).toBe('warning');

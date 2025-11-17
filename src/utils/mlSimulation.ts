@@ -26,11 +26,11 @@ interface DataPoint {
  * Formula: y = slope * x + intercept
  */
 export interface LinearRegressionResult {
-  slope: number;           // Rate of consumption (units per day)
-  intercept: number;       // Initial quantity at t=0
-  rSquared: number;        // Coefficient of determination (0-1)
-  variance: number;        // Variance of residuals
-  confidence: number;      // Confidence level (0-100%)
+  slope: number; // Rate of consumption (units per day)
+  intercept: number; // Initial quantity at t=0
+  rSquared: number; // Coefficient of determination (0-1)
+  variance: number; // Variance of residuals
+  confidence: number; // Confidence level (0-100%)
 }
 
 /**
@@ -64,13 +64,13 @@ export interface StockPrediction {
  */
 const ML_CONFIG = {
   // Regression parameters
-  MIN_DATA_POINTS: 3,           // Minimum historical points for regression
-  CONFIDENCE_LEVEL: 0.95,       // 95% confidence interval
+  MIN_DATA_POINTS: 3, // Minimum historical points for regression
+  CONFIDENCE_LEVEL: 0.95, // 95% confidence interval
 
   // Time parameters
-  SIMULATION_HISTORY_DAYS: 30,  // Simulate 30 days of history
-  LEAD_TIME_DAYS: 5,            // Delivery lead time
-  SAFETY_MARGIN_DAYS: 2,        // Additional safety margin
+  SIMULATION_HISTORY_DAYS: 30, // Simulate 30 days of history
+  LEAD_TIME_DAYS: 5, // Delivery lead time
+  SAFETY_MARGIN_DAYS: 2, // Additional safety margin
 
   // Risk thresholds (days)
   RISK_CRITICAL: 3,
@@ -78,8 +78,8 @@ const ML_CONFIG = {
   RISK_MEDIUM: 14,
 
   // Confidence penalties
-  LOW_VARIANCE_BONUS: 10,       // +10% confidence if low variance
-  HIGH_VARIANCE_PENALTY: 20,    // -20% confidence if high variance
+  LOW_VARIANCE_BONUS: 10, // +10% confidence if low variance
+  HIGH_VARIANCE_PENALTY: 20, // -20% confidence if high variance
 } as const;
 
 /**
@@ -96,7 +96,10 @@ const ML_CONFIG = {
  * // Returns 30 data points showing quantity evolution over time
  * ```
  */
-function simulateHistoricalData(stock: Stock, days = ML_CONFIG.SIMULATION_HISTORY_DAYS): DataPoint[] {
+function simulateHistoricalData(
+  stock: Stock,
+  days = ML_CONFIG.SIMULATION_HISTORY_DAYS
+): DataPoint[] {
   const now = Date.now();
   const dataPoints: DataPoint[] = [];
 
@@ -128,10 +131,7 @@ function simulateHistoricalData(stock: Stock, days = ML_CONFIG.SIMULATION_HISTOR
 
   // Generate historical data points showing consumption over time
   // Start from a higher quantity in the past and decrease to current level
-  const startQuantity = Math.min(
-    stock.quantity + (baseConsumptionRate * days),
-    maxThreshold * 1.1
-  );
+  const startQuantity = Math.min(stock.quantity + baseConsumptionRate * days, maxThreshold * 1.1);
 
   let currentQuantity = startQuantity;
 
@@ -183,7 +183,9 @@ export function performLinearRegression(dataPoints: DataPoint[]): LinearRegressi
   const n = dataPoints.length;
 
   if (n < ML_CONFIG.MIN_DATA_POINTS) {
-    throw new Error(`Insufficient data points for regression. Need at least ${ML_CONFIG.MIN_DATA_POINTS}, got ${n}`);
+    throw new Error(
+      `Insufficient data points for regression. Need at least ${ML_CONFIG.MIN_DATA_POINTS}, got ${n}`
+    );
   }
 
   // Convert timestamps to days (x-axis)
@@ -212,7 +214,7 @@ export function performLinearRegression(dataPoints: DataPoint[]): LinearRegressi
     return sum + Math.pow(val - predicted, 2);
   }, 0);
 
-  const rSquared = 1 - (ssRes / ssTot);
+  const rSquared = 1 - ssRes / ssTot;
 
   // Calculate variance of residuals
   const variance = ssRes / (n - 2); // Divide by (n-2) for sample variance
@@ -386,7 +388,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
       quantity: stock.quantity,
       slope: regression.slope.toFixed(2),
       rSquared: regression.rSquared.toFixed(2),
-      confidence: regression.confidence
+      confidence: regression.confidence,
     });
   }
 
@@ -413,9 +415,10 @@ export function predictStockRupture(stock: Stock): StockPrediction {
   }
 
   // Step 5: Calculate rupture date
-  const dateOfRupture = daysUntilRupture !== null
-    ? new Date(Date.now() + daysUntilRupture * 24 * 60 * 60 * 1000)
-    : null;
+  const dateOfRupture =
+    daysUntilRupture !== null
+      ? new Date(Date.now() + daysUntilRupture * 24 * 60 * 60 * 1000)
+      : null;
 
   // Step 6: Determine risk level
   const riskLevel = determineRiskLevel(daysUntilRupture);
@@ -458,15 +461,17 @@ export function predictStockRupture(stock: Stock): StockPrediction {
  * ```
  */
 export function predictStockRuptures(stocks: Stock[]): StockPrediction[] {
-  const predictions = stocks.map(stock => {
-    try {
-      return predictStockRupture(stock);
-    } catch (error) {
-      // If prediction fails (e.g., insufficient data), return a safe default
-      console.warn(`Failed to predict stock ${stock.id}:`, error);
-      return null;
-    }
-  }).filter((p): p is StockPrediction => p !== null);
+  const predictions = stocks
+    .map(stock => {
+      try {
+        return predictStockRupture(stock);
+      } catch (error) {
+        // If prediction fails (e.g., insufficient data), return a safe default
+        console.warn(`Failed to predict stock ${stock.id}:`, error);
+        return null;
+      }
+    })
+    .filter((p): p is StockPrediction => p !== null);
 
   // Sort by risk level (critical first)
   const riskOrder: Record<StockPrediction['riskLevel'], number> = {

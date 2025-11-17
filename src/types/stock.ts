@@ -18,22 +18,22 @@ export const OVERSTOCKED = 'overstocked';
  * Garantit la cohérence entre les constantes et le type
  */
 export type StockStatus =
-    | typeof OPTIMAL
-    | typeof LOW
-    | typeof CRITICAL
-    | typeof OUT_OF_STOCK
-    | typeof OVERSTOCKED;
+  | typeof OPTIMAL
+  | typeof LOW
+  | typeof CRITICAL
+  | typeof OUT_OF_STOCK
+  | typeof OVERSTOCKED;
 
 /**
  * Objet regroupant toutes les constantes pour faciliter l'import
  * Usage: STOCK_STATUS.OPTIMAL ou directement OPTIMAL
  */
 export const STOCK_STATUS = {
-    OPTIMAL,
-    LOW,
-    CRITICAL,
-    OUT_OF_STOCK,
-    OVERSTOCKED,
+  OPTIMAL,
+  LOW,
+  CRITICAL,
+  OUT_OF_STOCK,
+  OVERSTOCKED,
 };
 
 /**
@@ -41,85 +41,91 @@ export const STOCK_STATUS = {
  * Permet de gérer des quantités fractionnaires (0.5m, 65%, etc.)
  */
 export type StockUnit =
-    | 'piece'        // Pièces entières (défaut) - ex: 2 tubes, 5 boîtes
-    | 'percentage'   // Pourcentage de remplissage - ex: 65% d'un tube
-    | 'ml'           // Millilitres - ex: 150ml de peinture
-    | 'g'            // Grammes - ex: 250g de farine
-    | 'meter'        // Mètres - ex: 2.5m de tissu
-    | 'liter'        // Litres - ex: 1.5L de vernis
-    | 'kg';          // Kilogrammes - ex: 2kg de farine
+  | 'piece' // Pièces entières (défaut) - ex: 2 tubes, 5 boîtes
+  | 'percentage' // Pourcentage de remplissage - ex: 65% d'un tube
+  | 'ml' // Millilitres - ex: 150ml de peinture
+  | 'g' // Grammes - ex: 250g de farine
+  | 'meter' // Mètres - ex: 2.5m de tissu
+  | 'liter' // Litres - ex: 1.5L de vernis
+  | 'kg'; // Kilogrammes - ex: 2kg de farine
 
 export interface Stock {
-    id: number | string;
-    name: string;
-    quantity: number;
-    unit?: StockUnit;          // Unité de mesure (défaut: 'piece')
-    value: number;
-    status: StockStatus;
-    lastUpdate: string;
-    category?: string;
-    sku?: string;
-    description?: string;
-    supplier?: string;
-    minThreshold?: number;
-    maxThreshold?: number;
+  id: number | string;
+  name: string;
+  quantity: number;
+  unit?: StockUnit; // Unité de mesure (défaut: 'piece')
+  value: number;
+  status: StockStatus;
+  lastUpdate: string;
+  category?: string;
+  sku?: string;
+  description?: string;
+  supplier?: string;
+  minThreshold?: number;
+  maxThreshold?: number;
 
-    // Gestion des containers (tubes, bouteilles, etc.) pour unités en %
-    containerCapacity?: number;    // Capacité d'un container (ex: 100ml pour un tube)
-    containersOwned?: number;      // Nombre de containers possédés
-    totalCapacity?: number;        // Capacité totale = containerCapacity × containersOwned
+  // Gestion des containers (tubes, bouteilles, etc.) pour unités en %
+  containerCapacity?: number; // Capacité d'un container (ex: 100ml pour un tube)
+  containersOwned?: number; // Nombre de containers possédés
+  totalCapacity?: number; // Capacité totale = containerCapacity × containersOwned
 }
 
 export interface SearchFilters {
-    query?: string;
-    status?: StockStatus[];
-    category?: string[];
-    minValue?: number;
-    maxValue?: number;
-    sortBy?: 'name' | 'quantity' | 'value' | 'lastUpdate';
-    sortOrder?: 'asc' | 'desc';
+  query?: string;
+  status?: StockStatus[];
+  category?: string[];
+  minValue?: number;
+  maxValue?: number;
+  sortBy?: 'name' | 'quantity' | 'value' | 'lastUpdate';
+  sortOrder?: 'asc' | 'desc';
 }
 
 export interface StockStats {
-    total: number;
-    optimal: number;
-    low: number;
-    critical: number;
-    outOfStock: number;
-    overstocked: number;
-    totalValue: number;
-    averageValue: number;
+  total: number;
+  optimal: number;
+  low: number;
+  critical: number;
+  outOfStock: number;
+  overstocked: number;
+  totalValue: number;
+  averageValue: number;
 }
 
 export interface CreateStockData {
-    name: string;
-    quantity: number;
-    unit?: StockUnit;
-    value: number;
-    description?: string;
-    category?: string;
-    supplier?: string;
-    minThreshold?: number;
-    maxThreshold?: number;
+  name: string;
+  quantity: number;
+  unit?: StockUnit;
+  value: number;
+  description?: string;
+  category?: string;
+  supplier?: string;
+  minThreshold?: number;
+  maxThreshold?: number;
 }
 
 export interface UpdateStockData extends Partial<CreateStockData> {
-    id: number | string;
+  id: number | string;
 }
 
 export interface StockEvent {
-    readonly id: string;
-    stockId: number | string;
-    type: 'created' | 'updated' | 'deleted' | 'low_stock' | 'critical_stock';
-    timestamp: Date;
-    userId: string;
-    details: Record<string, unknown>;
+  readonly id: string;
+  stockId: number | string;
+  type: 'created' | 'updated' | 'deleted' | 'low_stock' | 'critical_stock';
+  timestamp: Date;
+  userId: string;
+  details: Record<string, unknown>;
 }
 
-export const STOCK_STATUSES: readonly StockStatus[] = [OPTIMAL, LOW, CRITICAL, OUT_OF_STOCK, OVERSTOCKED];
+export const STOCK_STATUSES: readonly StockStatus[] = [
+  OPTIMAL,
+  LOW,
+  CRITICAL,
+  OUT_OF_STOCK,
+  OVERSTOCKED,
+];
 
 export const isStockStatus = (status: string): status is StockStatus => {
-    return STOCK_STATUSES.some(validStatus => validStatus === status);
+  return STOCK_STATUSES.some(validStatus => validStatus === status);
 };
 
 /**
@@ -132,22 +138,22 @@ export const isStockStatus = (status: string): status is StockStatus => {
  * @returns Le statut calculé parmi les 5 possibles
  */
 export const calculateStockStatus = (
-    quantity: number,
-    minThreshold: number = 10,
-    maxThreshold: number = 100
+  quantity: number,
+  minThreshold: number = 10,
+  maxThreshold: number = 100
 ): StockStatus => {
-    // Priorité 1 : Rupture de stock
-    if (quantity === 0) return OUT_OF_STOCK;
+  // Priorité 1 : Rupture de stock
+  if (quantity === 0) return OUT_OF_STOCK;
 
-    // Priorité 2 : Critique (< 50% du seuil minimum)
-    if (quantity < minThreshold * 0.5) return CRITICAL;
+  // Priorité 2 : Critique (< 50% du seuil minimum)
+  if (quantity < minThreshold * 0.5) return CRITICAL;
 
-    // Priorité 3 : Attention (< seuil minimum)
-    if (quantity < minThreshold) return LOW;
+  // Priorité 3 : Attention (< seuil minimum)
+  if (quantity < minThreshold) return LOW;
 
-    // Priorité 4 : Surstockage (> seuil maximum)
-    if (quantity > maxThreshold) return OVERSTOCKED;
+  // Priorité 4 : Surstockage (> seuil maximum)
+  if (quantity > maxThreshold) return OVERSTOCKED;
 
-    // Priorité 5 : Normal (entre min et max)
-    return OPTIMAL;
+  // Priorité 5 : Normal (entre min et max)
+  return OPTIMAL;
 };

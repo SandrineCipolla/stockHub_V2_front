@@ -4,7 +4,7 @@ import { CardWrapper } from '../CardWrapper';
 
 // Mock useTheme
 vi.mock('@/hooks/useTheme', () => ({
-  useTheme: () => ({ theme: 'dark' })
+  useTheme: () => ({ theme: 'dark' }),
 }));
 
 describe('CardWrapper', () => {
@@ -146,7 +146,7 @@ describe('CardWrapper', () => {
     });
 
     it('should not be selected by default', () => {
-      const { container} = render(<CardWrapper>Test</CardWrapper>);
+      const { container } = render(<CardWrapper>Test</CardWrapper>);
       const card = container.querySelector('sh-card');
       expect(card?.hasAttribute('selected')).toBe(false);
     });

@@ -3,7 +3,7 @@
  * Centralise toutes les classes CSS pour éviter les "magic strings"
  */
 
-import type {ComponentSize} from '@/types/ui';
+import type { ComponentSize } from '@/types/ui';
 
 /**
  * Classes de base pour tous les badges de statut

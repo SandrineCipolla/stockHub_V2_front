@@ -23,11 +23,11 @@ export type SuggestionPriority = 'critical' | 'high' | 'medium' | 'low';
  * Types of AI suggestions
  */
 export type SuggestionType =
-  | 'rupture-risk'      // Stock rupture imminent
-  | 'overstock'         // Surstock détecté
-  | 'reorder-now'       // Réapprovisionnement urgent
-  | 'reorder-soon'      // Réapprovisionnement à prévoir
-  | 'optimize-stock';   // Optimisation des seuils
+  | 'rupture-risk' // Stock rupture imminent
+  | 'overstock' // Surstock détecté
+  | 'reorder-now' // Réapprovisionnement urgent
+  | 'reorder-soon' // Réapprovisionnement à prévoir
+  | 'optimize-stock'; // Optimisation des seuils
 
 /**
  * AI-generated suggestion for stock management
@@ -63,18 +63,18 @@ interface ConsumptionTrend {
  */
 const AI_CONFIG = {
   // Seuils de détection
-  CRITICAL_DAYS_THRESHOLD: 3,      // Rupture critique si < 3 jours
-  HIGH_PRIORITY_DAYS: 7,            // Priorité haute si < 7 jours
-  OVERSTOCK_RATIO: 2.0,             // Surstock si > 2x maxQuantity
+  CRITICAL_DAYS_THRESHOLD: 3, // Rupture critique si < 3 jours
+  HIGH_PRIORITY_DAYS: 7, // Priorité haute si < 7 jours
+  OVERSTOCK_RATIO: 2.0, // Surstock si > 2x maxQuantity
 
   // Calculs de confiance
-  MIN_CONFIDENCE: 70,               // Confiance minimale pour suggestion
-  HIGH_CONFIDENCE: 85,              // Seuil de confiance élevée
+  MIN_CONFIDENCE: 70, // Confiance minimale pour suggestion
+  HIGH_CONFIDENCE: 85, // Seuil de confiance élevée
 
   // Facteurs de calcul
-  SAFETY_STOCK_FACTOR: 0.2,        // 20% de stock de sécurité
-  LEAD_TIME_DAYS: 5,                // Délai de réapprovisionnement
-  VOLATILITY_PENALTY: 0.3,          // Pénalité pour volatilité élevée
+  SAFETY_STOCK_FACTOR: 0.2, // 20% de stock de sécurité
+  LEAD_TIME_DAYS: 5, // Délai de réapprovisionnement
+  VOLATILITY_PENALTY: 0.3, // Pénalité pour volatilité élevée
 } as const;
 
 /**
@@ -120,10 +120,7 @@ function analyzeConsumptionTrend(stock: Stock): ConsumptionTrend {
   const volatility = Math.min(deviation / optimalMidpoint, 1);
 
   // Confiance : haute si proche des seuils (données plus significatives)
-  const confidence = Math.min(
-    AI_CONFIG.MIN_CONFIDENCE + (deviation / optimalMidpoint) * 20,
-    100
-  );
+  const confidence = Math.min(AI_CONFIG.MIN_CONFIDENCE + (deviation / optimalMidpoint) * 20, 100);
 
   return {
     dailyAverage,
@@ -140,10 +137,7 @@ function analyzeConsumptionTrend(stock: Stock): ConsumptionTrend {
  * @param trend - Consumption trend analysis
  * @returns Number of days until rupture, or null if no risk
  */
-function predictDaysUntilRupture(
-  stock: Stock,
-  trend: ConsumptionTrend
-): number | null {
+function predictDaysUntilRupture(stock: Stock, trend: ConsumptionTrend): number | null {
   if (stock.quantity <= 0) {
     return 0; // Rupture immédiate
   }
@@ -265,10 +259,7 @@ function getUsageAdaptedMessage(
  * @param trend - Consumption trend analysis
  * @returns Recommended quantity to order
  */
-function calculateOptimalReorderQuantity(
-  stock: Stock,
-  trend: ConsumptionTrend
-): number {
+function calculateOptimalReorderQuantity(stock: Stock, trend: ConsumptionTrend): number {
   const minThreshold = stock.minThreshold ?? 10;
   const maxThreshold = stock.maxThreshold ?? 100;
 
@@ -304,13 +295,13 @@ function generateRuptureRiskSuggestion(
   daysUntilRupture: number
 ): AISuggestion {
   const priority: SuggestionPriority =
-    daysUntilRupture <= AI_CONFIG.CRITICAL_DAYS_THRESHOLD ? 'critical' :
-    daysUntilRupture <= AI_CONFIG.HIGH_PRIORITY_DAYS ? 'high' : 'medium';
+    daysUntilRupture <= AI_CONFIG.CRITICAL_DAYS_THRESHOLD
+      ? 'critical'
+      : daysUntilRupture <= AI_CONFIG.HIGH_PRIORITY_DAYS
+        ? 'high'
+        : 'medium';
 
-  const confidence = Math.min(
-    trend.confidence - (trend.volatility * 10),
-    100
-  );
+  const confidence = Math.min(trend.confidence - trend.volatility * 10, 100);
 
   const quantityRecommended = calculateOptimalReorderQuantity(stock, trend);
   const sessionsRemaining = calculateSessionsRemaining(stock);
@@ -342,10 +333,7 @@ function generateRuptureRiskSuggestion(
 /**
  * Generates AI suggestion for overstock situation
  */
-function generateOverstockSuggestion(
-  stock: Stock,
-  trend: ConsumptionTrend
-): AISuggestion {
+function generateOverstockSuggestion(stock: Stock, trend: ConsumptionTrend): AISuggestion {
   const maxThreshold = stock.maxThreshold ?? 100;
   const excessRatio = stock.quantity / maxThreshold;
   const excessQuantity = stock.quantity - maxThreshold;
@@ -393,7 +381,10 @@ function generateReorderSuggestion(
   // Message principal avec contexte de sessions si applicable
   let message = `Stock ${stock.name} (${formattedCurrentQuantity}) nécessite un réapprovisionnement optimal de ${formattedRecommendedQuantity}.`;
 
-  if (sessionsRemaining !== null && (unit === 'percentage' || unit === 'meter' || unit === 'ml' || unit === 'liter')) {
+  if (
+    sessionsRemaining !== null &&
+    (unit === 'percentage' || unit === 'meter' || unit === 'ml' || unit === 'liter')
+  ) {
     message = `Stock ${stock.name} (${formattedCurrentQuantity}, ~${sessionsRemaining} utilisation${sessionsRemaining > 1 ? 's' : ''} restante${sessionsRemaining > 1 ? 's' : ''}) nécessite un réapprovisionnement.`;
   }
 
@@ -419,10 +410,7 @@ function generateReorderSuggestion(
 /**
  * Generates AI suggestion for stock threshold optimization
  */
-function generateOptimizeSuggestion(
-  stock: Stock,
-  trend: ConsumptionTrend
-): AISuggestion {
+function generateOptimizeSuggestion(stock: Stock, trend: ConsumptionTrend): AISuggestion {
   const minThreshold = stock.minThreshold ?? 10;
   const maxThreshold = stock.maxThreshold ?? 100;
 

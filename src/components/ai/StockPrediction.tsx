@@ -56,7 +56,9 @@ export const StockPrediction: React.FC<StockPredictionProps> = ({
     'current-quantity': currentQuantity,
     'days-until-rupture-pessimistic': daysUntilRupturePessimistic,
     'days-until-rupture-optimistic': daysUntilRuptureOptimistic,
-    'recommended-reorder-date': recommendedReorderDate ? recommendedReorderDate.toISOString() : undefined,
+    'recommended-reorder-date': recommendedReorderDate
+      ? recommendedReorderDate.toISOString()
+      : undefined,
     'recommended-reorder-quantity': recommendedReorderQuantity,
     'show-details': showDetails ? '' : undefined,
     'data-theme': theme,

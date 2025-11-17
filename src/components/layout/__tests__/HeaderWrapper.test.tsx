@@ -7,8 +7,8 @@ const mockToggleTheme = vi.fn();
 vi.mock('@/hooks/useTheme', () => ({
   useTheme: () => ({
     theme: 'dark',
-    toggleTheme: mockToggleTheme
-  })
+    toggleTheme: mockToggleTheme,
+  }),
 }));
 
 // Mock console.log to avoid noise in tests
@@ -250,11 +250,7 @@ describe('HeaderWrapper', () => {
   describe('Real-world scenarios', () => {
     it('should render production header config', () => {
       const { container } = render(
-        <HeaderWrapper
-          userName="Sandrine Cipolla"
-          notificationCount={5}
-          className="app-header"
-        />
+        <HeaderWrapper userName="Sandrine Cipolla" notificationCount={5} className="app-header" />
       );
       const header = container.querySelector('sh-header');
 
@@ -266,9 +262,7 @@ describe('HeaderWrapper', () => {
     });
 
     it('should render header without notifications', () => {
-      const { container } = render(
-        <HeaderWrapper userName="Guest User" notificationCount={0} />
-      );
+      const { container } = render(<HeaderWrapper userName="Guest User" notificationCount={0} />);
       const header = container.querySelector('sh-header');
       expect(header?.getAttribute('notificationcount')).toBe('0');
     });

@@ -5,7 +5,7 @@ import { Plus, Download } from 'lucide-react';
 
 // Mock useTheme
 vi.mock('@/hooks/useTheme', () => ({
-  useTheme: () => ({ theme: 'dark' })
+  useTheme: () => ({ theme: 'dark' }),
 }));
 
 describe('ButtonWrapper', () => {
@@ -218,9 +218,7 @@ describe('ButtonWrapper', () => {
 
   describe('ARIA and accessibility', () => {
     it('should pass through aria-label', () => {
-      const { container } = render(
-        <ButtonWrapper aria-label="Close dialog">X</ButtonWrapper>
-      );
+      const { container } = render(<ButtonWrapper aria-label="Close dialog">X</ButtonWrapper>);
       const button = container.querySelector('sh-button');
       expect(button?.getAttribute('aria-label')).toBe('Close dialog');
     });
