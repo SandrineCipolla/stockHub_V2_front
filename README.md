@@ -50,9 +50,11 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ### Design System
 - **Tokens**: Variables CSS personnalisées
-- **Components**: Composants modulaires réutilisables
+- **Components**: Web Components réutilisables (Lit Element)
 - **Theming**: Support thème sombre/clair
 - **Accessibility**: Attributs ARIA et navigation clavier
+
+> 📚 **[Guide d'utilisation des Web Components](./documentation/WEB_COMPONENTS_GUIDE.md)** - Patterns recommandés et exemples
 
 ## 🚀 Installation & Démarrage
 
