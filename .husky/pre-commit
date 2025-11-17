@@ -7,8 +7,4 @@ npx lint-staged
 echo "📝 Checking TypeScript..."
 npm run type-check
 
-# Dead code detection
-echo "🧹 Checking for dead code..."
-npm run clean:deadcode
-
 echo "✅ Pre-commit checks passed!"

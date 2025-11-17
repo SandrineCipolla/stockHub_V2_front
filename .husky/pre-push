@@ -7,6 +7,10 @@ echo "🧪 Running pre-push checks..."
 echo "🧪 Running tests..."
 npm run test:run
 
+# Dead code detection
+echo "🧹 Checking for dead code..."
+npm run clean:deadcode
+
 # Build check
 echo "🏗️  Checking build..."
 npm run build
