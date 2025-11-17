@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
-import { StockCardWrapper } from '../StockCardWrapper';
-import type { Stock } from '@/types/stock';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {render} from '@testing-library/react';
+import {StockCardWrapper} from '../StockCardWrapper';
+import type {Stock} from '@/types/stock';
 
 // Mock useTheme
 vi.mock('@/hooks/useTheme', () => ({
@@ -26,12 +26,12 @@ vi.mock('@/utils/containerManager', () => ({
 
 // Mock stock data
 const mockStock: Stock = {
-  id: '1',
+  id: 1,
   name: 'Test Product',
   category: 'Electronics',
   quantity: 100,
   value: 1500,
-  unit: 'unit',
+  unit: 'piece',
   status: 'optimal',
   lastUpdate: '2 heures',
   minThreshold: 20,

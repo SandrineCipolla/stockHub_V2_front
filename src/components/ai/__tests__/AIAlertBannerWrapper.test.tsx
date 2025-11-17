@@ -14,32 +14,41 @@ const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 // Mock AI suggestions
 const criticalSuggestion: AISuggestion = {
   id: '1',
+  stockId: '1',
   stockName: 'Test Product Critical',
   title: 'Stock critique - commandez immédiatement',
-  description: 'Le stock est dangereusement bas',
+  message: 'Le stock est dangereusement bas',
+  action: 'Commander immédiatement',
+  impact: 'Risque de rupture de stock',
   priority: 'critical',
-  type: 'restock',
-  confidence: 0.95
+  type: 'rupture-risk',
+  confidence: 95
 };
 
 const highSuggestion: AISuggestion = {
   id: '2',
+  stockId: '2',
   stockName: 'Test Product High',
   title: 'Stock faible - commande recommandée',
-  description: 'Le stock approche du seuil critique',
+  message: 'Le stock approche du seuil critique',
+  action: 'Prévoir réapprovisionnement',
+  impact: 'Optimisation des stocks',
   priority: 'high',
-  type: 'restock',
-  confidence: 0.85
+  type: 'reorder-now',
+  confidence: 85
 };
 
 const mediumSuggestion: AISuggestion = {
   id: '3',
+  stockId: '3',
   stockName: 'Test Product Medium',
   title: 'Surveillez le stock',
-  description: 'Tendance à la baisse',
+  message: 'Tendance à la baisse',
+  action: 'Surveiller l\'évolution',
+  impact: 'Prévention des ruptures',
   priority: 'medium',
-  type: 'monitor',
-  confidence: 0.75
+  type: 'reorder-soon',
+  confidence: 75
 };
 
 describe('AIAlertBannerWrapper', () => {
@@ -207,7 +216,6 @@ describe('AIAlertBannerWrapper', () => {
         <AIAlertBannerWrapper suggestions={[criticalSuggestion]} />
       );
       const banner = container.querySelector('sh-ia-alert-banner');
-      const alertsProp = banner?.getAttribute('alerts');
 
       // Note: alerts is an object, check it exists
       expect(banner?.hasAttribute('alerts')).toBe(true);
