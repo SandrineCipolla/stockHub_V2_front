@@ -182,10 +182,38 @@
 - Pre-commit: fast (lint-staged + TypeScript)
 - Pre-push: comprehensive (tests + Knip + build)
 - Codebase cleaned, 100% TypeScript valid
+- Tag v1.2.0 créé et release GitHub publiée
+- PR #36 mergée dans main
+- Issue #24 mise à jour (reste SearchInputWrapper à tester)
 
 ---
 
 ## 📋 CE QUI RESTE À FAIRE
+
+### 🎯 Priorité Immédiate - Session 8 (18/11)
+
+#### Tests SearchInputWrapper (PR #34) ⏳
+
+**Estimation** : 30min-1h
+
+**Description** : Compléter les tests du dernier wrapper manquant
+
+**Tâches** :
+
+- [ ] Checkout branche PR #34
+- [ ] Créer `SearchInputWrapper.test.tsx`
+- [ ] Tester props mapping (value, placeholder, debounce)
+- [ ] Tester événement search
+- [ ] Tester événement clear
+- [ ] Tester debounce timing
+- [ ] Push tests sur branche PR #34
+- [ ] Merger PR #34 complète
+
+**Justification** : Compléter 7/7 wrappers testés, fermer proprement Issue #24
+
+---
+
+## 📋 BACKLOG
 
 ### 🎯 Priorité Immédiate (Issues GitHub)
 
