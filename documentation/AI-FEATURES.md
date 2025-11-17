@@ -651,12 +651,16 @@ ML détecte:
 
 ### Tests Unitaires
 
-**Couverture**: 93.3% (369 tests passent)
+**Couverture**: 60.67% global (374 tests passent, composants 90-98%)
+
+**Architecture**: Tests basés sur wrappers React pour web components
 
 **Fichiers testés**:
-- `aiPredictions.test.ts` (45 tests)
-- `mlSimulation.test.ts` (à implémenter)
-- `StockPrediction.test.tsx` (à implémenter)
+- `aiPredictions.test.ts` (45 tests) - Coverage: 75.53%
+- `StockPredictionCardWrapper.test.tsx` (tests wrapper - à implémenter)
+- Tests wrappers existants: ButtonWrapper, CardWrapper, MetricCardWrapper, StockCardWrapper (116 tests)
+
+**Note**: Composants AI non testés (0% coverage) - voir Issue #35
 
 **Scénarios testés**:
 - ✅ Calcul confiance avec différentes volatilités

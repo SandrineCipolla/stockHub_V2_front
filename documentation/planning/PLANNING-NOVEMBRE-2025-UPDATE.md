@@ -11,7 +11,7 @@
 **Score actuel** : 85/100
 
 **Points d'amélioration prioritaires** :
-- ✅ Tests unitaires (complété - 369 tests, 93% coverage)
+- ✅ Tests unitaires (complété - 374 tests, 60.67% coverage global, wrappers 90-98%)
 - ✅ Créativité visuelle (complété - système statuts + animations)
 - ✅ Animations (complété - Framer Motion)
 - ✅ IA visible (complété - ML predictions page)
@@ -88,7 +88,7 @@
 - 18 composants au total
 - Documentation harmonisée
 
-#### Session 5 (17/11) - Audit Accessibilité WCAG AA ✅
+#### Session 5 (17/11 matin) - Audit Accessibilité WCAG AA ✅
 **Durée** : ~2h
 
 - ✅ Création script `test-risk-levels-colors.mjs`
@@ -102,6 +102,30 @@
 - Script npm : `audit:risk-levels`
 - Rapport JSON automatisé
 - 0 corrections nécessaires
+
+#### Session 6 (17/11 après-midi) - Bug Search + Tests Wrappers ✅
+**Durée** : ~3h
+
+**Bug Fix - Recherche:**
+- ✅ Issue #33 créée (Search input not working)
+- ✅ Création `SearchInputWrapper.tsx` avec React.createElement()
+- ✅ Fix event detail: `detail.query` → `detail.value`
+- ✅ Tests manuels validés
+- ✅ PR #34 mergée
+
+**Tests Wrappers (Issue #24):**
+- ✅ `ButtonWrapper.test.tsx` - 26 tests (icon mapping, events, variants)
+- ✅ `CardWrapper.test.tsx` - 30 tests (variants, events, states)
+- ✅ `MetricCardWrapper.test.tsx` - 27 tests (icon/color mapping, trends)
+- ✅ `StockCardWrapper.test.tsx` - 33 tests (status conversion, formatting, events)
+
+**Livrables** :
+- Issue #33 résolue (Bug recherche)
+- PR #34 créée
+- 116 nouveaux tests wrappers
+- 374 tests passent (33 skipped)
+- Coverage: 60.67% global (composants 90-98%, utils 0-37%)
+- 1 test Analytics obsolète skip (sh-card → sh-stat-card)
 
 ---
 
@@ -194,8 +218,9 @@
 ## 📊 Métriques Actuelles (17/11/2025)
 
 ### Tests & Qualité ✅
-- **Tests unitaires** : 369 tests
-- **Coverage global** : 93.3%
+- **Tests unitaires** : 374 tests (116 tests wrappers + tests existants)
+- **Coverage global** : 60.67% (composants: 90-98%, utils/AI: 0-37%)
+- **Coverage wrappers** : 90-98% (4/6 wrappers testés)
 - **TypeScript** : Mode strict, 0 erreur
 - **ESLint** : 0 warning
 
@@ -265,7 +290,7 @@
 - ✅ Documentation professionnelle
 
 ### Métriques Qualité ✅
-- ✅ 93.3% coverage tests
+- ✅ 60.67% coverage global (374 tests, composants 90-98%, utils 0-37%)
 - ✅ 0 erreur TypeScript
 - ✅ Lighthouse 99/100 (perf)
 - ✅ Lighthouse 96/100 (a11y)

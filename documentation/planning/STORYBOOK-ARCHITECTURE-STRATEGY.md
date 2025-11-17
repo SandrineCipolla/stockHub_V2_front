@@ -320,7 +320,7 @@ Routing :
 - Tests categoryAggregator
 - Tests navigation Dashboard → Détails
 - Tests responsive
-- Vérifier coverage maintenu ≥ 93%
+- Vérifier coverage composants ≥ 90% (actuel: 60.67% global, composants 90-98%)
 
 **Livrables Session 4** :
 - ✅ Architecture finale implémentée
@@ -399,7 +399,7 @@ src/
 - [ ] Dashboard affiche 3-5 CategoryCard au lieu de 18 StockItemCard
 - [ ] Page CategoryDetailsPage créée
 - [ ] Navigation Dashboard → Détails fonctionne
-- [ ] Tous les tests passent (≥ 93% coverage)
+- [ ] Tous les tests passent (composants ≥ 90% coverage)
 - [ ] Build réussit
 - [ ] Performance maintenue (Lighthouse ≥ 98)
 
@@ -427,11 +427,12 @@ src/
 Le wrapper gère la conversion React props → WC props automatiquement.
 
 ### Tests
-⚠️ **Maintenir coverage ≥ 93%**
-- Ajouter tests pour chaque WC
+⚠️ **Maintenir coverage composants ≥ 90%**
+- Ajouter tests wrapper pour chaque WC
 - Ajouter tests pour CategoryCard
 - Ajouter tests pour categoryAggregator
 - Tests navigation Dashboard → Détails
+- État actuel: 374 tests, 60.67% global (composants 90-98%, utils 0-37%)
 
 ### Performance
 ⚠️ **Lighthouse doit rester ≥ 98/100**
