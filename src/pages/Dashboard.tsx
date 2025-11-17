@@ -8,13 +8,13 @@ import {MetricCardWrapper} from '@/components/dashboard/MetricCardWrapper';
 import {StockGrid} from '@/components/dashboard/StockGrid';
 import {AIAlertBannerWrapper as AISummaryWidget} from '@/components/ai/AIAlertBannerWrapper';
 import {ButtonWrapper as Button} from '@/components/common/ButtonWrapper';
+import {SearchInputWrapper} from '@/components/common/SearchInputWrapper';
 import {Card} from '@/components/common/Card';
 
 import {useStocks} from '@/hooks/useStocks';
 import {useDataExport} from '@/hooks/useFrontendState';
 import {useTheme} from '@/hooks/useTheme.ts';
 import {generateAISuggestions} from '@/utils/aiPredictions';
-import type {SearchChangeEvent} from '@/types/web-component-events';
 
 export const Dashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -264,18 +264,14 @@ export const Dashboard: React.FC = () => {
                 <section className="mb-8" role="search" aria-labelledby="search-heading">
                     <h2 id="search-heading" className="sr-only">Recherche de produits</h2>
                     <div className="relative max-w-md">
-                        <sh-search-input
+                        <SearchInputWrapper
                             placeholder="Rechercher un produit..."
                             value={searchTerm}
                             debounce={300}
                             clearable={true}
-                            onsh-search-change={(e: SearchChangeEvent) => {
-                                if (e.detail && typeof e.detail.query === 'string') {
-                                    handleSearchChange(e.detail.query);
-                                }
-                            }}
-                            onsh-search-clear={() => setSearchTerm('')}
-                            aria-label="Rechercher un produit"
+                            onSearchChange={handleSearchChange}
+                            onSearchClear={() => setSearchTerm('')}
+                            ariaLabel="Rechercher un produit"
                         />
                         <div id="search-help" className="sr-only">
                             Tapez le nom, la catégorie ou le SKU du produit que vous recherchez
