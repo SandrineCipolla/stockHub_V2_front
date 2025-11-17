@@ -30,3 +30,6 @@ coverage/
 
 # Documentation files
 documentation/propositionIA/propositionIA.tsx
+
+# Temporary audit report files
+documentation/metrics/*.json
