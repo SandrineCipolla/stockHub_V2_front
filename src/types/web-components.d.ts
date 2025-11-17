@@ -81,7 +81,10 @@ declare global {
         'onsh-metric-click'?: (e: CustomEvent) => void;
       };
 
-      'sh-quantity-input': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+      'sh-quantity-input': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
         value?: number;
         min?: number;
         max?: number;
@@ -132,13 +135,18 @@ declare global {
         'onsh-logout-click'?: (e: CustomEvent<{ userName: string }>) => void;
       };
 
-      'sh-ia-alert-banner': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+      'sh-ia-alert-banner': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
         count?: number;
         severity?: 'critical' | 'warning' | 'info';
         message?: string;
         expanded?: boolean;
         'data-theme'?: 'light' | 'dark';
-        'onsh-ia-alert-item-click'?: (e: CustomEvent<{ product: string; message: string; severity: string }>) => void;
+        'onsh-ia-alert-item-click'?: (
+          e: CustomEvent<{ product: string; message: string; severity: string }>
+        ) => void;
       };
 
       'sh-stock-card': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
@@ -157,7 +165,10 @@ declare global {
         'onsh-delete-click'?: (e: CustomEvent) => void;
       };
 
-      'sh-stock-item-card': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+      'sh-stock-item-card': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
         name?: string;
         sku?: string;
         quantity?: number;

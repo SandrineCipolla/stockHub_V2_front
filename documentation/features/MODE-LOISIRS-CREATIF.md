@@ -402,8 +402,10 @@ Fonctions mises à jour :
 - 4 fonctions IA mises à jour
 
 **Couverture de tests** :
-- Maintenue à ≥ 93%
+- Coverage actuel: 60.67% global (374 tests, composants 90-98%)
 - 18 stocks de test couvrant tous les cas d'usage
+- Tests wrappers React pour web components
+- Note: unitFormatter.ts 62.96% coverage
 
 ---
 

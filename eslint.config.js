@@ -3,6 +3,7 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import prettierConfig from 'eslint-config-prettier'
 
 export default tseslint.config(
   { ignores: [
@@ -44,4 +45,5 @@ export default tseslint.config(
       '@typescript-eslint/ban-ts-comment': 'error', // Interdit @ts-ignore, @ts-nocheck
     },
   },
+  prettierConfig, // Disable ESLint rules that conflict with Prettier
 )

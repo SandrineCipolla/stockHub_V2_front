@@ -15,7 +15,7 @@ Finaliser les dernières actions prioritaires avant retour encadrante pour attei
 
 | Semaine | Objectif | Statut | Résultat |
 |---------|----------|--------|----------|
-| **Semaine 1** | Tests Unitaires | ✅ Complété | 369 tests, coverage 93.3% |
+| **Semaine 1** | Tests Unitaires | ✅ Complété | 374 tests, coverage 60.67% (composants 90-98%) |
 | **Semaine 2** | Refactoring Complet | ✅ Complété | Code 100% DRY, architecture clean |
 | **Semaine 3** | Créativité & Animations | ✅ Complété | Framer Motion, différenciation visuelle |
 | **Semaine 4** | IA & Backend | ✅ Complété | Feature IA business intelligence |
@@ -151,7 +151,7 @@ Vérifier et corriger les contrastes de couleurs pour conformité WCAG AA (objec
 **Livrables RNCP Bloc 2** :
 - ✅ Architecture logicielle complète et documentée
 - ✅ Accessibilité RGAA validée
-- ✅ Tests unitaires exhaustifs (93.3% coverage)
+- ✅ Tests unitaires (374 tests, 60.67% coverage global, composants 90-98%)
 - ✅ Design System maîtrisé (100% migration)
 - ✅ Éco-conception (bundle optimisé)
 
