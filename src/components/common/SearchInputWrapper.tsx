@@ -65,9 +65,9 @@ export const SearchInputWrapper: React.FC<SearchInputWrapperProps> = ({
   // Écouter l'événement sh-search-change
   useEffect(() => {
     const handleSearchChange = (e: Event) => {
-      const customEvent = e as CustomEvent<{ query: string }>;
-      if (customEvent.detail && typeof customEvent.detail.query === 'string') {
-        onSearchChange?.(customEvent.detail.query);
+      const customEvent = e as CustomEvent<{ value: string }>;
+      if (customEvent.detail && typeof customEvent.detail.value === 'string') {
+        onSearchChange?.(customEvent.detail.value);
       }
     };
 
