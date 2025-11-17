@@ -20,6 +20,7 @@
     "audit:a11y": "node scripts/test-reduced-motion.mjs",
     "audit:datasets": "node scripts/test-animations-datasets.mjs",
     "audit:daltonisme": "node scripts/test-daltonisme.mjs",
+    "audit:risk-levels": "node scripts/test-risk-levels-colors.mjs",
     "audit:full": "node scripts/audit-complet.mjs",
     "clean:deadcode": "knip",
     "clean:fix": "knip --fix",

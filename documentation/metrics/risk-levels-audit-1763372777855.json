@@ -1,0 +1,231 @@
+{
+  "contraste": {
+    "dark": {
+      "tests": [
+        {
+          "level": "critical",
+          "hex": "#f87171",
+          "ratio": 5.288486050870367,
+          "passesNormal": true,
+          "passesLarge": true,
+          "wcagLevel": "AA"
+        },
+        {
+          "level": "high",
+          "hex": "#f59e0b",
+          "ratio": 6.811459795555411,
+          "passesNormal": true,
+          "passesLarge": true,
+          "wcagLevel": "AA"
+        },
+        {
+          "level": "medium",
+          "hex": "#fbbf24",
+          "ratio": 8.76304906295158,
+          "passesNormal": true,
+          "passesLarge": true,
+          "wcagLevel": "AAA"
+        },
+        {
+          "level": "low",
+          "hex": "#4ade80",
+          "ratio": 8.395060580077741,
+          "passesNormal": true,
+          "passesLarge": true,
+          "wcagLevel": "AAA"
+        }
+      ],
+      "allPassNormal": true,
+      "allPassLarge": true
+    },
+    "light": {
+      "tests": [
+        {
+          "level": "critical",
+          "hex": "#b91c1c",
+          "ratio": 6.4700447145121895,
+          "passesNormal": true,
+          "passesLarge": true,
+          "wcagLevel": "AA"
+        },
+        {
+          "level": "high",
+          "hex": "#b45309",
+          "ratio": 5.02163257594014,
+          "passesNormal": true,
+          "passesLarge": true,
+          "wcagLevel": "AA"
+        },
+        {
+          "level": "medium",
+          "hex": "#d97706",
+          "ratio": 3.1858232404059073,
+          "passesNormal": false,
+          "passesLarge": true,
+          "wcagLevel": "AA (large)"
+        },
+        {
+          "level": "low",
+          "hex": "#15803d",
+          "ratio": 5.0155974781114745,
+          "passesNormal": true,
+          "passesLarge": true,
+          "wcagLevel": "AA"
+        }
+      ],
+      "allPassNormal": false,
+      "allPassLarge": true
+    }
+  },
+  "daltonisme": {
+    "protanopia": {
+      "description": "Protanopie (déficit rouge)",
+      "differences": [
+        {
+          "pair": "Critique (≤3j) ↔ Élevé (4-7j)",
+          "delta": 70.75309180523492,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Moyen (8-14j)",
+          "delta": 63.57672530100933,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Faible (15j+)",
+          "delta": 80.92589202474076,
+          "differentiable": true
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Moyen (8-14j)",
+          "delta": 36.6333181680284,
+          "differentiable": false
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Faible (15j+)",
+          "delta": 142.13022197970423,
+          "differentiable": true
+        },
+        {
+          "pair": "Moyen (8-14j) ↔ Faible (15j+)",
+          "delta": 143.9548540341728,
+          "differentiable": true
+        }
+      ],
+      "allDifferentiable": false,
+      "passRate": "5/6"
+    },
+    "deuteranopia": {
+      "description": "Deutéranopie (déficit vert)",
+      "differences": [
+        {
+          "pair": "Critique (≤3j) ↔ Élevé (4-7j)",
+          "delta": 60.909769331364245,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Moyen (8-14j)",
+          "delta": 50.46781152378217,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Faible (15j+)",
+          "delta": 120.15822901491184,
+          "differentiable": true
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Moyen (8-14j)",
+          "delta": 34.36568055487916,
+          "differentiable": false
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Faible (15j+)",
+          "delta": 164.69972677572966,
+          "differentiable": true
+        },
+        {
+          "pair": "Moyen (8-14j) ↔ Faible (15j+)",
+          "delta": 168.24089871371942,
+          "differentiable": true
+        }
+      ],
+      "allDifferentiable": false,
+      "passRate": "5/6"
+    },
+    "tritanopia": {
+      "description": "Tritanopie (déficit bleu-jaune)",
+      "differences": [
+        {
+          "pair": "Critique (≤3j) ↔ Élevé (4-7j)",
+          "delta": 49.678969393496885,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Moyen (8-14j)",
+          "delta": 12.569805089976535,
+          "differentiable": false
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Faible (15j+)",
+          "delta": 179.82213434391218,
+          "differentiable": true
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Moyen (8-14j)",
+          "delta": 40.91454509095757,
+          "differentiable": true
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Faible (15j+)",
+          "delta": 207.12315177207978,
+          "differentiable": true
+        },
+        {
+          "pair": "Moyen (8-14j) ↔ Faible (15j+)",
+          "delta": 190.2997635311195,
+          "differentiable": true
+        }
+      ],
+      "allDifferentiable": false,
+      "passRate": "5/6"
+    },
+    "achromatopsia": {
+      "description": "Achromatopsie (monochrome)",
+      "differences": [
+        {
+          "pair": "Critique (≤3j) ↔ Élevé (4-7j)",
+          "delta": 24.24871130596428,
+          "differentiable": false
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Moyen (8-14j)",
+          "delta": 65.81793068761733,
+          "differentiable": true
+        },
+        {
+          "pair": "Critique (≤3j) ↔ Faible (15j+)",
+          "delta": 24.24871130596428,
+          "differentiable": false
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Moyen (8-14j)",
+          "delta": 41.569219381653056,
+          "differentiable": true
+        },
+        {
+          "pair": "Élevé (4-7j) ↔ Faible (15j+)",
+          "delta": 0,
+          "differentiable": false
+        },
+        {
+          "pair": "Moyen (8-14j) ↔ Faible (15j+)",
+          "delta": 41.569219381653056,
+          "differentiable": true
+        }
+      ],
+      "allDifferentiable": false,
+      "passRate": "3/6"
+    }
+  },
+  "timestamp": "2025-11-17T09:46:17.835Z"
+}
