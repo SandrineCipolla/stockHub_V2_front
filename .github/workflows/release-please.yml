@@ -1,0 +1,33 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          # Release type (node for npm packages)
+          release-type: node
+
+          # Package name (used in release titles)
+          package-name: stockhub-v2-front
+
+          # Optional: Changelog sections
+          # By default, Release Please groups commits by type
+          # feat: Features
+          # fix: Bug Fixes
+          # docs: Documentation
+          # chore: Chores
+          # refactor: Code Refactoring
+          # test: Tests
+          # style: Styles
+          # perf: Performance Improvements

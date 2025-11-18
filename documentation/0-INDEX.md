@@ -86,6 +86,7 @@
 - [technical/BUILD-OPTIMIZATIONS.md](technical/BUILD-OPTIMIZATIONS.md) - Optimisations build & performance
 - [technical/LOGGER-GUIDE.md](technical/LOGGER-GUIDE.md) - Système de logging
 - [technical/MAINTENANCE-AUTO.md](technical/MAINTENANCE-AUTO.md) - Scripts et automatisation
+- [technical/RELEASE-AUTOMATION.md](technical/RELEASE-AUTOMATION.md) - Automatisation releases (Release Please)
 - [technical/SCRIPTS-AUDIT.md](technical/SCRIPTS-AUDIT.md) - Scripts audit (FPS, a11y, daltonisme)
 - [technical/TYPE-SAFETY-AUDIT-2025-11-18.md](technical/TYPE-SAFETY-AUDIT-2025-11-18.md) - Audit TypeScript & sécurité des types
 
