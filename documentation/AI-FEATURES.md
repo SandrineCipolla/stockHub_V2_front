@@ -24,11 +24,13 @@
 StockHub V2 intègre deux niveaux d'intelligence artificielle pour la gestion optimale des stocks:
 
 ### 1. **Analyse Descriptive** (SmartSuggestions)
+
 - Détection de situations actuelles (rupture, surstock)
 - Suggestions immédiates d'actions
 - Niveau de confiance basé sur l'écart aux seuils
 
 ### 2. **Analyse Prédictive** (StockPrediction)
+
 - Prédiction temporelle avec Machine Learning
 - Régression linéaire pour estimation future
 - Intervalles de confiance statistiques
@@ -79,6 +81,7 @@ confidence = min(70 + (deviation / optimalMidpoint) × 20, 100)
 ```
 
 **Résultat**:
+
 - `dailyAverage`: Consommation moyenne quotidienne (unités/jour)
 - `trend`: 'increasing' | 'stable' | 'decreasing'
 - `volatility`: 0-1 (0 = stable, 1 = très volatil)
@@ -108,11 +111,13 @@ result = floor(adjustedDays)
 ```
 
 **Logique**:
+
 - Si `dailyAverage ≤ 0` → pas de consommation détectée → `null`
 - Si `quantity ≤ 0` → rupture immédiate → `0`
 - Sinon → calcul avec ajustement volatilité
 
 **Exemple**:
+
 ```
 Stock: Peinture Acrylique Bleu
 - Quantité: 30 tubes
@@ -163,6 +168,7 @@ result = min(round(finalQuantity), maxThreshold)
 ```
 
 **Exemple**:
+
 ```
 Stock: Farine T55
 - Quantité actuelle: 15 kg
@@ -205,6 +211,7 @@ finalConfidence = min(baseConfidence - confidencePenalty, 100)
 ```
 
 **Facteurs influençant**:
+
 - ✅ **Position proche des seuils** → +confiance (données significatives)
 - ✅ **Faible volatilité** → +confiance (consommation régulière)
 - ❌ **Volatilité élevée** → -confiance (consommation erratique)
@@ -275,6 +282,7 @@ m = (n∑xy - ∑x∑y) / (n∑x² - (∑x)²)
 ```
 
 Où:
+
 - `n` = nombre de points
 - `x` = jours (0, 1, 2, ..., n)
 - `y` = quantités
@@ -299,6 +307,7 @@ SS_res = ∑(y_i - ŷ_i)²    // Variance résiduelle
 ```
 
 **Interprétation R²**:
+
 - R² = 1 → Fit parfait (points exactement sur la droite)
 - R² = 0.9 → Excellent fit (90% de variance expliquée)
 - R² = 0.7 → Bon fit
@@ -404,11 +413,13 @@ Où:
 ```
 
 **Conditions**:
+
 - Si `m ≥ -0.01` → Pas de consommation ou stock en augmentation → `null`
 - Si `x < 0 ou x > 365` → Prédiction irréaliste → `null`
 - Sinon → `floor(x)` jours
 
 **Exemple**:
+
 ```
 Stock actuel: 82 unités
 Slope (m): -4.5 unités/jour
@@ -447,11 +458,13 @@ optimistic = ceil(prediction + errorMarginDays)
 ```
 
 **Interprétation**:
+
 - Avec 95% de confiance, la rupture se produira entre `pessimistic` et `optimistic` jours
 - Intervalle large → faible certitude (variance élevée)
 - Intervalle étroit → forte certitude (variance faible)
 
 **Exemple**:
+
 ```
 Prédiction: 18 jours
 Variance: 0.3
@@ -548,17 +561,18 @@ Exemple:
 
 ### Benchmarks Algorithmes
 
-| Algorithme | Complexité | Temps d'exécution (1000 stocks) |
-|------------|------------|----------------------------------|
-| `analyzeConsumptionTrend()` | O(1) | < 1ms |
-| `predictDaysUntilRupture()` | O(1) | < 1ms |
-| `calculateOptimalReorderQuantity()` | O(1) | < 1ms |
-| `generateAISuggestions()` | O(n) | ~15ms |
-| `simulateHistoricalData()` | O(d) | ~2ms (d=30 jours) |
-| `performLinearRegression()` | O(n) | ~5ms (n=31 points) |
-| `predictStockRuptures()` | O(n×d) | ~70ms |
+| Algorithme                          | Complexité | Temps d'exécution (1000 stocks) |
+| ----------------------------------- | ---------- | ------------------------------- |
+| `analyzeConsumptionTrend()`         | O(1)       | < 1ms                           |
+| `predictDaysUntilRupture()`         | O(1)       | < 1ms                           |
+| `calculateOptimalReorderQuantity()` | O(1)       | < 1ms                           |
+| `generateAISuggestions()`           | O(n)       | ~15ms                           |
+| `simulateHistoricalData()`          | O(d)       | ~2ms (d=30 jours)               |
+| `performLinearRegression()`         | O(n)       | ~5ms (n=31 points)              |
+| `predictStockRuptures()`            | O(n×d)     | ~70ms                           |
 
 **Optimisations**:
+
 - ✅ Memoization avec `useMemo()` dans React
 - ✅ Calculs uniquement si `confidence ≥ 70%`
 - ✅ Batch processing pour ML predictions
@@ -573,6 +587,7 @@ Exemple:
 **Problème**: Gérer 500 références produits, éviter ruptures.
 
 **Solution SmartSuggestions**:
+
 ```
 Stock: iPhone 15 Pro Max 256GB
 - Quantité: 12 unités
@@ -593,6 +608,7 @@ IA détecte:
 **Problème**: Gérer provisions irrégulières (vacances, invités).
 
 **Solution Adaptée**:
+
 ```
 Stock: Farine T55
 - Quantité: 2 kg
@@ -611,6 +627,7 @@ IA détecte:
 **Problème**: Tubes partiellement vides, consommation irrégulière.
 
 **Solution Sessions**:
+
 ```
 Stock: Acrylique Bleu Cobalt
 - Quantité: 45%
@@ -629,6 +646,7 @@ IA détecte:
 **Problème**: Anticiper avec précision la date de rupture.
 
 **Solution StockPrediction**:
+
 ```
 Stock: Vis M8x20 Inox
 - Quantité actuelle: 150 unités
@@ -656,6 +674,7 @@ ML détecte:
 **Architecture**: Tests basés sur wrappers React pour web components
 
 **Fichiers testés**:
+
 - `aiPredictions.test.ts` (45 tests) - Coverage: 75.53%
 - `StockPredictionCardWrapper.test.tsx` (tests wrapper - à implémenter)
 - Tests wrappers existants: ButtonWrapper, CardWrapper, MetricCardWrapper, StockCardWrapper (116 tests)
@@ -663,6 +682,7 @@ ML détecte:
 **Note**: Composants AI non testés (0% coverage) - voir Issue #35
 
 **Scénarios testés**:
+
 - ✅ Calcul confiance avec différentes volatilités
 - ✅ Prédiction rupture avec différents seuils
 - ✅ Adaptation messages selon unités
@@ -677,20 +697,20 @@ ML détecte:
 ### Algorithmes Inspirés
 
 1. **Régression Linéaire** - Méthode des moindres carrés
-   - Source: *Introduction to Statistical Learning* (James et al.)
+   - Source: _Introduction to Statistical Learning_ (James et al.)
    - Formules: Least Squares Method
 
 2. **Economic Order Quantity (EOQ)**
    - Adapté pour calcul quantité optimale
-   - Source: *Operations Management* (Heizer & Render)
+   - Source: _Operations Management_ (Heizer & Render)
 
 3. **Intervalles de Confiance**
    - Score z = 1.96 pour IC 95%
-   - Source: *Statistics for Business* (McClave et al.)
+   - Source: _Statistics for Business_ (McClave et al.)
 
 4. **Coefficient de Détermination (R²)**
    - Mesure de qualité du fit
-   - Source: *Applied Regression Analysis* (Draper & Smith)
+   - Source: _Applied Regression Analysis_ (Draper & Smith)
 
 ---
 
