@@ -7,12 +7,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ### 📊 Retours encadrante à traiter
 
 **Points forts validés** ✅
+
 - Design system mature
 - Performance excellente (Lighthouse 99/100)
 - Accessibilité conforme (96/100)
 - Architecture React 19 + TypeScript solide
 
 **Améliorations prioritaires** ⚠️
+
 - [x] Tests unitaires (sécurisation code)
 - [x] Créativité visuelle (différenciation cartes stocks)
 - [x] Micro-animations dashboard
@@ -25,7 +27,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - **Semaine** : 2 soirées × 2h = 4h/semaine
 - **Weekend** : 1 soirées × 3h = 3h/weekend
 - **Weekend** : 1/2 journée × 4h = 4h/weekend
-- **Total planning semaine** : 11h 
+- **Total planning semaine** : 11h
 
 ---
 
@@ -34,6 +36,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ### 📅 **SEMAINE 1 - Tests Unitaires (4h)** ✅
 
 #### **Soirée 1 - Mardi (2h) : Setup Tests + Composants UI**
+
 - [x] **Installation dépendances** (30min)
   ```bash
   npm install -D vitest @vitest/ui @testing-library/react @testing-library/user-event jsdom
@@ -47,6 +50,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - [x] Tests Badge (statuts, couleurs)
 
 #### **Soirée 2 - Jeudi (2h) : Tests Principaux + Coverage**
+
 - [x] **Tests Dashboard** (60min)
   - [x] Tests métriques affichage
   - [x] Tests composants responsives
@@ -57,14 +61,17 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [x] Vérifier coverage `npm run test:coverage`
 
 **✅ Validation Semaine 1** :
+
 - [x] Tous les tests passent (`npm run test`)
 - [x] Coverage ≥ 80%
-- [X] CI/CD Vercel
+- [x] CI/CD Vercel
 
 ---
+
 ### 📅 **SEMAINE 2 - Refactoring Complet (07/10 - 13/10)** ✅
 
 #### **Mardi 08/10 (2h30) : Séance 6 - Refactoring Badge/Button** ✅
+
 - [x] **Centralisation des types** (30min)
   - [x] Créer `src/types/index.ts`
   - [x] BadgeVariant, ButtonVariant, ComponentSize, InputType
@@ -82,6 +89,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ FAIT** : Composants UI refactorisés
 
 #### **Mercredi 09/10 (1h30) : Séance 7 - Refactoring Card/Input** ✅
+
 - [x] **Fixtures Card/Input** (60min)
   - [x] `fixtures/card.ts` (contenus, cas d'usage)
   - [x] `fixtures/input.ts` (labels, erreurs, helpers, cas d'usage)
@@ -95,6 +103,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ FAIT** : 47 tests passent sans régression
 
 #### **Jeudi 10/10 (3h45) : Séance 8 - Refactoring Dashboard** ✅
+
 - [x] **Types Dashboard** (30min)
   - [x] Créer types pour MetricCard, StockCard dans types/index.ts
   - [x] Type MetricIcon, MetricColor, ChangeType, MetricCardData
@@ -143,6 +152,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ FAIT** : 307 tests passent, 0 erreur TypeScript
 
 **📊 Résultats :**
+
 - **340 tests passent** sur 14 fichiers (+33 tests vs semaine 1)
 - **0 erreur TypeScript**
 - **Temps d'exécution optimisé** : ~11-13 secondes
@@ -155,6 +165,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 #### **Mercredi 09/10 après-midi (2h30) : Séances 11-12-13 - Optimisation finale** ✅
 
 **Séance 11 - Amélioration Coverage (1h30)** ✅
+
 - [x] **Configuration coverage optimisée** (15min)
   - [x] vitest.config.ts avec exclusions fichiers non pertinents
   - [x] Exclusion scripts, types, documentation, main.tsx, App.tsx
@@ -176,6 +187,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ RÉSULTAT** : Coverage globale 86.67% → 93.3% (+6.63%)
 
 **Séance 12 - Nettoyage Architecture Types (45min)** ✅
+
 - [x] **Centralisation types erreurs** (15min)
   - [x] Création types/error.ts
   - [x] FrontendErrorType, FrontendError, LoadingState, AsyncFrontendState<T>
@@ -190,6 +202,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ RÉSULTAT** : Architecture types 100% DRY, zéro duplication
 
 **Séance 13 - Nettoyage Tests & Fixtures (30min)** ✅
+
 - [x] **Fixtures mocks centralisées** (20min)
   - [x] test/fixtures/localStorage.ts avec createLocalStorageMock()
   - [x] test/fixtures/hooks.ts avec createMockUseStocks, createMockUseDataExport, createMockUseTheme
@@ -204,6 +217,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ RÉSULTAT** : Tests 100% DRY, fixtures complètes
 
 **📊 Résultats :**
+
 - **340 tests passent** (100% succès)
 - **Coverage globale : 93.3%** ✅ (objectif 80% largement dépassé)
 - **Architecture types clean** (zéro interface locale)
@@ -211,9 +225,11 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - **TypeScript OK** (0 erreur compilation)
 
 ---
+
 ### 🎨 **SEMAINE 3 - Créativité & Animations (14-20/10)**
 
 #### **Jeudi 09/10 (2h30) : Séance 14 - Système de statuts complet** ✅
+
 - [x] **Types enrichis** (1h)
   - [x] 5 statuts dans types/stock.ts (optimal, low, critical, outOfStock, overstocked)
   - [x] STOCK_STATUS_CONFIG avec couleurs light/dark complètes
@@ -232,11 +248,13 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ FAIT** : Système de statuts 100% fonctionnel
 
 **📊 Résultats :**
+
 - **262 tests StatusBadge** passent (+24 suites)
 - **Tous les tests au vert** (>360 tests)
 - **Architecture types/stock.ts** enrichie avec config visuelle complète
 
 #### **Vendredi 10/10 (2h30) : Séance 15 - StockCard enrichie** ✅
+
 - [x] **StockCard enrichie** (90min)
   - [x] Bordure gauche 4px colorée selon statut
   - [x] Background coloré uniquement au hover (10% opacité)
@@ -253,6 +271,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **✅ FAIT** : Différenciation visuelle épurée + feedback hover subtil
 
 **📊 Résultats :**
+
 - **Bordures** : emerald (optimal), amber (low), red (critical), gray (outOfStock), blue (overstocked)
 - **Backgrounds** : Neutre par défaut, coloré uniquement au hover (10% opacité)
 - **Tests** : +11 nouveaux tests pour bordures/backgrounds
@@ -260,10 +279,13 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - **Design** : Interface épurée en mode clair, feedback visuel subtil à l'interaction
 
 #### **Jeudi 17/10 (2h) : Animations Framer Motion** ✅
+
 - [x] **Setup Framer Motion** (30min)
+
   ```bash
   npm install framer-motion
   ```
+
   - [x] Hook useReducedMotion
 
 - [x] **Animations StockCard** (90min)
@@ -275,6 +297,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **🎯 Objectif** : Cartes animées ✅
 
 #### **Samedi 19/10 Soirée (3h) : Animations StockGrid + Dashboard** ✅
+
 - [x] **Animations StockGrid** (90min)
   - [x] Stagger children
   - [x] Layout animation
@@ -288,6 +311,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **🎯 Objectif** : Dashboard animé ✅
 
 #### **Dimanche 20/10 Matin (3h) : Tests Performance + Polish** ✅
+
 - [x] **Tests performance** (2h)
   - [x] FPS > 55 (60.81 FPS ✅)
   - [x] Lighthouse ≥ 98 (99/100 ✅)
@@ -304,6 +328,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **🎯 Objectif** : Dashboard vivant, fluide et performant 🎬 ✅
 
 **✅ BILAN SEMAINE 3** : ⭐ TERMINÉ
+
 - Interface créative et différenciée ✅
 - Animations fluides (Framer Motion + CountUp) ✅
 - Performance maintenue (99/100 Lighthouse) ✅
@@ -321,6 +346,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 > **🎯 Objectif RNCP (C2.5)** : Analyses descriptives et prédictives sur données avec Machine Learning pour extraire de la valeur métier
 
 #### **Mardi 22/10 (4h) : SmartSuggestions - IA Prédictive** ✅ TERMINÉ
+
 - [x] **Algorithmes intelligents** (2h30)
   - [x] Analyse tendances consommation (prédiction rupture)
   - [x] Détection surstock (analyse seuils optimaux)
@@ -340,6 +366,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [x] Nettoyage des console.log (build optimisé)
 
 **Livrables** :
+
 - `src/components/ai/AISummaryWidget.tsx` (200+ lignes) ✅
 - `src/components/ai/StockAIBadge.tsx` (388 lignes, popover contextuel) ✅
 - `src/components/ai/SmartSuggestions.tsx` (modifié pour filtrage optionnel) ✅
@@ -348,6 +375,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - Types mis à jour (StockCardProps, StockGridProps avec aiSuggestions) ✅
 
 **🎯 Résultat Final** :
+
 - Interface IA non intrusive et élégante ✅
 - Suggestions contextuelles par stock (badge "IA (X)") ✅
 - Résumé global dans Dashboard (widget compact) ✅
@@ -358,6 +386,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ---
 
 #### **Jeudi 24/10 (2h) : StockPrediction - ML Simulé** 📅 PRIORITÉ 1
+
 - [ ] **Algorithme prédictif** (60min)
   - [ ] Calcul moyenne consommation quotidienne
   - [ ] Prédiction jours avant rupture (régression linéaire)
@@ -375,6 +404,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [ ] Intégration StockCard ou Dashboard
 
 **Livrables** :
+
 - `src/components/ai/StockPrediction.tsx`
 - `src/utils/mlSimulation.ts` (modèle ML simulé)
 - Tests unitaires
@@ -382,6 +412,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ---
 
 #### **Samedi 26/10 Soirée (2h) : Documentation IA** 📅 PRIORITÉ 2
+
 - [ ] **Documentation technique IA** (90min)
   - [ ] Créer `documentation/AI-FEATURES.md`
   - [ ] Décrire algorithmes prédictifs utilisés
@@ -396,12 +427,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [ ] Documenter seuils et paramètres
 
 **Livrables** :
+
 - `documentation/AI-FEATURES.md` (obligatoire RNCP)
 - `documentation/PROMPTS.md` (obligatoire RNCP)
 
 ---
 
 #### **Dimanche 27/10 Matin (3h) : Setup Backend** 📅 PRIORITÉ 3
+
 - [ ] **Services API** (90min)
   - [ ] Installer @tanstack/react-query
   - [ ] Créer `services/api/client.ts`
@@ -415,6 +448,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [ ] Gestion états loading/error
 
 **Livrables** :
+
 - Services API configurés
 - Hooks React Query fonctionnels
 - (Backend connection en standby si backend pas prêt)
@@ -424,6 +458,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 **📊 BILAN SEMAINE 4** : ✅ **COMPLÉTÉ À 100%** (Finalisé le 03/11/2024)
 
 **✅ Ce qui est fait** :
+
 - ✅ SmartSuggestions - IA Prédictive (Composants + Algorithmes)
   - `AISummaryWidget.tsx` (200+ lignes) ✅
   - `StockAIBadge.tsx` (388 lignes) ✅
@@ -451,6 +486,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - **Note** : Backend reporté car non-obligatoire RNCP. Simulation suffit.
 
 **🎯 Impact RNCP** :
+
 - ✅ Documentation RNCP complète (déblocage soutenance)
 - ✅ Démontre maîtrise analyses descriptives ET prédictives
 - ✅ Utilisation ML (régression linéaire) pour valeur métier réelle
@@ -464,6 +500,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 > **🎯 Focus** : Quantités fractionnaires, consommation irrégulière, gestion par projets
 
 **📊 STATUT GLOBAL** :
+
 - ✅ **Option A - Unités Flexibles** : COMPLÉTÉ (2h30)
   - 7 unités supportées : piece, percentage, ml, g, meter, liter, kg
   - Affichage formaté intelligent (65%, 0.5m, 150ml, etc.)
@@ -482,6 +519,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - 📋 **Option C - Shopping List** : PLANIFIÉ (voir Roadmap)
 
 #### **Lundi 28/10 (3h) : Phase Analyse & Design** ✅ COMPLÉTÉ
+
 - [x] **Analyse besoins usage familial** (1h)
   - [x] Identifier différences vs usage professionnel
   - [x] Cas d'usage : peinture acrylique, tissus, cellier
@@ -496,12 +534,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [x] Maquettes UI pour sélection d'unité
 
 **Livrables** :
+
 - ✅ Types définis dans `types/stock.ts`
 - ✅ Utility `unitFormatter.ts` créé
 
 ---
 
 #### **Mardi 29/10 (2h) : Option A - Unités Flexibles** ✅ COMPLÉTÉ
+
 - [x] **Extension types Stock** (30min)
   - [x] Ajouter `unit?: StockUnit` dans types/stock.ts
   - [x] Type StockUnit avec 7 unités supportées
@@ -519,6 +559,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [x] Intégration dans tous les générateurs (rupture, reorder, overstock, optimize)
 
 **Livrables** :
+
 - ✅ `types/stock.ts` enrichi avec StockUnit (7 unités)
 - ✅ `utils/unitFormatter.ts` (formatQuantityWithUnit, parseQuantityInput)
 - ✅ `StockCard.tsx` avec affichage formaté
@@ -528,6 +569,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ---
 
 #### **Mardi 29/10 Après-midi (3h) : Gestion Containers & Usage Tracking** ✅ COMPLÉTÉ
+
 - [x] **Extension types pour containers** (30min)
   - [x] Ajouter `containerCapacity`, `containersOwned`, `totalCapacity` dans Stock
   - [x] Permettre tracking nombre de tubes/bouteilles possédés
@@ -550,6 +592,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [x] Documentation exemples dans `container-management-example.ts`
 
 **Livrables** :
+
 - ✅ `utils/containerManager.ts` (210 lignes) - Gestion complète containers
 - ✅ `StockCard.tsx` mis à jour avec bouton "Session" interactif
 - ✅ `stockData.ts` avec containerCapacity/containersOwned sur tubes peinture
@@ -561,6 +604,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ---
 
 #### **Jeudi 31/10 (2h) : Option B - Fréquence d'Activité** 📅 REPORTÉ
+
 - [ ] **Extension types pour usage irrégulier** (45min)
   - [ ] Ajouter `activityFrequency?: ActivityFrequency` (daily/weekly/monthly/seasonal/sporadic)
   - [ ] Ajouter `lastUsedDate?: Date`
@@ -578,12 +622,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [ ] Message IA adapté : "~5 sessions restantes selon ton activité"
 
 **Livrables** :
+
 - Système de fréquence d'activité fonctionnel
 - Algorithmes IA adaptés usage irrégulier
 
 ---
 
 #### **Samedi 02/11 Soirée (3h) : Option C - Mode Projets (optionnel)** 📅 PRIORITÉ 4
+
 - [ ] **Types projet créatif** (60min)
   - [ ] Interface CreativeProject (id, name, status, materials)
   - [ ] Relation Stock ↔ Project (materialsNeeded)
@@ -601,12 +647,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [ ] Historique consommation par projet
 
 **Livrables** :
+
 - Système de projets créatifs complet (si temps disponible)
 - Documentation PROJECTS.md
 
 ---
 
 #### **Dimanche 03/11 Matin (4h) : Tests & Documentation** 📅 PRIORITÉ 5
+
 - [ ] **Tests unités flexibles** (90min)
   - [ ] Tests StockCard avec 7 types d'unités
   - [ ] Tests affichage formaté (0.5m, 65%, etc.)
@@ -626,6 +674,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
   - [ ] Mise à jour README avec mode familial
 
 **Livrables** :
+
 - Tests couvrant tous les cas d'usage créatifs
 - Documentation MODE-LOISIRS-CREATIF.md complète
 - Coverage maintenu ≥ 93%
@@ -633,6 +682,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ---
 
 **✅ BILAN SEMAINE 5** : ⭐ COMPLÉTÉ À 70%
+
 - ✅ Système unités flexibles (pièces, %, ml, m, etc.) - **FAIT**
 - ✅ Gestion containers (tubes, bouteilles) avec tracking usage - **FAIT**
 - ✅ Suggestions IA adaptées au contexte familial/créatif - **FAIT**
@@ -642,12 +692,14 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 - ⏸️ Système projets - **REPORTÉ (voir Roadmap)**
 
 **🎯 Impact Utilisateur** :
+
 - Usage quotidien simplifié (cellier, loisirs créatifs)
 - Prédictions réalistes pour consommation irrégulière
 - Pas besoin d'historique complexe pour commencer
 - S'améliore avec le temps (apprentissage léger)
 
 **📊 Exemples concrets** :
+
 ```typescript
 // Tube de peinture
 {
@@ -689,9 +741,11 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ### 🔄 Historique récent
 
 **28-29 Octobre** : Mode Loisirs/Créatif (Semaine 5) ✅ 70% complété
+
 - Unités flexibles, gestion containers, doc complète
 
 **30 Oct - 03 Nov** : Intégration Design System ✅ 100% complété
+
 - Migration 8 composants vers web components
 - Fix bug critical (reflect: true sur status)
 - Documentation wrappers pattern
@@ -700,322 +754,399 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 ### ✅ Complétion Feature IA (03/11/2024)
 
 La branche `feature/ai-business-intelligence` contient :
+
 - ✅ **100% IA Business Intelligence** (SmartSuggestions + StockPrediction + Analytics)
 - ✅ 100% Design System integration
 - ✅ **Documentation RNCP complète** (AI-FEATURES.md + PROMPTS.md)
 
 **Issues GitHub créées pour améliorations futures** :
+
 - Issue #9 : Migration Analytics vers Design System
 - Issue #10 : Audit accessibilité couleurs (WCAG AA/AAA)
 
 **Prochaine étape** : Commit + PR vers main
 
 **Temps passé session 4 (03/11)** : 1h30
+
 - Debug ML (slopes négatifs) : 30min
 - Page Analytics + React Router : 40min
 - Documentation + Issues GitHub : 20min
 
 ---
 
-## 🔮 PROCHAINES ÉTAPES - STORYBOOK + ARCHITECTURE
+### 🎨 **NOVEMBRE 2025 - Design System Externe + Tests Finalisation (13-18/11)** ✅
 
-> **Important** : Consulter `documentation/planning/ROADMAP-ARCHITECTURE-EVOLUTION.md` pour détails complets
+> **📖 Documentation détaillée** :
+>
+> - `documentation/planning/PLANNING-NOVEMBRE-2025-UPDATE.md` (planning réel avec sessions 1-8)
+> - `documentation/planning/PLANNING-FINALISATION-NOVEMBRE-2025.md` (planning actions prioritaires)
+> - `documentation/SESSION-2025-11-18-SEARCH-WRAPPER-TESTS.md` (Session 8)
 
-### 📌 Décision Stratégique : STORYBOOK EN PRIORITÉ
-
-**🎯 Constat** : Avant d'ajouter de nouvelles features (Options B & C), il est stratégique de mettre en place **Storybook avec Web Components** pour :
-- ✅ Éviter duplication de code
-- ✅ Créer un Design System réutilisable
-- ✅ Partager composants entre Web (React) et Mobile (React Native/Capacitor)
-- ✅ Documenter visuellement toutes les variantes
-- ✅ Prototyper nouvelles features avant implémentation
-
-**📅 Nouveau Planning** :
-1. **MAINTENANT (Semaine 5 bis)** : Storybook + Web Components (4-5h)
-2. **SEMAINE 6** : Option B (Architecture Catégories) en utilisant Storybook
-3. **SEMAINE 7** : Option C (Shopping List) en utilisant Storybook
+**🎯 Contexte** : Retours encadrante (note 85/100) → Créer un **Design System externe** avec Storybook pour éviter duplication de code et permettre réutilisation web/mobile.
 
 ---
 
-### 🎨 **PRIORITÉ 1 - Storybook + Architecture (6-7h)** 📅 À FAIRE MAINTENANT
+#### **Session 1 (13/11 - 4h) : Setup Design System** ✅
 
-> **📖 Documentation complète** : `documentation/planning/STORYBOOK-ARCHITECTURE-STRATEGY.md`
-> **🎯 Objectif** : Design System réutilisable (web + mobile) + Architecture finale à 2 niveaux
-> **🔑 Stratégie** : Storybook AVANT refactoring pour prototyper visuellement
+- [x] **Création repository séparé** (60min)
+  - Repository : `github.com/SandrineCipolla/stockhub_design_system`
+  - Stack : Lit Element + TypeScript + Vite
+  - Version : v1.0.0
 
-**📅 Timeline** :
-1. **Session 1 (2h)** : Setup Storybook + Lit + Button WC
-2. **Session 2 (2h)** : 4 composants WC + Stories
-3. **Session 3 (1h)** : Prototypage CategoryCard dans Storybook
-4. **Session 4 (2-3h)** : Refactoring architecture finale
+- [x] **Setup Storybook 8.4** (90min)
+  - Configuration complète avec Lit
+  - GitHub Actions CI/CD
+  - Publication Storybook : `sandrinecipolla.github.io/stockhub_design_system/`
 
----
+- [x] **Premiers composants** (90min)
+  - sh-button (4 variants, loading, disabled)
+  - sh-card (hover, clickable, padding)
+  - Système de tokens CSS (colors, spacing, typography)
 
-#### **Session 1 (2h) : Setup Storybook + Web Components Base**
-- [ ] **Installation Storybook** (30min)
-  ```bash
-  npx storybook@latest init
-  ```
-  - [ ] Configuration React 19 + TypeScript + Vite
-  - [ ] Setup thèmes dark/light
-  - [ ] Vérifier `http://localhost:6006`
+**Livrables** :
 
-- [ ] **Setup Web Components avec Lit** (60min)
-  ```bash
-  npm install lit @lit/react
-  ```
-  - [ ] Configuration Lit Element + TypeScript
-  - [ ] Build Vite pour WC
-  - [ ] Tests compatibilité React 19
-
-- [ ] **Conversion Button en WC** (30min)
-  - [ ] `src/components/web-components/wc-button.ts`
-  - [ ] Wrapper React `src/components/common/Button.tsx`
-  - [ ] Story `Button.stories.tsx` avec playground
-
-**Livrables Session 1** :
-- ✅ Storybook fonctionnel
-- ✅ Lit Element configuré
-- ✅ Button en WC + wrapper (backward compatible)
-- ✅ Story Button interactive
+- ✅ Repository Design System opérationnel
+- ✅ Storybook en ligne avec 2 composants
+- ✅ CI/CD automatisé
 
 ---
 
-#### **Session 2 (2h) : Migration Composants UI + Stories**
-- [ ] **Conversion en Web Components** (90min)
-  - [ ] Badge → `wc-badge.ts` + wrapper + story
-  - [ ] Card → `wc-card.ts` + wrapper + story
-  - [ ] StatusBadge → `wc-status-badge.ts` + wrapper + story
-  - [ ] Input → `wc-input.ts` + wrapper + story
+#### **Session 2 (14/11 - 3h) : Composants Avancés** ✅
 
-- [ ] **Design Tokens** (30min)
-  - [ ] `src/styles/design-tokens.css`
-  - [ ] CSS custom properties (couleurs, espacements, fonts)
-  - [ ] Page documentation tokens dans Storybook
+- [x] **8 composants fonctionnels** (180min)
+  - sh-stock-card (carte produit complète)
+  - sh-status-badge (5 statuts avec icônes)
+  - sh-metric-card (métriques dashboard)
+  - sh-quantity-input (input avec +/-)
+  - Tests unitaires Lit Element
+  - Stories Storybook complètes
 
-**Livrables Session 2** :
-- ✅ 5 composants UI en WC + wrappers React
-- ✅ 5 stories complètes avec playground
-- ✅ Design tokens documentés
-- ✅ Code existant toujours fonctionnel
+**Livrables** :
 
-**📦 Architecture après Session 2** :
-```
-src/
-├── components/
-│   ├── web-components/       # 5 WC avec Lit
-│   │   ├── wc-button.ts
-│   │   ├── wc-badge.ts
-│   │   ├── wc-card.ts
-│   │   ├── wc-status-badge.ts
-│   │   └── wc-input.ts
-│   ├── common/               # Wrappers React (backward compatible)
-│   │   ├── Button.tsx
-│   │   ├── Badge.tsx
-│   │   ├── Card.tsx
-│   │   ├── StatusBadge.tsx
-│   │   └── Input.tsx
-│   └── dashboard/
-│       └── StockCard.tsx     # Toujours utilisé (pas encore renommé)
-├── stories/
-│   ├── Button.stories.tsx
-│   ├── Badge.stories.tsx
-│   ├── Card.stories.tsx
-│   ├── StatusBadge.stories.tsx
-│   └── Input.stories.tsx
-└── styles/
-    └── design-tokens.css
-```
+- ✅ 8 composants Web Components
+- ✅ Version v1.1.0 publiée
+- ✅ Documentation props et events complète
 
 ---
 
-#### **Session 3 (1h) : Prototypage CategoryCard dans Storybook**
-- [ ] **Design visuel CategoryCard** (30min)
-  - [ ] Story `CategoryCard.stories.tsx` avec mock data
-  - [ ] Tester layouts : icône, métriques agrégées, mini preview items
-  - [ ] Hover states, responsive
-  - [ ] Thèmes dark/light
+#### **Session 3 (15/11 - 4h) : Migration Analytics - Partie 1** ✅
 
-- [ ] **Validation variantes** (15min)
-  - [ ] Catégorie vide (0 items)
-  - [ ] Catégorie avec items critiques
-  - [ ] Catégorie tout optimal
-  - [ ] Catégorie mixte
+- [x] **Composants spécialisés Analytics** (150min)
+  - sh-stat-card (statistiques avec trends)
+  - sh-stock-prediction-card (prédictions ML)
+  - Wrappers React (StatCard, StockPrediction)
 
-- [ ] **Documentation props** (15min)
-  - [ ] Interface `CategoryCardProps` dans story
-  - [ ] Playground interactif
+- [x] **Pattern React.createElement()** (60min)
+  - Documentation `WEB_COMPONENTS_GUIDE.md`
+  - Intégration dans page Analytics
+  - Gestion événements custom
 
-**Livrables Session 3** :
-- ✅ Story CategoryCard avec toutes variantes visuelles
-- ✅ Interface `CategoryCardProps` définie
-- ✅ **Validation visuelle AVANT implémentation**
-- ✅ Décisions de design prises
+- [x] **Fermeture Issue #9**
+  - Migration Analytics complète
+  - Tests intégration validés
 
-⚠️ **Note** : CategoryCard n'est PAS encore implémenté, c'est juste un prototype visuel.
+**Livrables** :
+
+- ✅ Issue #9 complétée (Migration Analytics)
+- ✅ DS Version v1.2.0
+- ✅ Documentation technique `WEB_COMPONENTS_GUIDE.md`
 
 ---
 
-#### **Session 4 (2-3h) : Refactoring Architecture Finale**
+#### **Session 4 (16/11 - 3h) : Refinement & Polish** ✅
 
-**🎯 Objectif** : Architecture à 2 niveaux
-```
-Dashboard (accueil)
-├── CategoryCard : "Peinture" (7 items, 2 critiques)
-├── CategoryCard : "Tissus" (4 items, 1 critique)
-└── CategoryCard : "Cellier" (7 items, 2 low)
+- [x] **Améliorations UX** (120min)
+  - Hover sh-stat-card optimisé (border au lieu de bg)
+  - Hauteur cartes optimisée (88px → 72px)
+  - Tests React avec wrappers
 
-Click CategoryCard → Page Détails
-├── StockItemCard : "Acrylique Bleu" (65%)
-├── StockItemCard : "Acrylique Rouge" (15%)
-└── etc.
-```
+- [x] **Documentation harmonisée** (60min)
+  - README Design System mis à jour
+  - README Frontend mis à jour
+  - PRs mergées et tagguées
 
-- [ ] **Renommage composants** (30min)
-  - [ ] `StockCard.tsx` → `StockItemCard.tsx`
-  - [ ] `StockCard.test.tsx` → `StockItemCard.test.tsx`
-  - [ ] `StockCard.stories.tsx` → `StockItemCard.stories.tsx`
-  - [ ] Types : `StockCardProps` → `StockItemCardProps`
-  - [ ] Mettre à jour tous les imports
+**Livrables** :
 
-- [ ] **Types catégories** (20min)
-  - [ ] Créer `src/types/category.ts`
-  - [ ] Interface `StockCategory` avec métriques agrégées
-
-- [ ] **Implémentation CategoryCard** (45min)
-  - [ ] `src/components/dashboard/CategoryCard.tsx`
-  - [ ] Utilise Web Components existants
-  - [ ] Animations Framer Motion
-  - [ ] Tests unitaires
-
-- [ ] **Adaptation Dashboard** (30min)
-  - [ ] Modifier `Dashboard.tsx` pour afficher CategoryCard
-  - [ ] Utility `categoryAggregator.ts` pour grouper stocks
-
-- [ ] **Page détails** (30min)
-  - [ ] `src/pages/CategoryDetailsPage.tsx`
-  - [ ] Affiche StockItemCard pour items de la catégorie
-  - [ ] Routing `/category/:categoryId`
-
-- [ ] **Tests & Validation** (30min)
-  - [ ] Tests CategoryCard
-  - [ ] Tests categoryAggregator
-  - [ ] Tests navigation Dashboard → Détails
-  - [ ] Coverage ≥ 93%
-
-**Livrables Session 4** :
-- ✅ Architecture finale implémentée
-- ✅ Dashboard affiche 3-5 CategoryCard (au lieu de 18 StockItemCard)
-- ✅ Page CategoryDetailsPage fonctionnelle
-- ✅ Navigation Dashboard → Détails OK
-- ✅ Tous les tests passent
-- ✅ Build OK, Performance maintenue
-
-**📦 Architecture finale** :
-```
-src/
-├── components/
-│   ├── web-components/       # 5 WC
-│   ├── common/               # 5 wrappers React
-│   └── dashboard/
-│       ├── CategoryCard.tsx       # NOUVEAU - Catégorie agrégée
-│       └── StockItemCard.tsx      # RENOMMÉ - Item individuel
-├── pages/
-│   ├── Dashboard.tsx              # Affiche CategoryCard
-│   └── CategoryDetailsPage.tsx   # NOUVEAU - Affiche StockItemCard
-├── types/
-│   ├── stock.ts
-│   └── category.ts               # NOUVEAU
-├── utils/
-│   └── categoryAggregator.ts     # NOUVEAU
-└── stories/
-    ├── Button/Badge/Card/StatusBadge/Input.stories.tsx
-    ├── CategoryCard.stories.tsx  # NOUVEAU
-    └── StockItemCard.stories.tsx # RENOMMÉ
-```
-
-**🎯 Bénéfices finaux** :
-- ✅ Design System complet (web + mobile)
-- ✅ Architecture scalable (1000+ items)
-- ✅ Dashboard épuré (3-5 cartes)
-- ✅ 0 duplication de code
-- ✅ Documentation interactive complète
+- ✅ DS Version v1.3.1 (stable)
+- ✅ 18 composants au total
+- ✅ Documentation harmonisée entre DS et Front
 
 ---
 
-### 📌 Évolutions Architecture (APRÈS Storybook)
+#### **Session 5 (17/11 matin - 2h) : Audit Accessibilité WCAG AA** ✅
 
-L'architecture actuelle (1 carte = 1 item) fonctionne mais n'est pas scalable. Deux évolutions majeures ont été identifiées et documentées :
+- [x] **Script audit automatisé** (90min)
+  - Création `test-risk-levels-colors.mjs`
+  - Audit contrastes WCAG complet
+  - Tests daltonisme (4 types: protanopie, deutéranopie, tritanopie, achromatopsie)
 
-#### **Option B - Architecture par Catégories** (Estimé: 4-6h)
-**Problème actuel** : 18 cartes sur le dashboard, sera ingérable avec 50+ items
+- [x] **Documentation complète** (30min)
+  - `ACCESSIBILITY-COLOR-AUDIT-2025-11-17.md`
+  - Rapport JSON automatisé
+  - 100% conformité WCAG AA validée
 
-**Solution** :
-```
-Dashboard compacte (3-5 cartes)
-├── Catégorie "Peinture" (7 items, 2 critiques)
-├── Catégorie "Tissus" (4 items, 1 critique)
-└── Catégorie "Cellier" (7 items, 2 critiques)
-```
+**Livrables** :
 
-Click "Détails" → Modal avec liste items de la catégorie
-
-**Avantages** :
-- Dashboard épuré (toujours 3-5 cartes max)
-- Organisation naturelle
-- Scalable jusqu'à 1000+ items
-
-**Quand faire** : SEMAINE 6 (recommandé avant d'avoir trop d'items)
+- ✅ Issue #10 complétée (Audit accessibilité)
+- ✅ Script npm : `audit:risk-levels`
+- ✅ 0 corrections nécessaires (tous les contrastes conformes 3.19:1 à 8.76:1)
 
 ---
 
-#### **Option C - Shopping List** (Estimé: 3-4h MVP)
-**Problème actuel** : Pas de workflow "acheter"
+#### **Session 6 (17/11 après-midi - 3h) : Bug Search + Tests Wrappers** ✅
 
-**Solution** :
-```
-Workflow cohérent
-1. Click "Ajouter à acheter" → Shopping List
-2. Aller au magasin (cocher items achetés)
-3. Click "Réceptionner" → Ajout au stock réel
-```
+- [x] **Bug Fix - Recherche** (90min)
+  - Issue #33 : Search input not working
+  - Création `SearchInputWrapper.tsx` avec React.createElement()
+  - Fix event detail : `detail.query` → `detail.value`
+  - PR #34 créée (SearchInputWrapper - tests à faire)
 
-**Features MVP** :
-- Liste de courses dédiée
-- Bouton "Ajouter à acheter" sur cartes
-- Page Shopping List avec tracking
-- Réception dans stock
+- [x] **Tests Wrappers (6/6)** (90min)
+  - ButtonWrapper : 26 tests
+  - CardWrapper : 30 tests
+  - MetricCardWrapper : 27 tests
+  - StockCardWrapper : 33 tests
+  - AIAlertBannerWrapper : 44 tests
+  - HeaderWrapper : 46 tests
 
-**Avantages** :
-- Workflow cohérent vs "Acheter" magique
-- Budget tracking possible
-- Historique achats
-- Feature "killer" pour usage familial
+**Livrables** :
 
-**Quand faire** : SEMAINE 7 (après Option B)
+- ✅ Issue #33 : Bug recherche identifié et fixé
+- ✅ 206 nouveaux tests wrappers
+- ✅ 437 tests passent (33 skipped, 470 total)
+- ✅ Coverage composants : 90-98%
+- ✅ Issue #35 créée (tests utils/AI non testés)
 
 ---
 
-### 🎯 Recommandation
+#### **Session 7 (17/11 soir - 2h) : Code Quality Tooling** ✅
 
-**Séquence optimale** :
-1. **Cette semaine** : Finir Semaine 5 (tests, polish)
-2. **SEMAINE 6** : Option B (Architecture catégories)
-3. **SEMAINE 7** : Option C (Shopping List MVP)
-4. **SEMAINE 8+** : Features avancées shopping list (multi-magasins, scanner, etc.)
+- [x] **Corrections Copilot Review (PR #36)** (60min)
+  - Fix duplicate test MetricCardWrapper
+  - Fix type assertions StockCardWrapper
+  - Fix spacing CardWrapper
+  - Update test counts dans docs
 
-**Alternative Quick Win** (si manque temps) :
-- Garder architecture actuelle
-- Implémenter juste Shopping List
-- Reporter catégories pour plus tard
+- [x] **Code Quality Automation** (30min)
+  - Setup Prettier (format 82 files)
+  - Setup Husky git hooks (pre-commit, pre-push)
+  - Setup lint-staged (linting incrémental)
+  - Knip moved to pre-push
 
-**Voir fichier détaillé** : `documentation/planning/ROADMAP-ARCHITECTURE-EVOLUTION.md`
+- [x] **Code Cleanup** (30min)
+  - Remove 9 unused files
+  - Remove unused dependencies (react-countup, esbuild)
+  - Remove 41 unused exports
+  - Total : 13 files deleted, ~1765 lines removed
+
+**Livrables** :
+
+- ✅ PR #36 mergée dans main
+- ✅ Tag v1.2.0 créé avec release GitHub
+- ✅ Codebase cleaned, 100% TypeScript valid
+- ✅ Automated quality pipeline fonctionnel
+
+---
+
+#### **Session 8 (18/11 - 2h) : Tests SearchInputWrapper & Finalisation PR #34** ✅
+
+- [x] **Tests SearchInputWrapper (28 tests)** (90min)
+  - Création `SearchInputWrapper.test.tsx` (337 lignes)
+  - Tests rendu, props, thème, événements, synchronisation
+  - Tests edge cases (long values, debounce extrêmes)
+  - Tous les tests passent ✅
+
+- [x] **Corrections Review PR #34** (30min)
+  - Fix types incohérents : `query` → `value` (4 fichiers)
+    - `src/types/web-component-events.ts`
+    - `src/global.d.ts`
+    - `src/vite-env.d.ts`
+    - `src/types/web-components.d.ts`
+  - Optimisation performance : `handleSearchClear` mémorisé (useCallback)
+  - Résolution conflits merge avec main
+
+- [x] **Merge PR #34** (immédiat)
+  - 464 tests passent (33 skipped, 497 total)
+  - TypeScript 0 erreur, build succès
+  - Issue #24 fermée (7/7 wrappers = 100%)
+  - Issue #33 fermée (bug recherche résolu)
+
+**Livrables** :
+
+- ✅ SearchInputWrapper 100% testé (28 tests)
+- ✅ Types cohérents avec web component réel
+- ✅ Performance Dashboard optimisée
+- ✅ PR #34 mergée avec succès
+- ✅ Documentation : `SESSION-2025-11-18-SEARCH-WRAPPER-TESTS.md`
+
+---
+
+**📊 RÉSULTATS FINAUX NOVEMBRE 2025** :
+
+**Design System** ✅
+
+- Repository séparé : `github.com/SandrineCipolla/stockhub_design_system`
+- Storybook : `sandrinecipolla.github.io/stockhub_design_system/`
+- 18 Web Components (5 atoms, 7 molecules, 6 organisms)
+- Version v1.3.1 stable
+- Package NPM : `@stockhub/design-system`
+
+**Tests & Qualité** ✅
+
+- **464 tests passent** (33 skipped, 497 total)
+- **234 tests wrappers** (7/7 wrappers = 100%)
+- Coverage global : 60.67% (composants : 90-98%)
+- TypeScript : 0 erreur (mode strict)
+- ESLint : 0 warning
+- Build : Succès (5.46s)
+
+**Performance** ✅
+
+- Lighthouse Performance : 99/100
+- Lighthouse Accessibility : 96/100
+- Bundle size : 113.99 KB gzipped
+- FPS : 60 FPS stable
+
+**Accessibilité** ✅
+
+- WCAG 2.1 Level AA : 100% conforme
+- Contrastes couleurs : Tous validés (3.19:1 à 8.76:1)
+- Daltonisme : 83% paires distinguables + compensation labels
+- Navigation clavier : Complète
+
+**Issues Fermées** ✅
+
+- Issue #9 : Migration Analytics vers DS
+- Issue #10 : Audit accessibilité couleurs
+- Issue #24 : Tests wrappers components (7/7 = 100%)
+- Issue #33 : Bug recherche résolu
+
+**Durée totale Sessions 1-8** : ~23h (13-18 Novembre 2025)
+
+---
+
+## 🔮 PROCHAINES ÉTAPES - POST-DESIGN SYSTEM ✅
+
+> **✅ Statut** : Design System externe COMPLÉTÉ (Sessions 1-8, 13-18 Nov 2025)
+> **📖 Documentation** : `documentation/planning/PLANNING-NOVEMBRE-2025-UPDATE.md`
+
+### ✅ Design System - FAIT
+
+**Ce qui était prévu** :
+
+1. ~~Storybook + Web Components (4-5h)~~ → ✅ **FAIT** (Sessions 1-4)
+2. ~~Migration tous composants vers DS~~ → ✅ **FAIT** (18 Web Components)
+3. ~~Documentation Storybook~~ → ✅ **FAIT** (sandrinecipolla.github.io/stockhub_design_system/)
+
+**Résultat** :
+
+- ✅ Repository séparé créé et opérationnel
+- ✅ 18 Web Components (Lit Element + TypeScript)
+- ✅ Storybook en ligne avec documentation complète
+- ✅ 7/7 wrappers React testés (464 tests, 100% passent)
+- ✅ CI/CD automatisé (GitHub Actions)
+- ✅ NPM package publié : `@stockhub/design-system`
+
+---
+
+### 🎯 CE QUI RESTE À FAIRE (Backlog Priorisé)
+
+> **📖 Voir aussi** : `documentation/planning/PLANNING-NOVEMBRE-2025-UPDATE.md` (Section BACKLOG)
+
+#### **🔴 PRIORITÉ HAUTE - Qualité Code**
+
+**Issue #23 - Type Safety** (1-2h)
+
+- [ ] Audit types `any` restants
+- [ ] Typage strict événements custom
+- [ ] Interfaces web components complètes
+- [ ] Tests TypeScript stricts
+
+**Issue #25 - Harmoniser Documentation** (1h)
+
+- [ ] Aligner structure `/documentation`
+- [ ] Links croisés DS ↔ Front
+- [ ] Guides techniques unifiés
+
+#### **🟠 PRIORITÉ MOYENNE - Tests Avancés**
+
+**Issue #28 - Playwright E2E Tests** (4-6h)
+
+- [ ] Setup Playwright
+- [ ] Tests navigation (Dashboard → Analytics)
+- [ ] Tests interactions (click cards, filters)
+- [ ] Tests responsive
+- [ ] CI/CD intégration
+
+**Issue #35 - Tests Utils/AI** (2-3h)
+
+- [ ] Tests `aiPredictions.ts` (coverage actuel 0-37%)
+- [ ] Tests utils helpers
+- [ ] Améliorer coverage global vers 80%
+
+#### **🟡 PRIORITÉ BASSE - Features Avancées**
+
+**Issue #16 - Normalisation Accents Recherche** (1h)
+
+- [ ] Fonction `normalizeString()` dans utils
+- [ ] Intégrer dans search filter
+- [ ] Tests (café = cafe)
+
+**Issue #30 - Debug Vercel optionalDependencies** (30min-1h)
+
+- [ ] Investiguer warning Vercel
+- [ ] Fix si bloquant
+- [ ] Documenter solution
+
+#### **🔵 OPTIONNEL - Nice-to-have**
+
+**Tests Frontend Avancés (Semaine 5+ optionnel - 11h)**
+
+- [ ] Tests accessibilité (Audit WCAG automatisé 2h)
+- [ ] Performance datasets (1000+ stocks 3h)
+- [ ] Bundle optimization (code splitting 3h)
+- [ ] Storybook stories enrichies (2h)
+
+**Features Avancées (Semaine 6 - 11h)**
+
+- [ ] PWA Frontend (Service Worker, manifest 2h)
+- [ ] State Management (Zustand si nécessaire 2h)
+- [ ] Monitoring Frontend (Error boundaries, Web Vitals 3h)
+- [ ] Internationalisation (react-i18next 4h)
+
+**UI/UX Avancé (Semaine 7 - 11h)**
+
+- [ ] Tests régression visuelle (Chromatic 2h)
+- [ ] Architecture modulaire (2h)
+- [ ] Optimisations avancées (React.memo, bundle analysis 3h)
+- [ ] Audit Lighthouse 100/100 (4h)
+
+---
+
+### ✅ **Storybook + Design System - COMPLÉTÉ** (13-18 Novembre 2025)
+
+> **📌 Note** : Cette section détaillait le plan initial pour créer un Design System avec Storybook.
+> **✅ Statut** : Travail réalisé via **Design System externe** (repository séparé)
+>
+> **Voir documentation complète** : Section **"🎨 NOVEMBRE 2025 - Design System Externe + Tests Finalisation (13-18/11)"** ci-dessus (lignes 720-948)
+>
+> **Résumé** :
+>
+> - ✅ Repository `stockhub_design_system` créé
+> - ✅ 18 Web Components (Lit Element + TypeScript)
+> - ✅ Storybook en ligne : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
+> - ✅ Package NPM publié : `@stockhub/design-system@v1.3.1`
+> - ✅ 8 sessions de développement (13-18/11/2025)
+> - ✅ Migration complète dans le Frontend
+>
+> **Architecture par catégories (CategoryCard)** : Reportée au backlog (non prioritaire actuellement)
 
 ---
 
 ## 📋 CHECKLIST PAR LIVRABLE
 
 ### 🧪 **Livrable 1 : Tests Unitaires**
+
 - [x] Vitest configuré et fonctionnel
 - [x] Tests Button, Card, Badge passent
 - [x] Tests Dashboard passent
@@ -1024,6 +1155,7 @@ Workflow cohérent
 - [x] Script `npm run test:coverage` fonctionne
 
 ### 🔄 **Livrable 2 : Refactoring Complet** ✅ TERMINÉ (08-13/10)
+
 - [x] **Séance 6** : Types centralisés src/types/index.ts (08/10)
 - [x] **Séance 6** : Fixtures Badge/Button/Icon (08/10)
 - [x] **Séance 6** : Tests Button/Badge refactorisés (08/10)
@@ -1037,6 +1169,7 @@ Workflow cohérent
 - [x] Code 100% DRY et maintenable ✅
 
 ### 🧹 **Livrable 2: Optimisation & Nettoyage** ✅ TERMINÉ (09/10 matin)
+
 - [x] **Séance 11** : Configuration coverage optimisée
 - [x] **Séance 11** : Tests useFrontendState enrichis (+25 tests)
 - [x] **Séance 11** : Tests useStocks enrichis (+10 tests)
@@ -1051,6 +1184,7 @@ Workflow cohérent
 - [x] TypeScript OK (0 erreur) ✅
 
 ### 🎨 **Livrable 3 : Système de statuts** ✅ TERMINÉ (09/10 soir)
+
 - [x] **Séance 14** : Types StockStatus avec STOCK_STATUS_CONFIG complet
 - [x] **Séance 14** : 5 statuts (optimal, low, critical, outOfStock, overstocked)
 - [x] **Séance 14** : Icônes Lucide par statut
@@ -1058,10 +1192,11 @@ Workflow cohérent
 - [x] **Séance 14** : Composant StatusBadge.tsx avec accessibilité
 - [x] **Séance 14** : 262 tests StatusBadge (+24 suites)
 - [x] **Séance 14** : Intégration StockCard
-- [x] >360 tests passent ✅
+- [x] > 360 tests passent ✅
 - [x] TypeScript OK (0 erreur) ✅
 
 ### 🎨 **Livrable 4 : Créativité Visuelle StockCard** ✅ TERMINÉ (09-10/10)
+
 - [x] Type StockStatus + constantes couleurs ✅
 - [x] 5 statuts définis avec palette complète ✅
 - [x] Icônes spécifiques par statut ✅
@@ -1077,6 +1212,7 @@ Workflow cohérent
 - [x] Accessibilité 96/100 ✅
 
 ### ✨ **Livrable 5 : Micro-animations** ✅ TERMINÉ (17-20/10)
+
 - [x] Framer Motion installé
 - [x] Animations entrance/exit StockCard
 - [x] Animations hover fluides
@@ -1092,6 +1228,7 @@ Workflow cohérent
 - [x] 369 tests passent
 
 ### 🤖 **Livrable 6 : IA Visible** 📅 22-24/10
+
 - [ ] SmartSuggestions avec animations
 - [ ] StockPrediction avec barre progression
 - [ ] Interface IA intuitive
@@ -1099,6 +1236,7 @@ Workflow cohérent
 - [ ] Intégration dashboard harmonieuse
 
 ### 📌 **Livrable 7 : Connexion Backend** 📅 26-27/10
+
 - [ ] React Query configuré
 - [ ] Client API avec auth Azure AD
 - [ ] useStocksQuery fonctionnel
@@ -1111,6 +1249,7 @@ Workflow cohérent
 ## 🚀 COMMANDES UTILES
 
 ### Installation
+
 ```bash
 # Tests
 npm install -D vitest @vitest/ui @testing-library/react @testing-library/user-event jsdom
@@ -1123,6 +1262,7 @@ npm install @tanstack/react-query
 ```
 
 ### Scripts de développement
+
 ```bash
 # Tests
 npm run test              # Lancer tests
@@ -1136,6 +1276,7 @@ npm run preview          # Preview build
 ```
 
 ### Validation qualité
+
 ```bash
 # Performance
 npm run build
@@ -1151,6 +1292,7 @@ npm run type-check
 ## 📊 MÉTRIQUES DE RÉUSSITE
 
 ### Objectifs quantitatifs
+
 - [ ] **Tests** : Coverage ≥ 80%
 - [ ] **Performance** : Lighthouse ≥ 98/100
 - [ ] **Accessibilité** : Lighthouse ≥ 96/100
@@ -1158,6 +1300,7 @@ npm run type-check
 - [ ] **Bundle size** : < 600kb (gzipped)
 
 ### Objectifs qualitatifs
+
 - [ ] **Feedback encadrante** : Réponse à tous les points d'amélioration
 - [ ] **Expérience utilisateur** : Interface plus vivante et engageante
 - [ ] **Code quality** : Tests robustes, code maintenable
@@ -1166,6 +1309,7 @@ npm run type-check
 ### 📈 Audits Lighthouse - Historique
 
 #### Audit du 10/10/2025 (Séance 15 - Post StockCard enrichie) ✅
+
 ```
 Date : 10 octobre 2025, 13:51
 Build : Production (npm run build && npm run preview)
@@ -1185,6 +1329,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ```
 
 **📊 Évolution des scores :**
+
 - Performance : Maintenue à 100/100 malgré ajout CSS différenciation visuelle
 - Accessibility : Stable à 96/100 (WCAG AA conforme)
 - Bundle size : Optimisé à 70 KB gzipped (objectif < 600 KB largement atteint)
@@ -1194,6 +1339,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ## 📝 NOTES ET OBSERVATIONS
 
 ### Séance 1 - Tests Setup (Date : 28/09/2025)
+
 ```
 ⏱️ Temps réel : 2h30 (incluant bonus Input)
 
@@ -1227,7 +1373,9 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 
 🔄 À reporter : Rien - Séance 1 SURVALIDÉE ✅⭐
 ```
-### Séance 2 -  Tests Dashboard (Date : 29/09/2025)
+
+### Séance 2 - Tests Dashboard (Date : 29/09/2025)
+
 ```
 ⏱️ Temps réel : 2h15min (estimé 2h)
 
@@ -1261,7 +1409,9 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 
 🔄 À reporter : Rien - Séance 2 SURVALIDÉE ✅⭐
 ```
+
 ### Séance 3 - Tests Hooks (Date : 29/09/2025)
+
 ```
 ⏱️ Temps réel : 2h45min (estimé 2h30)
 
@@ -1300,7 +1450,9 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 - Lignes non couvertes useFrontendState : fonctions commentées
 → Non critique, logique principale 100% testée
 ```
+
 ### Séance 4 - Tests Components Layout (Date : 30/09/2025)
+
 ```
 ⏱️ Temps réel : 1h30min (estimé 1h30)
 
@@ -1350,6 +1502,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ```
 
 ### Séance 5 - Tests Page Dashboard (Date : 30/09/2025)
+
 ```
 ⏱️ Temps réel : Estimé 2h (à compléter)
 
@@ -1400,7 +1553,9 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 - Ligne 325 : console.log (non critique)
 - Lignes 341-346 : État complexe ou callback conditionnel
 ```
+
 ### Séance 6 - Refactoring Badge/Button (Date : 08/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 2h (estimé 2h)
 
@@ -1423,6 +1578,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ```
 
 ### Séance 7 - Refactoring Card/Input (Date : 09/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 2h (estimé 2h)
 
@@ -1451,6 +1607,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ```
 
 ### Séance 8 - Fixtures Dashboard (Date : 10/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 2h15min (estimé 2h)
 
@@ -1482,6 +1639,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ```
 
 ### Séance 9 - Refactoring tests Dashboard (Date : 12/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 3h (estimé 3h)
 
@@ -1513,6 +1671,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ```
 
 ### Séance 10 - Refactoring Layout/Hooks/Page (Date : 13/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 4h (estimé 4h)
 
@@ -1552,6 +1711,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 ```
 
 **📊 BILAN REFACTORING COMPLET :**
+
 - **14 fichiers de test** avec fixtures structurées
 - **340 tests unitaires** passent sans erreur (+33 tests)
 - **Architecture robuste** et maintenable
@@ -1561,6 +1721,7 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 - **Coverage globale : 93.3%** ✅
 
 ### Séance 11 - Amélioration Coverage Tests (Date : 09/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 1h30 (estimé 2h)
 
@@ -1619,21 +1780,22 @@ Rapport complet : documentation/metrics/lighthouse-report-2025-10-10.json
 
 📊 **DÉTAIL COVERAGE FINALE PAR CATÉGORIE :**
 
-| Catégorie | Statements | Branches | Functions | Lines | Status |
-|-----------|------------|----------|-----------|-------|--------|
-| **Components common** | 100% | 98.14% | 100% | 100% | ✅ Excellent |
-| **Components dashboard** | 99.56% | 96.49% | 100% | 99.56% | ✅ Excellent |
-| **Components layout** | 96.19% | 83.33% | 80% | 96.19% | ✅ Très bien |
-| **Components providers** | 100% | 100% | 100% | 100% | ✅ Parfait |
-| **Contexts** | 100% | 100% | 100% | 100% | ✅ Parfait |
-| **Data** | 100% | 100% | 100% | 100% | ✅ Parfait |
-| **Hooks** | **87.79%** | 83.78% | 100% | 87.79% | ✅ Très bien |
-| **Pages** | 90.84% | 61.36% | 42.85% | 90.84% | ✅ Bien |
-| **GLOBAL** | **93.3%** | **85.63%** | **87.17%** | **93.3%** | ✅ **Excellent** |
+| Catégorie                | Statements | Branches   | Functions  | Lines     | Status           |
+| ------------------------ | ---------- | ---------- | ---------- | --------- | ---------------- |
+| **Components common**    | 100%       | 98.14%     | 100%       | 100%      | ✅ Excellent     |
+| **Components dashboard** | 99.56%     | 96.49%     | 100%       | 99.56%    | ✅ Excellent     |
+| **Components layout**    | 96.19%     | 83.33%     | 80%        | 96.19%    | ✅ Très bien     |
+| **Components providers** | 100%       | 100%       | 100%       | 100%      | ✅ Parfait       |
+| **Contexts**             | 100%       | 100%       | 100%       | 100%      | ✅ Parfait       |
+| **Data**                 | 100%       | 100%       | 100%       | 100%      | ✅ Parfait       |
+| **Hooks**                | **87.79%** | 83.78%     | 100%       | 87.79%    | ✅ Très bien     |
+| **Pages**                | 90.84%     | 61.36%     | 42.85%     | 90.84%    | ✅ Bien          |
+| **GLOBAL**               | **93.3%**  | **85.63%** | **87.17%** | **93.3%** | ✅ **Excellent** |
 
 **🎯 OBJECTIF 80% COVERAGE : LARGEMENT DÉPASSÉ ✅**
 
 ### Séance 12 - Nettoyage Architecture Types (Date : 09/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 45min (estimé 1h)
 
@@ -1700,6 +1862,7 @@ src/types/
 **🎯 RÉSULTAT : CODE 100% DRY, ZÉRO DUPLICATION ✅**
 
 ### Séance 13 - Nettoyage Final Tests & Fixtures (Date : 09/10/2025 matin) ✅
+
 ```
 ⏱️ Temps réel : 30min (estimé 45min)
 
@@ -1772,6 +1935,7 @@ src/test/fixtures/
 **🎯 TESTS 100% DRY & RÉUTILISABLES ✅**
 
 ### Séance 14 - Système de statuts complet (Date : 09/10/2025 soir - 2h30) ✅
+
 ```
 ⏱️ Temps réel : 2h30min (estimé 2h)
 
@@ -1823,6 +1987,7 @@ src/test/fixtures/
 ```
 
 ### Séance 15 - StockCard enrichie (Date : 10/10/2025 - 2h30) ✅
+
 ```
 ⏱️ Temps réel : 2h30min (estimé 2h)
 
@@ -1888,6 +2053,7 @@ src/test/fixtures/
 ```
 
 ### Séance 16 - Animations Framer Motion (Date : 17/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 2h30min (estimé 2h)
 
@@ -1960,6 +2126,7 @@ src/test/fixtures/
 ```
 
 ### Séance 17 - Animations StockGrid + Dashboard (Date : 19/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 3h (estimé 3h)
 
@@ -2019,6 +2186,7 @@ src/test/fixtures/
 ```
 
 ### Séance 17.5 - Nettoyage Code (Date : 20/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 1h (estimé 45min)
 
@@ -2072,6 +2240,7 @@ src/test/fixtures/
 ```
 
 ### Séance 18 - Performance + Polish (Date : 20/10/2025) ✅
+
 ```
 ⏱️ Temps réel : 3h (estimé 4h)
 
@@ -2139,6 +2308,7 @@ src/test/fixtures/
 ```
 
 **📊 Résultats Performance Finale :**
+
 - **Tests FPS** : 60.81 FPS (objectif >55) ✅
 - **Lighthouse Performance** : 99/100 (objectif ≥98) ✅
 - **Accessibility** : 96/100 ✅
@@ -2151,6 +2321,7 @@ src/test/fixtures/
 ## 🎉 VALIDATION FINALE
 
 ### Checklist finale avant livraison (27/10)
+
 - [x] Tous les tests passent ✅ (369 tests)
 - [x] Coverage ≥ 80% ✅ (93.3% global)
 - [x] Code 100% refactorisé ✅
@@ -2162,9 +2333,10 @@ src/test/fixtures/
 - [x] Documentation mise à jour ✅
 
 ### Résultat attendu
+
 - [ ] **Note encadrante** : 85/100 → 95/100+ ?
 - [ ] **Application complète** : V2 + Backend connecté +IA
-- [ ] **Compétences RNCP** :  Tests ✅, créativité, animations, intégration API
+- [ ] **Compétences RNCP** : Tests ✅, créativité, animations, intégration API
 - [ ] **Portfolio** : Projet de qualité professionnelle
 
 ---
@@ -2180,163 +2352,38 @@ src/test/fixtures/
 
 ---
 
-## 🔮 **NOVEMBRE - BACKLOG POST-CORRECTIONS (Après retours encadrante)**
+## 🔮 **NOVEMBRE - Planning Réel vs Planning Initial**
 
-> **📋 À traiter APRÈS avoir terminé :** Créativité visuelle ✅ + Animations ✅ + IA visible ✅ + Backend ✅
+> **📌 Note historique** : Cette section détaillait un planning initial (Semaines 5-7) pour novembre 2025.
+> **✅ Statut** : Planning **NON suivi tel quel** - Priorités ajustées après retours encadrante
 
-### 📅 **SEMAINE 5 - Tests Frontend Avancés (03-10/11)**
+### Ce qui s'est réellement passé en Novembre 2025
 
-#### **Mardi 05/11 (2h) : Tests E2E Frontend**
-- [ ] **Configuration Playwright** (60min)
-  - [ ] Installation et setup Playwright
-  - [ ] Configuration tests interface utilisateur
-  - [ ] Scripts de base pour CI frontend
+**Décision stratégique** : Après retours encadrante, priorité donnée au **Design System externe** avec Storybook (éviter duplication code, réutilisabilité React/Mobile).
 
-- [ ] **Scénarios utilisateur frontend** (60min)
-  - [ ] Navigation complète dashboard
-  - [ ] Interactions utilisateur (CRUD stocks)
-  - [ ] Export CSV côté client
-  - [ ] Tests responsive multi-navigateurs
+**Travail réalisé (13-18 Novembre)** :
 
-**🎯 Objectif** : Interface testée en conditions réelles
+- ✅ **Sessions 1-8** : Design System externe complet (18 Web Components, Storybook en ligne)
+- ✅ **Issue #9** : Migration Analytics vers Design System
+- ✅ **Issue #10** : Audit accessibilité couleurs (WCAG AA 100%)
+- ✅ **Issue #24** : Tests wrappers (7/7 wrappers testés = 464 tests)
+- ✅ **Issue #33** : Fix recherche (SearchInputWrapper)
 
-#### **Jeudi 07/11 (2h) : Tests d'accessibilité**
-- [ ] **Audit automatisé WCAG** (60min)
-  - [ ] Installation axe-core
-  - [ ] Tests automatisés accessibilité
-  - [ ] Rapport violations interface
+**Voir documentation détaillée** :
 
-- [ ] **Tests navigation utilisateur** (60min)
-  - [ ] Navigation clavier complète
-  - [ ] Tests screen readers
-  - [ ] Focus management et ARIA
+- Section **"🎨 NOVEMBRE 2025 - Design System Externe + Tests Finalisation"** (lignes 720-948) ci-dessus
+- Plannings détaillés :
+  - `documentation/planning/PLANNING-NOVEMBRE-2025-UPDATE.md` (travail réel 13-18/11)
+  - `documentation/planning/PLANNING-FINALISATION-NOVEMBRE-2025.md` (priorités immédiates)
+- Sessions :
+  - `documentation/SESSION-2025-11-18-SEARCH-WRAPPER-TESTS.md` (Session 8)
 
-**🎯 Objectif** : Accessibilité parfaite validée
+**Éléments du backlog initial intégrés** :
 
-#### **Samedi 09/11 Soirée (3h) : Performance Frontend**
-- [ ] **Tests de performance client** (90min)
-  - [ ] Tests avec datasets importantes (1000+ stocks)
-  - [ ] Mesure FPS et responsivité
-  - [ ] Optimisation re-renders React
+- ✅ Storybook → Fait (Design System externe)
+- ✅ Tests accessibilité → Fait (audit WCAG complet)
+- ✅ Documentation → Fait (WEB_COMPONENTS_GUIDE.md + sessions)
+- 🔄 Tests E2E Playwright → Backlog (Issue #28)
+- 🔄 PWA, i18n, Monitoring → Backlog optionnel
 
-- [ ] **Bundle optimization** (90min)
-  - [ ] Code splitting par route
-  - [ ] Tree shaking et imports optimisés
-  - [ ] Lazy loading composants
-
-**🎯 Objectif** : Performance frontend optimale
-
-#### **Dimanche 10/11 Matin (4h) : Documentation Frontend**
-- [ ] **Storybook setup** (2h)
-  - [ ] Installation et configuration
-  - [ ] Stories avec fixtures existantes
-  - [ ] Documentation composants interactive
-
-- [ ] **Documentation patterns frontend** (2h)
-  - [ ] Guide architecture composants
-  - [ ] Patterns de test documentés
-  - [ ] Conventions de développement
-
-**🎯 Objectif** : Documentation frontend professionnelle
-
----
-
-### 📅 **SEMAINE 6 - Features Frontend Avancées (10-17/11)**
-
-#### **Mardi 12/11 (2h) : PWA Frontend**
-- [ ] **Service Worker** (60min)
-  - [ ] Cache strategies côté client
-  - [ ] Offline functionality interface
-  - [ ] Update notifications UI
-
-- [ ] **Manifest PWA** (60min)
-  - [ ] Icons et metadata
-  - [ ] Install prompt interface
-  - [ ] Tests installation utilisateur
-
-**🎯 Objectif** : Application Progressive Web App
-
-#### **Jeudi 14/11 (2h) : State Management Frontend**
-- [ ] **Évaluation état actuel** (30min)
-  - [ ] Analyse useState/Context actuels
-  - [ ] Identification besoins state global
-
-- [ ] **Migration Zustand si nécessaire** (90min)
-  - [ ] Setup store frontend uniquement
-  - [ ] Migration hooks personnalisés
-  - [ ] Tests state management
-
-**🎯 Objectif** : State management frontend optimisé
-
-#### **Samedi 16/11 Soirée (3h) : Monitoring Frontend**
-- [ ] **Error boundaries avancés** (90min)
-  - [ ] Composants error boundary robustes
-  - [ ] Fallback UI élégants
-  - [ ] Logging côté client
-
-- [ ] **Performance monitoring client** (90min)
-  - [ ] Web Vitals tracking
-  - [ ] User interactions analytics
-  - [ ] Performance dashboards frontend
-
-**🎯 Objectif** : Monitoring frontend robuste
-
-#### **Dimanche 17/11 Matin (4h) : Internationalisation**
-- [ ] **Setup i18n React** (2h)
-  - [ ] react-i18next configuration
-  - [ ] Extraction chaînes interface
-  - [ ] Traductions FR/EN
-
-- [ ] **Tests multi-langues** (2h)
-  - [ ] Tests avec différentes langues
-  - [ ] Tests formatage dates/nombres
-  - [ ] Validation UX multi-culturelle
-
-**🎯 Objectif** : Interface internationale
-
----
-
-### 📅 **SEMAINE 7 - UI/UX Frontend Avancé (17-24/11)**
-
-#### **Mardi 19/11 (2h) : Tests de régression visuelle**
-- [ ] **Setup Chromatic** (60min)
-  - [ ] Configuration tests visuels
-  - [ ] Baseline screenshots composants
-  - [ ] Intégration Storybook
-
-- [ ] **Visual testing automation** (60min)
-  - [ ] Tests responsive automatisés
-  - [ ] Tests thèmes dark/light
-  - [ ] Détection régressions UI
-
-**🎯 Objectif** : Zéro régression visuelle
-
-#### **Jeudi 21/11 (2h) : Architecture Frontend Modulaire**
-- [ ] **Modularisation composants** (90min)
-  - [ ] Découpage par features UI
-  - [ ] Barrel exports optimisés
-  - [ ] Structure scalable
-
-- [ ] **Tests architecture frontend** (30min)
-  - [ ] Tests isolation composants
-  - [ ] Tests dependencies
-
-**🎯 Objectif** : Architecture frontend scalable
-
-#### **Samedi 23/11 Soirée (3h) : Optimisations Avancées**
-- [ ] **Performance fine-tuning** (90min)
-  - [ ] Memoization avancée (React.memo, useMemo)
-  - [ ] Optimisation re-renders
-  - [ ] Virtualization si nécessaire
-
-- [ ] **Bundle analysis avancé** (90min)
-  - [ ] Analyse webpack-bundle-analyzer
-  - [ ] Optimisation imports
-  - [ ] Preloading stratégique
-
-**🎯 Objectif** : Performance frontend maximale
-
-#### **Dimanche 24/11 Matin (4h) : Audit Frontend Final**
-- [ ] **Lighthouse audit complet** (2h)
-  - [ ] Score 100/100 toutes catégories
-  - [ ] Core Web Vitals optimaux
+**Ce qui reste à faire** : Voir section **"🔮 PROCHAINES ÉTAPES - POST-DESIGN SYSTEM ✅"** (lignes 949-1034) ci-dessus pour le backlog priorisé actuel.

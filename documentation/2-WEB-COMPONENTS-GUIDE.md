@@ -95,6 +95,7 @@ return (
 ```
 
 **Problèmes rencontrés avec JSX :**
+
 - Les propriétés booléennes ne passent pas correctement
 - Le thème peut ne pas s'appliquer
 - Comportement incohérent avec les événements custom
@@ -172,11 +173,11 @@ useEffect(() => {
 
 ### Événements Disponibles
 
-| Composant | Événement | Detail |
-|-----------|-----------|--------|
-| `sh-stat-card` | `sh-stat-click` | `{ label, value, riskLevel, selected }` |
-| `sh-stock-prediction-card` | `sh-prediction-click` | `{ stockId, stockName, riskLevel }` |
-| `sh-button` | `sh-click` | `{ disabled, loading }` |
+| Composant                  | Événement             | Detail                                  |
+| -------------------------- | --------------------- | --------------------------------------- |
+| `sh-stat-card`             | `sh-stat-click`       | `{ label, value, riskLevel, selected }` |
+| `sh-stock-prediction-card` | `sh-prediction-click` | `{ stockId, stockName, riskLevel }`     |
+| `sh-button`                | `sh-click`            | `{ disabled, loading }`                 |
 
 ---
 
@@ -338,7 +339,9 @@ export const StockPrediction: React.FC<StockPredictionProps> = ({
     'current-quantity': currentQuantity,
     'days-until-rupture-pessimistic': daysUntilRupturePessimistic,
     'days-until-rupture-optimistic': daysUntilRuptureOptimistic,
-    'recommended-reorder-date': recommendedReorderDate ? recommendedReorderDate.toISOString() : undefined,
+    'recommended-reorder-date': recommendedReorderDate
+      ? recommendedReorderDate.toISOString()
+      : undefined,
     'recommended-reorder-quantity': recommendedReorderQuantity,
     'show-details': showDetails ? '' : undefined,
     'data-theme': theme,
@@ -358,6 +361,7 @@ const componentRef = useRef<HTMLElement>(null);
 ```
 
 Les refs permettent d'accéder à l'instance réelle du web component pour :
+
 - Écouter les événements
 - Assigner des propriétés JavaScript
 - Appeler des méthodes publiques
@@ -377,7 +381,9 @@ Cela garantit que le web component est enregistré avant d'interagir avec lui.
 ```typescript
 useEffect(() => {
   const element = componentRef.current;
-  const handler = () => { /* ... */ };
+  const handler = () => {
+    /* ... */
+  };
 
   if (element) {
     element.addEventListener('event', handler);
@@ -388,12 +394,12 @@ useEffect(() => {
 
 ### 4. Conventions de Nommage
 
-| Type | Convention | Exemple |
-|------|-----------|---------|
-| Composant | kebab-case | `sh-stat-card` |
-| Attribut | kebab-case | `risk-level` |
-| Propriété JS | camelCase | `riskLevel` |
-| Événement | kebab-case avec préfixe | `sh-stat-click` |
+| Type         | Convention              | Exemple         |
+| ------------ | ----------------------- | --------------- |
+| Composant    | kebab-case              | `sh-stat-card`  |
+| Attribut     | kebab-case              | `risk-level`    |
+| Propriété JS | camelCase               | `riskLevel`     |
+| Événement    | kebab-case avec préfixe | `sh-stat-click` |
 
 ### 5. TypeScript
 
@@ -415,11 +421,13 @@ declare global {
 ### Problème : Le web component ne s'affiche pas
 
 **Causes possibles :**
+
 1. Import manquant dans `main.tsx`
 2. CSS du Design System non importé
 3. Mauvais nom de composant
 
 **Solution :**
+
 ```typescript
 // main.tsx
 import '@stockhub/design-system/dist/index.js';
@@ -431,6 +439,7 @@ import '@stockhub/design-system/dist/tokens/design-tokens.css';
 **Cause :** Attribut `data-theme` manquant ou mal passé
 
 **Solution :**
+
 ```typescript
 return React.createElement('sh-component', {
   'data-theme': theme, // ✅ Kebab-case avec guillemets
@@ -442,6 +451,7 @@ return React.createElement('sh-component', {
 **Cause :** Tentative d'assigner via attribut HTML au lieu de propriété JS
 
 **Solution :**
+
 ```typescript
 // ❌ Ne fonctionne pas
 <sh-stat-card selected={true} />
@@ -461,6 +471,7 @@ useEffect(() => {
 **Cause :** Utilisation de `onClick` au lieu d'`addEventListener`
 
 **Solution :**
+
 ```typescript
 // ❌ Ne fonctionne pas avec web components
 <sh-button onClick={handleClick} />
@@ -481,6 +492,7 @@ useEffect(() => {
 
 **Solution :**
 Vérifier que `src/types/web-components.d.ts` contient les déclarations :
+
 ```typescript
 declare global {
   namespace JSX {
@@ -506,6 +518,6 @@ declare global {
 
 ## Changelog
 
-| Date | Version | Changements |
-|------|---------|-------------|
-| 2025-11-17 | 1.0.0 | Création du guide initial |
+| Date       | Version | Changements               |
+| ---------- | ------- | ------------------------- |
+| 2025-11-17 | 1.0.0   | Création du guide initial |

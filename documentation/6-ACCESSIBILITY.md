@@ -14,6 +14,7 @@
 ### Composants Audités
 
 Les niveaux de risque (risk levels) sont utilisés dans plusieurs composants du Design System :
+
 - **sh-stat-card** (page Analytics - filtres)
 - **sh-stock-prediction-card** (prédictions ML)
 - **sh-stock-card** (cartes de stock sur Dashboard)
@@ -22,20 +23,22 @@ Les niveaux de risque (risk levels) sont utilisés dans plusieurs composants du 
 ### Couleurs de Risk Levels
 
 #### Mode Sombre (Défaut)
-| Risk Level | Couleur | Code Hex | Variable CSS |
-|------------|---------|----------|--------------|
-| **Critical** | Rouge/Rose | `#f87171` | `--color-danger-400` |
-| **High** | Orange | `#f59e0b` | `--color-warning-500` |
-| **Medium** | Jaune doré | `#fbbf24` | `--color-warning-400` |
-| **Low** | Vert | `#4ade80` | `--color-success-400` |
+
+| Risk Level   | Couleur    | Code Hex  | Variable CSS          |
+| ------------ | ---------- | --------- | --------------------- |
+| **Critical** | Rouge/Rose | `#f87171` | `--color-danger-400`  |
+| **High**     | Orange     | `#f59e0b` | `--color-warning-500` |
+| **Medium**   | Jaune doré | `#fbbf24` | `--color-warning-400` |
+| **Low**      | Vert       | `#4ade80` | `--color-success-400` |
 
 #### Mode Clair
-| Risk Level | Couleur | Code Hex | Variable CSS |
-|------------|---------|----------|--------------|
-| **Critical** | Rouge foncé | `#b91c1c` | `--color-danger-700` |
-| **High** | Orange foncé | `#b45309` | `--color-warning-700` |
-| **Medium** | Jaune foncé | `#d97706` | `--color-warning-600` |
-| **Low** | Vert foncé | `#15803d` | `--color-success-700` |
+
+| Risk Level   | Couleur      | Code Hex  | Variable CSS          |
+| ------------ | ------------ | --------- | --------------------- |
+| **Critical** | Rouge foncé  | `#b91c1c` | `--color-danger-700`  |
+| **High**     | Orange foncé | `#b45309` | `--color-warning-700` |
+| **Medium**   | Jaune foncé  | `#d97706` | `--color-warning-600` |
+| **Low**      | Vert foncé   | `#15803d` | `--color-success-700` |
 
 ---
 
@@ -44,6 +47,7 @@ Les niveaux de risque (risk levels) sont utilisés dans plusieurs composants du 
 ### Ratios de Contraste Requis
 
 Selon WCAG 2.1 Level AA :
+
 - **Texte normal** (< 18pt ou < 14pt gras) : **≥ 4.5:1**
 - **Texte large** (≥ 18pt ou ≥ 14pt gras) : **≥ 3:1**
 - **Composants UI** (bordures, icônes) : **≥ 3:1**
@@ -51,6 +55,7 @@ Selon WCAG 2.1 Level AA :
 ### Classification des Textes
 
 **sh-stat-card** :
+
 - `.value` : `font-size: 1.5rem` (24px) + `font-weight: bold` → **Texte LARGE** → Seuil : **3:1**
   - ✅ **Utilise la couleur du risk level** (via `--value-color`)
 - `.label` : `font-size: 0.75rem` (12px) + `font-weight: medium` → Texte neutre
@@ -107,27 +112,27 @@ Les résultats analytiques ont été validés par les scripts d'audit du projet 
 
 ### Résultats Mode Sombre
 
-| Risk Level | Couleur Texte | BG | Ratio | Texte Normal (≥4.5) | Texte Large (≥3) | Statut |
-|------------|---------------|-----|-------|---------------------|------------------|--------|
-| **Critical** | `#f87171` | `#1e293b` | **5.29:1** | ✅ PASS | ✅ PASS | ✅ **CONFORME** |
-| **High** | `#f59e0b` | `#1e293b` | **6.81:1** | ✅ PASS | ✅ PASS | ✅ **CONFORME** |
-| **Medium** | `#fbbf24` | `#1e293b` | **8.76:1** | ✅ PASS | ✅ PASS | ✅ **CONFORME** |
-| **Low** | `#4ade80` | `#1e293b` | **8.40:1** | ✅ PASS | ✅ PASS | ✅ **CONFORME** |
+| Risk Level   | Couleur Texte | BG        | Ratio      | Texte Normal (≥4.5) | Texte Large (≥3) | Statut          |
+| ------------ | ------------- | --------- | ---------- | ------------------- | ---------------- | --------------- |
+| **Critical** | `#f87171`     | `#1e293b` | **5.29:1** | ✅ PASS             | ✅ PASS          | ✅ **CONFORME** |
+| **High**     | `#f59e0b`     | `#1e293b` | **6.81:1** | ✅ PASS             | ✅ PASS          | ✅ **CONFORME** |
+| **Medium**   | `#fbbf24`     | `#1e293b` | **8.76:1** | ✅ PASS             | ✅ PASS          | ✅ **CONFORME** |
+| **Low**      | `#4ade80`     | `#1e293b` | **8.40:1** | ✅ PASS             | ✅ PASS          | ✅ **CONFORME** |
 
 **Résultat Mode Sombre** : ✅ **100% CONFORME WCAG AA** (4/4 passent texte large)
 
 ### Résultats Mode Clair
 
-| Risk Level | Couleur Texte | BG | Ratio | Texte Normal (≥4.5) | Texte Large (≥3) | Statut |
-|------------|---------------|-----|-------|---------------------|------------------|--------|
-| **Critical** | `#b91c1c` | `#ffffff` | **6.47:1** | ✅ PASS | ✅ PASS | ✅ **CONFORME** |
-| **High** | `#b45309` | `#ffffff` | **5.02:1** | ✅ PASS | ✅ PASS | ✅ **CONFORME** |
-| **Medium** | `#d97706` | `#ffffff` | **3.19:1** | ❌ FAIL | ✅ **PASS** | ✅ **CONFORME*** |
-| **Low** | `#15803d` | `#ffffff` | **5.02:1** | ✅ PASS | ✅ PASS | ✅ **CONFORME** |
+| Risk Level   | Couleur Texte | BG        | Ratio      | Texte Normal (≥4.5) | Texte Large (≥3) | Statut            |
+| ------------ | ------------- | --------- | ---------- | ------------------- | ---------------- | ----------------- |
+| **Critical** | `#b91c1c`     | `#ffffff` | **6.47:1** | ✅ PASS             | ✅ PASS          | ✅ **CONFORME**   |
+| **High**     | `#b45309`     | `#ffffff` | **5.02:1** | ✅ PASS             | ✅ PASS          | ✅ **CONFORME**   |
+| **Medium**   | `#d97706`     | `#ffffff` | **3.19:1** | ❌ FAIL             | ✅ **PASS**      | ✅ **CONFORME\*** |
+| **Low**      | `#15803d`     | `#ffffff` | **5.02:1** | ✅ PASS             | ✅ PASS          | ✅ **CONFORME**   |
 
 **Résultat Mode Clair** : ✅ **100% CONFORME WCAG AA** (4/4 passent texte large)
 
-> ***Note sur "Medium"** : Le ratio 3.19:1 ne passe PAS pour texte normal (≥4.5:1) mais PASSE pour texte large (≥3:1). Dans `sh-stat-card`, seul le `.value` (24px bold = **texte large**) utilise la couleur. Le composant est donc **100% conforme WCAG AA**.
+> **\*Note sur "Medium"** : Le ratio 3.19:1 ne passe PAS pour texte normal (≥4.5:1) mais PASSE pour texte large (≥3:1). Dans `sh-stat-card`, seul le `.value` (24px bold = **texte large**) utilise la couleur. Le composant est donc **100% conforme WCAG AA**.
 
 ---
 
@@ -136,6 +141,7 @@ Les résultats analytiques ont été validés par les scripts d'audit du projet 
 ### Tests Effectués
 
 #### 1. Mode Sombre (Dark Theme)
+
 - ✅ Page Analytics (http://localhost:5175/analytics)
   - StatCard "Critique" : Texte `#f87171` sur fond `#1e293b` - Lisible
   - StatCard "Élevé" : Texte `#f59e0b` sur fond `#1e293b` - Lisible
@@ -147,6 +153,7 @@ Les résultats analytiques ont été validés par les scripts d'audit du projet 
   - Badges de confiance clairs
 
 #### 2. Mode Clair (Light Theme)
+
 - ✅ Page Analytics
   - StatCard "Critique" : Texte `#b91c1c` sur fond blanc - Lisible
   - StatCard "Élevé" : Texte `#b45309` sur fond blanc - Lisible
@@ -187,13 +194,13 @@ Tests de différentiabilité entre risk levels (Delta E ≥ 40 = distinguable) :
 
 ### Conformité Globale
 
-| Critère | Statut | Note |
-|---------|--------|------|
-| **Contraste Mode Sombre** | ✅ CONFORME | 100% (4/4 risk levels) |
-| **Contraste Mode Clair** | ✅ CONFORME | 100% (4/4 risk levels) |
-| **Daltonisme** | ✅ ACCESSIBLE | Tous types couverts |
-| **Lisibilité Texte Normal** | ✅ PASS | Ratios ≥ 4.5:1 |
-| **Lisibilité Texte Large** | ✅ PASS | Ratios ≥ 3:1 |
+| Critère                     | Statut        | Note                   |
+| --------------------------- | ------------- | ---------------------- |
+| **Contraste Mode Sombre**   | ✅ CONFORME   | 100% (4/4 risk levels) |
+| **Contraste Mode Clair**    | ✅ CONFORME   | 100% (4/4 risk levels) |
+| **Daltonisme**              | ✅ ACCESSIBLE | Tous types couverts    |
+| **Lisibilité Texte Normal** | ✅ PASS       | Ratios ≥ 4.5:1         |
+| **Lisibilité Texte Large**  | ✅ PASS       | Ratios ≥ 3:1           |
 
 **Score Final** : ✅ **100/100** - Conformité WCAG 2.1 Level AA
 
@@ -206,6 +213,7 @@ Tests de différentiabilité entre risk levels (Delta E ≥ 40 = distinguable) :
 **Aucune correction nécessaire** ✅
 
 Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des marges confortables :
+
 - Mode sombre : ratios entre 5.4:1 et 8.2:1
 - Mode clair : ratios entre 5.3:1 et 7.2:1
 
@@ -232,16 +240,16 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
 ```json
 {
   "dark-theme": {
-    "critical": "#f87171",  // danger-400  | 5.4:1
-    "high":     "#f59e0b",  // warning-500 | 6.8:1
-    "medium":   "#fbbf24",  // warning-400 | 8.2:1
-    "low":      "#4ade80"   // success-400 | 6.9:1
+    "critical": "#f87171", // danger-400  | 5.4:1
+    "high": "#f59e0b", // warning-500 | 6.8:1
+    "medium": "#fbbf24", // warning-400 | 8.2:1
+    "low": "#4ade80" // success-400 | 6.9:1
   },
   "light-theme": {
-    "critical": "#b91c1c",  // danger-700  | 7.2:1
-    "high":     "#b45309",  // warning-700 | 6.1:1
-    "medium":   "#d97706",  // warning-600 | 5.3:1
-    "low":      "#15803d"   // success-700 | 6.4:1
+    "critical": "#b91c1c", // danger-700  | 7.2:1
+    "high": "#b45309", // warning-700 | 6.1:1
+    "medium": "#d97706", // warning-600 | 5.3:1
+    "low": "#15803d" // success-700 | 6.4:1
   }
 }
 ```
@@ -251,17 +259,23 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
 ## 📸 Captures d'Écran
 
 ### Mode Sombre
+
 ![Analytics Dark Mode](./captures/analytics-dark-risk-levels.png)
+
 - Tous les risk levels visibles et contrastés
 - Différenciation claire critical/high/medium/low
 
 ### Mode Clair
+
 ![Analytics Light Mode](./captures/analytics-light-risk-levels.png)
+
 - Couleurs plus foncées pour maintenir contraste
 - Lisibilité parfaite sur fond blanc
 
 ### Simulation Daltonisme
+
 ![Protanopie Simulation](./captures/analytics-protanopia.png)
+
 - Les niveaux restent distinguables même sans rouge
 
 ---
@@ -271,6 +285,7 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
 ### Outils Utilisés
 
 #### Scripts d'Audit Créés
+
 - **`scripts/test-risk-levels-colors.mjs`** ✅ NOUVEAU
   - Script spécifique pour tester les 4 risk levels
   - Calcule ratios de contraste WCAG
@@ -279,6 +294,7 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
   - Génère rapport JSON dans `documentation/metrics/`
 
 #### Outils Existants
+
 - **`scripts/test-daltonisme.mjs`**
   - Teste les couleurs de STATUS (différentes des risk levels)
   - Commande : `npm run audit:daltonisme`
@@ -288,15 +304,18 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
   - Commande : `npm run audit:full`
 
 #### Outils Externes
+
 - **WebAIM Contrast Checker** : https://webaim.org/resources/contrastchecker/
 - **Chrome DevTools** : Rendering > Emulate vision deficiencies
 - **WCAG 2.1 Guidelines** : https://www.w3.org/WAI/WCAG21/quickref/
 
 ### Standards
+
 - **WCAG 2.1 Level AA** : Critère 1.4.3 (Contrast Minimum)
 - **WCAG 2.1 Level AAA** : Critère 1.4.6 (Contrast Enhanced) - Non requis mais dépassé sur certains niveaux
 
 ### Composants Auditables
+
 - Design System : `src/components/molecules/stat-card/sh-stat-card.ts`
 - Design Tokens : `src/tokens/tokens.json`
 - Front Analytics : `src/pages/Analytics.tsx`
@@ -314,15 +333,18 @@ Tous les niveaux de risque (critical, high, medium, low) respectent les normes d
 #### Détails de Conformité
 
 **Mode Sombre** :
+
 - ✅ 4/4 risk levels passent WCAG AA pour texte large (ratios : 5.29:1 à 8.76:1)
 - ✅ 4/4 risk levels dépassent également le seuil texte normal (4.5:1)
 
 **Mode Clair** :
+
 - ✅ 4/4 risk levels passent WCAG AA pour texte large (ratios : 3.19:1 à 6.47:1)
 - ✅ 3/4 passent également le seuil texte normal
 - ✅ "Medium" (3.19:1) passe pour texte large, utilisé par `.value` dans `sh-stat-card`
 
 **Daltonisme** :
+
 - ✅ 83% des paires distinguables (protanopie, deutéranopie, tritanopie)
 - ⚠️ 50% en achromatopsie, compensé par labels et icônes textuels
 

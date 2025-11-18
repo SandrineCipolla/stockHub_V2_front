@@ -37,6 +37,7 @@ try {
 ## 📖 API du Logger
 
 ### `logger.debug(...args)`
+
 **Usage :** Logs de débogage détaillés  
 **Visible :** 🟢 DEV uniquement  
 **Format DEV :** `🐛 [DEBUG] ...`
@@ -46,6 +47,7 @@ logger.debug('User clicked button', { userId: 123, timestamp: Date.now() });
 ```
 
 ### `logger.log(...args)`
+
 **Usage :** Informations générales  
 **Visible :** 🟢 DEV uniquement  
 **Format DEV :** `ℹ️ [INFO] ...`
@@ -56,6 +58,7 @@ logger.log('Stocks loaded:', stocks.length);
 ```
 
 ### `logger.warn(...args)`
+
 **Usage :** Avertissements importants  
 **Visible :** 🟢 DEV + 🟡 PRODUCTION  
 **Format DEV :** `⚠️ [WARN] ...`
@@ -65,6 +68,7 @@ logger.warn('Stock level is low', { stockId: 'ABC123', quantity: 5 });
 ```
 
 ### `logger.error(...args)`
+
 **Usage :** Erreurs critiques  
 **Visible :** 🟢 DEV + 🔴 PRODUCTION  
 **Format DEV :** `❌ [ERROR] ...`
@@ -74,6 +78,7 @@ logger.error('Failed to save stock:', error);
 ```
 
 ### `logger.perf(message, duration, unit?)`
+
 **Usage :** Mesures de performance  
 **Visible :** 🟢 DEV uniquement  
 **Format DEV :** `⚡ [PERF] message: duration unit`
@@ -87,6 +92,7 @@ logger.perf('Data fetch completed', Math.round(duration), 'ms');
 ```
 
 ### `logger.group(label)` / `logger.groupEnd()`
+
 **Usage :** Organiser les logs en groupes  
 **Visible :** 🟢 DEV uniquement
 
@@ -181,7 +187,7 @@ function checkStockLevel(stock: Stock) {
       id: stock.id,
       name: stock.name,
       quantity: stock.quantity,
-      minThreshold: minThreshold
+      minThreshold: minThreshold,
     });
     // ✅ Ce warning sera visible en production
     // L'utilisateur peut le copier et vous l'envoyer pour diagnostic
@@ -191,17 +197,17 @@ function checkStockLevel(stock: Stock) {
 
 ---
 
-## 🔄 Migration depuis console.*
+## 🔄 Migration depuis console.\*
 
 ### Règles de conversion
 
-| Ancien | Nouveau | Visibilité |
-|--------|---------|------------|
+| Ancien            | Nouveau          | Visibilité     |
+| ----------------- | ---------------- | -------------- |
 | `console.debug()` | `logger.debug()` | DEV uniquement |
-| `console.log()` | `logger.log()` | DEV uniquement |
-| `console.info()` | `logger.log()` | DEV uniquement |
-| `console.warn()` | `logger.warn()` | DEV + PROD |
-| `console.error()` | `logger.error()` | DEV + PROD |
+| `console.log()`   | `logger.log()`   | DEV uniquement |
+| `console.info()`  | `logger.log()`   | DEV uniquement |
+| `console.warn()`  | `logger.warn()`  | DEV + PROD     |
+| `console.error()` | `logger.error()` | DEV + PROD     |
 
 ### Checklist de migration
 
@@ -216,19 +222,23 @@ function checkStockLevel(stock: Stock) {
 ## 🎁 Avantages
 
 ✅ **Débogage en production**
+
 - Les erreurs critiques restent visibles
 - Les utilisateurs peuvent copier les erreurs de leur console
 
 ✅ **Pas de pollution**
+
 - Les logs de debug sont automatiquement désactivés en production
 - Console propre pour l'utilisateur final
 
 ✅ **Fonctionnalités avancées**
+
 - Mesure automatique des performances avec `measurePerf()`
 - Organisation des logs avec `logger.group()`
 - Logs formatés avec emojis en développement
 
 ✅ **Configuration simple**
+
 - Pas besoin de `drop_console: true` dans Vite/Terser
 - Contrôle fin via `import.meta.env.DEV`
 
@@ -260,4 +270,3 @@ Pourquoi ? Parce que le logger utilise les `console.*` de manière intelligente,
 **Créé le :** 21 octobre 2025  
 **Auteur :** Sandrine Cipolla  
 **Projet :** StockHub V2
-

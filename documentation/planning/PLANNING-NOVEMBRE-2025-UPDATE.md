@@ -186,30 +186,45 @@
 - PR #36 mergée dans main
 - Issue #24 mise à jour (reste SearchInputWrapper à tester)
 
+#### Session 8 (18/11) - Tests SearchInputWrapper & Finalisation PR #34 ✅
+
+**Durée** : ~2h
+
+**Tests SearchInputWrapper (28 tests):**
+
+- ✅ Créer `SearchInputWrapper.test.tsx` (337 lignes)
+- ✅ Tests rendu de base (2 tests)
+- ✅ Tests props mapping (8 tests - placeholder, debounce, clearable, aria, className)
+- ✅ Tests thème (1 test)
+- ✅ Tests événements sh-search-change (7 tests - validation detail.value)
+- ✅ Tests événements sh-search-clear (3 tests)
+- ✅ Tests synchronisation value (2 tests)
+- ✅ Tests intégration (2 tests - workflow complet)
+- ✅ Tests edge cases (4 tests - long values, debounce extrêmes)
+
+**Corrections Review PR #34:**
+
+- ✅ Fix types incohérents (query → value) dans 4 fichiers
+  - `src/types/web-component-events.ts`
+  - `src/global.d.ts`
+  - `src/vite-env.d.ts`
+  - `src/types/web-components.d.ts`
+- ✅ Optimisation performance Dashboard (handleSearchClear mémorisé)
+- ✅ Résolution conflits merge avec main
+- ✅ TypeScript 0 erreur, tous les tests passent
+
+**Livrables** :
+
+- SearchInputWrapper 100% testé (28 tests)
+- PR #34 mergée avec succès
+- Issue #24 fermée (7/7 wrappers = 100%)
+- Issue #33 fermée (bug recherche résolu)
+- 464 tests passent (33 skipped, 497 total)
+- Documentation: `SESSION-2025-11-18-SEARCH-WRAPPER-TESTS.md`
+
 ---
 
-## 📋 CE QUI RESTE À FAIRE
-
-### 🎯 Priorité Immédiate - Session 8 (18/11)
-
-#### Tests SearchInputWrapper (PR #34) ⏳
-
-**Estimation** : 30min-1h
-
-**Description** : Compléter les tests du dernier wrapper manquant
-
-**Tâches** :
-
-- [ ] Checkout branche PR #34
-- [ ] Créer `SearchInputWrapper.test.tsx`
-- [ ] Tester props mapping (value, placeholder, debounce)
-- [ ] Tester événement search
-- [ ] Tester événement clear
-- [ ] Tester debounce timing
-- [ ] Push tests sur branche PR #34
-- [ ] Merger PR #34 complète
-
-**Justification** : Compléter 7/7 wrappers testés, fermer proprement Issue #24
+## 📋 BACKLOG
 
 ---
 
@@ -219,7 +234,7 @@
 
 #### 1. Issue #24 - Tests Wrappers Components ✅ COMPLÉTÉ
 
-**Durée réelle** : 4h
+**Durée réelle** : 6h (Sessions 6-8)
 
 **Description** : Ajouter tests pour les wrappers React des web components
 
@@ -231,8 +246,9 @@
 - ✅ StockCardWrapper - 33 tests
 - ✅ AIAlertBannerWrapper - 44 tests
 - ✅ HeaderWrapper - 46 tests
-- ✅ 437 tests passent (6/6 wrappers testés)
-- ⏳ SearchInputWrapper tests - à faire après merge PR #34
+- ✅ SearchInputWrapper - 28 tests (Session 8)
+- ✅ 464 tests passent (7/7 wrappers = 100%)
+- ✅ 234 tests wrappers au total
 
 **Justification RNCP** : Tests unitaires qualité professionnelle ✅
 
@@ -305,13 +321,14 @@
 
 ---
 
-## 📊 Métriques Actuelles (17/11/2025)
+## 📊 Métriques Actuelles (18/11/2025)
 
 ### Tests & Qualité ✅
 
-- **Tests unitaires** : 437 tests (206 tests wrappers + tests existants)
+- **Tests unitaires** : 464 tests (234 tests wrappers + tests existants)
+- **Tests passent** : 464 passent (33 skipped, 497 total)
 - **Coverage global** : 60.67% (composants: 90-98%, utils/AI: 0-37%)
-- **Coverage wrappers** : 90-98% (6/6 wrappers testés ✅)
+- **Coverage wrappers** : 90-98% (7/7 wrappers testés = 100% ✅)
 - **TypeScript** : Mode strict, 0 erreur
 - **ESLint** : 0 warning
 
