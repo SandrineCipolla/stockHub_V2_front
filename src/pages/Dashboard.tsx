@@ -87,6 +87,10 @@ export const Dashboard: React.FC = () => {
         updateFilters({ query: value });
     }, [updateFilters]);
 
+    const handleSearchClear = useCallback(() => {
+        setSearchTerm('');
+    }, []);
+
     // Gestionnaires d'événements avec useCallback
     const handleExport = useCallback(async (): Promise<void> => {
         if (stocks.length === 0) return;
@@ -270,7 +274,7 @@ export const Dashboard: React.FC = () => {
                             debounce={300}
                             clearable={true}
                             onSearchChange={handleSearchChange}
-                            onSearchClear={() => setSearchTerm('')}
+                            onSearchClear={handleSearchClear}
                             ariaLabel="Rechercher un produit"
                         />
                         <div id="search-help" className="sr-only">
