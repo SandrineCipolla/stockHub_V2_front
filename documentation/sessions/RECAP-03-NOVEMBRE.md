@@ -7,6 +7,7 @@
 ## ✅ CE QUI A ÉTÉ FAIT AUJOURD'HUI
 
 ### 1. **Migration MetricCard** (Matin)
+
 - ✅ Création de `MetricCardWrapper.tsx` pour wrapper sh-metric-card
 - ✅ Mapping des props React vers attributs web component
 - ✅ Conversion icon names (package → Package, alert-triangle → AlertTriangle)
@@ -14,14 +15,17 @@
 - ✅ Dashboard mis à jour pour utiliser MetricCardWrapper
 
 ### 2. **Résolution Bug Critique : Status Colors** (Matin)
+
 **Problème découvert** : Toutes les cartes de stock affichaient des bordures vertes, peu importe leur statut réel (optimal/low/critical).
 
 **Investigation** :
+
 - Vérifié que les données avaient les bons status
 - Inspecté le CSS du DS : sélecteurs `:host([status="low"])` présents
 - Découvert que l'attribut `status` n'apparaissait pas physiquement dans le DOM
 
 **Cause racine** :
+
 ```typescript
 // ❌ Avant (commit d334887) - sh-stock-card.ts ligne 50
 @property() status: 'optimal' | 'low' | 'critical' = 'optimal';
@@ -33,6 +37,7 @@
 Sans `reflect: true`, Lit Element ne reflète pas la propriété comme attribut HTML. Les sélecteurs CSS `:host([status="..."])` ne peuvent donc pas matcher.
 
 **Solution appliquée** :
+
 1. ✅ Ajout de `reflect: true` dans `sh-stock-card.ts` du DS
 2. ✅ Build du DS (commit 940b781)
 3. ✅ Push sur GitHub master
@@ -41,6 +46,7 @@ Sans `reflect: true`, Lit Element ne reflète pas la propriété comme attribut 
 6. ✅ Redémarrage serveur de dev
 
 ### 3. **Mise à jour Package Design System**
+
 - Package DS mis à jour de **d334887** → **940b781**
 - Vérification : `npm list @stockhub/design-system`
 - Serveur dev redémarré sur http://localhost:5175
@@ -50,12 +56,14 @@ Sans `reflect: true`, Lit Element ne reflète pas la propriété comme attribut 
 ## 📂 FICHIERS CRÉÉS/MODIFIÉS
 
 ### Nouveaux fichiers
+
 ```
 src/components/dashboard/
 └── MetricCardWrapper.tsx        (56 lignes) ✨
 ```
 
 ### Fichiers modifiés
+
 ```
 src/pages/
 └── Dashboard.tsx                (Import MetricCardWrapper, 3 usages)
@@ -67,6 +75,7 @@ package-lock.json                (DS package: d334887 → 940b781)
 ```
 
 ### Fichiers modifiés dans le DS (stockhub_design_system)
+
 ```
 src/components/organisms/stock-card/
 └── sh-stock-card.ts             (Ligne 50: ajout reflect: true)
@@ -79,6 +88,7 @@ src/components/organisms/stock-card/
 ### Dans l'app (http://localhost:5175)
 
 **Métriques Dashboard** :
+
 ```
 ┌─────────────────┬─────────────────┬─────────────────┐
 │ Total Produits  │ Stock Faible    │ Valeur Totale   │
@@ -88,11 +98,13 @@ src/components/organisms/stock-card/
 └─────────────────┴─────────────────┴─────────────────┘
         ✅              ⚠️              📈
 ```
+
 - Affichage avec web components sh-metric-card
 - Icônes Lucide correctes
 - Variants de couleur (success/warning/info)
 
 **Cartes de Stock** :
+
 ```
 ┌────────────────────────────────────────┐
 │ Acrylique Bleu Cobalt          [✅]    │  ← Bordure VERTE
@@ -123,6 +135,7 @@ src/components/organisms/stock-card/
 ```
 
 **Résultat** : Les couleurs des bordures correspondent maintenant correctement aux status !
+
 - 🟢 Vert : optimal
 - 🟠 Orange : low
 - 🔴 Rouge : critical
@@ -134,35 +147,37 @@ src/components/organisms/stock-card/
 ## 🐛 PROBLÈME RENCONTRÉ & RÉSOLUTION
 
 ### Symptôme
+
 Toutes les cartes de stock avaient des bordures vertes, indépendamment de leur status réel.
 
 ### Investigation
+
 1. **Vérification données** : Les stocks avaient bien des status différents (optimal/low/critical)
 2. **Inspection CSS** : Les règles CSS étaient correctes dans le DS
 3. **Inspection DOM** : L'attribut `status` n'apparaissait pas dans le HTML
 
 ### Cause Racine
+
 La propriété `status` dans `sh-stock-card` manquait l'option `reflect: true`. Sans cette option, Lit Element ne reflète pas la propriété TypeScript comme attribut HTML.
 
 **Comportement sans reflect** :
+
 ```html
 <!-- Dans le DOM, on voyait : -->
-<sh-stock-card name="Peinture" value="€12">
-  #shadow-root
-</sh-stock-card>
+<sh-stock-card name="Peinture" value="€12"> #shadow-root </sh-stock-card>
 <!-- ❌ Pas d'attribut status="low" visible -->
 ```
 
 **Comportement avec reflect** :
+
 ```html
 <!-- Maintenant on voit : -->
-<sh-stock-card name="Peinture" value="€12" status="low">
-  #shadow-root
-</sh-stock-card>
+<sh-stock-card name="Peinture" value="€12" status="low"> #shadow-root </sh-stock-card>
 <!-- ✅ Attribut status visible pour les sélecteurs CSS -->
 ```
 
 ### Solution
+
 ```typescript
 // Dans sh-stock-card.ts
 @property({ reflect: true })
@@ -170,14 +185,23 @@ status: 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked' = 'optim
 ```
 
 Avec `reflect: true`, les sélecteurs CSS du Shadow DOM fonctionnent :
+
 ```css
-:host([status="optimal"]) { --status-color: var(--color-success-500); }
-:host([status="low"]) { --status-color: var(--color-warning-500); }
-:host([status="critical"]) { --status-color: var(--color-danger-500); }
+:host([status='optimal']) {
+  --status-color: var(--color-success-500);
+}
+:host([status='low']) {
+  --status-color: var(--color-warning-500);
+}
+:host([status='critical']) {
+  --status-color: var(--color-danger-500);
+}
 ```
 
 ### Leçon Apprise
+
 **Quand utiliser `reflect: true` dans Lit Element** :
+
 - ✅ Quand on veut que la propriété soit visible comme attribut HTML
 - ✅ Quand on utilise des sélecteurs CSS basés sur l'attribut (`:host([attr])`)
 - ✅ Pour le debugging (l'attribut apparaît dans DevTools)
@@ -188,6 +212,7 @@ Avec `reflect: true`, les sélecteurs CSS du Shadow DOM fonctionnent :
 ## 📋 PROCHAINES ÉTAPES
 
 ### Cette semaine
+
 - [ ] Migrer Button vers sh-button (en cours)
 - [ ] Migrer Card vers sh-card
 - [ ] Intégrer sh-ia-alert-banner pour les alertes IA
@@ -195,6 +220,7 @@ Avec `reflect: true`, les sélecteurs CSS du Shadow DOM fonctionnent :
 - [ ] Committer et merger dans feature/ai-business-intelligence
 
 ### Composants restants à migrer
+
 ```
 ✅ sh-header           (✓ Complété)
 ✅ sh-footer           (✓ Complété)
@@ -211,16 +237,19 @@ Avec `reflect: true`, les sélecteurs CSS du Shadow DOM fonctionnent :
 ## 📊 MÉTRIQUES
 
 ### Build
+
 - **Status** : ✅ Aucune erreur
 - **Dev server** : http://localhost:5175
 - **HMR** : Fonctionnel
 
 ### Design System
+
 - **Version avant** : commit d334887 (sans reflect)
 - **Version après** : commit 940b781 (avec reflect)
 - **Commit fix** : `fix: add reflect:true to status property in sh-stock-card`
 
 ### Code modifié aujourd'hui
+
 - **MetricCardWrapper** : 56 lignes (nouveau)
 - **StockCardWrapper** : -8 lignes (suppression workaround)
 - **Dashboard** : ~20 lignes (imports et usages)
@@ -232,13 +261,16 @@ Avec `reflect: true`, les sélecteurs CSS du Shadow DOM fonctionnent :
 ## 🔗 LIENS RAPIDES
 
 **Branches Git** :
+
 - Travail actuel : `feature/design-system-integration`
 - Merge prévu vers : `feature/ai-business-intelligence`
 
 **Serveur dev** :
+
 - http://localhost:5175
 
 **Design System** :
+
 - Repo : stockhub_design_system
 - Commit avec fix : 940b781
 
@@ -247,6 +279,7 @@ Avec `reflect: true`, les sélecteurs CSS du Shadow DOM fonctionnent :
 ## 💬 EN RÉSUMÉ
 
 **Aujourd'hui on a** :
+
 - ✅ Migré MetricCard vers sh-metric-card avec succès
 - ✅ Découvert et résolu un bug critique sur les status colors
 - ✅ Appris l'importance de `reflect: true` dans Lit Element
@@ -266,12 +299,14 @@ Le problème des couleurs venait d'une propriété Lit Element non reflétée. S
 ### Composants migrés
 
 **Button → sh-button** :
+
 - Créé `ButtonWrapper.tsx` avec mapping manuel des icônes Lucide
 - Mapping : Plus, Download, BarChart3, Search
 - Gestion du thème et des événements
 - Conservé taille par défaut (md) après test utilisateur
 
 **AISummaryWidget → sh-ia-alert-banner** :
+
 - Créé `AIAlertBannerWrapper.tsx`
 - Conversion AISuggestion → IaAlert
 - Calcul de la severity dominante (critical/warning/info)
@@ -280,28 +315,31 @@ Le problème des couleurs venait d'une propriété Lit Element non reflétée. S
 ### Corrections apportées
 
 **StockGrid : Filtrage des suggestions IA**
+
 - **Problème** : Toutes les suggestions IA étaient passées à chaque carte
 - **Symptôme** : Badge IA (1) identique sur tous les stocks
 - **Fix** : Ajout d'un filtre par `stockId` dans StockGrid.tsx
+
 ```typescript
-const stockSuggestions = aiSuggestions.filter(
-    suggestion => suggestion.stockId === stock.id
-);
+const stockSuggestions = aiSuggestions.filter(suggestion => suggestion.stockId === stock.id);
 ```
 
 **Espacement amélioré** :
+
 - Augmentation de `mb-8` à `mb-12` entre métriques et bannière IA
 - Meilleure respiration visuelle
 
 ### Points UX identifiés
 
 **Test taille des boutons** :
+
 - Essayé `size="lg"` sur les boutons principaux
 - Retour utilisateur : trop imposants
 - **Décision** : Conservé `size="md"` par défaut
 - Noté dans DESIGN-SYSTEM-IMPROVEMENTS.md pour ajuster le padding dans le DS
 
 **Bannière IA** :
+
 - Changée à `expanded: false` par défaut
 - Utilisateur peut développer au besoin
 
@@ -312,30 +350,37 @@ const stockSuggestions = aiSuggestions.filter(
 Document exhaustif des améliorations à apporter au DS :
 
 ### 1. sh-button : Padding insuffisant
+
 - Padding actuel md : `8px 12px`
 - Suggestion : `10px 16px` (+2px vertical, +4px horizontal)
 
 ### 2. sh-button : Centrage icônes mobile
+
 - Problème avec `hide-text-mobile`
 - Suggestion CSS pour centrage parfait
 
 ### 3. sh-button : Variant primary dans cards ?
+
 - Question ouverte : boutons cards trop discrets ?
 - Actuellement tous en `variant="ghost"`
 
 ### 4. sh-stock-card : Badge IA toujours rouge
+
 - **Problème critique** : Couleur rouge fixe pour tous les badges
 - Devrait adapter la couleur selon priorité (rouge/orange/bleu)
 - Nécessite ajout prop `iaSeverity` au composant
 
 ### 5. sh-ia-alert-banner : Doublon d'icônes
+
 - Puce "•" + icône AlertTriangle
 - À retirer ligne 373 du DS
 
 ### 6. sh-metric-card : Espacement mobile
+
 - Vérifier gap en responsive
 
 ### 7. Audit responsive général
+
 - Checklist complète pour mobile
 
 ---
@@ -343,6 +388,7 @@ Document exhaustif des améliorations à apporter au DS :
 ## 📊 État final de la migration
 
 ### Composants DS intégrés ✅
+
 ```
 ✅ sh-header           (HeaderWrapper)
 ✅ sh-footer           (Utilisé directement)
@@ -355,12 +401,14 @@ Document exhaustif des améliorations à apporter au DS :
 ```
 
 ### Composants React conservés
+
 ```
 - Card (utilisé uniquement pour écran d'erreur)
 - NavSection (wrapper layout custom)
 ```
 
 ### Fichiers créés
+
 ```
 src/components/
 ├── common/ButtonWrapper.tsx               (57 lignes)
@@ -377,10 +425,12 @@ documentation/
 ## 🐛 Problèmes connus (à corriger dans DS)
 
 ### Bloquants UX
+
 1. **Badge IA rouge partout** - Manque de distinction visuelle urgence
 2. **Doublon icônes** dans liste alerts
 
 ### Nice-to-have
+
 3. Padding boutons insuffisant
 4. Centrage icônes mobile
 5. Espacement metric cards mobile
@@ -392,28 +442,35 @@ documentation/
 ## 💡 Décisions techniques
 
 ### Pattern d'intégration web components
+
 ```typescript
 // Pattern utilisé pour tous les wrappers
-return React.createElement('sh-component', {
+return React.createElement(
+  'sh-component',
+  {
     prop1: value1,
     'kebab-case-prop': value2,
     'data-theme': theme,
-    'onsh-event': handleEvent
-}, children);
+    'onsh-event': handleEvent,
+  },
+  children
+);
 ```
 
 **Avantages** :
+
 - Pas de conflit avec TypeScript JSX
 - Props passées directement au web component
 - Support des événements custom
 
 ### Gestion des icônes Lucide → String
+
 ```typescript
 // Mapping manuel pour garantir la correspondance
 const iconMap = new Map<LucideIcon, string>([
-    [Plus, 'Plus'],
-    [Download, 'Download'],
-    // ...
+  [Plus, 'Plus'],
+  [Download, 'Download'],
+  // ...
 ]);
 ```
 
@@ -443,11 +500,13 @@ const iconMap = new Map<LucideIcon, string>([
 **Objectif** : Terminer l'amélioration "AI Business Intelligence" (25% → 100%)
 
 **Problème Identifié** :
+
 - ✅ SmartSuggestions implémenté (22/10)
 - ❌ StockPrediction manquant (régression linéaire ML)
 - ❌ **Documentation RNCP manquante** (BLOQUANT pour soutenance)
 
 **Branche active** : `feature/ai-business-intelligence`
+
 - Contient : SmartSuggestions (25%) + Design System integration (100%)
 - Décision : Terminer les 75% IA restants avant merge dans main
 
@@ -462,9 +521,11 @@ const iconMap = new Map<LucideIcon, string>([
 **Algorithmes implémentés** :
 
 ##### A. Simulation Données Historiques
+
 ```typescript
-function simulateHistoricalData(stock: Stock, days = 30): DataPoint[]
+function simulateHistoricalData(stock: Stock, days = 30): DataPoint[];
 ```
+
 - Rétro-extrapolation depuis état actuel
 - Génération 31 points (30 jours + aujourd'hui)
 - Variance réaliste (±30%)
@@ -473,11 +534,13 @@ function simulateHistoricalData(stock: Stock, days = 30): DataPoint[]
 **Apprentissage** : En production, on remplacerait par vraies données backend. Structure du code permet transition facile.
 
 ##### B. Régression Linéaire (Moindres Carrés)
+
 ```typescript
-function performLinearRegression(dataPoints: DataPoint[]): LinearRegressionResult
+function performLinearRegression(dataPoints: DataPoint[]): LinearRegressionResult;
 ```
 
 **Formules mathématiques** :
+
 ```
 Slope (m) = (n∑xy - ∑x∑y) / (n∑x² - (∑x)²)
 Intercept (b) = (∑y - m∑x) / n
@@ -486,6 +549,7 @@ Variance = SS_res / (n - 2)
 ```
 
 **Retour** :
+
 - `slope` : Taux de consommation (unités/jour)
 - `intercept` : Quantité initiale à t=0
 - `rSquared` : Qualité du fit (0-1, idéal > 0.85)
@@ -495,25 +559,30 @@ Variance = SS_res / (n - 2)
 **Apprentissage Clé** : La régression linéaire simple suffit pour 90% des cas d'usage stock (consommation tendance linéaire court-terme).
 
 ##### C. Prédiction Temporelle Rupture
+
 ```typescript
-function predictRuptureTime(stock: Stock, regression: LinearRegressionResult): number | null
+function predictRuptureTime(stock: Stock, regression: LinearRegressionResult): number | null;
 ```
 
 **Formule** :
+
 ```
 daysUntilRupture = -currentQuantity / slope
 ```
 
 **Conditions** :
+
 - Si slope ≥ -0.01 → stock stable/augmente → null
 - Si résultat < 0 ou > 365 → irréaliste → null
 
 ##### D. Intervalles de Confiance (IC 95%)
+
 ```typescript
-function calculateConfidenceInterval(prediction, variance, slope): [pessimistic, optimistic]
+function calculateConfidenceInterval(prediction, variance, slope): [pessimistic, optimistic];
 ```
 
 **Formule Statistique** :
+
 ```
 IC = prédiction ± (z × σ / |slope|)
 
@@ -533,11 +602,13 @@ Où:
 **Fonctionnalités UI** :
 
 ##### A. Barre de Progression Risque
+
 - Calcul % risque : 100% (critical) → 0% (low)
 - Animation Framer Motion progressive
 - Couleurs adaptatives selon niveau
 
 **Formule % Risque** :
+
 ```typescript
 if (days ≤ 3)  → 100% - (days × 6.67%)     // 100-80%
 if (days ≤ 7)  → 80% - ((days-3) × 7.5%)   // 80-50%
@@ -546,6 +617,7 @@ else           → max(0, 25% - ((days-14)))  // 25-0%
 ```
 
 ##### B. Classification Risque
+
 ```typescript
 if (days ≤ 3)  → CRITICAL (rouge)
 if (days ≤ 7)  → HIGH (orange)
@@ -554,6 +626,7 @@ else           → LOW (vert)
 ```
 
 ##### C. Affichage Infos ML
+
 - Taux consommation quotidien
 - Date rupture estimée
 - Intervalle confiance (pessimiste/optimiste)
@@ -569,17 +642,17 @@ else           → LOW (vert)
 **Fichier modifié** : `src/pages/Dashboard.tsx`
 
 **Ajouts** :
+
 ```typescript
 // Calcul prédictions ML (memoized)
 const mlPredictions = useMemo(() => {
-    const predictions = predictStockRuptures(stocks);
-    return predictions
-        .filter(p => p.riskLevel !== 'low' && p.daysUntilRupture !== null)
-        .slice(0, 3);  // Top 3 stocks à risque
+  const predictions = predictStockRuptures(stocks);
+  return predictions.filter(p => p.riskLevel !== 'low' && p.daysUntilRupture !== null).slice(0, 3); // Top 3 stocks à risque
 }, [stocks]);
 ```
 
 **Section UI** :
+
 - Nouvelle section "Analyse Prédictive ML"
 - Grid responsive (1/2/3 colonnes)
 - Affiche uniquement stocks avec risque réel
@@ -637,12 +710,14 @@ const mlPredictions = useMemo(() => {
    - Roadmap v2.0
 
 **Apprentissage Documentation** :
+
 - Expliquer formules mathématiques avec exemples concrets
 - Donner calculs pas-à-pas pour pédagogie
 - Lier algorithmes à valeur métier
 - Mentionner sources académiques (crédibilité)
 
 **Exemple Contenu** :
+
 ```markdown
 ### Exemple Complet Régression
 
@@ -721,17 +796,20 @@ R² = 0.99852 → Excellent fit!
    - Inspirations pratiques (Amazon, Google Analytics, GitHub)
 
 **Apprentissage Crucial** : Documenter **pourquoi** et pas seulement **comment**. Justifier décisions techniques avec:
+
 - Alternatives considérées
 - Critères de choix
 - Compromis assumés
 - Validations effectuées
 
 **Exemple Justification** :
+
 ```markdown
 **Question**: Pourquoi pas Neural Networks ?
 
 **Réponse**:
 Benchmark:
+
 - Régression: 5ms, R²=0.85-0.95, UX excellent
 - Neural: 250ms, R²=0.95-0.99, UX médiocre
 
@@ -747,6 +825,7 @@ Conclusion: +5% précision ne justifie pas +5000% temps
 ##### A. planning_ameliorations_v2.md
 
 **Modifications** :
+
 - Ligne 16-19 : Statut améliorations prioritaires
   - IA: `[ ]` → `[~]` (75% restant - en cours)
 
@@ -765,6 +844,7 @@ Conclusion: +5% précision ne justifie pas +5000% temps
 ##### B. ETAT-IA-BUSINESS-INTELLIGENCE.md (nouveau)
 
 **Document stratégique** (250+ lignes) :
+
 - État détaillé 25% complété
 - Ce qui manque avec estimations temps
 - Planning suggéré 3 sessions
@@ -772,6 +852,7 @@ Conclusion: +5% précision ne justifie pas +5000% temps
 - Impact RNCP détaillé
 
 **Apprentissage** : Créer documents "état projet" aide à:
+
 - Reprendre travail facilement après pause
 - Communiquer avancement aux parties prenantes
 - Planifier prochaines sessions efficacement
@@ -785,12 +866,14 @@ Conclusion: +5% précision ne justifie pas +5000% temps
 **Leçon** : ML complexe pas nécessaire en frontend. Régression linéaire simple + bien implémentée > Neural Networks lourds.
 
 **Justification Technique** :
+
 - Performance : 5ms vs 250ms
 - Bundle : +0KB vs +400KB
 - Maintenabilité : Code natif vs dépendance externe
 - Précision : 85-95% R² largement suffisant
 
 **Quand utiliser ML complexe** :
+
 - Patterns non-linéaires complexes
 - Dataset massif (1000+ points)
 - Backend avec GPU disponible
@@ -803,6 +886,7 @@ Conclusion: +5% précision ne justifie pas +5000% temps
 **Leçon** : Traduire métriques ML en langage métier = clé adoption utilisateur.
 
 **Mauvais** :
+
 ```
 Slope: -4.5 units/day
 R²: 0.94
@@ -810,6 +894,7 @@ Intercept: 99.8
 ```
 
 **Bon** :
+
 ```
 🤖 IA détecte : Rupture dans 12 jours
 Confiance: 91%
@@ -825,6 +910,7 @@ Fourchette: 10-14 jours
 **Leçon** : Documentation technique != documentation pédagogique.
 
 **Stratégie Gagnante** :
+
 1. **Expliquer formules** avec exemples calculs pas-à-pas
 2. **Justifier choix** avec alternatives + critères décision
 3. **Cas d'usage concrets** avec données réalistes
@@ -832,6 +918,7 @@ Fourchette: 10-14 jours
 5. **Citer sources académiques** (crédibilité)
 
 **Structure AI-FEATURES.md** :
+
 ```
 Pour chaque algorithme:
 1. Objectif business
@@ -850,6 +937,7 @@ Pour chaque algorithme:
 **Leçon** : Parfait est l'ennemi du bien. Documenter compromis montre maturité.
 
 **Exemples Compromis Assumés** :
+
 - Simulation vs données réelles (pragmatisme)
 - Régression linéaire vs modèles complexes (performance)
 - IC 95% vs IC 99% (standard universel)
@@ -862,11 +950,13 @@ Pour chaque algorithme:
 #### 5. **Architecture Code**
 
 **Leçon** : Séparer algorithmes (utils/) et UI (components/) facilite:
+
 - Tests unitaires (algorithmes seuls)
 - Réutilisabilité (algorithmes sans UI)
 - Maintenabilité (changements isolés)
 
 **Structure Appliquée** :
+
 ```
 src/
 ├── utils/
@@ -887,20 +977,23 @@ src/
 **Leçon** : `useMemo()` critique pour calculs coûteux.
 
 **Avant** :
+
 ```typescript
 // Recalcul à chaque re-render (60 fois/seconde)
-const predictions = predictStockRuptures(stocks);  // 70ms
+const predictions = predictStockRuptures(stocks); // 70ms
 ```
 
 **Après** :
+
 ```typescript
 // Recalcul uniquement si stocks changent
 const predictions = useMemo(() => {
-    return predictStockRuptures(stocks);
+  return predictStockRuptures(stocks);
 }, [stocks]);
 ```
 
 **Gain Performance** :
+
 - FPS : 15-20 → 60
 - CPU : 4200ms/s → 70ms (uniquement si data change)
 
@@ -913,11 +1006,13 @@ const predictions = useMemo(() => {
 **Leçon** : Intervalles de confiance rendent prédictions crédibles.
 
 **Pourquoi IC 95% ?**
+
 - Reconnaît l'incertitude (honnêteté)
 - Donne fourchette réaliste
 - Standard scientifique universel
 
 **Message UI** :
+
 ```
 Rupture prévue: 12 jours
 Fourchette: 10-14 jours (IC 95%)
@@ -930,18 +1025,21 @@ Fourchette: 10-14 jours (IC 95%)
 ### 📊 Métriques Session 3
 
 **Temps Passé** : 2h30
+
 - StockPrediction (code) : 1h
 - Documentation RNCP : 1h30
 - Intégration + tests : 15min
 - Mise à jour planning : 15min
 
 **Lignes Code** :
+
 - `mlSimulation.ts` : 397 lignes
 - `StockPrediction.tsx` : 288 lignes
 - `Dashboard.tsx` : +10 lignes
 - **Total** : 695 lignes code
 
 **Lignes Documentation** :
+
 - `AI-FEATURES.md` : 600+ lignes
 - `PROMPTS.md` : 400+ lignes
 - `ETAT-IA-BUSINESS-INTELLIGENCE.md` : 250+ lignes
@@ -958,6 +1056,7 @@ Fourchette: 10-14 jours (IC 95%)
 **IA Business Intelligence** : 25% → **100%** ✅
 
 **Checklist Complétude** :
+
 - [x] StockPrediction composant créé
 - [x] mlSimulation.ts avec régression linéaire
 - [x] Intégration Dashboard fonctionnelle
@@ -968,6 +1067,7 @@ Fourchette: 10-14 jours (IC 95%)
 - [x] Bundle optimal (222 KB gzipped)
 
 **Compétence RNCP C2.5** : ✅ **VALIDÉE**
+
 > "Analyses descriptives et prédictives sur données avec Machine Learning"
 
 **Note Estimée** : 18-20/20 (vs 12-14/20 sans doc)
@@ -999,12 +1099,14 @@ documentation/
 ### 🔮 Prochaines Étapes
 
 **Immédiat** :
+
 1. ✅ Tester en local (`npm run dev`)
 2. ✅ Vérifier prédictions ML sur Dashboard
 3. Commit + push sur branche
 4. Créer PR vers main
 
 **Optionnel (PRIORITÉ 3)** :
+
 - Setup Backend React Query (reporté)
 - Connecter vraies données historiques
 - Remplacer simulation par API backend
@@ -1024,14 +1126,18 @@ documentation/
 **Symptôme** : Toutes les prédictions affichaient `risk: 'low'` et `daysUntilRupture: null`, même pour stocks critiques.
 
 **Investigation** :
+
 ```typescript
 // Debug log ajouté
-console.log('🤖 ML Predictions:', allPredictions.map(p => ({
-  name: p.stockName,
-  slope: p.regression.slope,
-  rsquared: p.regression.rSquared,
-  daysUntilRupture: p.daysUntilRupture
-})));
+console.log(
+  '🤖 ML Predictions:',
+  allPredictions.map(p => ({
+    name: p.stockName,
+    slope: p.regression.slope,
+    rsquared: p.regression.rSquared,
+    daysUntilRupture: p.daysUntilRupture,
+  }))
+);
 
 // Résultat dans console :
 // Acrylique Jaune Cadmium: slope: 2.69, rsquared: 0.40, status: 'critical', daysUntilRupture: null
@@ -1040,19 +1146,21 @@ console.log('🤖 ML Predictions:', allPredictions.map(p => ({
 **Problème** : Slope POSITIF (2.69) au lieu de NÉGATIF → stock augmente au lieu de diminuer !
 
 **Cause Racine** :
+
 ```typescript
 // ❌ AVANT (ligne ~150 mlSimulation.ts)
 for (let i = 0; i < days; i++) {
-    const dayOffset = days - i;
-    const timestamp = now - dayOffset * MS_PER_DAY;
-    dataPoints.push({ timestamp, quantity: currentQuantity });
+  const dayOffset = days - i;
+  const timestamp = now - dayOffset * MS_PER_DAY;
+  dataPoints.push({ timestamp, quantity: currentQuantity });
 
-    // BUG ICI : on AJOUTE au lieu de SOUSTRAIRE
-    currentQuantity += baseConsumptionRate + dailyVariation; // ❌
+  // BUG ICI : on AJOUTE au lieu de SOUSTRAIRE
+  currentQuantity += baseConsumptionRate + dailyVariation; // ❌
 }
 ```
 
 **Fix Appliqué** :
+
 ```typescript
 // ✅ APRÈS
 currentQuantity -= baseConsumptionRate + dailyVariation; // ✅
@@ -1071,16 +1179,17 @@ currentQuantity -= baseConsumptionRate + dailyVariation; // ✅
 **Problème** : La simulation utilisait toujours `estimatedDaysToDeplete = 20` pour tous les stocks, ignorant leur status.
 
 **Fix Appliqué** :
+
 ```typescript
 // ✅ Adaptation basée sur status
 let estimatedDaysToDeplete = 20; // default
 
 if (stock.status === 'critical') {
-  estimatedDaysToDeplete = 10;  // Consommation rapide
+  estimatedDaysToDeplete = 10; // Consommation rapide
 } else if (stock.status === 'low') {
-  estimatedDaysToDeplete = 15;  // Consommation modérée
+  estimatedDaysToDeplete = 15; // Consommation modérée
 } else if (stock.status === 'overstocked') {
-  estimatedDaysToDeplete = 40;  // Consommation lente
+  estimatedDaysToDeplete = 40; // Consommation lente
 }
 
 const baseConsumptionRate = (maxThreshold - minThreshold) / estimatedDaysToDeplete;
@@ -1097,21 +1206,25 @@ const baseConsumptionRate = (maxThreshold - minThreshold) / estimatedDaysToDeple
 #### Problème UX Identifié
 
 **Feedback Utilisateur** :
+
 > "on a beaucoup de rouge... il faut réfléchir à la pertinence que ce soit directement sur le dashboard"
 
 **Analyse** :
+
 - Dashboard avait déjà la bannière IA (5 suggestions)
 - Section ML ajoutait 3 cartes avec couleurs vives (rouge/orange)
 - Confusion entre bannière IA et prédictions ML
 - Question : "pourquoi 3 et pas 5 ?"
 
 **Contexte Fonctionnel** :
+
 - **Dashboard** : Vue d'ensemble stocks (vocation généraliste)
 - **Prédictions ML** : Analyse détaillée (vocation spécialisée)
 
 **Décision Prise** : **Option B - Page Analytics Dédiée**
 
 **Justification** :
+
 1. **Séparation des préoccupations** : Dashboard = gestion, Analytics = analyse
 2. **Évite surcharge visuelle** : Pas de "rouge partout"
 3. **Fonctionnalités avancées** : Filtrage par risque impossible sur Dashboard
@@ -1128,6 +1241,7 @@ const baseConsumptionRate = (maxThreshold - minThreshold) / estimatedDaysToDeple
 **Fonctionnalités** :
 
 ##### A. Système de Filtrage
+
 ```typescript
 type RiskFilter = 'all' | 'critical' | 'high' | 'medium' | 'low';
 const [riskFilter, setRiskFilter] = useState<RiskFilter>('all');
@@ -1139,7 +1253,9 @@ const filteredPredictions = useMemo(() => {
 ```
 
 ##### B. Stats Summary Cards
+
 5 cartes cliquables pour filtrer :
+
 - **Total Stocks** (tous)
 - **Critique** (≤3 jours) - Rouge
 - **Élevé** (4-7 jours) - Orange
@@ -1147,12 +1263,15 @@ const filteredPredictions = useMemo(() => {
 - **Faible** (15+ jours) - Vert
 
 ##### C. Grid Prédictions
+
 - Responsive (1/2/3 colonnes)
 - Affiche `StockPrediction` components filtrés
 - Message vide si aucune prédiction dans catégorie
 
 ##### D. Info Box ML
+
 Explique méthodologie :
+
 - Algorithme : Régression linéaire moindres carrés
 - Données : Simulation 30 jours
 - Intervalles confiance : IC 95%
@@ -1165,11 +1284,13 @@ Explique méthodologie :
 #### 2. **Setup React Router** (App.tsx)
 
 **Installation** :
+
 ```bash
 npm install react-router-dom
 ```
 
 **Configuration Routes** :
+
 ```typescript
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Analytics } from "@/pages/Analytics.tsx";
@@ -1196,6 +1317,7 @@ function App() {
 #### 3. **Modifications Dashboard**
 
 **Suppressions** :
+
 ```typescript
 // ❌ Imports retirés
 - import { predictStockRuptures } from '@/utils/mlSimulation';
@@ -1205,6 +1327,7 @@ function App() {
 ```
 
 **Ajouts** :
+
 ```typescript
 // ✅ Navigation
 import { useNavigate } from 'react-router-dom';
@@ -1221,6 +1344,7 @@ const navigate = useNavigate();
 ```
 
 **Résultat** :
+
 - Dashboard nettoyé (plus de section ML)
 - Navigation claire vers Analytics
 - Garde bannière IA SmartSuggestions (complémentaire)
@@ -1232,6 +1356,7 @@ const navigate = useNavigate();
 #### 4. **Fix Erreurs TypeScript**
 
 **Erreurs Détectées** :
+
 ```bash
 npm run type-check
 
@@ -1243,6 +1368,7 @@ src/pages/Analytics.tsx:9:29 - error TS6133:
 ```
 
 **Fix** :
+
 ```typescript
 // ❌ Avant
 import { TrendingDown, CheckCircle, Filter, Home, AlertTriangle } from 'lucide-react';
@@ -1264,6 +1390,7 @@ import { TrendingDown, CheckCircle, Filter, Home } from 'lucide-react';
 **IA Business Intelligence** : **100% TERMINÉE** ✅
 
 **Checklist Finale** :
+
 - [x] Bugs ML identifiés et corrigés (slope négatif, simulation adaptée)
 - [x] Page Analytics créée avec filtrage complet
 - [x] React Router configuré (/, /analytics, catch-all)
@@ -1280,11 +1407,13 @@ import { TrendingDown, CheckCircle, Filter, Home } from 'lucide-react';
 ### 🎯 Issues GitHub Créées
 
 #### Issue 1 : Migration Design System Analytics
+
 **Titre** : `feat: migrate Analytics page to Design System components`
 
-**Problème** : Page Analytics utilise Tailwind direct au lieu des web components sh-*
+**Problème** : Page Analytics utilise Tailwind direct au lieu des web components sh-\*
 
 **Tâches** :
+
 - [ ] Remplacer boutons filtres par `sh-button`
 - [ ] Utiliser `sh-card` pour stats cards
 - [ ] Vérifier `sh-metric-card` applicable ?
@@ -1295,15 +1424,18 @@ import { TrendingDown, CheckCircle, Filter, Home } from 'lucide-react';
 ---
 
 #### Issue 2 : Audit Accessibilité Couleurs
+
 **Titre** : `a11y: audit color contrast for risk levels (red/orange/amber)`
 
 **Problème** : Couleurs vives (rouge/orange/jaune) potentiellement trop agressives et risquent de ne pas passer audits WCAG
 
 **Zones Concernées** :
+
 - StockPrediction.tsx (bordures + backgrounds)
 - Analytics.tsx (stats cards + filtres)
 
 **Tâches** :
+
 - [ ] Tester contraste avec WCAG AA/AAA checker
 - [ ] Ajuster saturation/luminosité si nécessaire
 - [ ] Vérifier lisibilité dark mode
@@ -1312,6 +1444,7 @@ import { TrendingDown, CheckCircle, Filter, Home } from 'lucide-react';
 **Labels** : `a11y`, `ux`, `P2`
 
 **Références** :
+
 - WCAG 2.1 Level AA : Ratio contrast 4.5:1 (texte normal)
 - WCAG 2.1 Level AAA : Ratio contrast 7:1 (texte normal)
 
@@ -1324,13 +1457,14 @@ import { TrendingDown, CheckCircle, Filter, Home } from 'lucide-react';
 **Leçon** : Face à un bug invisible (prédictions "qui marchent pas"), ajouter logs détaillés avec toutes les variables critiques.
 
 **Approche Gagnante** :
+
 ```typescript
 console.log('🤖 Debug:', {
   stockName: stock.name,
   status: stock.status,
-  slope: regression.slope,        // ← Le coupable !
+  slope: regression.slope, // ← Le coupable !
   rsquared: regression.rSquared,
-  daysUntilRupture: prediction
+  daysUntilRupture: prediction,
 });
 ```
 
@@ -1345,12 +1479,14 @@ console.log('🤖 Debug:', {
 **Leçon** : Deux features sur même page = confusion. Critères pour séparer :
 
 **Séparer SI** :
+
 - ✅ Visuellement surchargé ("beaucoup de rouge")
 - ✅ Fonctions différentes (gestion vs analyse)
 - ✅ Utilisateur pose question "pourquoi X et pas Y ?" (confusion)
 - ✅ Une feature occulte l'autre
 
 **Garder ensemble SI** :
+
 - Données identiques visualisées différemment
 - Features complémentaires (ex: liste + carte)
 - Navigation entre elles serait frustrante
@@ -1364,6 +1500,7 @@ console.log('🤖 Debug:', {
 **Leçon** : React Router v6 simplifie énormément vs v5.
 
 **Setup Minimal** :
+
 ```typescript
 <BrowserRouter>
   <Routes>
@@ -1375,6 +1512,7 @@ console.log('🤖 Debug:', {
 ```
 
 **Apprentissage** :
+
 - Catch-all (`path="*"`) essentiel pour gérer URLs invalides
 - `replace` évite historique pollué
 - `useNavigate()` hook pour navigation programmatique
@@ -1386,6 +1524,7 @@ console.log('🤖 Debug:', {
 **Leçon** : Imports inutilisés = code smell. IDE avertit mais facile d'ignorer.
 
 **Impact** :
+
 - Bundle size inutilement gonflé
 - Confusion lors lecture code ("où est utilisé X ?")
 - Erreurs compilation stricte
@@ -1399,13 +1538,14 @@ console.log('🤖 Debug:', {
 **Leçon** : Simulation doit refléter réalité observée.
 
 **Exemple** :
+
 ```typescript
 // ❌ Simulation naïve : tous stocks consomment pareil
 estimatedDaysToDeplete = 20; // Toujours
 
 // ✅ Simulation intelligente : adapte au status
 if (stock.status === 'critical') {
-  estimatedDaysToDeplete = 10;  // Stock critique = consommation rapide
+  estimatedDaysToDeplete = 10; // Stock critique = consommation rapide
 }
 ```
 
@@ -1418,12 +1558,14 @@ if (stock.status === 'critical') {
 **Leçon** : Créer issues pour améliorations futures = discipline professionnelle.
 
 **Bénéfices** :
+
 - Ne pas oublier tâches importantes
 - Prioriser (labels P1/P2/P3)
 - Traçabilité décisions
 - Facilite onboarding nouveaux devs
 
 **Structure Issue Efficace** :
+
 1. Titre clair avec préfixe (feat:/fix:/a11y:/refactor:)
 2. Problème contextualisé
 3. Checklist tâches concrètes
@@ -1452,11 +1594,13 @@ package-lock.json                     (react-router-dom deps) MODIFIÉ
 ### 📊 Métriques Session 4
 
 **Temps Passé** : ~1h30
+
 - Debug ML (logs + investigation) : 30min
 - Création Analytics.tsx : 40min
 - Setup React Router + nettoyage : 20min
 
 **Lignes Modifiées** :
+
 - Analytics.tsx : +210 lignes (nouveau)
 - Dashboard.tsx : -12 lignes (section ML retirée)
 - App.tsx : +4 lignes (routes)
@@ -1464,6 +1608,7 @@ package-lock.json                     (react-router-dom deps) MODIFIÉ
 - **Net** : +207 lignes
 
 **Bugs Critiques Résolus** : 2
+
 1. Slope positif (signe inversé)
 2. Simulation identique tous stocks
 
@@ -1476,20 +1621,24 @@ package-lock.json                     (react-router-dom deps) MODIFIÉ
 **Feature IA Business Intelligence** : **100% COMPLÉTÉE** ✅
 
 **Composants Implémentés** :
+
 1. ✅ SmartSuggestions (analyse descriptive)
 2. ✅ StockPrediction (ML régression linéaire)
 3. ✅ Page Analytics dédiée (filtres + navigation)
 
 **Documentation RNCP** :
+
 1. ✅ AI-FEATURES.md (600+ lignes)
 2. ✅ PROMPTS.md (400+ lignes)
 3. ✅ RECAP-03-NOVEMBRE.md (1500+ lignes)
 
 **Intégration Design System** :
+
 - ✅ 100% composants majeurs migrés (Header, Footer, Button, MetricCard, StockCard, IA Banner, SearchInput)
 - 📋 Issues créées pour améliorations (Analytics DS, Audit a11y)
 
 **Tests** :
+
 - ✅ TypeScript 0 erreur
 - ✅ Build production OK
 - ✅ Navigation fonctionnelle
@@ -1497,6 +1646,7 @@ package-lock.json                     (react-router-dom deps) MODIFIÉ
 - ✅ UX validée utilisateur
 
 **Compétences RNCP Validées** :
+
 - ✅ C2.5 : Analyses descriptives et prédictives avec ML
 - ✅ C3.2 : Intégration Design System
 - ✅ C4.1 : Documentation technique professionnelle

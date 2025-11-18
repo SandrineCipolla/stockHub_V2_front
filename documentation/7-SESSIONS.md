@@ -6,7 +6,7 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 8
+**Total sessions documentées** : 9
 **Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
@@ -14,12 +14,42 @@
 
 ## 🗓️ Sessions Actives (Documentation V2)
 
+### Session du 18 Novembre 2025 - Tests SearchInputWrapper & Finalisation PR #34
+
+**Fichier** : [sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md](sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md)
+
+**Objectif** : Finaliser tests du dernier wrapper manquant (SearchInputWrapper) et compléter Issue #24
+
+**Réalisations** :
+
+- ✅ **SearchInputWrapper.test.tsx créé** (337 lignes, 28 tests)
+  - Rendering, props mapping, events, edge cases
+- ✅ **Types corrigés** (4 fichiers) - `query` → `value` pour cohérence
+- ✅ **Performance optimisée** - handleSearchClear mémorisé (useCallback)
+- ✅ **PR #34 mergée** - 5 commits, résolution conflits merge
+- ✅ **464 tests passent** (33 skipped, 497 total)
+- ✅ **Issue #24 fermée** - 7/7 wrappers testés = 100% ✅
+- ✅ **Issue #33 fermée** - Bug recherche résolu
+
+**Tests wrappers complets** :
+
+- ButtonWrapper (26 tests), CardWrapper (30 tests)
+- MetricCardWrapper (27 tests), StockCardWrapper (33 tests)
+- AIAlertBannerWrapper (44 tests), HeaderWrapper (46 tests)
+- SearchInputWrapper (28 tests) - **234 tests wrappers au total**
+
+**Impact** : 🎉 **100% des wrappers testés - Coverage 90-98%**
+
+---
+
 ### Session du 13 Novembre 2025 - Migration Analytics vers Design System
-**Fichier** : [SESSION-2025-11-13-ANALYTICS-MIGRATION.md](SESSION-2025-11-13-ANALYTICS-MIGRATION.md)
+
+**Fichier** : [sessions/2025-11-13-ANALYTICS-MIGRATION.md](sessions/2025-11-13-ANALYTICS-MIGRATION.md)
 
 **Objectif** : Migrer la dernière page non-migrée (Analytics) vers le Design System
 
 **Réalisations** :
+
 - ✅ **100% Design System Migration** - Toutes les pages migrées
 - ✅ CardWrapper.tsx créé (63 lignes) - Wrapper générique pour sh-card
 - ✅ StatCard.tsx créé (60 lignes) - Composant spécialisé analytics
@@ -30,6 +60,7 @@
 - ✅ 0 erreur TypeScript
 
 **Suite - Décision Architecture StockPrediction** :
+
 - ⚠️ Tentative migration StockPrediction vers sh-card : limitations Shadow DOM
 - ✅ **Décision RNCP** : Créer `sh-stock-prediction-card` dans DS
 - ✅ Issue #32 créée (StockHub V2) - Tracking
@@ -42,11 +73,13 @@
 ---
 
 ### Session du 12 Novembre 2025 - Tests Unitaires
-**Fichier** : [SESSION-2025-11-12-TESTS-UNITAIRES.md](SESSION-2025-11-12-TESTS-UNITAIRES.md)
+
+**Fichier** : [sessions/2025-11-12-TESTS-UNITAIRES.md](sessions/2025-11-12-TESTS-UNITAIRES.md)
 
 **Objectif** : Corriger tests unitaires cassés après migration Design System
 
 **Réalisations** :
+
 - ✅ **244 tests passent** (vs 208 avant) - +36 tests corrigés
 - ✅ Dashboard.test.tsx corrigé (18 tests) - MemoryRouter + web components
 - ✅ StockGrid.test.tsx corrigé (18 tests) - Adaptation Shadow DOM
@@ -60,11 +93,13 @@
 ---
 
 ### Session du 08 Novembre 2024 - Cleanup & Optimisation
-**Fichier** : [SESSION-2025-02-08-CLEANUP.md](SESSION-2025-02-08-CLEANUP.md)
+
+**Fichier** : [sessions/2025-02-08-CLEANUP.md](sessions/2025-02-08-CLEANUP.md)
 
 **Objectif** : Nettoyer le projet et optimiser après migration Design System
 
 **Réalisations** :
+
 - ✅ Documentation réorganisée (3 fichiers archivés)
 - ✅ Composants legacy supprimés (Button, Badge + tests)
 - ✅ 5 fixtures inutilisées supprimées
@@ -77,11 +112,13 @@
 ---
 
 ### Session du 22 Janvier 2025 - Corrections Copilot
-**Fichier** : [SESSION-2025-01-22-FIXES-COPILOT.md](SESSION-2025-01-22-FIXES-COPILOT.md)
+
+**Fichier** : [sessions/2025-01-22-FIXES-COPILOT.md](sessions/2025-01-22-FIXES-COPILOT.md)
 
 **Objectif** : Appliquer les recommandations Copilot et corrections TypeScript
 
 **Réalisations** :
+
 - ✅ Type `WebComponentStatus` réutilisable créé
 - ✅ Configuration Vite optimisée (chunks manuels)
 - ✅ Nettoyage automatique avec Knip (5 fichiers + 3 dépendances supprimés)
@@ -93,17 +130,20 @@
 ---
 
 ### Session du 03 Novembre 2024 - Migration MetricCard & Bug Critique
-**Fichier** : [RECAP-03-NOVEMBRE.md](RECAP-03-NOVEMBRE.md)
+
+**Fichier** : [sessions/RECAP-03-NOVEMBRE.md](sessions/RECAP-03-NOVEMBRE.md)
 
 **Objectif** : Migration de MetricCard vers Design System et résolution bug colors
 
 **Réalisations** :
+
 - ✅ Création `MetricCardWrapper.tsx`
 - ✅ **Bug critique résolu** : Status colors (ajout `reflect: true` dans DS)
 - ✅ Mapping props React → web component
 - ✅ Mise à jour package DS (d334887 → 940b781)
 
 **Leçons apprises** :
+
 - `reflect: true` nécessaire pour sélecteurs CSS `:host([attr])`
 - Importance de tester visuellement après migration
 - Workflow de mise à jour du DS maîtrisé
@@ -113,6 +153,7 @@
 ## 🗄️ Sessions Archivées (Historique)
 
 ### Session du 29 Octobre 2024
+
 **Fichier** : [archive/recaps/RECAP-29-OCTOBRE.md](archive/recaps/RECAP-29-OCTOBRE.md)
 
 **Thèmes** : Migration composants vers Design System
@@ -120,6 +161,7 @@
 ---
 
 ### Session du 21 Octobre 2024
+
 **Fichier** : [archive/recaps/RECAP-21-OCTOBRE.md](archive/recaps/RECAP-21-OCTOBRE.md)
 
 **Thèmes** : Intégration Design System initial
@@ -127,6 +169,7 @@
 ---
 
 ### Session du 14 Octobre 2024
+
 **Fichier** : [archive/recaps/RECAP-14-OCTOBRE.md](archive/recaps/RECAP-14-OCTOBRE.md)
 
 **Thèmes** : Setup projet et architecture V2
@@ -136,11 +179,13 @@
 ## 🎓 Pour le RNCP
 
 Ces sessions constituent la **documentation de développement** requise pour :
+
 - **C2.5** : Documenter les décisions techniques et architecturales
 - **C3.2** : Traçabilité du développement
 - **C4.1** : Tests et qualité logicielle
 
 Chaque session documente :
+
 1. **Objectifs** de la session
 2. **Problèmes rencontrés** et solutions
 3. **Décisions techniques** justifiées
@@ -156,22 +201,27 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 # Session du [DATE] - [TITRE]
 
 ## 🎯 Objectif
+
 [Description de l'objectif principal]
 
 ## ✅ Réalisations
+
 - [ ] Tâche 1
 - [ ] Tâche 2
 
 ## 🐛 Problèmes Rencontrés
+
 **Problème** : [Description]
 **Solution** : [Description]
 
 ## 📊 Métriques
+
 - Build time: Xms
 - Tests: X passed / X total
 - Coverage: X%
 
 ## 🎓 Leçons Apprises
+
 - Leçon 1
 - Leçon 2
 ```
@@ -181,22 +231,28 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 ## 🔍 Recherche par Thème
 
 **Tests & Qualité**
-- [13 Nov 2025](SESSION-2025-11-13-ANALYTICS-MIGRATION.md) - Analytics tests (259 tests, 100% passing)
-- [12 Nov 2025](SESSION-2025-11-12-TESTS-UNITAIRES.md) - Correction TU web components (98% réussite)
+
+- [18 Nov 2025](sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md) - SearchInputWrapper tests (464 tests, 7/7 wrappers ✅)
+- [13 Nov 2025](sessions/2025-11-13-ANALYTICS-MIGRATION.md) - Analytics tests (259 tests, 100% passing)
+- [12 Nov 2025](sessions/2025-11-12-TESTS-UNITAIRES.md) - Correction TU web components (98% réussite)
 
 **Design System & Web Components**
-- [13 Nov 2025](SESSION-2025-11-13-ANALYTICS-MIGRATION.md) - Analytics migration (100% DS achieved!)
-- [03 Nov 2024](RECAP-03-NOVEMBRE.md) - MetricCard migration + Bug status colors
+
+- [13 Nov 2025](sessions/2025-11-13-ANALYTICS-MIGRATION.md) - Analytics migration (100% DS achieved!)
+- [03 Nov 2024](sessions/RECAP-03-NOVEMBRE.md) - MetricCard migration + Bug status colors
 - [29 Oct 2024](archive/recaps/RECAP-29-OCTOBRE.md) - Migrations composants
 - [21 Oct 2024](archive/recaps/RECAP-21-OCTOBRE.md) - Intégration initiale
 
 **Optimisations & Build**
-- [22 Jan 2025](SESSION-2025-01-22-FIXES-COPILOT.md) - Vite config + Knip cleanup
+
+- [22 Jan 2025](sessions/2025-01-22-FIXES-COPILOT.md) - Vite config + Knip cleanup
 
 **TypeScript & Types**
-- [22 Jan 2025](SESSION-2025-01-22-FIXES-COPILOT.md) - Corrections types fixtures
+
+- [22 Jan 2025](sessions/2025-01-22-FIXES-COPILOT.md) - Corrections types fixtures
 
 **Architecture**
+
 - [14 Oct 2024](archive/recaps/RECAP-14-OCTOBRE.md) - Setup V2
 
 ---
@@ -205,15 +261,35 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 **Octobre 2024** : Setup V2 + Intégration Design System
 **Novembre 2024** : Migration composants + Résolution bugs
-**Novembre 2025** : Tests Unitaires + Stratégie Shadow DOM (98% réussite)
-**Janvier 2025** : Optimisations + Nettoyage technique
+**Novembre 2025** :
+
+- Tests Unitaires + Stratégie Shadow DOM (98% réussite)
+- Design System externe créé (18 Web Components, Storybook)
+- Tests wrappers complets (7/7 = 464 tests, coverage 90-98%)
+- Audit accessibilité WCAG AA (100% conforme)
+  **Janvier 2025** : Optimisations + Nettoyage technique
+
+**Complété** :
+
+- ✅ Tests wrappers (Issue #24) - 7/7 wrappers testés
+- ✅ Correction Header.test.tsx (Issue #27) - PR #27 mergée
+- ✅ Audit accessibilité couleurs (Issue #10) - 100% conforme
+- ✅ Migration Analytics (Issue #9) - 100% Design System
+- ✅ Bug recherche (Issue #33) - SearchInputWrapper créé
 
 **À venir** :
-- Tests wrappers (Issue #24)
-- Correction Header.test.tsx (Issue #27)
-- Setup Playwright E2E (Issue #28)
+
+- Type Safety (Issue #23) - Audit types `any` restants
+- Documentation harmonisation (Issue #25) - Links DS ↔ Front
+- Setup Playwright E2E (Issue #28) - Tests bout-en-bout
+
+**Référence Design System externe** :
+
+- Repository : https://github.com/SandrineCipolla/stockhub_design_system
+- Storybook : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
+- Documentation : Voir `WEB_COMPONENTS_GUIDE.md`
 
 ---
 
-**Dernière mise à jour** : 13 Novembre 2025
-**Prochaine session** : Audit accessibilité couleurs (Issue #10)
+**Dernière mise à jour** : 18 Novembre 2025
+**Prochaine session** : Documentation harmonisation (Issue #25)

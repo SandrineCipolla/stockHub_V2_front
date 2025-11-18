@@ -10,6 +10,7 @@
 ## 📋 Contexte
 
 Suite à la migration vers les web components du Design System, **36 tests unitaires échouaient** :
+
 - ❌ 18 tests dans `Dashboard.test.tsx`
 - ❌ 18 tests dans `StockGrid.test.tsx`
 
@@ -21,12 +22,12 @@ Suite à la migration vers les web components du Design System, **36 tests unita
 
 ### Avant / Après
 
-| Métrique | Avant | Après | Amélioration |
-|----------|-------|-------|--------------|
-| **Tests qui passent** | 208 | **244** | +36 ✅ |
-| **Tests qui échouent** | 36 | 5 | -31 🎯 |
-| **Tests skippés** | 0 | 20 | +20 ⏭️ |
-| **Taux de réussite** | 85.2% | **98%** | +12.8% 📈 |
+| Métrique               | Avant | Après   | Amélioration |
+| ---------------------- | ----- | ------- | ------------ |
+| **Tests qui passent**  | 208   | **244** | +36 ✅       |
+| **Tests qui échouent** | 36    | 5       | -31 🎯       |
+| **Tests skippés**      | 0     | 20      | +20 ⏭️       |
+| **Taux de réussite**   | 85.2% | **98%** | +12.8% 📈    |
 
 ### Détail par fichier
 
@@ -46,6 +47,7 @@ Suite à la migration vers les web components du Design System, **36 tests unita
 #### Problème 1 : Router Context manquant
 
 **Erreur** :
+
 ```
 useNavigate() may be used only in the context of a <Router> component.
 ```
@@ -53,6 +55,7 @@ useNavigate() may be used only in the context of a <Router> component.
 **Cause** : Dashboard utilise maintenant `useNavigate()` pour le bouton "Analyses IA" (ajouté session du 03/11)
 
 **Solution** :
+
 ```typescript
 import { MemoryRouter } from 'react-router-dom';
 
@@ -73,6 +76,7 @@ const renderDashboard = () => {
 #### Problème 2 : Web Components au lieu de composants React
 
 **Erreur** :
+
 ```
 Unable to find an element by: [data-testid="header"]
 ```
@@ -80,6 +84,7 @@ Unable to find an element by: [data-testid="header"]
 **Cause** : Header et Footer sont maintenant `<sh-header>` et `<sh-footer>` (web components)
 
 **Solution** :
+
 ```typescript
 // ❌ Avant
 expect(screen.getByTestId('header')).toBeInTheDocument();
@@ -97,6 +102,7 @@ expect(header).toBeInTheDocument();
 #### Problème 3 : Shadow DOM empêche accès au texte
 
 **Erreur** :
+
 ```
 Unable to find an element with the text: Total Produits
 ```
@@ -104,6 +110,7 @@ Unable to find an element with the text: Total Produits
 **Cause** : `sh-metric-card` et `sh-stock-card` ont un Shadow DOM
 
 **Solution** :
+
 ```typescript
 // ❌ Avant - Cherchait le texte dans le Shadow DOM
 expect(screen.getByText('Total Produits')).toBeInTheDocument();
@@ -122,6 +129,7 @@ expect(metricCards.length).toBeGreaterThanOrEqual(3);
 #### Problème 1 : Articles wrapper inexistants
 
 **Erreur** :
+
 ```
 Unable to find an element with the text: Pommes Golden
 ```
@@ -129,6 +137,7 @@ Unable to find an element with the text: Pommes Golden
 **Cause** : StockGrid n'utilise plus de wrapper `<article>`, juste `<sh-stock-card>` directement
 
 **Structure avant** :
+
 ```html
 <article>
   <StockCard name="Pommes" />
@@ -136,11 +145,13 @@ Unable to find an element with the text: Pommes Golden
 ```
 
 **Structure après** :
+
 ```html
 <sh-stock-card name="Pommes" />
 ```
 
 **Solution** :
+
 ```typescript
 // ❌ Avant
 const articles = container.querySelectorAll('article');
@@ -180,6 +191,7 @@ expect(stockCard?.getAttribute('status')).toBe('optimal');
 Les tests suivants ont été **temporairement désactivés** avec `describe.skip()` ou `it.skip()` car ils nécessitent un accès au Shadow DOM :
 
 **Dashboard.test.tsx** (11 skipped) :
+
 - ❌ Click sur bouton "Ajouter un Stock"
 - ❌ Interactions avec search input
 - ❌ Click sur bouton "Exporter"
@@ -189,6 +201,7 @@ Les tests suivants ont été **temporairement désactivés** avec `describe.skip
 - ❌ Gestion erreurs
 
 **StockGrid.test.tsx** (9 skipped) :
+
 - ❌ Callbacks onView/onEdit/onDelete
 - ❌ Vérification boutons disabled (isUpdating, isDeleting)
 - ❌ Opérations bulk
@@ -197,6 +210,7 @@ Les tests suivants ont été **temporairement désactivés** avec `describe.skip
 **Raison** : Les boutons sont dans le Shadow DOM du web component, inaccessibles via `screen.getByRole()`
 
 **Fichiers modifiés** :
+
 - `src/pages/__tests__/Dashboard.test.tsx:170-267`
 - `src/components/dashboard/__tests__/StockGrid.test.tsx:125-167,316-365`
 
@@ -209,6 +223,7 @@ Les tests suivants ont été **temporairement désactivés** avec `describe.skip
 **Problème** : Testing Library ne peut pas accéder au contenu du Shadow DOM
 
 **Solutions** :
+
 1. ✅ Tester la **présence** du web component (`querySelector('sh-component')`)
 2. ✅ Tester les **attributs** exposés (`getAttribute('name')`)
 3. ❌ Éviter de tester le contenu interne (Shadow DOM)
@@ -223,6 +238,7 @@ Les tests suivants ont été **temporairement désactivés** avec `describe.skip
 **Leçon** : Composants utilisant `useNavigate()` doivent être wrappés dans un Router pour les tests
 
 **Pattern recommandé** :
+
 ```typescript
 import { MemoryRouter } from 'react-router-dom';
 
@@ -236,6 +252,7 @@ const renderWithRouter = (component: React.ReactElement) => {
 ```
 
 **Avantage MemoryRouter vs BrowserRouter** :
+
 - ✅ Pas de manipulation de l'URL du navigateur
 - ✅ Isolation entre tests
 - ✅ Plus rapide
@@ -245,6 +262,7 @@ const renderWithRouter = (component: React.ReactElement) => {
 ### 3. **Migration Progressive des Tests**
 
 **Stratégie appliquée** :
+
 1. ✅ **Phase 1** : Corriger tests de structure (composants renders)
 2. ✅ **Phase 2** : Adapter assertions aux attributs web components
 3. ⏭️ **Phase 3** : Skipper tests incompatibles avec Shadow DOM
@@ -306,6 +324,7 @@ documentation/
 **Problème** : `ButtonWrapper` crée des web components `<sh-button>` avec Shadow DOM, inaccessibles via `screen.getByRole()`
 
 **Tests corrigés** :
+
 1. ✅ `should display logout button` - querySelector + attributs
 2. ✅ `should call toggleTheme` - dispatchEvent('sh-button-click')
 3. ✅ `should render logout button` - querySelector avec aria-label
@@ -313,6 +332,7 @@ documentation/
 5. ✅ `should have proper ARIA labels` - mix screen + querySelector
 
 **Solution appliquée** :
+
 ```typescript
 // Au lieu de screen.getByRole()
 const logoutButton = container.querySelector('sh-button[aria-label*="Se déconnecter"]');
@@ -343,16 +363,19 @@ Error: Cannot find module '@esbuild/linux-x64'
 ### Cause
 
 **Vercel a changé son comportement d'installation** entre le 12 et le 13 novembre 2025 :
+
 - **Avant (12/11)** : Vercel installait automatiquement les `optionalDependencies` (binaires natifs)
 - **Après (13/11)** : Vercel ignore les `optionalDependencies` par défaut
 
 **Packages affectés** :
+
 - `rollup` (utilisé par Vite pour le build)
 - `esbuild` (utilisé par tsx pour generate-sitemap)
 
 ### Solutions Appliquées
 
 #### 1. Ajout explicite d'esbuild
+
 ```json
 // package.json
 "devDependencies": {
@@ -361,12 +384,14 @@ Error: Cannot find module '@esbuild/linux-x64'
 ```
 
 #### 2. Configuration .npmrc
+
 ```
 # .npmrc
 optional=true
 ```
 
 #### 3. Configuration Vercel (✅ SOLUTION FINALE)
+
 ```json
 // vercel.json
 {
@@ -376,11 +401,13 @@ optional=true
 ```
 
 **Pourquoi ça fonctionne** :
+
 - `npm ci --no-optional` : Installation rapide sans optional
 - `npm install --no-save @rollup/rollup-linux-x64-gnu` : Force l'installation du binaire Linux Rollup
 - `|| npm ci` : Fallback si la commande échoue
 
 #### 4. Retrait temporaire du sitemap du build
+
 ```json
 // package.json
 "build": "tsc -b && vite build",
@@ -422,6 +449,7 @@ Le `generate-sitemap` nécessitait `tsx` (qui dépend d'esbuild). Retiré du bui
    - Estimation: 9h (setup + migration)
 
 **Labels créés** :
+
 - ✅ `test` - Tests unitaires, E2E, intégration (vert #0e8a16)
 - ✅ `P1` - Priorité haute - urgent (rouge #d73a4a)
 - ✅ `P2` - Priorité moyenne - important (jaune #fbca04)
@@ -433,36 +461,36 @@ Le `generate-sitemap` nécessitait `tsx` (qui dépend d'esbuild). Retiré du bui
 
 ### Session du 12 Novembre 2025
 
-| Métrique | Valeur |
-|----------|--------|
-| **Temps passé** | ~1h30 |
-| **Tests corrigés** | 36 |
-| **Tests skippés** | 20 |
-| **Fichiers modifiés** | 2 |
-| **Lignes modifiées** | ~330 |
-| **Taux de réussite** | 98% (244/249) |
+| Métrique              | Valeur        |
+| --------------------- | ------------- |
+| **Temps passé**       | ~1h30         |
+| **Tests corrigés**    | 36            |
+| **Tests skippés**     | 20            |
+| **Fichiers modifiés** | 2             |
+| **Lignes modifiées**  | ~330          |
+| **Taux de réussite**  | 98% (244/249) |
 
 ### Session du 13 Novembre 2025 (Finalisation)
 
-| Métrique | Valeur |
-|----------|--------|
-| **Temps passé** | ~2h (tests 45min + debug Vercel 1h15) |
-| **Tests corrigés** | 5 (Header.test.tsx) |
-| **Fichiers modifiés** | 6 (1 test + 5 config Vercel) |
-| **Lignes modifiées** | ~100 (50 tests + 50 config) |
-| **Taux de réussite final** | **100%** (249/269, 20 skipped) |
-| **Issues labellisées** | 2 (#27, #28) |
-| **Labels créés** | 4 (test, P1, P2, P3) |
-| **Problèmes résolus** | Vercel optionalDependencies |
+| Métrique                   | Valeur                                |
+| -------------------------- | ------------------------------------- |
+| **Temps passé**            | ~2h (tests 45min + debug Vercel 1h15) |
+| **Tests corrigés**         | 5 (Header.test.tsx)                   |
+| **Fichiers modifiés**      | 6 (1 test + 5 config Vercel)          |
+| **Lignes modifiées**       | ~100 (50 tests + 50 config)           |
+| **Taux de réussite final** | **100%** (249/269, 20 skipped)        |
+| **Issues labellisées**     | 2 (#27, #28)                          |
+| **Labels créés**           | 4 (test, P1, P2, P3)                  |
+| **Problèmes résolus**      | Vercel optionalDependencies           |
 
 ### 📊 Résultat Global
 
-| Métrique | Avant | Après | Amélioration |
-|----------|-------|-------|--------------|
-| **Tests qui passent** | 208 | **249** | +41 ✅ |
-| **Tests qui échouent** | 36 | **0** | -36 🎯 |
-| **Tests skippés** | 0 | 20 | +20 ⏭️ (E2E planifié) |
-| **Taux de réussite** | 85.2% | **100%** | +14.8% 📈 |
+| Métrique               | Avant | Après    | Amélioration          |
+| ---------------------- | ----- | -------- | --------------------- |
+| **Tests qui passent**  | 208   | **249**  | +41 ✅                |
+| **Tests qui échouent** | 36    | **0**    | -36 🎯                |
+| **Tests skippés**      | 0     | 20       | +20 ⏭️ (E2E planifié) |
+| **Taux de réussite**   | 85.2% | **100%** | +14.8% 📈             |
 
 ---
 
@@ -473,20 +501,22 @@ Le `generate-sitemap` nécessitait `tsx` (qui dépend d'esbuild). Retiré du bui
 **Pourquoi** : Accès complet au Shadow DOM via navigateur réel
 
 **Implémentation suggérée** :
+
 ```typescript
 // e2e/dashboard.spec.ts
 test('should add new stock', async ({ page }) => {
-    await page.goto('/');
+  await page.goto('/');
 
-    // Playwright peut accéder au Shadow DOM
-    const addButton = page.locator('sh-button:has-text("Ajouter un Stock")');
-    await addButton.click();
+  // Playwright peut accéder au Shadow DOM
+  const addButton = page.locator('sh-button:has-text("Ajouter un Stock")');
+  await addButton.click();
 
-    // ... reste du test
+  // ... reste du test
 });
 ```
 
 **Avantages** :
+
 - ✅ Teste l'expérience utilisateur réelle
 - ✅ Accès complet au Shadow DOM
 - ✅ Tests cross-browser
@@ -506,13 +536,11 @@ test('should add new stock', async ({ page }) => {
 import { fixture, expect } from '@open-wc/testing';
 
 describe('sh-button', () => {
-    it('should render with correct text', async () => {
-        const el = await fixture<Button>(html`
-            <sh-button>Click me</sh-button>
-        `);
+  it('should render with correct text', async () => {
+    const el = await fixture<Button>(html` <sh-button>Click me</sh-button> `);
 
-        expect(el.shadowRoot?.textContent).to.include('Click me');
-    });
+    expect(el.shadowRoot?.textContent).to.include('Click me');
+  });
 });
 ```
 
@@ -524,11 +552,11 @@ describe('sh-button', () => {
 
 **Proposition** :
 
-| Type de test | Où ? | Quoi tester ? | Outil |
-|--------------|------|---------------|-------|
-| **Unit Tests** | StockHub V2 | Structure, props, attributs | Vitest + RTL |
-| **Component Tests** | Design System | Comportement web components | @open-wc/testing |
-| **Integration Tests** | StockHub V2 | Flux utilisateur complets | Playwright |
+| Type de test          | Où ?          | Quoi tester ?               | Outil            |
+| --------------------- | ------------- | --------------------------- | ---------------- |
+| **Unit Tests**        | StockHub V2   | Structure, props, attributs | Vitest + RTL     |
+| **Component Tests**   | Design System | Comportement web components | @open-wc/testing |
+| **Integration Tests** | StockHub V2   | Flux utilisateur complets   | Playwright       |
 
 **Avantage** : Couverture complète sans duplication
 
@@ -537,11 +565,13 @@ describe('sh-button', () => {
 ## 🔗 Liens Utiles
 
 **Documentation** :
+
 - [Testing Library - Shadow DOM](https://testing-library.com/docs/dom-testing-library/api-queries/)
 - [Open WC - Testing Web Components](https://open-wc.org/docs/testing/testing-package/)
 - [Playwright - Shadow DOM](https://playwright.dev/docs/selectors#pierce-selectors)
 
 **Fichiers liés** :
+
 - `documentation/RECAP-03-NOVEMBRE.md` (session ajout React Router)
 - `documentation/DESIGN-SYSTEM-FEEDBACK.md` (problèmes DS)
 - `documentation/TROUBLESHOOTING-WEB-COMPONENTS.md` (guide web components)
@@ -551,12 +581,14 @@ describe('sh-button', () => {
 ## ✅ Checklist Session
 
 ### Session 12 Novembre 2025
+
 - [x] Corriger Dashboard.test.tsx (18 tests)
 - [x] Corriger StockGrid.test.tsx (18 tests)
 - [x] Documenter la session
 - [x] Créer issues GitHub (#27, #28)
 
 ### Session 13 Novembre 2025 (Finalisation)
+
 - [x] Corriger Header.test.tsx (5 tests)
 - [x] Créer labels GitHub (test, P1, P2, P3)
 - [x] Labelliser issues #27 et #28
@@ -566,6 +598,7 @@ describe('sh-button', () => {
 - [x] Configurer vercel.json pour forcer install rollup binaries
 
 ### Actions Futures
+
 - [ ] Setup Playwright et migrer 20 tests skippés vers E2E - P3 (issue #28)
 
 ---
@@ -581,6 +614,7 @@ describe('sh-button', () => {
 **Objectif initial** : Corriger les tests cassés après migration Design System
 
 **Résultats** :
+
 - ✅ **100% des tests passent** (249/269, 20 skippés pour E2E)
 - ✅ **41 tests corrigés** au total (Dashboard, StockGrid, Header)
 - ✅ **Stratégie E2E définie** : Migration Playwright planifiée (issue #28)

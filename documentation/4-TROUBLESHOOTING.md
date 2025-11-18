@@ -29,6 +29,7 @@ Lors de l'utilisation du web component `<sh-status-badge>` dans le composant `St
 **Fichier :** `src/types/web-components.d.ts`
 
 Le fichier contenait une erreur de syntaxe à la dernière ligne :
+
 ```typescript
 // ❌ AVANT (INCORRECT)
 export {}
@@ -40,6 +41,7 @@ Il y avait une accolade fermante en trop qui invalidait tout le fichier de décl
 ### 2. Conflit entre fichiers de déclaration
 
 Deux fichiers déclaraient les mêmes web components :
+
 - `src/react-app-env.d.ts` - déclarations simples
 - `src/types/web-components.d.ts` - déclarations complètes
 
@@ -48,11 +50,13 @@ Cela créait une ambiguïté pour TypeScript.
 ### 3. Incompatibilité de format de statut
 
 Le type `StockStatus` utilise le format **camelCase** :
+
 ```typescript
 type StockStatus = 'optimal' | 'low' | 'critical' | 'outOfStock' | 'overstocked';
 ```
 
 Mais le web component `sh-status-badge` attend le format **kebab-case** :
+
 ```typescript
 status?: 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked';
 ```
@@ -132,18 +136,22 @@ Création d'une fonction de conversion pour mapper camelCase → kebab-case :
 const convertStatusToWebComponent = (
   status: StockStatus
 ): 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked' => {
-  const statusMap: Record<StockStatus, 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked'> = {
+  const statusMap: Record<
+    StockStatus,
+    'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked'
+  > = {
     optimal: 'optimal',
     low: 'low',
     critical: 'critical',
-    outOfStock: 'out-of-stock',  // 🔑 Conversion ici
-    overstocked: 'overstocked'
+    outOfStock: 'out-of-stock', // 🔑 Conversion ici
+    overstocked: 'overstocked',
   };
   return statusMap[status];
 };
 ```
 
 Utilisation dans le JSX :
+
 ```tsx
 <sh-status-badge status={convertStatusToWebComponent(stock.status)} />
 ```
@@ -160,7 +168,7 @@ Utilisation dans le JSX :
   },
   "include": [
     "src/**/*",
-    "src/types/**/*.d.ts",  // Inclusion explicite des fichiers de déclaration
+    "src/types/**/*.d.ts", // Inclusion explicite des fichiers de déclaration
     "documentation/V2/ARCHITECTURE.md",
     "node_modules/vitest/globals.d.ts"
   ]
@@ -179,6 +187,7 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.
 ```
 
 **Avantages :**
+
 - ✅ Type safety complète
 - ✅ Autocomplétion fonctionnelle dans l'IDE
 - ✅ Détection d'erreurs à la compilation
@@ -199,6 +208,7 @@ Ajout de valeurs explicites pour les attributs boolean :
 ```
 
 **Bonnes pratiques :**
+
 - Toujours spécifier `={true}` ou `={false}` pour les attributs boolean
 - Évite les ambiguïtés dans le code
 - Plus clair pour les autres développeurs
@@ -210,6 +220,7 @@ Ajout de valeurs explicites pour les attributs boolean :
 ### 1. **Placement des déclarations globales**
 
 Pour les projets Vite + React, privilégier `vite-env.d.ts` pour les déclarations JSX car :
+
 - ✅ Toujours chargé automatiquement par Vite
 - ✅ Pas besoin de configuration supplémentaire
 - ✅ Évite les conflits de modules
@@ -217,6 +228,7 @@ Pour les projets Vite + React, privilégier `vite-env.d.ts` pour les déclaratio
 ### 2. **Typage strict pour web components**
 
 Toujours spécifier le type union littéral exact, pas un `string` générique :
+
 ```typescript
 // ❌ INCORRECT
 const convert = (status: StockStatus): string => { ... }
@@ -226,6 +238,7 @@ const convert = (status: StockStatus): 'optimal' | 'low' | 'critical' | 'out-of-
 ```
 
 **Pour les CustomEvent, toujours typer la structure du détail :**
+
 ```typescript
 // ❌ INCORRECT
 onsh-search-change={(e: any) => handleSearch(e.detail.query)}
@@ -243,16 +256,17 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearch(e.detail
 ### 4. **Vérification de syntaxe**
 
 Toujours vérifier les accolades fermantes dans les fichiers `.d.ts` :
+
 ```typescript
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       // ...
-    }  // ← Fermeture IntrinsicElements
-  }    // ← Fermeture JSX
-}      // ← Fermeture global
+    } // ← Fermeture IntrinsicElements
+  } // ← Fermeture JSX
+} // ← Fermeture global
 
-export {};  // ← Ne PAS ajouter d'accolade ici
+export {}; // ← Ne PAS ajouter d'accolade ici
 ```
 
 ### 5. **Attributs boolean explicites**
@@ -272,16 +286,19 @@ Toujours spécifier des valeurs explicites pour les attributs boolean :
 ## 🔧 Commandes utiles pour diagnostiquer
 
 ### Supprimer le cache TypeScript
+
 ```bash
 Remove-Item tsconfig.tsbuildinfo -ErrorAction SilentlyContinue
 ```
 
 ### Vérifier les erreurs TypeScript
+
 ```bash
 npx tsc --noEmit
 ```
 
 ### Redémarrer le serveur TypeScript (IntelliJ/WebStorm)
+
 1. `Ctrl+Shift+A`
 2. Taper "Restart TypeScript Service"
 3. Entrée
