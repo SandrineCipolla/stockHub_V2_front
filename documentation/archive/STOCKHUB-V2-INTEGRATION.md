@@ -1,6 +1,6 @@
 # Guide d'Intégration StockHub V2
 
-**Date** : 21 Octobre 2025 *(Mis à jour)*
+**Date** : 21 Octobre 2025 _(Mis à jour)_
 **Version Design System** : 2.0.0-rc
 **Cible** : StockHub V2 (React + TypeScript)
 
@@ -9,6 +9,7 @@
 ## 🎯 Objectif
 
 Intégrer les Web Components du Design System dans l'application React StockHub V2 pour :
+
 - ✅ Réduire la duplication de code
 - ✅ Maintenir une cohérence visuelle
 - ✅ Faciliter la maintenance
@@ -25,6 +26,7 @@ Intégrer les Web Components du Design System dans l'application React StockHub 
 **Solution complète documentée dans :** [`TROUBLESHOOTING-WEB-COMPONENTS.md`](./TROUBLESHOOTING-WEB-COMPONENTS.md)
 
 **Résumé rapide :**
+
 1. ✅ Corriger la syntaxe de `src/types/web-components.d.ts`
 2. ✅ Ajouter les déclarations dans `src/vite-env.d.ts`
 3. ✅ Créer une fonction de conversion pour mapper camelCase → kebab-case
@@ -53,12 +55,14 @@ npm install git+https://github.com/SandrineCipolla/stockhub_design_system.git#v2
 ```
 
 **Avantages** :
+
 - ✅ Fonctionne en local ET sur GitHub Actions CI/CD
 - ✅ Pas besoin de NPM (gratuit)
 - ✅ Versionné via Git (tags, branches)
 - ✅ Facile à mettre à jour
 
 **Mise à jour** :
+
 ```bash
 npm update @stockhub/design-system
 # OU forcer la réinstallation
@@ -82,10 +86,12 @@ npm link @stockhub/design-system
 ```
 
 **Avantages** :
+
 - ✅ Modifications instantanées (pas besoin de republier)
 - ✅ Idéal pour développement
 
 **Inconvénients** :
+
 - ❌ Ne fonctionne pas sur CI/CD
 - ❌ Lien cassé si vous changez de répertoire
 
@@ -153,17 +159,20 @@ Remplacer les composants React simples par les Web Components équivalents.
 #### 1. Badge
 
 **Avant (React)** :
+
 ```tsx
 // src/components/common/Badge.tsx
 <Badge variant="success">Active</Badge>
 ```
 
 **Après (Web Component)** :
+
 ```tsx
 <sh-badge variant="success">Active</sh-badge>
 ```
 
 **Action** :
+
 - [ ] Supprimer `src/components/common/Badge.tsx`
 - [ ] Remplacer toutes les occurrences de `<Badge>` par `<sh-badge>`
 - [ ] Vérifier les props (variant, size, pill)
@@ -173,6 +182,7 @@ Remplacer les composants React simples par les Web Components équivalents.
 #### 2. Button
 
 **Avant (React)** :
+
 ```tsx
 // src/components/common/Button.tsx
 <Button variant="primary" loading={isLoading} onClick={handleClick}>
@@ -181,22 +191,20 @@ Remplacer les composants React simples par les Web Components équivalents.
 ```
 
 **Après (Web Component)** :
+
 ```tsx
-<sh-button
-  variant="primary"
-  loading={isLoading}
-  onClick={(e) => handleClick()}
-  iconBefore="Save"
->
+<sh-button variant="primary" loading={isLoading} onClick={e => handleClick()} iconBefore="Save">
   Save
 </sh-button>
 ```
 
 **⚠️ Différences importantes** :
+
 - Attribut `iconBefore` / `iconAfter` au lieu d'un composant React `<Icon>`
 - Les icônes utilisent **Lucide** avec noms en PascalCase : `"Save"`, `"Edit"`, `"Trash2"`
 
 **Action** :
+
 - [ ] Supprimer `src/components/common/Button.tsx`
 - [ ] Remplacer toutes les occurrences de `<Button>` par `<sh-button>`
 - [ ] Migrer les icônes vers Lucide (voir tableau de mapping ci-dessous)
@@ -206,18 +214,20 @@ Remplacer les composants React simples par les Web Components équivalents.
 #### 3. Input
 
 **Avant (React)** :
+
 ```tsx
 // src/components/common/Input.tsx
 <Input
   type="text"
   placeholder="Enter name"
   value={name}
-  onChange={(e) => setName(e.target.value)}
+  onChange={e => setName(e.target.value)}
   error={errors.name}
 />
 ```
 
 **Après (Web Component)** :
+
 ```tsx
 <sh-input
   type="text"
@@ -230,10 +240,12 @@ Remplacer les composants React simples par les Web Components équivalents.
 ```
 
 **⚠️ Différences importantes** :
+
 - Événement custom `sh-input-change` au lieu de `onChange`
 - `e.detail.value` au lieu de `e.target.value`
 
 **Action** :
+
 - [ ] Supprimer `src/components/common/Input.tsx`
 - [ ] Remplacer toutes les occurrences de `<Input>` par `<sh-input>`
 - [ ] Adapter les event handlers
@@ -245,6 +257,7 @@ Remplacer les composants React simples par les Web Components équivalents.
 #### 4. StatusBadge
 
 **Avant (React)** :
+
 ```tsx
 // src/components/inventory/StatusBadge.tsx
 <StatusBadge status="in-stock" />
@@ -253,6 +266,7 @@ Remplacer les composants React simples par les Web Components équivalents.
 ```
 
 **Après (Web Component)** :
+
 ```tsx
 <sh-status-badge status="optimal" />
 <sh-status-badge status="low" />
@@ -263,16 +277,17 @@ Remplacer les composants React simples par les Web Components équivalents.
 
 **⚠️ Changement de noms de statuts** :
 
-| Ancien (React) | Nouveau (Web Component) | Icône | Animation |
-|----------------|-------------------------|-------|-----------|
-| `in-stock` | `optimal` | CheckCircle | ❌ |
-| `low-stock` | `low` | AlertCircle | ❌ |
-| `critical` (nouveau) | `critical` | AlertTriangle | ✅ Pulse |
-| `out-of-stock` | `out-of-stock` | XCircle | ✅ Pulse |
-| `restock-needed` | `critical` ou `low` | AlertTriangle / AlertCircle | ✅ / ❌ |
-| *(nouveau)* | `overstocked` | TrendingUp | ❌ |
+| Ancien (React)       | Nouveau (Web Component) | Icône                       | Animation |
+| -------------------- | ----------------------- | --------------------------- | --------- |
+| `in-stock`           | `optimal`               | CheckCircle                 | ❌        |
+| `low-stock`          | `low`                   | AlertCircle                 | ❌        |
+| `critical` (nouveau) | `critical`              | AlertTriangle               | ✅ Pulse  |
+| `out-of-stock`       | `out-of-stock`          | XCircle                     | ✅ Pulse  |
+| `restock-needed`     | `critical` ou `low`     | AlertTriangle / AlertCircle | ✅ / ❌   |
+| _(nouveau)_          | `overstocked`           | TrendingUp                  | ❌        |
 
 **Action** :
+
 - [ ] Supprimer `src/components/inventory/StatusBadge.tsx`
 - [ ] Remplacer toutes les occurrences avec mapping des statuts
 - [ ] Profiter de l'animation pulse automatique pour `critical` et `out-of-stock`
@@ -282,6 +297,7 @@ Remplacer les composants React simples par les Web Components équivalents.
 #### 5. MetricCard (Dashboard)
 
 **Avant (React)** :
+
 ```tsx
 // src/components/dashboard/MetricCard.tsx
 <MetricCard
@@ -294,12 +310,13 @@ Remplacer les composants React simples par les Web Components équivalents.
 ```
 
 **Après (Web Component)** :
+
 ```tsx
 <sh-metric-card
   icon="Package"
   label="Total Produits"
   value={totalProducts}
-  trend={trend > 0 ? "increase" : "decrease"}
+  trend={trend > 0 ? 'increase' : 'decrease'}
   trend-value={`${trend > 0 ? '+' : ''}${trend}%`}
   variant="success"
   clickable
@@ -308,12 +325,14 @@ Remplacer les composants React simples par les Web Components équivalents.
 ```
 
 **⚠️ Différences importantes** :
+
 - `icon` est une string Lucide (PascalCase) au lieu d'un composant React
 - `trend` est `"increase"` | `"decrease"` au lieu d'un number
 - `trend-value` séparé pour afficher "+12%" ou "-5%"
 - Événement `sh-metric-click` si `clickable={true}`
 
 **Action** :
+
 - [ ] Supprimer `src/components/dashboard/MetricCard.tsx`
 - [ ] Remplacer toutes les occurrences
 - [ ] Adapter la logique de tendance (number → increase/decrease)
@@ -323,6 +342,7 @@ Remplacer les composants React simples par les Web Components équivalents.
 #### 6. StockCard / StockItemCard (Inventaire)
 
 **Avant (React)** :
+
 ```tsx
 // src/components/inventory/StockCard.tsx
 <StockCard
@@ -334,6 +354,7 @@ Remplacer les composants React simples par les Web Components équivalents.
 ```
 
 **Après (Web Component)** :
+
 ```tsx
 <sh-stock-item-card
   name={product.name}
@@ -351,27 +372,32 @@ Remplacer les composants React simples par les Web Components équivalents.
 ```
 
 **⚠️ Différences importantes** :
+
 - Props individuelles (name, sku, quantity, value, location, status) au lieu d'un objet `product`
 - Événements custom : `sh-view-click`, `sh-edit-click`, `sh-delete-click`
 - Mapping des statuts (voir tableau StatusBadge)
 - Badge de statut intégré (ne pas ajouter `<sh-status-badge>` manuellement)
 
 **Helper de mapping** :
+
 ```typescript
-function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked' {
+function mapStatusToWebComponent(
+  status: string
+): 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked' {
   const statusMap: Record<string, any> = {
     'in-stock': 'optimal',
     'low-stock': 'low',
-    'critical': 'critical',
+    critical: 'critical',
     'out-of-stock': 'out-of-stock',
     'restock-needed': 'critical',
-    'overstocked': 'overstocked',
+    overstocked: 'overstocked',
   };
   return statusMap[status] || 'optimal';
 }
 ```
 
 **Action** :
+
 - [ ] Supprimer `src/components/inventory/StockCard.tsx`
 - [ ] Remplacer toutes les occurrences
 - [ ] Créer helper `mapStatusToWebComponent()`
@@ -382,6 +408,7 @@ function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical'
 #### 7. Header
 
 **Avant (React)** :
+
 ```tsx
 // src/components/layout/Header.tsx
 <Header
@@ -393,6 +420,7 @@ function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical'
 ```
 
 **Après (Web Component)** :
+
 ```tsx
 <sh-header
   userName={user.name}
@@ -406,6 +434,7 @@ function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical'
 ```
 
 **Action** :
+
 - [ ] Supprimer `src/components/layout/Header.tsx`
 - [ ] Remplacer par `<sh-header>`
 - [ ] Adapter les event handlers
@@ -417,6 +446,7 @@ function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical'
 #### 8. Card
 
 **Avant (React)** :
+
 ```tsx
 <Card hover clickable onClick={handleClick}>
   <CardHeader>Title</CardHeader>
@@ -426,13 +456,9 @@ function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical'
 ```
 
 **Après (Web Component)** :
+
 ```tsx
-<sh-card
-  hover
-  clickable
-  padding="md"
-  onsh-card-click={handleClick}
->
+<sh-card hover clickable padding="md" onsh-card-click={handleClick}>
   <h3 slot="header">Title</h3>
   <p>Content...</p>
   <div slot="footer">Footer</div>
@@ -440,10 +466,12 @@ function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical'
 ```
 
 **⚠️ Différences importantes** :
+
 - Slots nommés : `slot="header"` et `slot="footer"` au lieu de composants séparés
 - Événement `sh-card-click` au lieu de `onClick`
 
 **Action** :
+
 - [ ] Supprimer `src/components/common/Card.tsx`
 - [ ] Remplacer par `<sh-card>` avec slots
 
@@ -452,6 +480,7 @@ function mapStatusToWebComponent(status: string): 'optimal' | 'low' | 'critical'
 #### 9. Icon (Lucide Migration)
 
 **Avant (React avec lucide-react)** :
+
 ```tsx
 import { Package, Edit, Trash2 } from 'lucide-react';
 
@@ -461,6 +490,7 @@ import { Package, Edit, Trash2 } from 'lucide-react';
 ```
 
 **Après (Web Component avec Lucide vanilla)** :
+
 ```tsx
 <sh-icon name="Package" size="lg" color="primary" />
 <sh-icon name="Edit" size="sm" />
@@ -470,25 +500,26 @@ import { Package, Edit, Trash2 } from 'lucide-react';
 **Mapping des tailles** :
 
 | lucide-react (px) | sh-icon (size) |
-|-------------------|----------------|
-| 12 | xs |
-| 16 | sm |
-| 20 | md |
-| 24 | lg |
-| 32 | xl |
+| ----------------- | -------------- |
+| 12                | xs             |
+| 16                | sm             |
+| 20                | md             |
+| 24                | lg             |
+| 32                | xl             |
 
 **Mapping des couleurs** :
 
-| lucide-react (color) | sh-icon (color) |
-|----------------------|-----------------|
-| (custom hex) | inherit (style parent) |
-| blue, primary | primary |
-| green | success |
-| yellow, orange | warning |
-| red | danger |
-| gray | muted |
+| lucide-react (color) | sh-icon (color)        |
+| -------------------- | ---------------------- |
+| (custom hex)         | inherit (style parent) |
+| blue, primary        | primary                |
+| green                | success                |
+| yellow, orange       | warning                |
+| red                  | danger                 |
+| gray                 | muted                  |
 
 **Action** :
+
 - [ ] Supprimer les imports de `lucide-react`
 - [ ] Remplacer par `<sh-icon name="..." size="..." />`
 - [ ] Adapter les tailles et couleurs (voir tableaux)
@@ -530,12 +561,14 @@ function App() {
 ## 📋 Checklist Intégration
 
 ### Préparation
+
 - [ ] Installer `@stockhub/design-system@latest`
 - [ ] Créer `src/types/web-components.d.ts` pour TypeScript
 - [ ] Importer les composants dans `main.tsx` ou `App.tsx`
 - [ ] Créer helper `mapStatusToWebComponent()`
 
 ### Phase 1 : Composants Simples
+
 - [ ] Migrer `Badge` → `sh-badge`
 - [ ] Migrer `Button` → `sh-button` (+ migration icônes)
 - [ ] Migrer `Input` → `sh-input` (+ event handlers)
@@ -543,6 +576,7 @@ function App() {
 - [ ] Tester les pages avec composants migrés
 
 ### Phase 2 : Composants Métier
+
 - [ ] Migrer `StatusBadge` → `sh-status-badge` (+ mapping statuts)
 - [ ] Migrer `MetricCard` → `sh-metric-card`
 - [ ] Migrer `StockCard` → `sh-stock-item-card`
@@ -551,12 +585,14 @@ function App() {
 - [ ] Vérifier les interactions (View/Edit/Delete)
 
 ### Phase 3 : Composants Génériques
+
 - [ ] Migrer `Card` → `sh-card` (+ slots)
 - [ ] Migrer toutes les icônes `lucide-react` → `sh-icon`
 - [ ] Supprimer la dépendance `lucide-react` du package.json
 - [ ] Tester toutes les pages
 
 ### Tests & Validation
+
 - [ ] Tests E2E (Playwright/Cypress)
 - [ ] Tests visuels (Chromatic ou Percy)
 - [ ] Lighthouse score ≥ 98
@@ -564,6 +600,7 @@ function App() {
 - [ ] Responsive mobile (320px - 1920px)
 
 ### Documentation
+
 - [ ] Mettre à jour la doc technique interne
 - [ ] Créer guide pour nouveaux développeurs
 - [ ] Documenter les helpers de mapping
@@ -582,10 +619,10 @@ export function mapStatusToWebComponent(
   const statusMap: Record<string, any> = {
     'in-stock': 'optimal',
     'low-stock': 'low',
-    'critical': 'critical',
+    critical: 'critical',
     'out-of-stock': 'out-of-stock',
     'restock-needed': 'critical',
-    'overstocked': 'overstocked',
+    overstocked: 'overstocked',
   };
   return statusMap[status] || 'optimal';
 }
@@ -678,6 +715,7 @@ Les attributs boolean doivent être passés comme props React :
 ### 5. Migration Progressive
 
 **Ne pas tout migrer d'un coup** ! Migrer par phase :
+
 1. Composants simples (Badge, Button, Input)
 2. Composants métier (StatusBadge, MetricCard, StockCard)
 3. Composants génériques (Card, Icon)
@@ -689,16 +727,19 @@ Tester après chaque phase.
 ## 📊 Métriques de Succès
 
 ### Performance
+
 - ✅ Lighthouse score ≥ 98
 - ✅ Temps de chargement < 2s
 - ✅ FCP (First Contentful Paint) < 1s
 
 ### Qualité
+
 - ✅ Aucune régression visuelle (Chromatic)
 - ✅ Tous les tests E2E passent
 - ✅ Accessibilité WCAG AA
 
 ### Maintenance
+
 - ✅ Réduction du code dupliqué (≥ 50%)
 - ✅ Cohérence visuelle à 100%
 - ✅ Documentation complète
@@ -710,15 +751,18 @@ Tester après chaque phase.
 ### Problèmes Courants
 
 **1. Web Component ne s'affiche pas**
+
 - Vérifier l'import : `import '@stockhub/design-system';`
 - Vérifier la console : erreur de nom de composant ?
 - Vérifier les attributs : kebab-case ou camelCase
 
 **2. Événement ne se déclenche pas**
+
 - Utiliser le nom complet : `onsh-button-click` (pas `onClick`)
 - Vérifier la console : `CustomEvent` émis ?
 
 **3. Style cassé**
+
 - Vérifier `data-theme` sur le parent
 - Vérifier que les CSS variables globales sont chargées
 
@@ -737,6 +781,7 @@ Tester après chaque phase.
 **Nouveau composant organism** pour afficher les cartes de stock dans le dashboard principal.
 
 **Utilisation** :
+
 ```tsx
 <sh-stock-card
   name="Acrylique Bleu Cobalt"
@@ -755,6 +800,7 @@ Tester après chaque phase.
 ```
 
 **Props** :
+
 - `name` : Nom du stock
 - `category` : Catégorie du produit
 - `last-update` : Texte de dernière mise à jour
@@ -765,6 +811,7 @@ Tester après chaque phase.
 - `ia-count` : Nombre d'alertes IA (number) - affiche badge IA si > 0
 
 **Badge IA avec JavaScript** :
+
 ```tsx
 useEffect(() => {
   customElements.whenDefined('sh-stock-card').then(() => {
@@ -777,12 +824,14 @@ useEffect(() => {
 ```
 
 **Événements** :
+
 - `sh-session-click` : Click sur "Enregistrer session"
 - `sh-details-click` : Click sur "Détails"
 - `sh-edit-click` : Click sur éditer
 - `sh-delete-click` : Click sur supprimer
 
 **Distinction avec StockItemCard** :
+
 - `sh-stock-card` = **Carte de stock global** (dashboard principal)
 - `sh-stock-item-card` = **Carte d'item individuel** (vue détaillée d'un stock)
 
@@ -791,14 +840,17 @@ useEffect(() => {
 ### Organisation Atomic Design mise à jour
 
 **Organisms** (composants métier complexes) :
+
 - `sh-header` : Navigation principale
 - `sh-stock-card` : Carte de stock dashboard 🆕
 - `sh-stock-item-card` : Carte d'item inventaire
 
 **Molecules** (groupes d'atomes) :
+
 - `sh-button`, `sh-status-badge`, `sh-metric-card`, `sh-card` (base)
 
 **Atoms** (composants de base) :
+
 - `sh-icon`, `sh-input`, `sh-badge`, `sh-text`
 
 ---
@@ -812,6 +864,7 @@ Tous les composants manquants ont été créés !
 **Nouveau composant** : Champ de recherche avec icône et bouton clear.
 
 **Utilisation** :
+
 ```tsx
 <sh-search-input
   placeholder="Rechercher un stock..."
@@ -826,6 +879,7 @@ Tous les composants manquants ont été créés !
 ```
 
 **Props** :
+
 - `placeholder` : Texte placeholder
 - `value` : Valeur du champ
 - `debounce` : Délai de debounce en ms (0 = désactivé)
@@ -833,6 +887,7 @@ Tous les composants manquants ont été créés !
 - `disabled` : Désactiver le champ
 
 **Événements** :
+
 - `sh-search` : Émis à la soumission (Enter)
 - `sh-search-change` : Émis lors de la saisie (avec debounce si configuré)
 - `sh-search-clear` : Émis lors du clic sur le bouton clear
@@ -844,6 +899,7 @@ Tous les composants manquants ont été créés !
 **Nouveau composant** : Footer avec copyright et liens légaux.
 
 **Utilisation** :
+
 ```tsx
 <sh-footer
   app-name="STOCK HUB"
@@ -854,14 +910,17 @@ Tous les composants manquants ont été créés !
 ```
 
 **Props** :
+
 - `app-name` : Nom de l'application (défaut: "STOCK HUB")
 - `year` : Année du copyright (défaut: année courante)
 
 **Événements** :
+
 - `sh-footer-link-click` : Émis lors du clic sur un lien
   - `e.detail.link` : `'mentions-legales' | 'politique-confidentialite' | 'cgu' | 'cookies'`
 
 **Liens intégrés** :
+
 - Mentions Légales
 - Politique de Confidentialité
 - CGU
@@ -874,6 +933,7 @@ Tous les composants manquants ont été créés !
 **Nouveau composant** : Bandeau d'alertes IA avec liste collapsible.
 
 **Utilisation** :
+
 ```tsx
 <sh-ia-alert-banner
   count={5}
@@ -886,6 +946,7 @@ Tous les composants manquants ont été créés !
 ```
 
 **Props** :
+
 - `count` : Nombre d'alertes
 - `severity` : `'critical' | 'warning' | 'info'`
 - `message` : Message principal
@@ -893,6 +954,7 @@ Tous les composants manquants ont été créés !
 - `alerts` : Array d'objets `IaAlert[]` (doit être assigné via JS)
 
 **Interface IaAlert** :
+
 ```typescript
 interface IaAlert {
   product: string;
@@ -902,6 +964,7 @@ interface IaAlert {
 ```
 
 **Assignation des alertes (JavaScript)** :
+
 ```tsx
 useEffect(() => {
   customElements.whenDefined('sh-ia-alert-banner').then(() => {
@@ -909,7 +972,7 @@ useEffect(() => {
     if (banner) {
       banner.alerts = [
         { product: 'Acrylique Jaune', message: 'Risque de rupture', severity: 'critical' },
-        { product: 'Feutrine Rouge', message: 'Stock bas', severity: 'warning' }
+        { product: 'Feutrine Rouge', message: 'Stock bas', severity: 'warning' },
       ];
     }
   });
@@ -917,10 +980,12 @@ useEffect(() => {
 ```
 
 **Événements** :
+
 - `sh-ia-alert-item-click` : Clic sur un item d'alerte
   - `e.detail` : L'objet `IaAlert` complet
 
 **Badges de sévérité** :
+
 - `critical` : Badge rouge "X Critiques"
 - `warning` : Badge orange "X Attention"
 - `info` : Badge bleu "X Info"
@@ -932,6 +997,7 @@ useEffect(() => {
 Le composant Header était déjà créé et correspond au design StockHub V2.
 
 **Utilisation complète** :
+
 ```tsx
 <sh-header
   userName="Sandrine Cipolla"
@@ -945,6 +1011,7 @@ Le composant Header était déjà créé et correspond au design StockHub V2.
 ```
 
 **Fonctionnalités** :
+
 - Logo StockHub intégré
 - Badge de notifications avec compteur
 - Toggle thème (Sun/Moon)
@@ -957,6 +1024,7 @@ Le composant Header était déjà créé et correspond au design StockHub V2.
 ### Organisation Atomic Design complète
 
 **Organisms** (composants métier complexes) :
+
 - `sh-header` : Navigation principale avec logo, notifications, thème ✅
 - `sh-footer` : Footer avec copyright et liens légaux ✅
 - `sh-ia-alert-banner` : Bandeau d'alertes IA collapsible ✅
@@ -964,10 +1032,12 @@ Le composant Header était déjà créé et correspond au design StockHub V2.
 - `sh-stock-item-card` : Carte d'item inventaire ✅
 
 **Molecules** (groupes d'atomes) :
+
 - `sh-button`, `sh-status-badge`, `sh-metric-card`, `sh-card`
 - `sh-search-input` : Champ de recherche avec debounce ✅
 
 **Atoms** (composants de base) :
+
 - `sh-icon`, `sh-input`, `sh-badge`, `sh-logo`, `sh-text`
 
 ---

@@ -9,16 +9,19 @@ StockHub V2 utilise **Framer Motion** pour des micro-animations fluides et perfo
 ## 🎯 Principes de design
 
 ### Performance
+
 - **Objectif FPS** : >55 FPS en moyenne
 - **Total Blocking Time** : 0ms
 - **Lighthouse Performance** : 99/100
 
 ### Accessibilité
+
 - Support complet de `prefers-reduced-motion`
 - Durées réduites à 0.01s en mode accessibility
 - Tests automatisés d'accessibilité
 
 ### Scalabilité
+
 - Performance maintenue jusqu'à 500+ stocks
 - Dégradation < 1% (excellent)
 - Layout animations optimisées
@@ -34,6 +37,7 @@ Composant de carte de stock avec animations entrance, hover et exit.
 #### Animations
 
 **Entrance** (apparition en cascade)
+
 ```typescript
 // Constantes (src/constants/animations.ts)
 INITIAL_Y_OFFSET: 50,      // Offset vertical initial
@@ -44,12 +48,14 @@ EASING: [0.25, 0.46, 0.45, 0.94] // easeOutQuad
 ```
 
 **Comportement** :
+
 - Apparition depuis le bas (translateY: 50px → 0)
 - Scale-in subtil (0.95 → 1.0)
 - Délai échelonné basé sur l'index (`index * 0.12s`)
 - Easing natural (easeOutQuad)
 
 **Hover**
+
 ```typescript
 HOVER_SCALE: 1.02,          // Légère élévation
 HOVER_Y_OFFSET: -4,         // Décalage vers le haut
@@ -57,12 +63,14 @@ HOVER_DURATION: 0.2,        // Transition rapide
 ```
 
 **Comportement** :
+
 - Scale de 1.02x (élévation subtile)
 - Décalage -4px vers le haut
 - Background coloré selon statut (10% opacité)
 - Bordure intensifiée
 
 **Exit** (disparition)
+
 ```typescript
 EXIT_Y_OFFSET: -16,         // Offset vers le haut
 EXIT_DURATION: 0.3,         // Durée de sortie
@@ -70,6 +78,7 @@ EXIT_SCALE: 0.95,           // Scale final
 ```
 
 **Comportement** :
+
 - Disparition vers le haut (translateY: 0 → -16px)
 - Scale-out (1.0 → 0.95)
 - Fade-out (opacity: 1 → 0)
@@ -83,22 +92,22 @@ EXIT_SCALE: 0.95,           // Scale final
   initial={{
     opacity: 0,
     y: INITIAL_Y_OFFSET,
-    scale: INITIAL_SCALE
+    scale: INITIAL_SCALE,
   }}
   animate={{
     opacity: 1,
     y: 0,
-    scale: 1
+    scale: 1,
   }}
   exit={{
     opacity: 0,
     y: EXIT_Y_OFFSET,
-    scale: EXIT_SCALE
+    scale: EXIT_SCALE,
   }}
   transition={{
     duration: shouldReduceMotion ? REDUCED_MOTION_DURATION : ENTRANCE_DURATION,
     delay: shouldReduceMotion ? 0 : index * CASCADE_DELAY,
-    ease: EASING
+    ease: EASING,
   }}
   whileHover={{ scale: HOVER_SCALE, y: HOVER_Y_OFFSET }}
 >
@@ -109,6 +118,7 @@ EXIT_SCALE: 0.95,           // Scale final
 #### Tests
 
 **Fichiers** :
+
 - `src/components/dashboard/__tests__/StockCard.test.tsx`
 - `scripts/test-performance-fps.mjs` (Hover test)
 - `scripts/test-reduced-motion.mjs`
@@ -124,11 +134,13 @@ Conteneur de grille avec layout animations pour filtrage/tri fluide.
 #### Animations
 
 **Layout** (réorganisation automatique)
+
 ```typescript
 layout={true}  // Active les transitions de position automatiques
 ```
 
 **Comportement** :
+
 - Transitions automatiques lors de changements de layout
 - Réorganisation fluide lors du filtrage
 - Réorganisation fluide lors du tri
@@ -139,16 +151,13 @@ layout={true}  // Active les transitions de position automatiques
 **Fichier** : `src/components/dashboard/StockGrid.tsx:23`
 
 ```tsx
-<motion.div
-  layout
-  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
->
+<motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   <AnimatePresence mode="popLayout">
     {stocks.map((stock, index) => (
       <StockCard
         key={stock.id}
         stock={stock}
-        index={index}  // Pour le délai en cascade
+        index={index} // Pour le délai en cascade
         onDelete={onDelete}
       />
     ))}
@@ -157,12 +166,14 @@ layout={true}  // Active les transitions de position automatiques
 ```
 
 **AnimatePresence** :
+
 - Mode `popLayout` : retire l'élément du layout avant animation exit
 - Transitions fluides lors de l'ajout/suppression de cartes
 
 #### Tests
 
 **Fichiers** :
+
 - `src/components/dashboard/__tests__/StockGrid.test.tsx`
 - `scripts/test-performance-fps.mjs` (Filtrage test)
 
@@ -177,12 +188,14 @@ Composant de métrique avec compteur animé (CountUp).
 #### Animations
 
 **Compteur animé**
+
 ```typescript
 COUNTER_DURATION: 1.2,      // Durée de l'animation du compteur
 EASING_FACTOR: -10,         // Facteur easeOutExpo
 ```
 
 **Comportement** :
+
 - Comptage depuis 0 jusqu'à la valeur finale
 - Easing `easeOutExpo` (ralentissement progressif)
 - Parsing intelligent des préfixes/suffixes (+, -, %, €, $)
@@ -208,6 +221,7 @@ EASING_FACTOR: -10,         // Facteur easeOutExpo
 ```
 
 **Prop `enableAnimation`** :
+
 - Permet de désactiver l'animation dans les tests
 - Valeur par défaut : `true`
 
@@ -216,6 +230,7 @@ EASING_FACTOR: -10,         // Facteur easeOutExpo
 **Fonction** : `src/utils/valueParser.ts`
 
 Supporte :
+
 - Nombres simples : `42`
 - Préfixes : `+10`, `-5`
 - Suffixes : `85%`, `1250€`, `$99`
@@ -224,6 +239,7 @@ Supporte :
 #### Tests
 
 **Fichiers** :
+
 - `src/components/dashboard/__tests__/MetricCard.test.tsx`
 - `scripts/test-performance-fps.mjs` (CountUp test)
 - `scripts/test-reduced-motion.mjs`
@@ -280,7 +296,7 @@ function MyComponent() {
     <motion.div
       animate={{ opacity: 1 }}
       transition={{
-        duration: shouldReduceMotion ? 0.01 : 0.6
+        duration: shouldReduceMotion ? 0.01 : 0.6,
       }}
     />
   );
@@ -294,20 +310,24 @@ function MyComponent() {
 ### Tests automatisés
 
 **Script FPS** : `scripts/test-performance-fps.mjs`
+
 - Mesure FPS pendant 5 scénarios
 - Seuil : >55 FPS en moyenne
 - **Résultat** : 60.81 FPS ✅
 
 **Script datasets** : `scripts/test-animations-datasets.mjs`
+
 - Teste 4 tailles de datasets (5, 50, 200, 500 stocks)
 - Seuil : >55 FPS en moyenne
 - **Résultat** : 60.93 FPS, dégradation 0.8% ✅
 
 **Script reduced motion** : `scripts/test-reduced-motion.mjs`
+
 - Vérifie le respect de `prefers-reduced-motion`
 - **Résultat** : Tous les tests passent ✅
 
 **Script daltonisme** : `scripts/test-daltonisme.mjs`
+
 - Teste contraste WCAG (5 statuts × 2 thèmes)
 - Simule 4 types de daltonisme (Protanopie, Deutéranopie, Tritanopie, Achromatopsie)
 - Vérifie différentiabilité des couleurs (Delta E)
@@ -322,6 +342,7 @@ function MyComponent() {
 ### Résultats Lighthouse
 
 **Audit du 20/10/2025**
+
 - **Performance** : 99/100 ✅
 - **Accessibility** : 96/100 ✅
 - **FCP** : 1.5s
@@ -370,13 +391,13 @@ npx lighthouse http://localhost:4173 \\
 
 ```typescript
 // Bon (fluide)
-delay: index * 0.12
+delay: index * 0.12;
 
 // Trop rapide (saccadé)
-delay: index * 0.05
+delay: index * 0.05;
 
 // Trop lent (ennuyeux)
-delay: index * 0.3
+delay: index * 0.3;
 ```
 
 ---
@@ -401,6 +422,7 @@ Lorsque vous ajoutez une nouvelle animation :
 ### Performance
 
 1. **Privilégier transform et opacity**
+
    ```tsx
    // ✅ Bon (GPU-accelerated)
    animate={{ scale: 1.02, y: -4, opacity: 1 }}
@@ -410,6 +432,7 @@ Lorsque vous ajoutez une nouvelle animation :
    ```
 
 2. **Utiliser will-change avec parcimonie**
+
    ```tsx
    // ✅ Bon (uniquement pendant hover)
    whileHover={{ willChange: 'transform' }}
@@ -419,6 +442,7 @@ Lorsque vous ajoutez une nouvelle animation :
    ```
 
 3. **Layout animations pour repositionnement**
+
    ```tsx
    // ✅ Bon (smooth repositioning)
    <motion.div layout>
@@ -430,6 +454,7 @@ Lorsque vous ajoutez une nouvelle animation :
 ### Accessibilité
 
 1. **Toujours respecter reduced motion**
+
    ```tsx
    const shouldReduceMotion = useReducedMotion();
 
@@ -463,6 +488,7 @@ Lorsque vous ajoutez une nouvelle animation :
 ## 📝 Historique des modifications
 
 ### Version 1.0 (20/10/2025)
+
 - ✅ Implémentation Framer Motion
 - ✅ Animations StockCard (entrance, hover, exit)
 - ✅ Animations StockGrid (layout)

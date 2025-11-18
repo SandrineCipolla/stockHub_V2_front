@@ -11,12 +11,14 @@ Migrer la dernière page non-migrée (Analytics) vers le Design System pour atte
 ## 📊 État Initial
 
 ### Avant Migration
+
 - **Design System Migration** : ~95% (Analytics page restante)
 - **Tests** : 249 passing, 20 skipped
 - **Build size** : ~103 KB gzipped
 - **Analytics page** : Utilise HTML brut + Tailwind CSS
 
 ### Composants à Migrer
+
 1. ❌ 5 cartes statistiques (Total, Critical, High, Medium, Low) - HTML `<button>`
 2. ❌ Info Box ML - HTML `<div>` avec Tailwind
 3. ✅ Header - Déjà migré (`<sh-header>`)
@@ -32,23 +34,25 @@ Migrer la dernière page non-migrée (Analytics) vers le Design System pour atte
 ### 1. Création de Composants Réutilisables
 
 #### CardWrapper.tsx
+
 **Fichier** : `src/components/common/CardWrapper.tsx`
 **Lignes** : 63 lignes
 
 ```typescript
 export interface CardProps {
-    variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
-    size?: 'sm' | 'md' | 'lg';
-    clickable?: boolean;
-    selected?: boolean;
-    disabled?: boolean;
-    className?: string;
-    children?: React.ReactNode;
-    onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
+  size?: 'sm' | 'md' | 'lg';
+  clickable?: boolean;
+  selected?: boolean;
+  disabled?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 ```
 
 **Fonctionnalités** :
+
 - ✅ Wrapper React pour `<sh-card>` web component
 - ✅ Gestion du thème (dark/light) via `data-theme`
 - ✅ Handler custom pour événement `sh-card-click`
@@ -56,21 +60,23 @@ export interface CardProps {
 - ✅ États clickable, selected, disabled
 
 #### StatCard.tsx
+
 **Fichier** : `src/components/analytics/StatCard.tsx`
 **Lignes** : 60 lignes
 
 ```typescript
 export interface StatCardProps {
-    value: number;
-    label: string;
-    variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
-    selected?: boolean;
-    onClick?: () => void;
-    className?: string;
+  value: number;
+  label: string;
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
+  selected?: boolean;
+  onClick?: () => void;
+  className?: string;
 }
 ```
 
 **Fonctionnalités** :
+
 - ✅ Composant spécialisé pour statistiques Analytics
 - ✅ Affichage valeur numérique + label
 - ✅ Couleurs de texte adaptées aux variantes (purple, red, amber, emerald)
@@ -84,6 +90,7 @@ export interface StatCardProps {
 #### Changements dans Analytics.tsx
 
 **Avant** (HTML brut) :
+
 ```tsx
 <button
   onClick={() => setRiskFilter('critical')}
@@ -93,16 +100,13 @@ export interface StatCardProps {
       : 'border-gray-200 dark:border-gray-700 hover:border-red-300'
   }`}
 >
-  <div className="text-2xl font-bold text-red-600 dark:text-red-400">
-    {stats.critical}
-  </div>
-  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-    Critique (≤3j)
-  </div>
+  <div className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.critical}</div>
+  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Critique (≤3j)</div>
 </button>
 ```
 
 **Après** (Design System) :
+
 ```tsx
 <StatCard
   value={stats.critical}
@@ -116,6 +120,7 @@ export interface StatCardProps {
 **Réduction** : ~15 lignes → 5 lignes par carte (75% de réduction)
 
 #### Composants Migrés
+
 1. ✅ **5 StatCard components** (Total, Critical, High, Medium, Low)
    - Total : variant="primary", selected={riskFilter === 'all'}
    - Critical : variant="error"
@@ -137,6 +142,7 @@ export interface StatCardProps {
    ```
 
 **Impact** :
+
 - ✅ Logique métier 100% préservée (filtres, prédictions ML, stats)
 - ✅ Thème dark/light maintenu
 - ✅ Accessibilité améliorée (web components ARIA)
@@ -147,11 +153,13 @@ export interface StatCardProps {
 ### 3. Tests Unitaires Complets
 
 #### Analytics.test.tsx
+
 **Fichier** : `src/pages/__tests__/Analytics.test.tsx`
 **Lignes** : 462 lignes
 **Tests** : 22 tests (10 passing, 12 skipped)
 
 ##### Tests Passing (10)
+
 ```typescript
 describe('Analytics Component', () => {
   describe('Initial render', () => {
@@ -182,6 +190,7 @@ describe('Analytics Component', () => {
 ```
 
 ##### Tests Skipped (12) - Pour E2E Playwright
+
 Raison : Interactions Shadow DOM nécessitent navigateur réel
 
 ```typescript
@@ -239,15 +248,17 @@ vi.mock('react-router-dom', async () => ({
 ## 📈 Métriques Finales
 
 ### Tests
-| Métrique | Avant | Après | Évolution |
-|----------|-------|-------|-----------|
-| **Tests totaux** | 249 | 259 | +10 tests |
-| **Tests passing** | 249 | 259 | +10 tests |
-| **Tests skipped** | 20 | 32 | +12 tests (E2E) |
-| **Taux réussite** | 100% | 100% | Maintenu |
-| **Fichiers tests** | 11 | 12 | +Analytics.test.tsx |
+
+| Métrique           | Avant | Après | Évolution           |
+| ------------------ | ----- | ----- | ------------------- |
+| **Tests totaux**   | 249   | 259   | +10 tests           |
+| **Tests passing**  | 249   | 259   | +10 tests           |
+| **Tests skipped**  | 20    | 32    | +12 tests (E2E)     |
+| **Taux réussite**  | 100%  | 100%  | Maintenu            |
+| **Fichiers tests** | 11    | 12    | +Analytics.test.tsx |
 
 ### Build Production
+
 ```bash
 ✓ built in 4.92s
 
@@ -263,17 +274,19 @@ dist/assets/design-system-CP8BBm5O.js 484.48 kB │ gzip: 103.31 kB
 **Bundle size maintenu** : 103.31 KB gzipped (identique)
 
 ### TypeScript
+
 - ✅ **0 erreurs** de compilation
 - ✅ Strict mode respecté
 - ✅ Types web components préservés
 
 ### Design System Migration
-| Catégorie | Avant | Après | Statut |
-|-----------|-------|-------|--------|
-| **Pages** | 95% | **100%** | ✅ Complété |
-| **Dashboard** | ✅ | ✅ | Maintenu |
-| **Analytics** | ❌ | ✅ | **Migré** |
-| **Components** | 100% | 100% | Maintenu |
+
+| Catégorie      | Avant | Après    | Statut      |
+| -------------- | ----- | -------- | ----------- |
+| **Pages**      | 95%   | **100%** | ✅ Complété |
+| **Dashboard**  | ✅    | ✅       | Maintenu    |
+| **Analytics**  | ❌    | ✅       | **Migré**   |
+| **Components** | 100%  | 100%     | Maintenu    |
 
 **🎉 100% Design System Migration Achieved!**
 
@@ -282,9 +295,11 @@ dist/assets/design-system-CP8BBm5O.js 484.48 kB │ gzip: 103.31 kB
 ## 🔍 Décisions Techniques
 
 ### 1. Création de CardWrapper Générique
+
 **Pourquoi** : Éviter duplication pour futurs usages de `<sh-card>`
 
 **Avantages** :
+
 - ✅ Réutilisable dans tout le projet
 - ✅ Gestion centralisée du thème
 - ✅ Handler d'événements standardisé
@@ -293,9 +308,11 @@ dist/assets/design-system-CP8BBm5O.js 484.48 kB │ gzip: 103.31 kB
 **Utilisation future** : Peut être utilisé pour modals, popups, conteneurs génériques
 
 ### 2. StatCard Spécialisé
+
 **Pourquoi** : Logique métier spécifique aux statistiques Analytics
 
 **Avantages** :
+
 - ✅ API simplifiée (value + label)
 - ✅ Couleurs de texte automatiques selon variante
 - ✅ Composant documenté et testé
@@ -304,9 +321,11 @@ dist/assets/design-system-CP8BBm5O.js 484.48 kB │ gzip: 103.31 kB
 **Alternative rejetée** : Utiliser CardWrapper directement → trop verbeux
 
 ### 3. Skip Tests Shadow DOM pour E2E
+
 **Pourquoi** : Testing Library ne peut pas accéder au Shadow DOM des web components
 
 **Justification** :
+
 - ✅ Tests de rendering suffisants en unit tests
 - ✅ Interactions nécessitent navigateur réel (Playwright)
 - ✅ Cohérence avec stratégie Dashboard.test.tsx
@@ -319,11 +338,13 @@ dist/assets/design-system-CP8BBm5O.js 484.48 kB │ gzip: 103.31 kB
 ## 📦 Fichiers Modifiés
 
 ### Créés (3 fichiers, 585 lignes)
+
 1. ✅ `src/components/common/CardWrapper.tsx` (63 lignes)
 2. ✅ `src/components/analytics/StatCard.tsx` (60 lignes)
 3. ✅ `src/pages/__tests__/Analytics.test.tsx` (462 lignes)
 
 ### Modifiés (1 fichier)
+
 1. ✅ `src/pages/Analytics.tsx`
    - Imports ajoutés (StatCard, CardWrapper)
    - 5 boutons HTML → StatCard components (lignes 76-117)
@@ -337,9 +358,11 @@ dist/assets/design-system-CP8BBm5O.js 484.48 kB │ gzip: 103.31 kB
 ## 🐛 Problèmes Rencontrés
 
 ### 1. Commit Direct sur Main
+
 **Problème** : Premier commit fait sur `main` au lieu de feature branch
 
 **Solution** :
+
 ```bash
 git branch feature/analytics-design-system
 git reset --hard HEAD~1
@@ -349,16 +372,18 @@ git checkout feature/analytics-design-system
 **Résultat** : ✅ Commit déplacé vers feature branch, main propre
 
 ### 2. Tests Failing - mockNavigate Non Défini
+
 **Erreur** : `mockNavigate is not defined`
 
 **Cause** : `useNavigate` mock déclaré dans un test au lieu du setup global
 
 **Solution** :
+
 ```typescript
 // Global mock au début du fichier
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => ({
-  ...await vi.importActual('react-router-dom'),
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }));
 ```
@@ -366,13 +391,16 @@ vi.mock('react-router-dom', async () => ({
 **Résultat** : ✅ 20 tests → 11 tests passing
 
 ### 3. Tests Failing - StockPrediction Interface
+
 **Erreur** : `Cannot read properties of undefined (reading 'toFixed')`
 
 **Cause** : Mock predictions avec mauvais noms de champs
+
 - ❌ `predictedDate` (n'existe pas)
 - ✅ `dateOfRupture` (correct)
 
 **Solution** : Matcher l'interface `StockPrediction` exacte
+
 ```typescript
 predictions.push({
   stockId: `stock-${i}`,
@@ -396,6 +424,7 @@ predictions.push({
 ## ✅ Checklist Complétée
 
 ### Migration Code
+
 - [x] Auditer page Analytics actuelle
 - [x] Identifier composants à migrer vers DS
 - [x] Vérifier disponibilité web components DS
@@ -406,6 +435,7 @@ predictions.push({
 - [x] Tester le build production
 
 ### Tests
+
 - [x] Créer tests Analytics.test.tsx
 - [x] Tester rendering page
 - [x] Tester navigation
@@ -416,6 +446,7 @@ predictions.push({
 - [x] Documenter tests skipped pour E2E
 
 ### Git & Documentation
+
 - [x] Commit sur feature branch
 - [x] Push vers GitHub
 - [x] Vérifier build production final
@@ -430,6 +461,7 @@ predictions.push({
 **Référence** : `documentation/planning/PLANNING-FINALISATION-NOVEMBRE-2025.md`
 
 ### Jour 1-2 : Migration Analytics (COMPLÉTÉ ✅)
+
 - ✅ Audit page actuelle (30min)
 - ✅ Migration composants (2h30)
 - ✅ Tests & Validation (1h30)
@@ -438,6 +470,7 @@ predictions.push({
 **Temps réel** : ~4h (estimé 4-6h)
 
 ### Critères de Succès
+
 - ✅ 100% composants migrés vers DS
 - ✅ Tous les tests passent (259/259)
 - ✅ Performance maintenue (103.31 KB)
@@ -451,12 +484,15 @@ predictions.push({
 ## 📚 Prochaines Étapes
 
 ### Immédiat
+
 1. **Mettre à jour issue #9** avec résultats finaux
 2. **Créer Pull Request** `feature/analytics-design-system` → `main`
 3. **Review code** et merger
 
 ### Jour 3 (14 Novembre 2025)
+
 **Issue #10** - a11y: audit color contrast for risk levels
+
 - Audit automatisé (axe DevTools)
 - Vérification manuelle niveaux risque (red/orange/amber)
 - Tests mode clair/sombre
@@ -466,7 +502,9 @@ predictions.push({
 **Objectif** : Accessibilité 96/100 → 98/100
 
 ### Reporté Post-Encadrante
+
 **Issue #28** - test: setup Playwright E2E tests
+
 - Setup Playwright
 - Migrer 32 tests skipped (20 Dashboard + 12 Analytics)
 - Tests interactions Shadow DOM
@@ -479,16 +517,19 @@ predictions.push({
 **Date** : 13 Novembre 2025
 **Durée** : ~4h
 **Commits** : 3 commits
+
 - Initial migration (CardWrapper, StatCard, Analytics.tsx)
 - Analytics tests (Analytics.test.tsx)
 - Documentation (cette session)
 
 **Lignes de code** :
+
 - ✅ +585 lignes créées (3 nouveaux fichiers)
 - ✅ ~40 lignes HTML remplacées
 - ✅ Code 100% DRY et maintenable
 
 **Impact RNCP Bloc 2** :
+
 - ✅ Architecture logicielle complète (100% DS)
 - ✅ Tests unitaires exhaustifs (259 tests)
 - ✅ Design System maîtrisé (migration complète)
@@ -500,16 +541,19 @@ predictions.push({
 ## 🔗 Références
 
 **Issues GitHub** :
+
 - #9 - feat: migrate Analytics page to Design System components (EN COURS)
 - #28 - test: setup Playwright E2E tests (OUVERT)
 - #10 - a11y: audit color contrast for risk levels (SUIVANT)
 
 **Documentation** :
+
 - `PLANNING-FINALISATION-NOVEMBRE-2025.md` - Planning global
 - `SESSION-2025-11-12-TESTS-UNITAIRES.md` - Session tests précédente
 - `TROUBLESHOOTING-WEB-COMPONENTS.md` - Guide web components
 
 **Fichiers Clés** :
+
 - `src/pages/Analytics.tsx` - Page migrée
 - `src/components/common/CardWrapper.tsx` - Wrapper générique
 - `src/components/analytics/StatCard.tsx` - Composant spécialisé
@@ -520,23 +564,28 @@ predictions.push({
 ## 🔄 Suite de Session - Migration StockPrediction
 
 ### Contexte Post-Migration
+
 Après avoir atteint 100% de migration DS, analyse visuelle a révélé un problème de styling sur les StockPrediction cards.
 
 ### Problème Identifié
+
 **Composant concerné** : `src/components/ai/StockPrediction.tsx`
 
 **Tentatives de migration vers sh-card** :
+
 1. ❌ Utilisation de `sh-card` avec variant="default" + Tailwind classes
 2. ❌ Ajout de `border-l-4` colorées selon riskLevel
 3. ❌ Ajout de `hover:bg-{color}-50` pour background au hover
 
 **Limitations rencontrées** :
+
 - ❌ Bordures droites au lieu d'arrondies (comme sh-stock-card)
 - ❌ Fine bordure violette indésirable au hover (vient du DS)
 - ❌ Impossible d'override styles internes à cause du Shadow DOM
 - ❌ `sh-card` générique ne supporte pas status-based styling
 
 **Constat** :
+
 - ✅ `sh-stock-card` a un prop `status` qui gère automatiquement les bordures colorées arrondies
 - ✅ `sh-card` est un composant générique sans styling status
 - ❌ StockPrediction a du contenu spécifique ML (progress bar, confidence, métriques) différent des stock items
@@ -548,6 +597,7 @@ Après avoir atteint 100% de migration DS, analyse visuelle a révélé un probl
 **Nom du composant** : `sh-stock-prediction-card`
 
 **Justification RNCP Bloc 2** :
+
 1. **Architecture Design System professionnelle**
    - Composants spécialisés pour cas d'usage spécifiques
    - Séparation des responsabilités (DS vs Application)
@@ -560,7 +610,7 @@ Après avoir atteint 100% de migration DS, analyse visuelle a révélé un probl
 
 3. **Réutilisabilité et maintenabilité**
    - Centralisé dans le DS pour usage futur
-   - Styling cohérent avec les autres sh-stock-* components
+   - Styling cohérent avec les autres sh-stock-\* components
    - Évolutif pour de nouvelles features ML
 
 4. **Bonnes pratiques web components**
@@ -569,11 +619,13 @@ Après avoir atteint 100% de migration DS, analyse visuelle a révélé un probl
    - Events custom pour interactions
 
 **Composants DS actuels pour référence** :
+
 - `sh-stock-card` : Affichage produits en stock (status prop avec bordures colorées)
 - `sh-stock-item-card` : Vue liste inventaire
 - `sh-metric-card` : Affichage métriques Dashboard
 
 **Nouveau composant à créer** :
+
 - `sh-stock-prediction-card` : Affichage prédictions ML avec métriques spécifiques
 
 ### Props Prévu pour sh-stock-prediction-card
@@ -611,12 +663,14 @@ interface StockPredictionCardProps {
 ### Fonctionnalités Requises
 
 **Styling automatique selon riskLevel** :
+
 - ✅ Bordure colorée arrondie (gauche) - critical=red, high=orange, medium=amber, low=green
 - ✅ Pas de background à l'état statique
 - ✅ Background coloré léger au hover uniquement
 - ✅ Icône adaptée (AlertTriangle pour critical/high, TrendingDown pour medium/low)
 
 **Affichage contenu** :
+
 - ✅ Header avec nom stock + icône risque
 - ✅ Message principal (ex: "Rupture prévue dans 5 jours")
 - ✅ Badge confidence ML (%)
@@ -625,6 +679,7 @@ interface StockPredictionCardProps {
 - ✅ Section détails (optionnelle) : consommation, date rupture, recommandations
 
 **Interactions** :
+
 - ✅ Effet hover (background coloré)
 - ✅ Event `sh-stock-prediction-click` (optionnel)
 - ✅ Transitions animations (respect prefers-reduced-motion)
@@ -632,11 +687,13 @@ interface StockPredictionCardProps {
 ### Actions Immédiates
 
 **Issue StockHub V2 (#XX)** :
+
 - Documenter décision architecture
 - Référencer future issue DS
 - Statut : EN ATTENTE création composant DS
 
 **Issue Design System (stockhub_design_system)** :
+
 - Créer issue dédiée pour sh-stock-prediction-card
 - Design composant + props
 - Implémentation Lit Element
@@ -645,6 +702,7 @@ interface StockPredictionCardProps {
 - Publication version DS (v1.2.3 ou v1.3.0)
 
 **Workflow** :
+
 1. ✅ Documenter session actuelle
 2. ⏳ Créer issue StockHub V2 (tracking)
 3. ⏳ Créer issue Design System (implémentation)

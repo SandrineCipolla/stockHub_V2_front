@@ -7,6 +7,7 @@
 ## 📋 Vue d'Ensemble
 
 Le projet StockHub V2 inclut plusieurs scripts d'audit automatisés pour vérifier différents aspects de qualité :
+
 - **Performance** : FPS et animations
 - **Accessibilité** : Reduced motion, daltonisme
 - **Qualité** : Datasets animations
@@ -24,22 +25,26 @@ Ces scripts sont situés dans `scripts/` et peuvent être exécutés via npm.
 **Fichier** : `scripts/test-performance-fps.mjs`
 
 **Quand l'utiliser** :
+
 - Après avoir ajouté de nouvelles animations
 - Avant de merger une PR avec des modifications d'animations
 - Lors d'un audit de performance complet
 - Si vous suspectez des problèmes de fluidité
 
 **Ce qu'il vérifie** :
+
 - FPS pendant les animations
 - Temps de frame
 - Dépassements de budget (frame drops)
 
 **Comment l'utiliser** :
+
 ```bash
 npm run audit:fps
 ```
 
 **Interprétation des résultats** :
+
 - ✅ **PASS** : Toutes les animations maintiennent >60 FPS
 - ❌ **FAIL** : Des frame drops détectés, optimiser les animations
 
@@ -52,22 +57,26 @@ npm run audit:fps
 **Fichier** : `scripts/test-reduced-motion.mjs`
 
 **Quand l'utiliser** :
+
 - Avant de livrer une nouvelle feature avec animations
 - Lors d'un audit accessibilité
 - Pour valider la conformité WCAG 2.1
 - Avant une mise en production
 
 **Ce qu'il vérifie** :
+
 - Les animations respectent `prefers-reduced-motion`
 - Les transitions sont désactivées quand nécessaire
 - Les utilisateurs sensibles aux mouvements ont une expérience adaptée
 
 **Comment l'utiliser** :
+
 ```bash
 npm run audit:a11y
 ```
 
 **Interprétation des résultats** :
+
 - ✅ **PASS** : Animations respectent reduced-motion
 - ❌ **FAIL** : Certaines animations ne respectent pas les préférences utilisateur
 
@@ -82,21 +91,25 @@ npm run audit:a11y
 **Fichier** : `scripts/test-animations-datasets.mjs`
 
 **Quand l'utiliser** :
+
 - Après avoir ajouté de nouveaux composants animés
 - Lors d'un refactoring des animations
 - Pour détecter des datasets manquants ou mal configurés
 
 **Ce qu'il vérifie** :
+
 - Présence des attributs `data-animation-*`
 - Configuration correcte des datasets
 - Cohérence entre les composants
 
 **Comment l'utiliser** :
+
 ```bash
 npm run audit:datasets
 ```
 
 **Interprétation des résultats** :
+
 - ✅ **PASS** : Tous les datasets sont corrects
 - ❌ **FAIL** : Datasets manquants ou mal configurés
 
@@ -109,26 +122,31 @@ npm run audit:datasets
 **Fichier** : `scripts/test-daltonisme.mjs`
 
 **Quand l'utiliser** :
+
 - Après avoir modifié les couleurs ou le thème
 - Lors d'un audit accessibilité complet
 - Avant une mise en production majeure
 - Pour valider les contrastes de couleurs
 
 **Ce qu'il vérifie** :
+
 - Contraste de couleurs suffisant
 - Lisibilité pour différents types de daltonisme (protanopie, deutéranopie, tritanopie)
 - Alternative aux informations uniquement basées sur la couleur
 
 **Comment l'utiliser** :
+
 ```bash
 npm run audit:daltonisme
 ```
 
 **Interprétation des résultats** :
+
 - ✅ **PASS** : Interface accessible aux daltoniens
 - ❌ **FAIL** : Problèmes de contraste ou dépendance à la couleur détectés
 
 **Critères WCAG** :
+
 - Success Criterion 1.4.1 Use of Color (Level A)
 - Success Criterion 1.4.3 Contrast (Minimum) (Level AA)
 
@@ -141,6 +159,7 @@ npm run audit:daltonisme
 **Fichier** : `scripts/audit-complet.mjs`
 
 **Quand l'utiliser** :
+
 - **Avant chaque release**
 - Avant de merger une PR majeure
 - Lors d'un audit qualité complet
@@ -148,17 +167,20 @@ npm run audit:daltonisme
 
 **Ce qu'il fait** :
 Exécute séquentiellement :
+
 1. `audit:fps`
 2. `audit:a11y`
 3. `audit:datasets`
 4. `audit:daltonisme`
 
 **Comment l'utiliser** :
+
 ```bash
 npm run audit:full
 ```
 
 **Interprétation des résultats** :
+
 - ✅ **ALL PASS** : Le projet respecte tous les critères de qualité
 - ⚠️ **PARTIAL PASS** : Certains audits ont échoué, à corriger
 - ❌ **FAIL** : Blocage, corrections nécessaires avant release
@@ -170,6 +192,7 @@ npm run audit:full
 ### Workflow Recommandé
 
 **Développement Local** :
+
 ```bash
 # Après modifications d'animations
 npm run audit:fps
@@ -179,6 +202,7 @@ npm run audit:daltonisme
 ```
 
 **Avant Commit** :
+
 ```bash
 # Audit ciblé selon les changements
 npm run audit:a11y  # Si modif animations
@@ -186,12 +210,14 @@ npm run audit:datasets  # Si nouveaux composants
 ```
 
 **Avant PR** :
+
 ```bash
 # Audit complet
 npm run audit:full
 ```
 
 **Avant Release** :
+
 ```bash
 # Audit complet + tests + build
 npm run audit:full
@@ -206,6 +232,7 @@ npm run build
 ### Recommandations
 
 **Option 1 : Audit sur chaque PR** (recommandé)
+
 ```yaml
 # .github/workflows/quality.yml
 name: Quality Audit
@@ -222,10 +249,12 @@ jobs:
 ```
 
 **Option 2 : Audit pré-release uniquement**
+
 - Exécuter `audit:full` uniquement sur les tags/releases
 - Plus rapide mais moins de sécurité
 
 **Option 3 : Audit sélectif par type de changement**
+
 - Détecter les fichiers modifiés
 - Exécuter uniquement les audits pertinents
 
@@ -236,11 +265,13 @@ jobs:
 ## 🎓 Pour le RNCP
 
 Ces scripts démontrent :
+
 - **C4.1** : Tests automatisés et assurance qualité
 - **C4.2** : Respect des normes d'accessibilité (WCAG)
 - **C3.2** : Conformité aux procédures et standards
 
 **Documentation liée** :
+
 - [TESTS-PERFORMANCE.md](TESTS-PERFORMANCE.md) - Métriques de performance
 - [ANIMATIONS.md](ANIMATIONS.md) - Système d'animations
 
@@ -249,6 +280,7 @@ Ces scripts démontrent :
 ## 🐛 Résolution de Problèmes
 
 ### Les scripts échouent avec "Module not found"
+
 ```bash
 # Vérifier que les scripts existent
 ls scripts/*.mjs
@@ -258,11 +290,13 @@ npm ci
 ```
 
 ### Les audits sont trop lents
+
 - Les audits lancent Puppeteer (navigateur headless)
 - Temps normal : 10-30 secondes par script
 - Pour accélérer : utiliser les audits ciblés au lieu de `audit:full`
 
 ### Faux positifs dans les résultats
+
 - Vérifier la version de Node.js (>= 18)
 - Vérifier la version de Puppeteer dans package.json
 - Consulter les logs détaillés dans le script
@@ -276,11 +310,13 @@ npm ci
 **Qui peut modifier** : Lead dev ou responsable qualité
 
 **Quand modifier** :
+
 - Ajout de nouveaux critères d'audit
 - Mise à jour des seuils de performance
 - Correction de bugs dans les scripts
 
 **Comment modifier** :
+
 1. Modifier le fichier `.mjs` concerné dans `scripts/`
 2. Tester le script : `npm run audit:xxx`
 3. Documenter les changements dans ce fichier
@@ -289,6 +325,7 @@ npm ci
 ### Suppression d'un Script
 
 **Avant de supprimer** :
+
 1. Vérifier qu'aucun processus CI/CD ne l'utilise
 2. Vérifier les références dans la documentation
 3. Créer une issue pour tracker la décision
