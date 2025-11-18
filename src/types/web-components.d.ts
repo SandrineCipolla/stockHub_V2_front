@@ -114,6 +114,15 @@ declare global {
         'data-theme'?: 'light' | 'dark';
       };
 
+      'sh-stat-card': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        label?: string;
+        value?: string | number;
+        'risk-level'?: 'default' | 'critical' | 'high' | 'medium' | 'low';
+        selected?: boolean;
+        'data-theme'?: 'light' | 'dark';
+        'onsh-stat-click'?: (e: CustomEvent) => void;
+      };
+
       // ==========================================
       // Organisms
       // ==========================================
@@ -180,6 +189,26 @@ declare global {
         'onsh-view-click'?: (e: CustomEvent<{ sku: string }>) => void;
         'onsh-edit-click'?: (e: CustomEvent<{ sku: string }>) => void;
         'onsh-delete-click'?: (e: CustomEvent<{ sku: string }>) => void;
+      };
+
+      'sh-stock-prediction-card': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
+        'stock-id'?: number | string;
+        'stock-name'?: string;
+        'risk-level'?: 'critical' | 'high' | 'medium' | 'low';
+        'days-until-rupture'?: number;
+        'date-of-rupture'?: string;
+        confidence?: number;
+        'daily-consumption-rate'?: number;
+        'current-quantity'?: number;
+        'days-until-rupture-pessimistic'?: number;
+        'days-until-rupture-optimistic'?: number;
+        'recommended-reorder-date'?: string;
+        'recommended-reorder-quantity'?: number;
+        'show-details'?: boolean;
+        'data-theme'?: 'light' | 'dark';
       };
     }
   }
