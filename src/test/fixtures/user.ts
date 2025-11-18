@@ -38,17 +38,17 @@ export const mockDefaultUser: User = {
     notifications: {
       email: true,
       push: true,
-      inApp: true
-    }
+      inApp: true,
+    },
   },
   stats: {
     totalInvestment: 50000,
     totalGain: 7500,
     portfolioValue: 57500,
-    stocksCount: 12
+    stocksCount: 12,
   },
   createdAt: '2024-01-15T10:00:00Z',
-  lastLoginAt: '2024-10-08T08:30:00Z'
+  lastLoginAt: '2024-10-08T08:30:00Z',
 };
 
 // Autres utilisateurs pour les tests
@@ -66,17 +66,17 @@ export const mockUsers: User[] = [
       notifications: {
         email: false,
         push: true,
-        inApp: true
-      }
+        inApp: true,
+      },
     },
     stats: {
       totalInvestment: 25000,
       totalGain: 2500,
       portfolioValue: 27500,
-      stocksCount: 8
+      stocksCount: 8,
     },
     createdAt: '2024-03-20T14:30:00Z',
-    lastLoginAt: '2024-10-07T16:45:00Z'
+    lastLoginAt: '2024-10-07T16:45:00Z',
   },
   {
     id: 'user-003',
@@ -90,18 +90,18 @@ export const mockUsers: User[] = [
       notifications: {
         email: true,
         push: false,
-        inApp: true
-      }
+        inApp: true,
+      },
     },
     stats: {
       totalInvestment: 100000,
       totalGain: -5000,
       portfolioValue: 95000,
-      stocksCount: 25
+      stocksCount: 25,
     },
     createdAt: '2024-02-10T09:15:00Z',
-    lastLoginAt: '2024-10-08T07:20:00Z'
-  }
+    lastLoginAt: '2024-10-08T07:20:00Z',
+  },
 ];
 
 // Données utilisateur pour différents scénarios de test
@@ -116,10 +116,10 @@ export const mockUserScenarios = {
       totalInvestment: 0,
       totalGain: 0,
       portfolioValue: 0,
-      stocksCount: 0
+      stocksCount: 0,
     },
     createdAt: new Date().toISOString(),
-    lastLoginAt: new Date().toISOString()
+    lastLoginAt: new Date().toISOString(),
   },
 
   // Utilisateur avec gros portefeuille
@@ -132,8 +132,8 @@ export const mockUserScenarios = {
       totalInvestment: 1000000,
       totalGain: 250000,
       portfolioValue: 1250000,
-      stocksCount: 50
-    }
+      stocksCount: 50,
+    },
   },
 
   // Utilisateur avec pertes
@@ -146,9 +146,9 @@ export const mockUserScenarios = {
       totalInvestment: 30000,
       totalGain: -8000,
       portfolioValue: 22000,
-      stocksCount: 15
-    }
-  }
+      stocksCount: 15,
+    },
+  },
 };
 
 // Helpers pour les tests

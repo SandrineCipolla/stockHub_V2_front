@@ -12,11 +12,11 @@ import type { StockUnit } from '@/types/stock';
  * Configuration for unit display
  */
 interface UnitConfig {
-  symbol: string;          // Symbole affiché (%, m, kg, etc.)
-  position: 'before' | 'after';  // Position du symbole
-  space: boolean;          // Espace entre nombre et symbole
-  decimals: number;        // Nombre de décimales à afficher
-  label: string;           // Label complet pour formulaires
+  symbol: string; // Symbole affiché (%, m, kg, etc.)
+  position: 'before' | 'after'; // Position du symbole
+  space: boolean; // Espace entre nombre et symbole
+  decimals: number; // Nombre de décimales à afficher
+  label: string; // Label complet pour formulaires
 }
 
 /**
@@ -89,10 +89,7 @@ export const UNIT_CONFIG: Record<StockUnit, UnitConfig> = {
  * formatQuantityWithUnit(2, 'piece')        // "2"
  * ```
  */
-export function formatQuantityWithUnit(
-  quantity: number,
-  unit: StockUnit = 'piece'
-): string {
+export function formatQuantityWithUnit(quantity: number, unit: StockUnit = 'piece'): string {
   const config = UNIT_CONFIG[unit];
 
   // Arrondir selon le nombre de décimales configuré
@@ -199,7 +196,7 @@ export function parseQuantityInput(input: string): {
  * @returns Array d'objets { value, label } pour chaque unité
  */
 export function getAvailableUnits(): Array<{ value: StockUnit; label: string }> {
-  return Object.keys(UNIT_CONFIG).map((value) => ({
+  return Object.keys(UNIT_CONFIG).map(value => ({
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     value: value as StockUnit,
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

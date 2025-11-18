@@ -61,14 +61,11 @@ export const Analytics: React.FC = () => {
             <div>
               <h1 className="text-3xl font-bold mb-2">Analyses IA & Prédictions</h1>
               <p className={themeClasses.textMuted}>
-                Prédictions Machine Learning basées sur régression linéaire (30 jours d'historique simulé)
+                Prédictions Machine Learning basées sur régression linéaire (30 jours d'historique
+                simulé)
               </p>
             </div>
-            <Button
-              variant="ghost"
-              icon={Home}
-              onClick={() => navigate('/')}
-            >
+            <Button variant="ghost" icon={Home} onClick={() => navigate('/')}>
               Retour Dashboard
             </Button>
           </div>
@@ -123,16 +120,14 @@ export const Analytics: React.FC = () => {
         {/* Filter Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">
-            {riskFilter === 'all' || riskFilter === null ? 'Toutes les prédictions' : `Prédictions : ${riskFilter}`}
+            {riskFilter === 'all' || riskFilter === null
+              ? 'Toutes les prédictions'
+              : `Prédictions : ${riskFilter}`}
             <span className={themeClasses.textMuted}> ({filteredPredictions.length})</span>
           </h2>
 
           {riskFilter !== 'all' && riskFilter !== null && (
-            <Button
-              variant="ghost"
-              icon={Filter}
-              onClick={() => setRiskFilter(null)}
-            >
+            <Button variant="ghost" icon={Filter} onClick={() => setRiskFilter(null)}>
               Réinitialiser filtre
             </Button>
           )}
@@ -175,13 +170,16 @@ export const Analytics: React.FC = () => {
                   <strong>Algorithme :</strong> Régression linéaire avec méthode des moindres carrés
                 </p>
                 <p>
-                  <strong>Données :</strong> Simulation de 30 jours d'historique basée sur le status actuel
+                  <strong>Données :</strong> Simulation de 30 jours d'historique basée sur le status
+                  actuel
                 </p>
                 <p>
-                  <strong>Intervalles de confiance :</strong> IC 95% (statistiquement, 95% de probabilité que la vraie valeur soit dans la fourchette)
+                  <strong>Intervalles de confiance :</strong> IC 95% (statistiquement, 95% de
+                  probabilité que la vraie valeur soit dans la fourchette)
                 </p>
                 <p>
-                  <strong>Note :</strong> En production avec backend, les prédictions utiliseraient des données historiques réelles pour une précision accrue.
+                  <strong>Note :</strong> En production avec backend, les prédictions utiliseraient
+                  des données historiques réelles pour une précision accrue.
                 </p>
               </div>
             </div>

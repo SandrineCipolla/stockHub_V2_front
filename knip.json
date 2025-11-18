@@ -1,25 +1,26 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": [
-    "src/main.tsx",
-    "src/vite-env.d.ts",
-    "scripts/**/*.{ts,mts,mjs}",
-    "vitest.config.ts"
-  ],
-  "project": [
-    "src/**/*.{ts,tsx}",
-    "scripts/**/*.{ts,mts,mjs}"
-  ],
+  "entry": ["src/main.tsx", "src/vite-env.d.ts", "scripts/**/*.{ts,mts,mjs}", "vitest.config.ts"],
+  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.{ts,mts,mjs}"],
   "ignore": [
     "src/test/**",
     "coverage/**",
     "dist/**",
     "documentation/**",
-    "audits/**"
+    "audits/**",
+    "src/types/web-component-events.ts",
+    "src/types/ui.ts",
+    "src/types/api.ts",
+    "src/types/components.ts",
+    "src/types/dashboard.ts",
+    "src/types/utils.ts",
+    "src/types/stock.ts",
+    "src/constants/stockConfig.ts",
+    "src/utils/aiPredictions.ts",
+    "src/utils/unitFormatter.ts",
+    "src/utils/containerManager.ts"
   ],
-  "ignoreDependencies": [
-    "stockhub_design_system"
-  ],
+  "ignoreDependencies": ["stockhub_design_system"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": false,
   "ignoreBinaries": ["tsx"],
@@ -29,4 +30,3 @@
     }
   }
 }
-

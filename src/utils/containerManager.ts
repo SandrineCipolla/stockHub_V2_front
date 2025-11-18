@@ -12,20 +12,20 @@ import type { Stock } from '@/types/stock';
  * Result of a purchase operation
  */
 export interface PurchaseResult {
-  newQuantity: number;           // Nouvelle quantité totale (en %)
-  newContainersOwned: number;    // Nouveau nombre de containers
-  totalCapacity: number;         // Capacité totale
-  message: string;               // Message de confirmation
+  newQuantity: number; // Nouvelle quantité totale (en %)
+  newContainersOwned: number; // Nouveau nombre de containers
+  totalCapacity: number; // Capacité totale
+  message: string; // Message de confirmation
 }
 
 /**
  * Result of a usage operation
  */
 export interface UsageResult {
-  newQuantity: number;           // Nouvelle quantité après usage
-  consumed: number;              // Quantité consommée
-  remainingSessions: number;     // Sessions estimées restantes
-  message: string;               // Message de confirmation
+  newQuantity: number; // Nouvelle quantité après usage
+  consumed: number; // Quantité consommée
+  remainingSessions: number; // Sessions estimées restantes
+  message: string; // Message de confirmation
 }
 
 /**
@@ -42,15 +42,14 @@ export interface UsageResult {
  * console.log(result.message); // "2 tubes ajoutés. Nouveau total : 265%"
  * ```
  */
-export function purchaseContainers(
-  stock: Stock,
-  containersCount: number
-): PurchaseResult {
+export function purchaseContainers(stock: Stock, containersCount: number): PurchaseResult {
   const unit = stock.unit ?? 'piece';
 
   // Validation : containers uniquement pour les unités en %
   if (unit !== 'percentage') {
-    throw new Error('purchaseContainers() est réservé aux stocks en pourcentage (tubes, bouteilles)');
+    throw new Error(
+      'purchaseContainers() est réservé aux stocks en pourcentage (tubes, bouteilles)'
+    );
   }
 
   if (containersCount <= 0) {
@@ -71,7 +70,7 @@ export function purchaseContainers(
     newQuantity,
     newContainersOwned,
     totalCapacity,
-    message: `${containersCount} tube${containersCount > 1 ? 's' : ''} ajouté${containersCount > 1 ? 's' : ''}. Nouveau total : ${newQuantity}% (${newContainersOwned} tube${newContainersOwned > 1 ? 's' : ''})`
+    message: `${containersCount} tube${containersCount > 1 ? 's' : ''} ajouté${containersCount > 1 ? 's' : ''}. Nouveau total : ${newQuantity}% (${newContainersOwned} tube${newContainersOwned > 1 ? 's' : ''})`,
   };
 }
 
@@ -93,10 +92,7 @@ export function purchaseContainers(
  * console.log(result.message); // "Session enregistrée : -20%. Reste : 45%"
  * ```
  */
-export function recordUsage(
-  stock: Stock,
-  percentageUsed?: number
-): UsageResult {
+export function recordUsage(stock: Stock, percentageUsed?: number): UsageResult {
   const unit = stock.unit ?? 'piece';
 
   // Moyenne de consommation par session selon l'unité
@@ -117,7 +113,7 @@ export function recordUsage(
     newQuantity,
     consumed,
     remainingSessions,
-    message: `Session enregistrée : -${consumed}%. Reste : ${newQuantity}% (~${remainingSessions} session${remainingSessions > 1 ? 's' : ''})`
+    message: `Session enregistrée : -${consumed}%. Reste : ${newQuantity}% (~${remainingSessions} session${remainingSessions > 1 ? 's' : ''})`,
   };
 }
 
@@ -154,10 +150,7 @@ function getDefaultConsumption(unit: Stock['unit']): number {
  * calculateTotalCapacity(100, 2); // 200ml (2 tubes de 100ml)
  * ```
  */
-export function calculateTotalCapacity(
-  containerCapacity: number,
-  containersOwned: number
-): number {
+export function calculateTotalCapacity(containerCapacity: number, containersOwned: number): number {
   return containerCapacity * containersOwned;
 }
 
@@ -221,10 +214,7 @@ export function volumeToPercentage(
  * getContainerLabel(1, "bouteille"); // "1 bouteille"
  * ```
  */
-export function getContainerLabel(
-  containersOwned: number,
-  containerType: string = "tube"
-): string {
+export function getContainerLabel(containersOwned: number, containerType: string = 'tube'): string {
   if (containersOwned === 0) return `Aucun ${containerType}`;
   if (containersOwned === 1) return `1 ${containerType}`;
   return `${containersOwned} ${containerType}s`;

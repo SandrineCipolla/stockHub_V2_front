@@ -1,140 +1,143 @@
-import {useCallback, useEffect, useState} from 'react';
-import type {AsyncFrontendState, FrontendError, FrontendErrorType} from '@/types';
+import { useCallback, useEffect, useState } from 'react';
+import type { AsyncFrontendState, FrontendError, FrontendErrorType } from '@/types';
 
 // ===== HOOK PRINCIPAL POUR GESTION D'ÉTATS =====
 export const useFrontendState = <T>(initialData: T | null = null) => {
-    const [state, setState] = useState<AsyncFrontendState<T>>({
-        data: initialData,
-        loading: false,
-        error: null,
-        status: 'idle'
+  const [state, setState] = useState<AsyncFrontendState<T>>({
+    data: initialData,
+    loading: false,
+    error: null,
+    status: 'idle',
+  });
+
+  const setLoading = useCallback((loading: boolean): void => {
+    setState(prev => ({
+      ...prev,
+      loading,
+      status: loading ? 'loading' : prev.status,
+      error: loading ? null : prev.error, // Clear errors when loading
+    }));
+  }, []);
+
+  const setData = useCallback((data: T): void => {
+    setState({
+      data,
+      loading: false,
+      error: null,
+      status: 'success',
     });
+  }, []);
 
-    const setLoading = useCallback((loading: boolean): void => {
-        setState(prev => ({
-            ...prev,
-            loading,
-            status: loading ? 'loading' : prev.status,
-            error: loading ? null : prev.error // Clear errors when loading
-        }));
-    }, []);
+  const setError = useCallback((error: FrontendError): void => {
+    setState(prev => ({
+      ...prev,
+      loading: false,
+      error,
+      status: 'error',
+    }));
+  }, []);
 
-    const setData = useCallback((data: T): void => {
-        setState({
-            data,
-            loading: false,
-            error: null,
-            status: 'success'
-        });
-    }, []);
+  const reset = useCallback((): void => {
+    setState({
+      data: initialData,
+      loading: false,
+      error: null,
+      status: 'idle',
+    });
+  }, [initialData]);
 
-    const setError = useCallback((error: FrontendError): void => {
-        setState(prev => ({
-            ...prev,
-            loading: false,
-            error,
-            status: 'error'
-        }));
-    }, []);
-
-    const reset = useCallback((): void => {
-        setState({
-            data: initialData,
-            loading: false,
-            error: null,
-            status: 'idle'
-        });
-    }, [initialData]);
-
-    return {
-        ...state,
-        setLoading,
-        setData,
-        setError,
-        reset,
-        isIdle: state.status === 'idle',
-        isLoading: state.status === 'loading',
-        isSuccess: state.status === 'success',
-        isError: state.status === 'error'
-    };
+  return {
+    ...state,
+    setLoading,
+    setData,
+    setError,
+    reset,
+    isIdle: state.status === 'idle',
+    isLoading: state.status === 'loading',
+    isSuccess: state.status === 'success',
+    isError: state.status === 'error',
+  };
 };
 
 // ===== HOOK POUR ACTIONS ASYNCHRONES SIMULÉES =====
 export const useAsyncAction = <T, P extends unknown[] = []>(
-    action: (...args: P) => Promise<T> | T,
-    options: {
-        onSuccess?: (data: T) => void;
-        onError?: (error: FrontendError) => void;
-        simulateDelay?: number; // Pour simuler une API
-    } = {}
+  action: (...args: P) => Promise<T> | T,
+  options: {
+    onSuccess?: (data: T) => void;
+    onError?: (error: FrontendError) => void;
+    simulateDelay?: number; // Pour simuler une API
+  } = {}
 ) => {
-    const { simulateDelay = 0, onSuccess, onError } = options;
-    const frontendState = useFrontendState<T>();
+  const { simulateDelay = 0, onSuccess, onError } = options;
+  const frontendState = useFrontendState<T>();
 
-    const execute = useCallback(async (...args: P): Promise<T | null> => {
-        frontendState.setLoading(true);
+  const execute = useCallback(
+    async (...args: P): Promise<T | null> => {
+      frontendState.setLoading(true);
 
-        try {
-            // Simuler un délai (comme une vraie API)
-            if (simulateDelay > 0) {
-                await new Promise(resolve => setTimeout(resolve, simulateDelay));
-            }
-
-            const result = await action(...args);
-
-            frontendState.setData(result);
-            onSuccess?.(result);
-            return result;
-        } catch (error) {
-            const frontendError = createFrontendError(
-                'unknown',     // ← type
-                error instanceof Error ? error.message : 'Une erreur est survenue', // ← message
-                undefined,     // ← field (optionnel)
-                { originalError: error }  // ← details
-            );
-
-            frontendState.setError(frontendError);
-            onError?.(frontendError);
-            return null;
+      try {
+        // Simuler un délai (comme une vraie API)
+        if (simulateDelay > 0) {
+          await new Promise(resolve => setTimeout(resolve, simulateDelay));
         }
-    }, [action, frontendState, onSuccess, onError, simulateDelay]);
 
-    return {
-        ...frontendState,
-        execute
-    };
+        const result = await action(...args);
+
+        frontendState.setData(result);
+        onSuccess?.(result);
+        return result;
+      } catch (error) {
+        const frontendError = createFrontendError(
+          'unknown', // ← type
+          error instanceof Error ? error.message : 'Une erreur est survenue', // ← message
+          undefined, // ← field (optionnel)
+          { originalError: error } // ← details
+        );
+
+        frontendState.setError(frontendError);
+        onError?.(frontendError);
+        return null;
+      }
+    },
+    [action, frontendState, onSuccess, onError, simulateDelay]
+  );
+
+  return {
+    ...frontendState,
+    execute,
+  };
 };
 
 // ===== FONCTION UTILITAIRE POUR CRÉER DES ERREURS =====
 export const createFrontendError = (
-    type: FrontendErrorType,
-    message: string,
-    field?: string,
-    details?: Record<string, unknown>
+  type: FrontendErrorType,
+  message: string,
+  field?: string,
+  details?: Record<string, unknown>
 ): FrontendError => {
-    const error: FrontendError = {
-        id: Math.random().toString(36).substring(2, 9),
-        type,
-        message,
-        timestamp: new Date()
-    };
+  const error: FrontendError = {
+    id: Math.random().toString(36).substring(2, 9),
+    type,
+    message,
+    timestamp: new Date(),
+  };
 
-    if (field) error.field = field;
-    if (details) error.details = details;
+  if (field) error.field = field;
+  if (details) error.details = details;
 
-    return error;
+  return error;
 };
 
 // ===== FONCTION UTILITAIRE POUR VALIDER LES ERREURS =====
 const isFrontendError = (error: unknown): error is FrontendError => {
-    return (
-        typeof error === 'object' &&
-        error !== null &&
-        'type' in error &&
-        'message' in error &&
-        'id' in error &&
-        'timestamp' in error
-    );
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'type' in error &&
+    'message' in error &&
+    'id' in error &&
+    'timestamp' in error
+  );
 };
 
 // ===== HOOK POUR VALIDATION DE FORMULAIRES =====
@@ -310,70 +313,67 @@ const isFrontendError = (error: unknown): error is FrontendError => {
 
 // ===== HOOK POUR EXPORT DE DONNÉES =====
 export const useDataExport = () => {
-    const exportState = useFrontendState<Blob>();
+  const exportState = useFrontendState<Blob>();
 
-    const exportToCsv = useCallback(async <T extends Record<string, unknown>>(
-        data: T[],
-        filename: string = 'export.csv'
+  const exportToCsv = useCallback(
+    async <T extends Record<string, unknown>>(
+      data: T[],
+      filename: string = 'export.csv'
     ): Promise<boolean> => {
-        exportState.setLoading(true);
+      exportState.setLoading(true);
 
-        try {
-            if (data.length === 0) {
-                throw createFrontendError(
-                    'export',
-                    'Aucune donnée à exporter',
-                );
-            }
-
-            // Simuler le temps de génération
-            await new Promise(resolve => setTimeout(resolve, 800));
-
-            // Créer CSV
-            const headers = Object.keys(data[0]);
-            const csvContent = [
-                headers.join(','),
-                ...data.map(row => headers.map(header =>
-                    `"${String(row[header]).replace(/"/g, '""')}"`
-                ).join(','))
-            ].join('\n');
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-            // Télécharger le fichier
-            const link = document.createElement('a');
-            if (link.download !== undefined) {
-                const url = URL.createObjectURL(blob);
-                link.setAttribute('href', url);
-                link.setAttribute('download', filename);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            }
-
-            exportState.setData(blob);
-            return true;
-        } catch (error) {
-            if (isFrontendError(error)) {
-                exportState.setError(error);
-            } else {
-                exportState.setError(createFrontendError(
-                    'export',
-                    'Erreur lors de l\'export',
-                    undefined,
-                    { error }
-                ));
-            }
-            return false;
+      try {
+        if (data.length === 0) {
+          throw createFrontendError('export', 'Aucune donnée à exporter');
         }
-    }, [exportState]);
 
-    return {
-        ...exportState,
-        exportToCsv
-    };
+        // Simuler le temps de génération
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        // Créer CSV
+        const headers = Object.keys(data[0]);
+        const csvContent = [
+          headers.join(','),
+          ...data.map(row =>
+            headers.map(header => `"${String(row[header]).replace(/"/g, '""')}"`).join(',')
+          ),
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        // Télécharger le fichier
+        const link = document.createElement('a');
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob);
+          link.setAttribute('href', url);
+          link.setAttribute('download', filename);
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+
+        exportState.setData(blob);
+        return true;
+      } catch (error) {
+        if (isFrontendError(error)) {
+          exportState.setError(error);
+        } else {
+          exportState.setError(
+            createFrontendError('export', "Erreur lors de l'export", undefined, { error })
+          );
+        }
+        return false;
+      }
+    },
+    [exportState]
+  );
+
+  return {
+    ...exportState,
+    exportToCsv,
+  };
 };
 
 // ===== HOOK POUR LOCAL STORAGE AVEC GESTION D'ERREURS =====
@@ -439,89 +439,89 @@ export const useDataExport = () => {
 //         error: storageState.error
 //     };
 // };
-export const useLocalStorageState = <T>(
-    key: string,
-    initialValue: T
-) => {
-    // Fonction pour lire depuis localStorage de façon synchrone
-    const getStoredValue = useCallback((): T => {
+export const useLocalStorageState = <T>(key: string, initialValue: T) => {
+  // Fonction pour lire depuis localStorage de façon synchrone
+  const getStoredValue = useCallback((): T => {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.warn(`Erreur lors de la lecture du localStorage pour la clé "${key}":`, error);
+      return initialValue;
+    }
+  }, [key, initialValue]);
+
+  // Initialiser avec la valeur du localStorage ou la valeur par défaut
+  const [storedValue, setStoredValue] = useState<T>(getStoredValue);
+  const [error, setError] = useState<FrontendError | null>(null);
+
+  // Fonction pour mettre à jour la valeur
+  const setValue = useCallback(
+    (value: T | ((prev: T) => T)): void => {
+      try {
+        const valueToStore = value instanceof Function ? value(storedValue) : value;
+
+        setStoredValue(valueToStore);
+        localStorage.setItem(key, JSON.stringify(valueToStore));
+        setError(null); // Clear previous errors
+      } catch (error) {
+        const frontendError = createFrontendError(
+          'storage',
+          'Impossible de sauvegarder dans le stockage local',
+          undefined,
+          { key, error }
+        );
+        setError(frontendError);
+      }
+    },
+    [key, storedValue]
+  );
+
+  // Fonction pour supprimer la valeur
+  const removeValue = useCallback((): void => {
+    try {
+      localStorage.removeItem(key);
+      setStoredValue(initialValue);
+      setError(null);
+    } catch (error) {
+      const frontendError = createFrontendError(
+        'storage',
+        'Impossible de supprimer du stockage local',
+        undefined,
+        { key, error }
+      );
+      setError(frontendError);
+    }
+  }, [key, initialValue]);
+
+  // Écouter les changements de localStorage depuis d'autres onglets
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === key) {
         try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : initialValue;
+          const newValue = e.newValue ? JSON.parse(e.newValue) : initialValue;
+          setStoredValue(newValue);
+          setError(null);
         } catch (error) {
-            console.warn(`Erreur lors de la lecture du localStorage pour la clé "${key}":`, error);
-            return initialValue;
+          const frontendError = createFrontendError(
+            'storage',
+            'Erreur lors de la synchronisation du stockage local',
+            undefined,
+            { key, error }
+          );
+          setError(frontendError);
         }
-    }, [key, initialValue]);
-
-    // Initialiser avec la valeur du localStorage ou la valeur par défaut
-    const [storedValue, setStoredValue] = useState<T>(getStoredValue);
-    const [error, setError] = useState<FrontendError | null>(null);
-
-    // Fonction pour mettre à jour la valeur
-    const setValue = useCallback((value: T | ((prev: T) => T)): void => {
-        try {
-            const valueToStore = value instanceof Function ? value(storedValue) : value;
-
-            setStoredValue(valueToStore);
-            localStorage.setItem(key, JSON.stringify(valueToStore));
-            setError(null); // Clear previous errors
-        } catch (error) {
-            const frontendError = createFrontendError(
-                'storage',
-                'Impossible de sauvegarder dans le stockage local',
-                undefined,
-                { key, error }
-            );
-            setError(frontendError);
-        }
-    }, [key, storedValue]);
-
-    // Fonction pour supprimer la valeur
-    const removeValue = useCallback((): void => {
-        try {
-            localStorage.removeItem(key);
-            setStoredValue(initialValue);
-            setError(null);
-        } catch (error) {
-            const frontendError = createFrontendError(
-                'storage',
-                'Impossible de supprimer du stockage local',
-                undefined,
-                { key, error }
-            );
-            setError(frontendError);
-        }
-    }, [key, initialValue]);
-
-    // Écouter les changements de localStorage depuis d'autres onglets
-    useEffect(() => {
-        const handleStorageChange = (e: StorageEvent) => {
-            if (e.key === key) {
-                try {
-                    const newValue = e.newValue ? JSON.parse(e.newValue) : initialValue;
-                    setStoredValue(newValue);
-                    setError(null);
-                } catch (error) {
-                    const frontendError = createFrontendError(
-                        'storage',
-                        'Erreur lors de la synchronisation du stockage local',
-                        undefined,
-                        { key, error }
-                    );
-                    setError(frontendError);
-                }
-            }
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-        return () => window.removeEventListener('storage', handleStorageChange);
-    }, [key, initialValue]);
-
-    return {
-        value: storedValue,
-        setValue,
-        removeValue,
-        error
+      }
     };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [key, initialValue]);
+
+  return {
+    value: storedValue,
+    setValue,
+    removeValue,
+    error,
+  };
 };

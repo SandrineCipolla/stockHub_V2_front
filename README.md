@@ -18,7 +18,6 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ## 🔗 **[Voir la démo live](https://stock-hub-v2-front.vercel.app/)** | 📁 **[Repository GitHub](https://github.com/SandrineCipolla/stockHub_V2_front)**
 
-
 ### ✨ Fonctionnalités principales
 
 - 📊 **Dashboard interactif** avec métriques en temps réel
@@ -34,6 +33,7 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 ## 🛠️ Stack Technique
 
 ### Core Technologies
+
 - **Frontend**: React 19.1.0 + TypeScript 5.8.3
 - **Build Tool**: Vite 6.3.5
 - **Styling**: TailwindCSS 3.4.1
@@ -42,13 +42,19 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 - **Design System**: Custom Design System Package
 
 ### Development Tools
+
 - **Linting**: ESLint 9.25.0 + TypeScript ESLint 8.30.1
+- **Formatting**: Prettier 3.6.2 avec auto-formatting
+- **Testing**: Vitest 3.2.4 + Testing Library
+- **Git Hooks**: Husky 9.1.7 + lint-staged 16.2.6
+- **Dead Code**: Knip 5.66.2 pour détection code inutilisé
 - **PostCSS**: Autoprefixer 10.4.21 + PostCSS Import 16.1.1
 - **Dev Server**: Vite avec Hot Module Replacement
 - **Build Tools**: TSX 4.20.3 pour les scripts
 - **SEO**: Vite Plugin Sitemap 0.8.2
 
 ### Design System
+
 - **Tokens**: Variables CSS personnalisées
 - **Components**: Web Components réutilisables (Lit Element)
 - **Theming**: Support thème sombre/clair
@@ -68,12 +74,14 @@ npm >= 8.0.0 ou yarn >= 1.22.0
 ### Installation
 
 1. **Cloner le repository**
+
 ```bash
 git clone https://github.com/SandrineCipolla/stockHub_V2_front.git
 cd stockHub_V2_front
 ```
 
 2. **Installer les dépendances**
+
 ```bash
 npm install
 # ou
@@ -81,6 +89,7 @@ yarn install
 ```
 
 3. **Configurer l'environnement**
+
 ```bash
 cp .env.example .env.local
 # Éditer les variables d'environnement
@@ -122,7 +131,7 @@ stockHub_V2_front/
 │   └── robots.txt
 ├── src/                    # Code source
 │   ├── components/        # Composants réutilisables
-│   ├── contexts/         
+│   ├── contexts/
 │   ├── data/             # Données statiques
 │   ├── hooks/            # Hooks personnalisés
 │   ├── pages/            # Pages web
@@ -143,25 +152,90 @@ stockHub_V2_front/
 
 ## 🔧 Scripts Disponibles
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Démarre le serveur de développement |
-| `npm run build` | Génère le sitemap et build de production |
+### Développement
+
+| Script            | Description                         |
+| ----------------- | ----------------------------------- |
+| `npm run dev`     | Démarre le serveur de développement |
 | `npm run preview` | Prévisualise le build de production |
-| `npm run lint` | Lance ESLint |
-| `npm run type-check` | Vérification TypeScript sans compilation |
-| `npm run generate-sitemap` | Génère le sitemap XML automatiquement |
+
+### Build & Deploy
+
+| Script                       | Description                             |
+| ---------------------------- | --------------------------------------- |
+| `npm run build`              | Build de production (TypeScript + Vite) |
+| `npm run build:with-sitemap` | Build avec génération du sitemap        |
+| `npm run generate-sitemap`   | Génère le sitemap XML automatiquement   |
+
+### Quality & Tests
+
+| Script                   | Description                                |
+| ------------------------ | ------------------------------------------ |
+| `npm run lint`           | Lance ESLint sur le code                   |
+| `npm run lint:fix`       | Corrige automatiquement les erreurs ESLint |
+| `npm run format`         | Formate le code avec Prettier              |
+| `npm run format:check`   | Vérifie le formatage sans modifier         |
+| `npm run type-check`     | Vérification TypeScript sans compilation   |
+| `npm run test`           | Lance les tests en mode watch              |
+| `npm run test:run`       | Exécute tous les tests une fois            |
+| `npm run test:coverage`  | Tests avec rapport de couverture           |
+| `npm run clean:deadcode` | Détecte le code mort avec Knip             |
+| `npm run clean:fix`      | Supprime automatiquement le code mort      |
+
+### CI/CD
+
+| Script               | Description                                      |
+| -------------------- | ------------------------------------------------ |
+| `npm run ci:quality` | Vérifications qualité (TypeScript, ESLint, Knip) |
+| `npm run ci:test`    | Exécute les tests pour CI                        |
+| `npm run ci:build`   | Build de production pour CI                      |
+| `npm run ci:check`   | Pipeline complet (quality + tests + build)       |
+
+## 🪝 Git Hooks (Husky)
+
+Le projet utilise Husky pour automatiser les vérifications de qualité à chaque commit et push.
+
+### Pre-commit (Rapide ~10s)
+
+Exécuté automatiquement à chaque `git commit`:
+
+- ✅ **lint-staged**: Formatage Prettier + ESLint sur fichiers modifiés uniquement
+- ✅ **TypeScript**: Vérification des types
+- 🎯 **Objectif**: Code formaté et sans erreurs TypeScript
+
+### Pre-push (Complet ~20s)
+
+Exécuté automatiquement à chaque `git push`:
+
+- ✅ **Tests**: Tous les tests unitaires (436 tests)
+- ✅ **Knip**: Détection du code mort
+- ✅ **Build**: Vérification que le build passe
+- 🎯 **Objectif**: Code testé, propre et buildable
+
+### Bypass des hooks (si nécessaire)
+
+```bash
+# Skip pre-commit
+git commit --no-verify -m "message"
+
+# Skip pre-push
+git push --no-verify
+```
+
+> ⚠️ **Note**: Utiliser `--no-verify` uniquement en cas d'urgence. Les hooks garantissent la qualité du code.
 
 ## 🚀 Déploiement
 
 ### Vercel (Recommandé)
 
 1. **Installation Vercel CLI**
+
 ```bash
 npm i -g vercel
 ```
 
 2. **Déploiement**
+
 ```bash
 vercel --prod
 ```
@@ -169,6 +243,7 @@ vercel --prod
 ### Netlify
 
 1. **Build**
+
 ```bash
 npm run build
 ```
@@ -203,16 +278,16 @@ docker run -p 80:80 stockhub-v2
 ```css
 :root {
   /* Couleurs */
-  --color-primary-500: #8B5CF6;
-  --color-primary-600: #7C3AED;
-  --color-primary-700: #6D28D9;
-  
+  --color-primary-500: #8b5cf6;
+  --color-primary-600: #7c3aed;
+  --color-primary-700: #6d28d9;
+
   /* Espacements */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 0.75rem;
   --spacing-lg: 1rem;
-  
+
   /* Typographie */
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -240,22 +315,45 @@ L'application respecte les standards RGAA :
 
 ## 🧪 Tests & Qualité
 
-### Audits
+### Métriques de Qualité
 
+#### Tests Unitaires
+
+- **Tests**: 436 tests passing (33 skipped pour E2E)
+- **Coverage Global**: 60.67%
+- **Coverage Composants**: 90-98%
+- **Framework**: Vitest 3.2.4 + Testing Library
+
+#### Code Quality
+
+- **TypeScript**: Mode strict, 0 erreur
+- **ESLint**: 0 warning
+- **Prettier**: Formatage automatique
+- **Knip**: Détection code mort activée
+
+#### Performance
+
+- **Lighthouse Performance**: 99/100
+- **Lighthouse Accessibility**: 96/100
 - **Lighthouse SEO**: Score > 90/100
-- **Accessibilité WAVE**: Conforme RGAA
-- **Performance**: Core Web Vitals optimisés
-- **TypeScript**: Mode strict activé
+- **Bundle Size**: 113.99 KB gzipped
+- **Build Time**: ~5s
 
 ### Commandes d'audit
 
 ```bash
+# Tests avec couverture
+npm run test:coverage
+
 # Lighthouse CLI
 npm i -g lighthouse
 lighthouse http://localhost:5173 --output html
 
 # Analyse de bundle
 npm run build -- --analyze
+
+# Détection code mort
+npm run clean:deadcode
 ```
 
 ## 🌱 Éco-conception
@@ -264,7 +362,6 @@ npm run build -- --analyze
 - **CSS optimisé**: Purge du CSS inutile
 - **JavaScript**: Tree shaking et code splitting
 - **Score EcoIndex**: Objectif grade B ou supérieur
-
 
 ## 👥 Équipe
 

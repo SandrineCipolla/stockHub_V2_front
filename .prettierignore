@@ -1,0 +1,30 @@
+# Dependencies
+node_modules
+
+# Production build
+dist
+build
+
+# Coverage
+coverage
+
+# IDE
+.vscode
+.idea
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+
+# Package manager
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Generated files
+*.map
+custom-elements.json

@@ -20,60 +20,60 @@ export const mockNavigationLinks: NavigationLink[] = [
     label: 'Tableau de bord',
     href: '/dashboard',
     icon: 'dashboard',
-    isActive: true
+    isActive: true,
   },
   {
     id: 'stocks',
     label: 'Actions',
     href: '/stocks',
     icon: 'trending_up',
-    isActive: false
+    isActive: false,
   },
   {
     id: 'portfolio',
     label: 'Portefeuille',
     href: '/portfolio',
     icon: 'account_balance_wallet',
-    isActive: false
+    isActive: false,
   },
   {
     id: 'analytics',
     label: 'Analyses',
     href: '/analytics',
     icon: 'analytics',
-    isActive: false
+    isActive: false,
   },
   {
     id: 'settings',
     label: 'Paramètres',
     href: '/settings',
     icon: 'settings',
-    isActive: false
-  }
+    isActive: false,
+  },
 ];
 
 // Breadcrumbs pour différentes pages
 export const mockBreadcrumbs = {
   dashboard: [
     { id: 'home', label: 'Accueil', href: '/' },
-    { id: 'dashboard', label: 'Tableau de bord', isActive: true }
+    { id: 'dashboard', label: 'Tableau de bord', isActive: true },
   ] as BreadcrumbItem[],
 
   stocks: [
     { id: 'home', label: 'Accueil', href: '/' },
-    { id: 'stocks', label: 'Actions', isActive: true }
+    { id: 'stocks', label: 'Actions', isActive: true },
   ] as BreadcrumbItem[],
 
   stockDetail: [
     { id: 'home', label: 'Accueil', href: '/' },
     { id: 'stocks', label: 'Actions', href: '/stocks' },
-    { id: 'stock-detail', label: 'AAPL', isActive: true }
+    { id: 'stock-detail', label: 'AAPL', isActive: true },
   ] as BreadcrumbItem[],
 
   portfolio: [
     { id: 'home', label: 'Accueil', href: '/' },
-    { id: 'portfolio', label: 'Portefeuille', isActive: true }
-  ] as BreadcrumbItem[]
+    { id: 'portfolio', label: 'Portefeuille', isActive: true },
+  ] as BreadcrumbItem[],
 };
 
 // Navigation secondaire
@@ -82,20 +82,20 @@ export const mockSecondaryNavigation: NavigationLink[] = [
     id: 'profile',
     label: 'Profil',
     href: '/profile',
-    icon: 'person'
+    icon: 'person',
   },
   {
     id: 'help',
     label: 'Aide',
     href: '/help',
-    icon: 'help'
+    icon: 'help',
   },
   {
     id: 'logout',
     label: 'Déconnexion',
     href: '/logout',
-    icon: 'logout'
-  }
+    icon: 'logout',
+  },
 ];
 
 // Navigation avec différents états
@@ -104,16 +104,16 @@ export const mockNavigationStates = {
 
   withActiveStocks: mockNavigationLinks.map(link => ({
     ...link,
-    isActive: link.id === 'stocks'
+    isActive: link.id === 'stocks',
   })),
 
   withActivePortfolio: mockNavigationLinks.map(link => ({
     ...link,
-    isActive: link.id === 'portfolio'
+    isActive: link.id === 'portfolio',
   })),
 
   withNoActive: mockNavigationLinks.map(link => ({
     ...link,
-    isActive: false
-  }))
+    isActive: false,
+  })),
 };

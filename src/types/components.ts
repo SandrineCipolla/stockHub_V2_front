@@ -1,75 +1,74 @@
-import React from "react";
-import type {LucideIcon} from 'lucide-react';
-import type {BadgeVariant, ButtonVariant, ComponentSize, InputType} from './ui';
-import type {Stock, StockStatus} from './stock';
-import type {AISuggestion} from '@/utils/aiPredictions';
+import React from 'react';
+import type { LucideIcon } from 'lucide-react';
+import type { BadgeVariant, ButtonVariant, ComponentSize, InputType } from './ui';
+import type { Stock, StockStatus } from './stock';
+import type { AISuggestion } from '@/utils/aiPredictions';
 
 // ========================================
 // INTERFACES PROPS COMPOSANTS
 // ========================================
 
-
 export interface BadgeProps {
-    variant: BadgeVariant;
-    children: React.ReactNode;
-    className?: string;
-    size?: ComponentSize;
+  variant: BadgeVariant;
+  children: React.ReactNode;
+  className?: string;
+  size?: ComponentSize;
 }
 
 export interface StatusBadgeProps {
-    status: StockStatus;
-    showIcon?: boolean;
-    size?: ComponentSize;
-    className?: string;
+  status: StockStatus;
+  showIcon?: boolean;
+  size?: ComponentSize;
+  className?: string;
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: ButtonVariant;
-    size?: ComponentSize;
-    icon?: LucideIcon;
-    loading?: boolean;
-    children?: React.ReactNode;
+  variant?: ButtonVariant;
+  size?: ComponentSize;
+  icon?: LucideIcon;
+  loading?: boolean;
+  children?: React.ReactNode;
 }
 
 export interface CardProps {
-    children: React.ReactNode;
-    hover?: boolean;
-    className?: string;
-    onClick?: () => void;
-    role?: string;
-    'aria-labelledby'?: string;
-    'aria-describedby'?: string;
+  children: React.ReactNode;
+  hover?: boolean;
+  className?: string;
+  onClick?: () => void;
+  role?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
 }
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    label?: string;
-    error?: string;
-    icon?: React.ElementType;
-    helperText?: string;
-    type?: InputType;
+  label?: string;
+  error?: string;
+  icon?: React.ElementType;
+  helperText?: string;
+  type?: InputType;
 }
 
 export interface StockCardProps {
-    stock: Stock;
-    index?: number;
-    isLoaded?: boolean;
-    onView?: (stockId: number | string) => void;
-    onEdit?: (stockId: number | string) => void;
-    onDelete?: (stockId: number | string) => void;
-    isUpdating?: boolean;
-    isDeleting?: boolean;
-    className?: string;
-    aiSuggestions?: AISuggestion[];
+  stock: Stock;
+  index?: number;
+  isLoaded?: boolean;
+  onView?: (stockId: number | string) => void;
+  onEdit?: (stockId: number | string) => void;
+  onDelete?: (stockId: number | string) => void;
+  isUpdating?: boolean;
+  isDeleting?: boolean;
+  className?: string;
+  aiSuggestions?: AISuggestion[];
 }
 
 export interface StockGridProps {
-    stocks: Stock[];
-    isLoaded?: boolean;
-    onView?: (stockId: number | string) => void;
-    onEdit?: (stockId: number | string) => void;
-    onDelete?: (stockId: number | string) => void;
-    isUpdating?: boolean;
-    isDeleting?: boolean;
-    className?: string;
-    aiSuggestions?: AISuggestion[];
+  stocks: Stock[];
+  isLoaded?: boolean;
+  onView?: (stockId: number | string) => void;
+  onEdit?: (stockId: number | string) => void;
+  onDelete?: (stockId: number | string) => void;
+  isUpdating?: boolean;
+  isDeleting?: boolean;
+  className?: string;
+  aiSuggestions?: AISuggestion[];
 }
