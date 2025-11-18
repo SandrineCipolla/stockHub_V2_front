@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release-please:
@@ -21,13 +22,5 @@ jobs:
           # Package name (used in release titles)
           package-name: stockhub-v2-front
 
-          # Optional: Changelog sections
-          # By default, Release Please groups commits by type
-          # feat: Features
-          # fix: Bug Fixes
-          # docs: Documentation
-          # chore: Chores
-          # refactor: Code Refactoring
-          # test: Tests
-          # style: Styles
-          # perf: Performance Improvements
+          # Use a GitHub token with the necessary permissions
+          token: ${{ secrets.GITHUB_TOKEN }}
