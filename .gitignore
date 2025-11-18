@@ -33,3 +33,7 @@ documentation/propositionIA/propositionIA.tsx
 
 # Temporary audit report files
 documentation/metrics/*.json
+
+# Claude Code configuration (personal)
+CLAUDE.md
+CLAUDE.local.md
