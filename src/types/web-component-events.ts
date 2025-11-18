@@ -96,6 +96,12 @@ export interface LogoutClickEventDetail {
 export type LogoutClickEvent = CustomEvent<LogoutClickEventDetail>;
 
 // ============================================
+// Stat Card Events
+// ============================================
+
+export type StatClickEvent = CustomEvent<void>;
+
+// ============================================
 // IA Alert Banner Events
 // ============================================
 
