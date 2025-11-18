@@ -229,6 +229,16 @@ gh pr create --title "feat: Add new feature"
 
 ## 🛠️ Commandes Utiles
 
+### Configuration automatique des tags (recommandé)
+
+**Pour récupérer automatiquement les tags lors des pulls** :
+
+```bash
+git config --add remote.origin.fetch "+refs/tags/*:refs/tags/*"
+```
+
+Une fois configuré, `git pull` récupérera automatiquement tous les nouveaux tags.
+
 ### Voir les releases GitHub
 
 ```bash
@@ -239,6 +249,12 @@ gh release list
 
 ```bash
 git tag -l
+```
+
+### Récupérer les tags manuellement (si pas configuré)
+
+```bash
+git fetch --tags
 ```
 
 ### Forcer une nouvelle release (si besoin)
@@ -315,13 +331,26 @@ gh workflow view "Release Please"
 - [x] `.release-please-manifest.json` créé avec version actuelle
 - [x] `release-please-config.json` configuré
 - [x] Documentation créée
-- [ ] Merger cette PR sur main
-- [ ] Vérifier que GitHub Action s'exécute
-- [ ] Attendre première Release PR automatique
+- [x] Configuration poussée sur main
+- [x] Permissions GitHub activées ("Allow GitHub Actions to create and approve pull requests")
+- [x] Première Release PR automatique créée et mergée
+- [x] **✨ Release v1.3.0 créée avec succès !**
 
 ---
 
-**Date création** : 18 Novembre 2025
-**Auteure** : Sandrine Cipolla
-**Version** : v1.1.0
-**Statut** : ✅ Configuration terminée
+## 🎊 **CONFIGURATION TERMINÉE ET TESTÉE**
+
+**Date finalisation** : 18 Novembre 2025
+**Première release automatique** : v1.3.0
+**Statut** : ✅ **Release Please 100% opérationnel !**
+
+### 🚀 Prochaines releases
+
+Pour les futures releases, tu n'auras qu'à :
+
+1. Développer avec des Conventional Commits
+2. Merger tes PRs sur `main`
+3. Release Please créera automatiquement les PRs de release
+4. Merger la PR de release → Tag + GitHub Release automatiques
+
+**L'automatisation est maintenant complète !** 🎉
