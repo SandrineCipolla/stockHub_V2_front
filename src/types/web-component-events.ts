@@ -20,7 +20,7 @@ export type WebComponentStatus = 'optimal' | 'low' | 'critical' | 'out-of-stock'
 // ============================================
 
 export interface SearchChangeEventDetail {
-  query: string;
+  value: string;
 }
 
 export type SearchChangeEvent = CustomEvent<SearchChangeEventDetail>;

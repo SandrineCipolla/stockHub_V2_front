@@ -99,8 +99,8 @@ declare global {
         disabled?: boolean;
         error?: boolean;
         'data-theme'?: 'light' | 'dark';
-        'onsh-search'?: (e: CustomEvent<{ query: string }>) => void;
-        'onsh-search-change'?: (e: CustomEvent<{ query: string }>) => void;
+        'onsh-search'?: (e: CustomEvent<{ value: string }>) => void;
+        'onsh-search-change'?: (e: CustomEvent<{ value: string }>) => void;
         'onsh-search-clear'?: (e: CustomEvent) => void;
       };
 
