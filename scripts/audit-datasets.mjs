@@ -4,6 +4,7 @@
  */
 
 import puppeteer from 'puppeteer';
+import {writeFileSync} from "fs";
 
 const TEST_URL = 'http://localhost:4173';
 const MIN_FPS_THRESHOLD = 55;
@@ -217,6 +218,18 @@ async function runDatasetTests() {
   }
 
   console.log('='.repeat(70) + '\n');
+
+  const jsonPath = `./documentation/metrics/data/datasets-${Date.now()}.json`;
+  const json = {
+    tests: results,
+    avgOverall,
+    allPassed,
+    timestamp: new Date().toISOString()
+  };
+
+  writeFileSync(jsonPath, JSON.stringify(json, null, 2));
+  console.log(`💾 Rapport JSON généré : ${jsonPath}`);
+
 
   process.exit(allPassed ? 0 : 1);
 }

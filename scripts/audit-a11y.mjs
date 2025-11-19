@@ -4,6 +4,7 @@
  */
 
 import puppeteer from 'puppeteer';
+import {writeFileSync} from "fs";
 
 const TEST_URL = 'http://localhost:4173';
 
@@ -190,6 +191,15 @@ async function testReducedMotion() {
   console.log(`\n${allPassed ? '✅ TOUS LES TESTS PASSENT' : '❌ CERTAINS TESTS ÉCHOUENT'}`);
   console.log(`\nLe système respecte ${allPassed ? 'correctement' : 'partiellement'} prefers-reduced-motion`);
   console.log('='.repeat(60) + '\n');
+
+  const jsonPath = `./documentation/metrics/data/a11y-${Date.now()}.json`;
+  const json = {
+    allPassed,
+    timestamp: new Date().toISOString()
+  };
+
+  writeFileSync(jsonPath, JSON.stringify(json, null, 2));
+  console.log(`💾 Rapport JSON généré : ${jsonPath}`);
 
   process.exit(allPassed ? 0 : 1);
 }

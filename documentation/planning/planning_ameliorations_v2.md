@@ -910,7 +910,7 @@ La branche `feature/ai-business-intelligence` contient :
 #### **Session 5 (17/11 matin - 2h) : Audit Accessibilité WCAG AA** ✅
 
 - [x] **Script audit automatisé** (90min)
-  - Création `test-risk-levels-colors.mjs`
+  - Création `audit-wcag.mjs`
   - Audit contrastes WCAG complet
   - Tests daltonisme (4 types: protanopie, deutéranopie, tritanopie, achromatopsie)
 

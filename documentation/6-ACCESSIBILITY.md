@@ -92,11 +92,11 @@ Cet audit combine une **analyse analytique** des couleurs suivie d'une **validat
 
 Les résultats analytiques ont été validés par les scripts d'audit du projet :
 
-1. **Script risk levels** : `node scripts/test-risk-levels-colors.mjs` ✅
+1. **Script risk levels** : `node scripts/audit-wcag.mjs` ✅
    - Calcule les ratios de contraste WCAG pour les 4 risk levels
    - Simule protanopie, deutéranopie, tritanopie, achromatopsie
    - Vérifie la différentiabilité des couleurs (Delta E)
-   - Fichier : `scripts/test-risk-levels-colors.mjs`
+   - Fichier : `scripts/audit-wcag.mjs`
    - Rapport JSON : `documentation/metrics/risk-levels-audit-[timestamp].json`
 
 2. **Script daltonisme général** : `npm run audit:daltonisme` ✅
@@ -162,7 +162,7 @@ Les résultats analytiques ont été validés par les scripts d'audit du projet 
 
 #### 3. Tests Perception Couleurs (Daltonisme)
 
-**Script Automatisé** (`test-risk-levels-colors.mjs`)
+**Script Automatisé** (`audit-wcag.mjs`)
 
 Tests de différentiabilité entre risk levels (Delta E ≥ 40 = distinguable) :
 
@@ -286,7 +286,7 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
 
 #### Scripts d'Audit Créés
 
-- **`scripts/test-risk-levels-colors.mjs`** ✅ NOUVEAU
+- **`scripts/audit-wcag.mjs`** ✅ NOUVEAU
   - Script spécifique pour tester les 4 risk levels
   - Calcule ratios de contraste WCAG
   - Simule 4 types de daltonisme

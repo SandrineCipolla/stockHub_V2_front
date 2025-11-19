@@ -1,0 +1,60 @@
+name: 🚀 Deploy Metrics Dashboard
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v5
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build project (for audits & Lighthouse)
+        run: npm run build
+
+      - name: 🌐 Start local server for audits
+        run: |
+          npm install -g serve
+          serve -s dist -l 4173 &
+          sleep 7
+
+      - name: 🧪 Run all audits & generate JSON data
+        run: |
+          mkdir -p documentation/metrics/data
+          node scripts/audit-fps.mjs
+          node scripts/audit-datasets.mjs
+          node scripts/audit-wcag.mjs
+          node scripts/audit-colorblind.mjs
+          node scripts/generate-eco.mjs
+          node scripts/generate-coverage.mjs
+          node scripts/generate-lighthouse.mjs
+          node scripts/audit-full.mjs
+
+      - name: ⚙️ Build metrics dashboard
+        run: npm run build:with-sitemap || npm run build
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: documentation/metrics
+          destination_dir: metrics
+          publish_branch: gh-pages

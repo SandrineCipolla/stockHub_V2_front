@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>📊 StockHub V2 - Dashboard Qualité (Dynamique)</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --sh-purple-500: #8b5cf6;
+            --sh-purple-400: #a78bfa;
+            --sh-purple-300: #c4b5fd;
+            --sh-dark-bg: #1a1a3e;
+            --sh-card-bg: #0f0f23;
+            --sh-border: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background: var(--sh-dark-bg);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .card {
+            background: var(--sh-card-bg);
+            border: 1px solid var(--sh-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--sh-purple-400);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen px-6 py-6">
+
+<!-- HEADER -->
+<header class="mb-10">
+    <h1 class="text-4xl font-bold text-[var(--sh-purple-400)]">
+        📊 StockHub V2 — Tableau de bord Qualité (Dynamique)
+    </h1>
+
+    <p class="opacity-80 mt-1">
+        Généré automatiquement — dernière mise à jour :
+        <span id="generated-date"></span>
+    </p>
+
+    <a class="mt-4 inline-block text-[var(--sh-purple-300)] underline hover:text-[var(--sh-purple-400)]"
+       href="https://sandrinecipolla.github.io/stockHub_V2_front/metrics/"
+       target="_blank">
+        🌍 Voir la version publique GitHub Pages
+    </a>
+</header>
+
+<script>
+    document.getElementById("generated-date").textContent =
+        new Date().toLocaleString("fr-FR");
+</script>
+
+<!-- GRID -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+    <section class="card">
+        <h2 class="section-title">🔦 Lighthouse</h2>
+        <canvas id="chart-lighthouse"></canvas>
+    </section>
+
+    <section class="card">
+        <h2 class="section-title">⚠️ WCAG Risk Levels</h2>
+        <canvas id="chart-wcag"></canvas>
+    </section>
+
+    <section class="card">
+        <h2 class="section-title">👁 Daltonisme</h2>
+        <canvas id="chart-daltonisme"></canvas>
+    </section>
+
+    <section class="card">
+        <h2 class="section-title">⚡ Performance FPS</h2>
+        <p class="text-lg" id="fps-result"></p>
+    </section>
+
+    <section class="card">
+        <h2 class="section-title">♿ Accessibilité — Reduced Motion</h2>
+        <p class="text-lg" id="a11y-result"></p>
+    </section>
+
+    <section class="card">
+        <h2 class="section-title">📊 Scalabilité — Datasets</h2>
+        <p class="text-lg" id="dataset-result"></p>
+    </section>
+
+</div>
+
+<!-- COVERAGE -->
+<section class="mt-14 card">
+    <h2 class="section-title">📈 Coverage des tests</h2>
+    <iframe class="w-full h-[800px] rounded-xl border border-white/20"
+            src="../../coverage/index.html"></iframe>
+</section>
+
+<!-- FOOTER -->
+<footer class="mt-20 pb-10 text-center opacity-70">
+    StockHub V2 © 2025 — Dashboard Qualité généré automatiquement.
+</footer>
+
+
+<!-- ==================================================== -->
+<!-- 🔥 SCRIPT DYNAMIQUE : CHARGEMENT JSON AUTOMATIQUE    -->
+<!-- ==================================================== -->
+<script>
+    const jsonBasePaths = [
+        "./data/", // 🟣 local
+        "https://sandrinecipolla.github.io/stockHub_V2_front/metrics/data/" // 🔵 GitHub Pages
+    ];
+
+    /* -------------------------------------------------- */
+    /* 🔍 Trouver automatiquement le fichier JSON le plus récent */
+    /* -------------------------------------------------- */
+    async function findLatestJSON(prefix) {
+        for (const base of jsonBasePaths) {
+            try {
+                const resp = await fetch(base);
+                if (!resp.ok) continue;
+
+                const text = await resp.text();
+                const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
+                    .map(m => m[1])
+                    .filter(name => name.startsWith(prefix));
+
+                if (matches.length > 0) {
+                    matches.sort().reverse();
+                    return base + matches[0];
+                }
+            } catch {}
+        }
+        return null;
+    }
+
+    async function loadJSON(prefix) {
+        const url = await findLatestJSON(prefix);
+        if (!url) return null;
+        const resp = await fetch(url);
+        return resp.json();
+    }
+
+    /* -------------------------------------------------- */
+    /* 📥 Chargement de TOUTES les sections */
+    /* -------------------------------------------------- */
+    async function loadAllData() {
+        const lighthouse = await loadJSON("lighthouse");
+        const wcag = await loadJSON("risk-levels");
+        const daltonisme = await loadJSON("daltonisme");
+        const fps = await loadJSON("fps");
+        const a11y = await loadJSON("a11y");
+        const datasets = await loadJSON("datasets");
+
+        renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets });
+    }
+
+    /* -------------------------------------------------- */
+    /* 🎨 Render des charts et textes */
+    /* -------------------------------------------------- */
+    function renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets }) {
+        console.log('🔍 Debug - Données reçues:', { lighthouse, wcag, daltonisme, fps, a11y, datasets });
+
+        // Détruire les anciens charts s'ils existent
+        if (window.charts) {
+            Object.values(window.charts).forEach(chart => {
+                if (chart && typeof chart.destroy === 'function') {
+                    chart.destroy();
+                }
+            });
+        }
+        window.charts = {};
+
+        /* ---------------- LIGHTHOUSE ---------------- */
+        if (lighthouse && lighthouse.scores) {
+            window.charts.lighthouse = new Chart(document.getElementById("chart-lighthouse"), {
+                type: "radar",
+                data: {
+                    labels: ["Performance", "Accessibilité", "SEO", "Best Practices"],
+                    datasets: [{
+                        label: "Scores Lighthouse",
+                        data: [
+                            lighthouse.scores.performance || 0,
+                            lighthouse.scores.accessibility || 0,
+                            lighthouse.scores.seo || 0,
+                            lighthouse.scores.bestPractices || 0,
+                        ],
+                        borderColor: "#a78bfa",
+                        backgroundColor: "rgba(167,139,250,0.3)",
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        } else if (lighthouse) {
+            // Fallback pour l'ancien format
+            window.charts.lighthouse = new Chart(document.getElementById("chart-lighthouse"), {
+                type: "radar",
+                data: {
+                    labels: ["Performance", "Accessibilité", "SEO", "Best Practices"],
+                    datasets: [{
+                        label: "Scores Lighthouse",
+                        data: [
+                            (lighthouse.performance || 0) * 100,
+                            (lighthouse.accessibility || 0) * 100,
+                            (lighthouse.seo || 0) * 100,
+                            (lighthouse["best-practices"] || 0) * 100,
+                        ],
+                        borderColor: "#a78bfa",
+                        backgroundColor: "rgba(167,139,250,0.3)",
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        /* ---------------- WCAG ---------------- */
+        if (wcag) {
+            window.charts.wcag = new Chart(document.getElementById("chart-wcag"), {
+                type: "bar",
+                data: {
+                    labels: ["Critique", "Élevé", "Moyen", "Faible"],
+                    datasets: [{
+                        label: "Niveaux de risque",
+                        data: [
+                            wcag.critique || 0,
+                            wcag.eleve || 0,
+                            wcag.moyen || 0,
+                            wcag.faible || 0
+                        ],
+                        backgroundColor: ["#ef4444", "#f97316", "#facc15", "#4ade80"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        /* ---------------- DALTONISME ---------------- */
+        if (daltonisme) {
+            const daltonismeData = typeof daltonisme === 'object' ? daltonisme : {};
+            const labels = Object.keys(daltonismeData);
+            const values = Object.values(daltonismeData);
+
+            if (labels.length > 0) {
+                window.charts.daltonisme = new Chart(document.getElementById("chart-daltonisme"), {
+                    type: "pie",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: ["#8b5cf6", "#a78bfa", "#c4b5fd", "#e9d5ff"]
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            }
+        }
+
+        // Texte : FPS
+        const fpsText = fps ?
+            `FPS moyen : ${fps.averageFps || fps.fps || 'N/A'} ${fps.passed ? '✅' : '❌'}` :
+            "En attente de données FPS...";
+        document.getElementById("fps-result").textContent = fpsText;
+
+        // Texte : A11y
+        const a11yText = a11y ?
+            `${a11y.passed ? '✅ Tous les tests passent' : '❌ Tests partiellement réussis'}` :
+            "En attente de données d'accessibilité...";
+        document.getElementById("a11y-result").textContent = a11yText;
+
+        // Texte : Datasets
+        const datasetsText = datasets ?
+            `Scalabilité : ${datasets.degradation || 'N/A'}% de dégradation ${datasets.passed ? '✅' : '❌'}` :
+            "En attente de données de scalabilité...";
+        document.getElementById("dataset-result").textContent = datasetsText;
+    }
+
+    /* -------------------------------------------------- */
+    /* 🚀 Lancement du chargement des données */
+    /* -------------------------------------------------- */
+    loadAllData();
+</script>
+
+
+</body>
+</html>
