@@ -22,6 +22,39 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
+## 📊 RÉSUMÉ GLOBAL - ÉTAT D'AVANCEMENT V2
+
+**✅ COMPLÉTÉ (90%)** - Prêt pour RNCP 2025
+
+- ✅ **SEMAINE 1** - Tests Unitaires (100%) - Coverage 93%+
+- ✅ **SEMAINE 2** - Refactoring Complet (100%) - Architecture optimisée
+- ✅ **SEMAINE 3** - Animations Dashboard (100%) - UI fluide et performante
+- ✅ **SEMAINE 4** - IA Business Intelligence (100%)
+  - ✅ SmartSuggestions + StockPrediction
+  - ✅ Documentation RNCP (AI-FEATURES.md + PROMPTS.md)
+  - ⏸️ Backend REPORTÉ (non-obligatoire RNCP)
+- ✅ **SEMAINE 5** - Mode Loisirs/Créatif (70%)
+  - ✅ Unités flexibles (7 types)
+  - ✅ Gestion containers
+  - ⏸️ Fréquence activité REPORTÉE JANVIER+
+  - ⏸️ Mode projets REPORTÉ JANVIER+
+- ✅ **NOVEMBRE 2025** - Design System Externe (100%)
+  - ✅ 18 Web Components Lit
+  - ✅ Storybook déployé
+  - ✅ Package npm publié
+
+**⏸️ REPORTÉ JANVIER 2025+ (V3)** - Évolutions futures
+
+- ⏸️ **Fréquence activité** (Mode Loisirs) - 2h
+- ⏸️ **Setup Backend** + React Query - 3h (PRIORITÉ HAUTE)
+- ⏸️ **Architecture Catégories** - 7h (meilleure UX)
+- ⏸️ **Shopping List MVP** - 7h (feature killer)
+- ⏸️ Tests mode loisirs complets - 3h (coverage déjà 93%)
+
+📖 **Voir roadmap détaillée** : `documentation/planning/ROADMAP-ARCHITECTURE-EVOLUTION.md`
+
+---
+
 ## ⏰ Disponibilité
 
 - **Semaine** : 2 soirées × 2h = 4h/semaine
@@ -385,51 +418,52 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
-#### **Jeudi 24/10 (2h) : StockPrediction - ML Simulé** 📅 PRIORITÉ 1
+#### **Jeudi 24/10 (2h) : StockPrediction - ML Simulé** ✅ COMPLÉTÉ
 
-- [ ] **Algorithme prédictif** (60min)
-  - [ ] Calcul moyenne consommation quotidienne
-  - [ ] Prédiction jours avant rupture (régression linéaire)
-  - [ ] Niveau de confiance basé sur variance historique
-  - [ ] Calcul date recommandée de commande
-  - [ ] Quantité optimale de réapprovisionnement
+- [x] **Algorithme prédictif** (60min)
+  - [x] Calcul moyenne consommation quotidienne
+  - [x] Prédiction jours avant rupture (régression linéaire)
+  - [x] Niveau de confiance basé sur variance historique
+  - [x] Calcul date recommandée de commande
+  - [x] Quantité optimale de réapprovisionnement
 
-- [ ] **Composant StockPrediction.tsx** (60min)
-  - [ ] Barre de progression du risque (0-100%)
-  - [ ] Indicateur visuel (vert/orange/rouge)
-  - [ ] Message "🤖 IA détecte : Rupture dans X jours"
-  - [ ] Niveau de confiance affiché (%)
-  - [ ] Actions recommandées
-  - [ ] Animation barre progressive
-  - [ ] Intégration StockCard ou Dashboard
+- [x] **Composant StockPrediction.tsx** (60min)
+  - [x] Barre de progression du risque (0-100%)
+  - [x] Indicateur visuel (vert/orange/rouge)
+  - [x] Message "🤖 IA détecte : Rupture dans X jours"
+  - [x] Niveau de confiance affiché (%)
+  - [x] Actions recommandées
+  - [x] Animation barre progressive
+  - [x] Intégration StockCard ou Dashboard
 
-**Livrables** :
+**Livrables** : ✅
 
-- `src/components/ai/StockPrediction.tsx`
-- `src/utils/mlSimulation.ts` (modèle ML simulé)
-- Tests unitaires
+- ✅ `src/components/ai/StockPrediction.tsx` (288 lignes)
+- ✅ `src/utils/mlSimulation.ts` (397 lignes - modèle ML simulé)
+- ✅ Page Analytics dédiée avec filtres
+- ✅ Tests unitaires
 
 ---
 
-#### **Samedi 26/10 Soirée (2h) : Documentation IA** 📅 PRIORITÉ 2
+#### **Samedi 26/10 Soirée (2h) : Documentation IA** ✅ COMPLÉTÉ
 
-- [ ] **Documentation technique IA** (90min)
-  - [ ] Créer `documentation/AI-FEATURES.md`
-  - [ ] Décrire algorithmes prédictifs utilisés
-  - [ ] Expliquer calculs de confiance
-  - [ ] Documenter formules ML (régression linéaire)
-  - [ ] Cas d'usage métier StockHub
+- [x] **Documentation technique IA** (90min)
+  - [x] Créer `documentation/AI-FEATURES.md`
+  - [x] Décrire algorithmes prédictifs utilisés
+  - [x] Expliquer calculs de confiance
+  - [x] Documenter formules ML (régression linéaire)
+  - [x] Cas d'usage métier StockHub
 
-- [ ] **Documentation prompts** (30min)
-  - [ ] Créer `documentation/PROMPTS.md`
-  - [ ] Lister algorithmes avec justifications
-  - [ ] Expliquer choix des métriques
-  - [ ] Documenter seuils et paramètres
+- [x] **Documentation prompts** (30min)
+  - [x] Créer `documentation/PROMPTS.md`
+  - [x] Lister algorithmes avec justifications
+  - [x] Expliquer choix des métriques
+  - [x] Documenter seuils et paramètres
 
-**Livrables** :
+**Livrables** : ✅
 
-- `documentation/AI-FEATURES.md` (obligatoire RNCP)
-- `documentation/PROMPTS.md` (obligatoire RNCP)
+- ✅ `documentation/AI-FEATURES.md` (600+ lignes - obligatoire RNCP)
+- ✅ `documentation/PROMPTS.md` (400+ lignes - obligatoire RNCP)
 
 ---
 
@@ -603,7 +637,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
-#### **Jeudi 31/10 (2h) : Option B - Fréquence d'Activité** 📅 REPORTÉ
+#### **Jeudi 31/10 (2h) : Option B - Fréquence d'Activité** ⏸️ REPORTÉ JANVIER+ (Roadmap V3)
 
 - [ ] **Extension types pour usage irrégulier** (45min)
   - [ ] Ajouter `activityFrequency?: ActivityFrequency` (daily/weekly/monthly/seasonal/sporadic)
@@ -628,7 +662,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
-#### **Samedi 02/11 Soirée (3h) : Option C - Mode Projets (optionnel)** 📅 PRIORITÉ 4
+#### **Samedi 02/11 Soirée (3h) : Option C - Mode Projets (optionnel)** ⏸️ REPORTÉ JANVIER+ (Roadmap V3)
 
 - [ ] **Types projet créatif** (60min)
   - [ ] Interface CreativeProject (id, name, status, materials)
@@ -653,7 +687,7 @@ Implémenter les améliorations demandées par l'encadrante sur le Frontend V2 (
 
 ---
 
-#### **Dimanche 03/11 Matin (4h) : Tests & Documentation** 📅 PRIORITÉ 5
+#### **Dimanche 03/11 Matin (4h) : Tests & Documentation** ⏸️ REPORTÉ JANVIER+ (Non critique RNCP)
 
 - [ ] **Tests unités flexibles** (90min)
   - [ ] Tests StockCard avec 7 types d'unités

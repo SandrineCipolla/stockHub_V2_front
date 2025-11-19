@@ -8,6 +8,7 @@
 ## 📊 État actuel (Phase 1 - ACTUEL)
 
 ### Architecture
+
 ```
 Dashboard
 ├── StockCard: "Acrylique Bleu Cobalt" (65%, 1 tube)
@@ -17,6 +18,7 @@ Dashboard
 ```
 
 ### Fonctionnalités
+
 - ✅ Affichage de tous les items individuellement
 - ✅ Unités flexibles (%, ml, m, kg, etc.)
 - ✅ Bouton "Session" pour enregistrer l'usage (tubes peinture)
@@ -24,6 +26,7 @@ Dashboard
 - ✅ Gestion des containers (tubes)
 
 ### Limites
+
 - ❌ Trop de cartes si beaucoup de produits (18 actuellement)
 - ❌ Pas de regroupement par catégorie
 - ❌ Pas de système d'achat/shopping list
@@ -56,6 +59,7 @@ Dashboard (Vue compacte)
 ```
 
 ### Bénéfices
+
 - ✅ Dashboard **beaucoup moins chargé** (3-5 cartes au lieu de 18+)
 - ✅ Organisation naturelle par usage (peinture, couture, cuisine)
 - ✅ Métriques agrégées par catégorie
@@ -71,7 +75,7 @@ interface StockCategory {
   name: string;
   icon: LucideIcon;
   description?: string;
-  items: Stock[];  // Les items de cette catégorie
+  items: Stock[]; // Les items de cette catégorie
 
   // Métriques agrégées
   totalItems: number;
@@ -81,7 +85,7 @@ interface StockCategory {
   totalValue: number;
 
   // Style
-  color: string;  // 'purple' pour peinture, 'blue' pour tissus, etc.
+  color: string; // 'purple' pour peinture, 'blue' pour tissus, etc.
 }
 
 // Nouveau composant
@@ -109,6 +113,7 @@ interface CategoryCardProps {
    - Assigner items aux catégories
 
 ### Estimation
+
 - **Temps** : 4-6 heures
 - **Complexité** : Moyenne (restructuration données)
 - **Impact** : Haut (UX beaucoup mieux)
@@ -158,7 +163,7 @@ StockCard
 ```typescript
 interface ShoppingListItem {
   id: string;
-  stockId?: number;        // Lien vers stock existant (optional)
+  stockId?: number; // Lien vers stock existant (optional)
   name: string;
   quantity: number;
   unit: StockUnit;
@@ -209,11 +214,13 @@ interface ShoppingList {
 ### Fonctionnalités avancées
 
 **Phase 3a - MVP** :
+
 - Ajouter à la liste
 - Marquer comme acheté
 - Réceptionner dans le stock
 
 **Phase 3b - Avancé** :
+
 - 📍 Shopping list par magasin ("Cultura", "Biocoop", etc.)
 - 🔔 Notifications push quand stock critique
 - 📊 Historique des achats (budget tracking)
@@ -222,6 +229,7 @@ interface ShoppingList {
 - 💰 Comparateur de prix entre magasins
 
 ### Estimation
+
 - **Temps MVP (3a)** : 3-4 heures
 - **Temps Avancé (3b)** : 6-8 heures
 - **Complexité** : Moyenne-Haute
@@ -234,6 +242,7 @@ interface ShoppingList {
 ### Séquence recommandée
 
 **SEMAINE 6 - Option B (Architecture catégories)**
+
 - Lundi : Design & Types (CategoryCard, interfaces)
 - Mardi : Implémentation CategoryCard
 - Mercredi : Implémentation CategoryDetailModal
@@ -241,6 +250,7 @@ interface ShoppingList {
 - Vendredi : Polish & Documentation
 
 **SEMAINE 7 - Option C (Shopping List MVP)**
+
 - Lundi : Design & Types (ShoppingList interfaces)
 - Mardi : Implémentation ShoppingListPage
 - Mercredi : Implémentation AddToShoppingListModal
@@ -248,6 +258,7 @@ interface ShoppingList {
 - Vendredi : Tests & Documentation
 
 **SEMAINE 8+ - Option C Avancé (si temps)**
+
 - Features avancées progressivement
 - Budget tracking
 - Multi-magasins
@@ -256,6 +267,7 @@ interface ShoppingList {
 ### Alternative : Quick Win
 
 Si pas le temps pour full refactor :
+
 1. **Garder architecture actuelle** (items individuels)
 2. **Implémenter juste Shopping List** (Option C MVP)
 3. **Ajouter filtres par catégorie** dans le Dashboard actuel
@@ -277,7 +289,7 @@ const categories: StockCategory[] = [
     items: stockData.filter(s => s.category === 'Peinture'),
     totalItems: 7,
     criticalCount: 1,
-    color: 'purple'
+    color: 'purple',
   },
   {
     id: 'tissu',
@@ -286,7 +298,7 @@ const categories: StockCategory[] = [
     items: stockData.filter(s => s.category === 'Tissu'),
     totalItems: 4,
     criticalCount: 1,
-    color: 'blue'
+    color: 'blue',
   },
   // etc.
 ];
@@ -299,12 +311,14 @@ Pas de perte de données, juste regroupement.
 ## 💭 Réflexions & Questions
 
 ### Questions à résoudre pour Option B
+
 - [ ] Modal ou page dédiée pour les détails de catégorie ?
 - [ ] Permettre de créer des catégories custom ?
 - [ ] Drag & drop pour réorganiser items entre catégories ?
 - [ ] Vue "flat" (actuelle) vs vue "catégories" switchable ?
 
 ### Questions à résoudre pour Option C
+
 - [ ] Stocker shopping list en localStorage ou backend ?
 - [ ] Permettre plusieurs listes (courses semaine, projets, etc.) ?
 - [ ] Intégration avec calendrier ?
@@ -317,22 +331,93 @@ Pas de perte de données, juste regroupement.
 **Quelle option prioriser ?**
 
 **Option 1** : B puis C (Recommandé)
+
 - Meilleure architecture globale
 - Scalabilité maximale
 - ~10-12h total
 
 **Option 2** : C puis B
+
 - Feature visible immédiatement
 - Moins de refactor initial
 - ~8-10h total
 
 **Option 3** : Quick Win (Filtres + Shopping List MVP)
+
 - Rapide (4-6h)
 - Garde architecture actuelle
 - Compromis raisonnable
 
 ---
 
+## 📅 JANVIER 2025+ : Évolutions Planifiées (V3)
+
+### 🎯 Éléments reportés de V2
+
+**1. Option B (Mode Loisirs) - Fréquence d'Activité** (2h)
+
+- ❌ `activityFrequency?: 'daily' | 'weekly' | 'monthly' | 'seasonal' | 'sporadic'`
+- ❌ `lastUsedDate?: Date`
+- ❌ Algorithme `analyzeCreativeConsumption()` pour usage irrégulier
+- ❌ Prédictions basées sur **sessions** plutôt que temps
+- ❌ UI : Dropdown sélection fréquence + "Dernière utilisation : il y a X jours"
+- **Priorité** : Moyenne (améliore précision IA pour usage créatif)
+
+**2. Setup Backend - React Query** (3h)
+
+- ❌ Installation et configuration `@tanstack/react-query`
+- ❌ Services API (`client.ts`, `stockService.ts`)
+- ❌ Hooks React Query (`useStocksQuery`, `useStockMutation`)
+- ❌ Connexion API backend (une fois backend prêt)
+- **Priorité** : Haute (indispensable pour prod)
+
+**3. Tests Mode Loisirs** (3h)
+
+- ❌ Tests unités flexibles (7 types d'unités)
+- ❌ Tests usage sporadique vs régulier
+- ❌ Tests sessions restantes selon fréquence
+- **Priorité** : Faible (coverage déjà 93%+)
+
+### 🚀 Nouvelles fonctionnalités V3
+
+**Option recommandée** : **Option 1** - Architecture par Catégories puis Shopping List
+
+**Semaine 1 (7h)** : Option B - Architecture Catégories
+
+- CategoryCard.tsx (affichage groupé)
+- CategoryDetailModal.tsx (détails par catégorie)
+- Migration données (items individuels → catégories)
+- **Bénéfice** : Dashboard moins chargé, meilleure scalabilité
+
+**Semaine 2 (7h)** : Option C - Shopping List MVP
+
+- ShoppingListPage.tsx
+- AddToShoppingListModal.tsx
+- Workflow "Ajouter → Acheter → Réceptionner"
+- **Bénéfice** : Feature killer, usage quotidien simplifié
+
+**Semaine 3 (4h)** : Backend + Fréquence Activité
+
+- Connexion backend (React Query)
+- Fréquence d'activité pour mode loisirs
+- Tests finaux
+
+**Total estimé** : ~18h (2 semaines à 11h/semaine)
+
+### 📊 Priorisation recommandée
+
+**MUST HAVE** (Janvier)
+
+1. 🔌 Setup Backend + React Query (indispensable prod)
+2. 🏗️ Architecture Catégories (meilleure UX)
+
+**SHOULD HAVE** (Février) 3. 🛒 Shopping List MVP (feature killer) 4. ⏰ Fréquence Activité (précision IA loisirs)
+
+**NICE TO HAVE** (Mars+) 5. 🚀 Shopping List Avancé (multi-magasins, scanner, budget) 6. 🧪 Tests mode loisirs complets
+
+---
+
 **Date création** : 14 Octobre 2025
-**Status** : 📋 Planning - Awaiting decision
-**Priorité** : Moyenne (amélioration UX, pas bloquant)
+**Dernière mise à jour** : 19 Novembre 2025
+**Status** : 📋 Planning - Prêt pour Janvier 2025
+**Priorité** : Haute (Backend) + Moyenne (UX improvements)
