@@ -133,38 +133,45 @@
     ];
 
     async function findLatestJSON(prefix) {
-        // Essayer d'abord en local
-        try {
-            const resp = await fetch("./data/");
-            if (resp.ok) {
-                const text = await resp.text();
-                const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
-                    .map(m => m[1])
-                    .filter(name => name.startsWith(prefix));
-                if (matches.length > 0) {
-                    matches.sort().reverse();
-                    return "./data/" + matches[0];
-                }
-            }
-        } catch (e) {
-            console.log("Local data not found, trying GitHub Pages...");
-        }
+        // Détecter si on est en local ou sur GitHub Pages
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-        // Fallback vers GitHub Pages
-        try {
-            const resp = await fetch("https://sandrinecipolla.github.io/stockHub_V2_front/data/");
-            if (resp.ok) {
-                const text = await resp.text();
-                const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
-                    .map(m => m[1])
-                    .filter(name => name.startsWith(prefix));
-                if (matches.length > 0) {
-                    matches.sort().reverse();
-                    return "https://sandrinecipolla.github.io/stockHub_V2_front/data/" + matches[0];
+        if (isLocal) {
+            // En local, essayer directement le dossier data local
+            try {
+                const resp = await fetch("./data/");
+                if (resp.ok) {
+                    const text = await resp.text();
+                    const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
+                        .map(m => m[1])
+                        .filter(name => name.startsWith(prefix));
+                    if (matches.length > 0) {
+                        matches.sort().reverse();
+                        console.log(`Local data found: ${matches[0]}`);
+                        return "./data/" + matches[0];
+                    }
                 }
+            } catch (e) {
+                console.log("Local data fetch failed:", e);
             }
-        } catch (e) {
-            console.log("GitHub Pages data not found either");
+            return null; // En local, ne pas fallback vers GitHub Pages
+        } else {
+            // Sur GitHub Pages, utiliser l'URL directe
+            try {
+                const resp = await fetch("./data/");
+                if (resp.ok) {
+                    const text = await resp.text();
+                    const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
+                        .map(m => m[1])
+                        .filter(name => name.startsWith(prefix));
+                    if (matches.length > 0) {
+                        matches.sort().reverse();
+                        return "./data/" + matches[0];
+                    }
+                }
+            } catch (e) {
+                console.log("GitHub Pages data not found:", e);
+            }
         }
 
         return null;
