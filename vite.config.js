@@ -21,9 +21,9 @@ export default defineConfig(({ mode }) => {
                         // Séparer React et ReactDOM dans leur propre chunk
                         'react-vendor': ['react', 'react-dom'],
                         // Séparer Framer Motion (animations)
-                        'animations': ['framer-motion'],
+                        animations: ['framer-motion'],
                         // Séparer les icônes Lucide
-                        'icons': ['lucide-react'],
+                        icons: ['lucide-react'],
                         // Séparer le Design System
                         'design-system': ['@stockhub/design-system'],
                     },
