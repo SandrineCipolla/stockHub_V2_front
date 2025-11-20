@@ -96,7 +96,7 @@
     </div>
 
     <button class="px-4 py-2 bg-[var(--sh-purple-500)] rounded-lg hover:bg-[var(--sh-purple-400)] transition"
-            onclick="document.getElementById('audit-details').classList.toggle('hidden')">
+            onclick="toggleAuditDetails()">
         📂 Voir / Masquer les détails
     </button>
 
@@ -136,44 +136,61 @@
         // Détecter si on est en local ou sur GitHub Pages
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-        if (isLocal) {
-            // En local, essayer directement le dossier data local
-            try {
-                const resp = await fetch("./data/");
-                if (resp.ok) {
-                    const text = await resp.text();
-                    const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
-                        .map(m => m[1])
-                        .filter(name => name.startsWith(prefix));
-                    if (matches.length > 0) {
-                        matches.sort().reverse();
-                        console.log(`Local data found: ${matches[0]}`);
-                        return "./data/" + matches[0];
-                    }
-                }
-            } catch (e) {
-                console.log("Local data fetch failed:", e);
-            }
-            return null; // En local, ne pas fallback vers GitHub Pages
-        } else {
-            // Sur GitHub Pages, utiliser l'URL directe
-            try {
-                const resp = await fetch("./data/");
-                if (resp.ok) {
-                    const text = await resp.text();
-                    const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
-                        .map(m => m[1])
-                        .filter(name => name.startsWith(prefix));
-                    if (matches.length > 0) {
-                        matches.sort().reverse();
-                        return "./data/" + matches[0];
-                    }
-                }
-            } catch (e) {
-                console.log("GitHub Pages data not found:", e);
-            }
+        // Liste statique des fichiers disponibles (fallback si le listage de dossier ne fonctionne pas)
+        const staticFileList = [
+            'lighthouse-1763634146672.json',
+            'risk-levels-audit-1763634259430.json',
+            'daltonisme-1763648733792.json',
+            'fps-1763634225042.json',
+            'a11y-1763635763804.json',
+            'datasets-1763634247354.json',
+            'audit-complet-1763634146592.json'
+        ];
+
+        // Mapping des préfixes aux patterns de fichiers
+        const prefixMapping = {
+            'lighthouse': /^lighthouse-\d+\.json$/,
+            'risk-levels': /^risk-levels-audit-\d+\.json$/,
+            'daltonisme': /^daltonisme-\d+\.json$/,
+            'fps': /^fps-\d+\.json$/,
+            'a11y': /^a11y-\d+\.json$/,
+            'datasets': /^datasets-\d+\.json$/,
+            'audit-complet': /^audit-complet-\d+\.json$/
+        };
+
+        const pattern = prefixMapping[prefix];
+        if (!pattern) {
+            console.log(`Pattern non trouvé pour le préfixe: ${prefix}`);
+            return null;
         }
 
+        try {
+            // Essayer d'abord de lister dynamiquement le dossier data
+            const resp = await fetch("./data/");
+            if (resp.ok) {
+                const text = await resp.text();
+                const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
+                    .map(m => m[1])
+                    .filter(name => pattern.test(name));
+                if (matches.length > 0) {
+                    matches.sort().reverse(); // Le plus récent en premier (timestamp descendant)
+                    console.log(`Fichier trouvé pour ${prefix}: ${matches[0]}`);
+                    return "./data/" + matches[0];
+                }
+            }
+        } catch (e) {
+            console.log(`Erreur lors du listage dynamique pour ${prefix}:`, e);
+        }
+
+        // Fallback : utiliser la liste statique
+        const staticMatches = staticFileList.filter(name => pattern.test(name));
+        if (staticMatches.length > 0) {
+            staticMatches.sort().reverse();
+            console.log(`Fichier statique trouvé pour ${prefix}: ${staticMatches[0]}`);
+            return "./data/" + staticMatches[0];
+        }
+
+        console.log(`Aucun fichier trouvé pour le préfixe: ${prefix}`);
         return null;
     }
 
@@ -304,18 +321,45 @@
     }
 
     async function loadCoverage() {
-        // Chargement et traitement des données de couverture (version rétablie simple)
+        // Chargement et traitement des données de couverture - CORRIGÉ pour utiliser le bon chemin
         const candidates = [
-            'coverage/coverage-final.json',
-            '../coverage/coverage-final.json',
-            '../../coverage/coverage-final.json'
+            './coverage/coverage-final.json', // Local - dossier metrics
+            '../../../coverage/coverage-final.json', // Racine du projet depuis metrics
+            '../../coverage/coverage-final.json', // Alternative
+            'https://sandrinecipolla.github.io/stockHub_V2_front/coverage/coverage-final.json' // GitHub Pages (si publié)
         ];
         let data = null;
+        let usedUrl = null;
+
         for (const url of candidates) {
-            try { const r = await fetch(url); if (r.ok) { data = await r.json(); break; } } catch {}
+            try {
+                console.log(`Tentative de chargement: ${url}`);
+                const r = await fetch(url);
+                if (r.ok) {
+                    data = await r.json();
+                    usedUrl = url;
+                    console.log(`Coverage chargée depuis: ${url}`);
+                    break;
+                } else {
+                    console.log(`Échec ${url}: ${r.status}`);
+                }
+            } catch (e) {
+                console.log(`Erreur ${url}:`, e.message);
+            }
         }
+
         const container = document.getElementById('coverage-content');
-        if (!data) { container.innerHTML = '<p class="text-red-400">Impossible de charger coverage-final.json (non publié).</p>'; return; }
+        if (!data) {
+            container.innerHTML = `
+                <p class="text-red-400">❌ Impossible de charger coverage-final.json</p>
+                <p class="text-xs opacity-60 mt-2">Tentatives effectuées :</p>
+                <ul class="text-xs opacity-60 mt-1">
+                    ${candidates.map(url => `<li>• ${url}</li>`).join('')}
+                </ul>
+                <p class="text-xs opacity-60 mt-2">Assurez-vous que les tests de couverture ont été exécutés avec <code>npm run test:coverage</code></p>
+            `;
+            return;
+        }
 
         const GROUP_RULES = [
             { id:'dashboard', label:'Dashboard', help:'Vue principale et widgets du tableau de bord', match:f=> /pages[\\\/]Dashboard|Dashboard/i.test(f) },
@@ -428,6 +472,7 @@
         container.innerHTML = `
           <div class='mb-4'>
             <p class='text-lg'>Couverture globale (instructions) : <span class='font-semibold ${colorFor(globalPct)}'>${globalPct.toFixed(1)}%</span></p>
+            <p class='text-xs opacity-60'>Source: ${usedUrl}</p>
             <p class='text-xs opacity-60 flex gap-3'>
               <span><span class='inline-block w-2 h-2 rounded-full bg-green-400 align-middle'></span> ≥85% bon</span>
               <span><span class='inline-block w-2 h-2 rounded-full bg-yellow-400 align-middle'></span> 70–84% moyen</span>
