@@ -79,9 +79,12 @@
         }
         .chart-container { position: relative; height: 200px; }
         .chart-overlay {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center; z-index: 10;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Retour au centrage original */
+            text-align: center;
+            z-index: 10;
             pointer-events: none;
             background: rgba(15, 15, 35, 0.9);
             border-radius: 50%;
@@ -91,6 +94,7 @@
             align-items: center;
             justify-content: center;
             border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
         .chart-overlay-text {
@@ -1405,32 +1409,100 @@
                 const contrastGrid = document.getElementById('contrast-tests-grid');
                 if (contrastGrid && daltonisme.contraste && daltonisme.contraste.tests) {
                     contrastGrid.innerHTML = daltonisme.contraste.tests.map(test => {
-                        const levelColor = test.level === 'AAA' ? 'border-green-500 bg-green-900/20' :
-                                         test.level === 'AA' ? 'border-yellow-500 bg-yellow-900/20' :
-                                         test.level === 'UI' ? 'border-blue-500 bg-blue-900/20' :
+                        // Calculer la conformité réelle basée sur le ratio de contraste
+                        const ratio = test.ratio || test.contrastRatio || 0;
+                        const expectedRatio = test.expectedRatio || (test.level === 'AAA' ? 7.0 : test.level === 'AA' ? 4.5 : 3.0);
+
+                        // Déterminer la conformité réelle
+                        const actuallyPasses = ratio >= expectedRatio;
+
+                        // Recalculer le level basé sur le ratio réel
+                        let actualLevel = 'FAIL';
+                        if (ratio >= 7.0) {
+                            actualLevel = 'AAA';
+                        } else if (ratio >= 4.5) {
+                            actualLevel = 'AA';
+                        } else if (ratio >= 3.0) {
+                            actualLevel = 'UI';
+                        }
+
+                        const levelColor = actualLevel === 'AAA' ? 'border-green-500 bg-green-900/20' :
+                                         actualLevel === 'AA' ? 'border-yellow-500 bg-yellow-900/20' :
+                                         actualLevel === 'UI' ? 'border-blue-500 bg-blue-900/20' :
                                          'border-red-500 bg-red-900/20';
 
-                        const statusIcon = test.passes ? '✅' : '❌';
-                        const statusText = test.passes ? 'Conforme' : 'Non conforme';
-                        const statusColor = test.passes ? 'text-green-400' : 'text-red-400';
+                        const statusIcon = actuallyPasses ? '✅' : '❌';
+                        const statusText = actuallyPasses ? 'Conforme' : 'Non conforme';
+                        const statusColor = actuallyPasses ? 'text-green-400' : 'text-red-400';
+
+                        // Extraire le contexte du test pour plus de clarté
+                        const testContext = test.context || test.description || test.selector || 'Élément non spécifié';
+                        const testType = test.type || 'Contraste de couleur';
+                        const backgroundMode = test.background || 'mode non spécifié';
+                        const statusType = test.status || 'statut non spécifié';
+
+                        // Déterminer l'icône et la couleur du mode
+                        let modeDisplay = '';
+                        if (backgroundMode === 'dark') {
+                            modeDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-800 text-gray-200 rounded-md border border-gray-600">
+                                🌙 Mode sombre
+                            </span>`;
+                        } else if (backgroundMode === 'light') {
+                            modeDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-md border border-gray-300">
+                                ☀️ Mode clair
+                            </span>`;
+                        } else {
+                            modeDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-md border border-purple-500/30">
+                                ❓ ${backgroundMode}
+                            </span>`;
+                        }
+
+                        // Affichage du type de statut testé
+                        const statusColors = {
+                            optimal: 'bg-green-500/20 text-green-400 border-green-500/30',
+                            low: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+                            critical: 'bg-red-500/20 text-red-400 border-red-500/30',
+                            outOfStock: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+                            overstocked: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+                        };
+                        const statusColorClass = statusColors[statusType] || 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+
+                        let statusDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-md border ${statusColorClass}">
+                            📊 ${statusType}
+                        </span>`;
+
+                        // Informations sur les couleurs testées
+                        let colorInfo = '';
+                        if (test.foregroundColor && test.backgroundColor) {
+                            colorInfo = `Texte: ${test.foregroundColor} sur ${test.backgroundColor}`;
+                        } else if (test.colors) {
+                            const colors = Object.entries(test.colors).map(([key, value]) => `${key}: ${value}`).join(' / ');
+                            colorInfo = colors;
+                        } else if (test.element) {
+                            colorInfo = `Élément: ${test.element}`;
+                        }
 
                         return `
                             <div class="p-4 ${levelColor} border rounded-lg">
                                 <div class="flex justify-between items-start mb-3">
                                     <div class="flex items-center gap-2">
                                         <span class="text-lg">${statusIcon}</span>
-                                        <div>
+                                        <div class="flex-1">
                                             <div class="font-medium ${statusColor}">${statusText}</div>
-                                            <div class="text-xs text-gray-400">${test.status || test.background} mode</div>
+                                            <div class="mt-2 flex flex-wrap gap-2">
+                                                ${modeDisplay}
+                                                ${statusDisplay}
+                                            </div>
+                                            ${colorInfo ? `<div class="text-xs text-blue-300 mt-2">${colorInfo}</div>` : ''}
                                         </div>
                                     </div>
                                     <span class="px-2 py-1 text-xs font-medium rounded-full ${
-                                        test.level === 'AAA' ? 'bg-green-500/20 text-green-400' :
-                                        test.level === 'AA' ? 'bg-yellow-500/20 text-yellow-400' :
-                                        test.level === 'UI' ? 'bg-blue-500/20 text-blue-400' :
+                                        actualLevel === 'AAA' ? 'bg-green-500/20 text-green-400' :
+                                        actualLevel === 'AA' ? 'bg-yellow-500/20 text-yellow-400' :
+                                        actualLevel === 'UI' ? 'bg-blue-500/20 text-blue-400' :
                                         'bg-red-500/20 text-red-400'
                                     }">
-                                        ${test.level}
+                                        ${actualLevel}
                                     </span>
                                 </div>
                                 <div class="space-y-2 text-sm">
@@ -1438,10 +1510,23 @@
                                         <span class="text-gray-300">Ratio de contraste:</span>
                                         <span class="font-mono ${statusColor}">${test.ratio?.toFixed(2) || 'N/A'}:1</span>
                                     </div>
-                                    ${test.passes ?
-                                        '<div class="text-green-300 text-xs">✅ Respecte les standards WCAG</div>' :
-                                        '<div class="text-red-300 text-xs">❌ Ne respecte pas les standards</div>'
-                                    }
+                                    ${test.expectedRatio ? `
+                                        <div class="flex justify-between text-xs">
+                                            <span class="text-gray-400">Requis:</span>
+                                            <span class="font-mono text-gray-300">${test.expectedRatio}:1</span>
+                                        </div>
+                                    ` : ''}
+                                    <div class="text-xs ${statusColor} bg-gray-800/50 p-2 rounded">
+                                        ${test.passes ?
+                                            '✅ Respecte les standards WCAG - Lisible pour tous les utilisateurs' :
+                                            '❌ Contraste insuffisant - Difficile à lire pour les utilisateurs malvoyants'
+                                        }
+                                    </div>
+                                    ${testContext && testContext !== 'Élément non spécifié' ? `
+                                        <div class="text-xs text-gray-500 border-t border-gray-700 pt-2 mt-2">
+                                            <span class="font-medium">Contexte:</span> ${testContext}
+                                        </div>
+                                    ` : ''}
                                 </div>
                             </div>
                         `;
@@ -1473,8 +1558,7 @@
                                     <div>
                                         <h4 class="font-semibold text-gray-200">${typeInfo.name}</h4>
                                         <p class="text-xs text-gray-400">${typeInfo.desc}</p>
-                                    </div>
-                                </div>
+                                    </div                                </div>
 
                                 <div class="space-y-3">
                                     <div class="flex justify-between items-center">
