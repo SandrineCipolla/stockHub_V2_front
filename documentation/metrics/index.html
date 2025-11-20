@@ -133,20 +133,40 @@
     ];
 
     async function findLatestJSON(prefix) {
-        for (const base of jsonBasePaths) {
-            try {
-                const resp = await fetch(base);
-                if (!resp.ok) continue;
+        // Essayer d'abord en local
+        try {
+            const resp = await fetch("./data/");
+            if (resp.ok) {
                 const text = await resp.text();
                 const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
                     .map(m => m[1])
                     .filter(name => name.startsWith(prefix));
                 if (matches.length > 0) {
                     matches.sort().reverse();
-                    return base + matches[0];
+                    return "./data/" + matches[0];
                 }
-            } catch {}
+            }
+        } catch (e) {
+            console.log("Local data not found, trying GitHub Pages...");
         }
+
+        // Fallback vers GitHub Pages
+        try {
+            const resp = await fetch("https://sandrinecipolla.github.io/stockHub_V2_front/data/");
+            if (resp.ok) {
+                const text = await resp.text();
+                const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
+                    .map(m => m[1])
+                    .filter(name => name.startsWith(prefix));
+                if (matches.length > 0) {
+                    matches.sort().reverse();
+                    return "https://sandrinecipolla.github.io/stockHub_V2_front/data/" + matches[0];
+                }
+            }
+        } catch (e) {
+            console.log("GitHub Pages data not found either");
+        }
+
         return null;
     }
 
