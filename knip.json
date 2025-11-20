@@ -20,7 +20,7 @@
     "src/utils/unitFormatter.ts",
     "src/utils/containerManager.ts"
   ],
-  "ignoreDependencies": ["stockhub_design_system"],
+  "ignoreDependencies": ["stockhub_design_system", "lighthouse"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": false,
   "ignoreBinaries": ["tsx"],
