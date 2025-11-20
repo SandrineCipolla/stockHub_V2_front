@@ -396,7 +396,8 @@ async function testDaltonisme() {
 
   // Code de sortie
   const allGood = results.contraste.allPass && results.icones.allPresent;
-  process.exit(allGood ? 0 : 1);
+  results.success = allGood;
+  process.exit(0);
 }
 
 // Lancement

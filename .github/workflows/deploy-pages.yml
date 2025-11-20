@@ -1,0 +1,17 @@
+# Workflow désactivé : l’application est déployée sur Vercel.
+# Conserve ce fichier uniquement comme référence. Pour réactiver, rétablis les events push.
+name: (DISABLED) Deploy App to GitHub Pages
+
+on:
+  workflow_dispatch: # déclenchement manuel uniquement
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "⚠️ Déploiement GitHub Pages désactivé (Vercel utilisé)."

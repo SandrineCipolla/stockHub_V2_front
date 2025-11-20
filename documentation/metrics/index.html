@@ -19,13 +19,11 @@
             --sh-card-bg: #0f0f23;
             --sh-border: rgba(255, 255, 255, 0.15);
         }
-
         body {
             background: var(--sh-dark-bg);
             color: white;
             font-family: 'Inter', sans-serif;
         }
-
         .card {
             background: var(--sh-card-bg);
             border: 1px solid var(--sh-border);
@@ -33,13 +31,17 @@
             padding: 1.5rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
-
         .section-title {
             font-size: 1.6rem;
             color: var(--sh-purple-400);
             margin-bottom: 1rem;
             font-weight: 600;
         }
+        /* Ajout styles tooltips coverage */
+        .tooltip-wrapper { position: relative; display:inline-block; }
+        .tooltip-box { position:absolute; left:0; top:110%; z-index:20; background:#1f1f2e; color:#fff; padding:.5rem .75rem; font-size:.65rem; line-height:1rem; border:1px solid rgba(255,255,255,.1); width:200px; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,.4); opacity:0; transform:translateY(-4px); pointer-events:none; transition:.15s ease; }
+        .tooltip-wrapper:focus .tooltip-box,
+        .tooltip-wrapper:hover .tooltip-box { opacity:1; transform:translateY(0); }
     </style>
 </head>
 
@@ -48,7 +50,7 @@
 <!-- HEADER -->
 <header class="mb-10">
     <h1 class="text-4xl font-bold text-[var(--sh-purple-400)]">
-        📊 StockHub V2 — Tableau de bord Qualité (Dynamique)
+        📊 StockHub V2 — Tableau de bord Qualité
     </h1>
 
     <p class="opacity-80 mt-1">
@@ -70,44 +72,52 @@
 
 <!-- GRID -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-    <section class="card">
-        <h2 class="section-title">🔦 Lighthouse</h2>
-        <canvas id="chart-lighthouse"></canvas>
-    </section>
-
-    <section class="card">
-        <h2 class="section-title">⚠️ WCAG Risk Levels</h2>
-        <canvas id="chart-wcag"></canvas>
-    </section>
-
-    <section class="card">
-        <h2 class="section-title">👁 Daltonisme</h2>
-        <canvas id="chart-daltonisme"></canvas>
-    </section>
-
-    <section class="card">
-        <h2 class="section-title">⚡ Performance FPS</h2>
-        <p class="text-lg" id="fps-result"></p>
-    </section>
-
-    <section class="card">
-        <h2 class="section-title">♿ Accessibilité — Reduced Motion</h2>
-        <p class="text-lg" id="a11y-result"></p>
-    </section>
-
-    <section class="card">
-        <h2 class="section-title">📊 Scalabilité — Datasets</h2>
-        <p class="text-lg" id="dataset-result"></p>
-    </section>
-
+    <section class="card"><h2 class="section-title">🔦 Lighthouse</h2><canvas id="chart-lighthouse"></canvas></section>
+    <section class="card"><h2 class="section-title">⚠️ WCAG Risk Levels</h2><canvas id="chart-wcag"></canvas></section>
+    <section class="card"><h2 class="section-title">👁 Daltonisme</h2><canvas id="chart-daltonisme"></canvas></section>
+    <section class="card"><h2 class="section-title">⚡ Performance FPS</h2><p id="fps-result"></p></section>
+    <section class="card"><h2 class="section-title">♿ Accessibilité — Reduced Motion</h2><p id="a11y-result"></p></section>
+    <section class="card"><h2 class="section-title">📊 Scalabilité — Datasets</h2><p id="dataset-result"></p></section>
 </div>
 
 <!-- COVERAGE -->
-<section class="mt-14 card">
+<section class="mt-14 card" id="coverage-section">
     <h2 class="section-title">📈 Coverage des tests</h2>
-    <iframe class="w-full h-[800px] rounded-xl border border-white/20"
-            src="../../coverage/index.html"></iframe>
+    <div class="space-y-4 text-sm" id="coverage-content">
+        <p class="opacity-70">Chargement du résumé de coverage…</p>
+    </div>
+</section>
+
+<!-- AUDIT COMPLET RNCP -->
+<section class="mt-14 card" id="audit-rncp">
+    <h2 class="section-title">📚 Audit Complet RNCP — Synthèse</h2>
+    <div class="text-md opacity-90 mb-4" id="audit-rncp-content">
+        Chargement des données RNCP...
+    </div>
+
+    <button class="px-4 py-2 bg-[var(--sh-purple-500)] rounded-lg hover:bg-[var(--sh-purple-400)] transition"
+            onclick="document.getElementById('audit-details').classList.toggle('hidden')">
+        📂 Voir / Masquer les détails
+    </button>
+
+    <div class="hidden mt-6 space-y-6" id="audit-details">
+        <div class="border-t border-white/10 pt-4">
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">📊 Performance</h3>
+            <div id="audit-performance"></div>
+        </div>
+        <div class="border-t border-white/10 pt-4">
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">♿ Accessibilité</h3>
+            <div id="audit-accessibility"></div>
+        </div>
+        <div class="border-t border-white/10 pt-4">
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">🌱 Éco-conception</h3>
+            <div id="audit-eco"></div>
+        </div>
+        <div class="border-t border-white/10 pt-4">
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">💎 Qualité du code</h3>
+            <div id="audit-quality"></div>
+        </div>
+    </div>
 </section>
 
 <!-- FOOTER -->
@@ -115,30 +125,22 @@
     StockHub V2 © 2025 — Dashboard Qualité généré automatiquement.
 </footer>
 
-
-<!-- ==================================================== -->
-<!-- 🔥 SCRIPT DYNAMIQUE : CHARGEMENT JSON AUTOMATIQUE    -->
-<!-- ==================================================== -->
+<!-- SCRIPT DYNAMIQUE -->
 <script>
     const jsonBasePaths = [
-        "./data/", // 🟣 local
-        "https://sandrinecipolla.github.io/stockHub_V2_front/metrics/data/" // 🔵 GitHub Pages
+        "./data/", // local
+        "https://sandrinecipolla.github.io/stockHub_V2_front/metrics/data/" // GitHub Pages
     ];
 
-    /* -------------------------------------------------- */
-    /* 🔍 Trouver automatiquement le fichier JSON le plus récent */
-    /* -------------------------------------------------- */
     async function findLatestJSON(prefix) {
         for (const base of jsonBasePaths) {
             try {
                 const resp = await fetch(base);
                 if (!resp.ok) continue;
-
                 const text = await resp.text();
                 const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
                     .map(m => m[1])
                     .filter(name => name.startsWith(prefix));
-
                 if (matches.length > 0) {
                     matches.sort().reverse();
                     return base + matches[0];
@@ -155,39 +157,37 @@
         return resp.json();
     }
 
-    /* -------------------------------------------------- */
-    /* 📥 Chargement de TOUTES les sections */
-    /* -------------------------------------------------- */
     async function loadAllData() {
-        const lighthouse = await loadJSON("lighthouse");
-        const wcag = await loadJSON("risk-levels");
-        const daltonisme = await loadJSON("daltonisme");
-        const fps = await loadJSON("fps");
-        const a11y = await loadJSON("a11y");
-        const datasets = await loadJSON("datasets");
-
+        const lighthouse = await loadJSON('lighthouse');
+        const wcag = await loadJSON('risk-levels');
+        const daltonisme = await loadJSON('daltonisme');
+        const fps = await loadJSON('fps');
+        const a11y = await loadJSON('a11y');
+        const datasets = await loadJSON('datasets');
+        // NE PLUS charger audit complet ici (lazy load)
         renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets });
+        // Placeholder audit synthétique léger
+        const auditLink = await findLatestJSON('audit-complet');
+        const auditContent = document.getElementById('audit-rncp-content');
+        auditContent.innerHTML = auditLink ? `<p class='text-sm'>Audit agrégé disponible (<a class='underline text-[var(--sh-purple-300)]' href='${auditLink}' target='_blank' rel='noopener'>télécharger JSON</a>). Cliquez sur détails pour charger.</p>` : `<p class='text-sm opacity-60'>Audit agrégé non présent. Générer via script.</p>`;
     }
 
-    /* -------------------------------------------------- */
-    /* 🎨 Render des charts et textes */
-    /* -------------------------------------------------- */
-    function renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets }) {
-        console.log('🔍 Debug - Données reçues:', { lighthouse, wcag, daltonisme, fps, a11y, datasets });
-
-        // Détruire les anciens charts s'ils existent
-        if (window.charts) {
-            Object.values(window.charts).forEach(chart => {
-                if (chart && typeof chart.destroy === 'function') {
-                    chart.destroy();
-                }
-            });
+    // Surcharge du bouton: charger audit au premier clic si pas déjà chargé
+    let auditLoaded = false;
+    async function toggleAuditDetails() {
+        const details = document.getElementById('audit-details');
+        details.classList.toggle('hidden');
+        if (!auditLoaded && !details.classList.contains('hidden')) {
+            const audit = await loadJSON('audit-complet');
+            renderAudit(audit);
+            auditLoaded = true;
         }
-        window.charts = {};
+    }
 
-        /* ---------------- LIGHTHOUSE ---------------- */
-        if (lighthouse && lighthouse.scores) {
-            window.charts.lighthouse = new Chart(document.getElementById("chart-lighthouse"), {
+    function renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets }) {
+        // Lighthouse
+        if (lighthouse?.scores) {
+            new Chart(document.getElementById("chart-lighthouse"), {
                 type: "radar",
                 data: {
                     labels: ["Performance", "Accessibilité", "SEO", "Best Practices"],
@@ -197,126 +197,226 @@
                             lighthouse.scores.performance || 0,
                             lighthouse.scores.accessibility || 0,
                             lighthouse.scores.seo || 0,
-                            lighthouse.scores.bestPractices || 0,
+                            lighthouse.scores.bestPractices || 0
                         ],
                         borderColor: "#a78bfa",
-                        backgroundColor: "rgba(167,139,250,0.3)",
+                        backgroundColor: "rgba(167,139,250,0.3)"
                     }]
                 },
-                options: {
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 100
-                        }
-                    }
-                }
-            });
-        } else if (lighthouse) {
-            // Fallback pour l'ancien format
-            window.charts.lighthouse = new Chart(document.getElementById("chart-lighthouse"), {
-                type: "radar",
-                data: {
-                    labels: ["Performance", "Accessibilité", "SEO", "Best Practices"],
-                    datasets: [{
-                        label: "Scores Lighthouse",
-                        data: [
-                            (lighthouse.performance || 0) * 100,
-                            (lighthouse.accessibility || 0) * 100,
-                            (lighthouse.seo || 0) * 100,
-                            (lighthouse["best-practices"] || 0) * 100,
-                        ],
-                        borderColor: "#a78bfa",
-                        backgroundColor: "rgba(167,139,250,0.3)",
-                    }]
-                },
-                options: {
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 100
-                        }
-                    }
-                }
+                options: { scales: { r: { beginAtZero: true, max: 100 } } }
             });
         }
 
-        /* ---------------- WCAG ---------------- */
+        // WCAG
         if (wcag) {
-            window.charts.wcag = new Chart(document.getElementById("chart-wcag"), {
+            new Chart(document.getElementById("chart-wcag"), {
                 type: "bar",
                 data: {
                     labels: ["Critique", "Élevé", "Moyen", "Faible"],
                     datasets: [{
-                        label: "Niveaux de risque",
-                        data: [
-                            wcag.critique || 0,
-                            wcag.eleve || 0,
-                            wcag.moyen || 0,
-                            wcag.faible || 0
-                        ],
+                        data: [wcag.critique, wcag.eleve, wcag.moyen, wcag.faible],
                         backgroundColor: ["#ef4444", "#f97316", "#facc15", "#4ade80"]
                     }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
                 }
             });
         }
 
-        /* ---------------- DALTONISME ---------------- */
+        // Daltonisme
         if (daltonisme) {
-            const daltonismeData = typeof daltonisme === 'object' ? daltonisme : {};
-            const labels = Object.keys(daltonismeData);
-            const values = Object.values(daltonismeData);
-
-            if (labels.length > 0) {
-                window.charts.daltonisme = new Chart(document.getElementById("chart-daltonisme"), {
-                    type: "pie",
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: values,
-                            backgroundColor: ["#8b5cf6", "#a78bfa", "#c4b5fd", "#e9d5ff"]
-                        }]
-                    },
-                    options: {
-                        responsive: true
-                    }
-                });
-            }
+            new Chart(document.getElementById("chart-daltonisme"), {
+                type: "pie",
+                data: {
+                    labels: Object.keys(daltonisme),
+                    datasets: [{
+                        data: Object.values(daltonisme),
+                        backgroundColor: ["#8b5cf6", "#a78bfa", "#c4b5fd", "#e9d5ff"]
+                    }]
+                }
+            });
         }
 
-        // Texte : FPS
-        const fpsText = fps ?
-            `FPS moyen : ${fps.averageFps || fps.fps || 'N/A'} ${fps.passed ? '✅' : '❌'}` :
-            "En attente de données FPS...";
-        document.getElementById("fps-result").textContent = fpsText;
-
-        // Texte : A11y
-        const a11yText = a11y ?
-            `${a11y.passed ? '✅ Tous les tests passent' : '❌ Tests partiellement réussis'}` :
-            "En attente de données d'accessibilité...";
-        document.getElementById("a11y-result").textContent = a11yText;
-
-        // Texte : Datasets
-        const datasetsText = datasets ?
-            `Scalabilité : ${datasets.degradation || 'N/A'}% de dégradation ${datasets.passed ? '✅' : '❌'}` :
-            "En attente de données de scalabilité...";
-        document.getElementById("dataset-result").textContent = datasetsText;
+        // Texte
+        document.getElementById("fps-result").textContent =
+            fps ? `FPS moyen : ${fps.avgOverall || 'N/A'} ${fps.allPassed ? '✅' : '❌'}` : "En attente...";
+        document.getElementById("a11y-result").textContent =
+            a11y ? `${a11y.passed ? '✅ Conforme' : '❌ Non conforme'}` : "En attente...";
+        document.getElementById("dataset-result").textContent =
+            datasets ? `Dégradation : ${datasets.degradation || 'N/A'}%` : "En attente...";
     }
 
-    /* -------------------------------------------------- */
-    /* 🚀 Lancement du chargement des données */
-    /* -------------------------------------------------- */
+    function renderAudit(audit) {
+        const el = document.getElementById('audit-rncp-content');
+        const perfEl = document.getElementById('audit-performance');
+        const accEl = document.getElementById('audit-accessibility');
+        const ecoEl = document.getElementById('audit-eco');
+        const qualityEl = document.getElementById('audit-quality');
+
+        if (!audit) { el.innerHTML += '<p class="mt-2 text-yellow-400 text-xs">Impossible de charger audit-complet.</p>'; return; }
+        el.innerHTML += `<p class='mt-2 text-xs opacity-50'>Chargé: ${new Date(audit.timestamp).toLocaleString('fr-FR')}</p>`;
+
+        // Performance
+        perfEl.innerHTML = `<ul class='text-sm space-y-1'>${[
+            audit.lighthouse?.scores?.performance!=null?`<li>Perf Lighthouse: <strong>${audit.lighthouse.scores.performance}%</strong></li>`:null,
+            audit.fps?.avgOverall!=null?`<li>FPS moyen: <strong>${audit.fps.avgOverall}</strong> ${audit.fps.allPassed?'✅':'⚠️'}</li>`:null,
+            audit.datasets?.degradation!=null?`<li>Dégradation datasets: <strong>${audit.datasets.degradation}%</strong></li>`:null
+        ].filter(Boolean).join('')}</ul>`;
+
+        // Accessibilité
+        accEl.innerHTML = `<ul class='text-sm space-y-1'>${[
+            audit.lighthouse?.scores?.accessibility!=null?`<li>Accessibilité Lighthouse: <strong>${audit.lighthouse.scores.accessibility}%</strong></li>`:null,
+            audit.a11y?`<li>Reduced Motion: ${audit.a11y.passed?'✅ Conforme':'❌ Non conforme'}</li>`:null,
+            audit.daltonisme?`<li>Daltonisme: ${Object.entries(audit.daltonisme).map(([k,v])=>`${k}:${v}`).join(', ')}</li>`:null,
+            audit.riskLevels?`<li>WCAG Risk Levels: Critique ${audit.riskLevels.critique}, Élevé ${audit.riskLevels.eleve}, Moyen ${audit.riskLevels.moyen}, Faible ${audit.riskLevels.faible}</li>`:null
+        ].filter(Boolean).join('')}</ul>`;
+
+        // Éco
+        ecoEl.innerHTML = audit.eco ? `<p class='text-sm'>Éco (indicateurs principaux): <code>${Object.keys(audit.eco).slice(0,5).join(', ')}</code></p>` : `<p class='text-xs opacity-60'>Absent</p>`;
+
+        // Coverage
+        qualityEl.innerHTML = audit.coverage && audit.coverage.statements!=null ? `<p class='text-sm'>Statements: <strong>${audit.coverage.statements}%</strong> | Fonctions: ${audit.coverage.functions??'N/A'}% | Branches: ${audit.coverage.branches??'N/A'}%</p>` : `<p class='text-xs opacity-60'>Couverture non disponible</p>`;
+    }
+
+    async function loadCoverage() {
+        // Chargement et traitement des données de couverture (version rétablie simple)
+        const candidates = [
+            'coverage/coverage-final.json',
+            '../coverage/coverage-final.json',
+            '../../coverage/coverage-final.json'
+        ];
+        let data = null;
+        for (const url of candidates) {
+            try { const r = await fetch(url); if (r.ok) { data = await r.json(); break; } } catch {}
+        }
+        const container = document.getElementById('coverage-content');
+        if (!data) { container.innerHTML = '<p class="text-red-400">Impossible de charger coverage-final.json (non publié).</p>'; return; }
+
+        const GROUP_RULES = [
+            { id:'dashboard', label:'Dashboard', help:'Vue principale et widgets du tableau de bord', match:f=> /pages[\\\/]Dashboard|Dashboard/i.test(f) },
+            { id:'analytics', label:'Analytics', help:'Pages et logique analytique', match:f=> /pages[\\\/]Analytics|analytics/i.test(f) },
+            { id:'components', label:'Components UI', help:'Composants réutilisables (src/components)', match:f=> /components[\\\/]/.test(f) },
+            { id:'hooks', label:'Hooks', help:'Hooks personnalisés (src/hooks)', match:f=> /hooks[\\\/]/.test(f) },
+            { id:'utils', label:'Utils', help:'Fonctions utilitaires diverses', match:f=> /utils[\\\/]/.test(f) },
+            { id:'contexts', label:'Contexts', help:'Gestion des contextes React (src/contexts)', match:f=> /contexts[\\\/]/.test(f) },
+            { id:'data', label:'Data Layer', help:'Accès et modèles de données (src/data)', match:f=> /data[\\\/]/.test(f) }
+        ];
+
+        let totalStatements=0, coveredStatements=0;
+        const fileCoverages=[];
+        for (const [fileName, fileObj] of Object.entries(data)) {
+            if (!fileObj || !fileObj.s) continue;
+            const sVals = Object.values(fileObj.s);
+            const fileStatements = sVals.length;
+            const fileCoveredStatements = sVals.filter(v=>v>0).length;
+            totalStatements += fileStatements;
+            coveredStatements += fileCoveredStatements;
+            if (fileStatements>0) {
+                fileCoverages.push({ raw:fileName, file: fileName.replace(/^.*src[\\\/]/,''), statements:fileStatements, covered:fileCoveredStatements });
+            }
+        }
+        const pct=(c,t)=> t===0?0:(c/t*100);
+
+        const groupMap = GROUP_RULES.map(g=>({ id:g.id, label:g.label, help:g.help, statements:0, covered:0 }));
+        for (const fc of fileCoverages) {
+            const match = GROUP_RULES.find(gr=> gr.match(fc.raw));
+            if (match) {
+                const target = groupMap.find(g=>g.id===match.id);
+                target.statements += fc.statements;
+                target.covered += fc.covered;
+            }
+        }
+        const effectiveGroups = groupMap.filter(g=> g.statements>0).map(g=> ({...g, pct: pct(g.covered,g.statements)}));
+        const sortedGroups = [...effectiveGroups].sort((a,b)=> a.pct - b.pct);
+        const bestGroups = [...effectiveGroups].sort((a,b)=> b.pct - a.pct).slice(0,3);
+
+        const withPctFiles = fileCoverages.map(f=> ({...f, pct: pct(f.covered,f.statements)}));
+        const worst = withPctFiles.filter(f=> f.statements>=5).sort((a,b)=> a.pct - b.pct).slice(0,5);
+        const best = withPctFiles.filter(f=> f.statements>=5).sort((a,b)=> b.pct - a.pct).slice(0,5);
+
+        const colorFor = p => p>=85? 'text-green-400' : p>=70? 'text-yellow-400' : 'text-red-400';
+        const bar = p => `<div class='h-2 w-full bg-white/10 rounded'><div class='h-2 rounded bg-[var(--sh-purple-500)]' style='width:${p.toFixed(1)}%'></div></div>`;
+        const listBlock = (title, arr) => arr.length ? `<div class='mt-8'><h3 class='font-semibold mb-2 text-sm'>${title}</h3><ul class='space-y-1 text-xs'>${arr.map(f=> `<li class='flex justify-between'><span class='truncate max-w-[65%]' title='${f.file}'>${f.file}</span><span class='${colorFor(f.pct)}'>${f.pct.toFixed(1)}%</span></li>`).join('')}</ul></div>` : '';
+
+        const groupBlock = effectiveGroups.length ? `
+          <div class='mt-8'>
+            <h3 class='font-semibold mb-2 text-sm'>Couverture par domaine fonctionnel</h3>
+            <div class='space-y-3'>
+              ${sortedGroups.map(g=>`
+                <div>
+                  <div class='flex justify-between mb-0.5'>
+                    <span class='tooltip-wrapper' tabindex='0'>${g.label} <span class='tooltip-box'>${g.help}</span></span>
+                    <span class='${colorFor(g.pct)} text-xs'>${g.pct.toFixed(1)}%</span>
+                  </div>
+                  ${bar(g.pct)}
+                </div>
+              `).join('')}
+            </div>
+            <div class='mt-4 text-xs opacity-60'>Top domaines bien couverts : ${bestGroups.map(g=> g.label + ' (' + g.pct.toFixed(0)+'%)').join(', ')}</div>
+          </div>`
+          : '<div class="mt-8 text-xs opacity-60">Aucun regroupement fonctionnel détecté (vérifiez vos dossiers).</div>';
+
+        // === Ajout règles fonctionnalités utilisateur ===
+        const FEATURE_RULES = [
+          { id:'crud', label:'Gestion Stocks (CRUD)', help:'Création, mise à jour, filtrage des stocks (useStocks, Dashboard, config)', match:f=> /(hooks[\\\/]useStocks|pages[\\\/]Dashboard|stockConfig|stockData)/i.test(f) },
+          { id:'prediction', label:'Prédictions IA', help:'Simulation & composant prédiction (mlSimulation, StockPrediction, aiPredictions)', match:f=> /(utils[\\\/]mlSimulation|components[\\\/]ai[\\\/]StockPrediction|utils[\\\/]aiPredictions)/i.test(f) },
+          { id:'alerts', label:'Alertes & Statuts', help:'Badges statut, calcul niveaux de risque, config', match:f=> /(StatusBadge|statusBadge|stockConfig|risk-levels|determineRiskLevel)/i.test(f) },
+          { id:'preferences', label:'Préférences & Thème', help:'Gestion thème & préférences utilisateur', match:f=> /(contexts[\\\/]theme)/i.test(f) },
+          { id:'dataLayer', label:'Couche Données', help:'Structures & accès (src/data)', match:f=> /src[\\\/]data[\\\/]/i.test(f) },
+          { id:'support', label:'Support générique', help:'Hooks/Utils techniques hors CRUD spécifique', match:f=> /(src[\\\/]utils|src[\\\/]hooks)/i.test(f) }
+        ];
+        function aggregateByRules(rules, files) {
+          const groups = rules.map(r=> ({ ...r, statements:0, covered:0, files:[] }));
+          for (const fc of files) {
+            const rule = rules.find(r=> r.match(fc.raw));
+            if (rule) {
+              const g = groups.find(gr=> gr.id===rule.id);
+              g.statements += fc.statements;
+              g.covered += fc.covered;
+              g.files.push(fc);
+            }
+          }
+          return groups.filter(g=> g.statements>0).map(g=> ({ ...g, pct: pct(g.covered,g.statements) }));
+        }
+        const featureGroups = aggregateByRules(FEATURE_RULES, fileCoverages);
+        const sortedFeatureGroups = [...featureGroups].sort((a,b)=> a.pct - b.pct);
+        const topFeatureGroups = [...featureGroups].sort((a,b)=> b.pct - a.pct).slice(0,3);
+        const featureBlock = featureGroups.length ? `
+          <div class='mt-10'>
+            <h3 class='font-semibold mb-2 text-sm'>Couverture par fonctionnalité (vue utilisateur)</h3>
+            <div class='space-y-3'>
+              ${sortedFeatureGroups.map(g=> {
+                const examples = g.files.sort((a,b)=> b.statements - a.statements).slice(0,2).map(f=> f.file).join(', ');
+                return `<div>
+                  <div class='flex justify-between mb-0.5'>
+                    <span class='tooltip-wrapper' tabindex='0'>${g.label} <span class='tooltip-box'>${g.help}${examples?`<br/><em>Exemples: ${examples}</em>`:''}</span></span>
+                    <span class='${colorFor(g.pct)} text-xs'>${g.pct.toFixed(1)}%</span>
+                  </div>
+                  ${bar(g.pct)}
+                </div>`;
+              }).join('')}
+            </div>
+            <div class='mt-4 text-xs opacity-60'>Fonctionnalités mieux couvertes : ${topFeatureGroups.map(g=> g.label + ' (' + g.pct.toFixed(0)+'%)').join(', ')}</div>
+          </div>` : `<div class='mt-10 text-xs opacity-60'>Pas de regroupement fonctionnel détecté (règles non satisfaites).</div>`;
+
+        const globalPct = pct(coveredStatements,totalStatements);
+        container.innerHTML = `
+          <div class='mb-4'>
+            <p class='text-lg'>Couverture globale (instructions) : <span class='font-semibold ${colorFor(globalPct)}'>${globalPct.toFixed(1)}%</span></p>
+            <p class='text-xs opacity-60 flex gap-3'>
+              <span><span class='inline-block w-2 h-2 rounded-full bg-green-400 align-middle'></span> ≥85% bon</span>
+              <span><span class='inline-block w-2 h-2 rounded-full bg-yellow-400 align-middle'></span> 70–84% moyen</span>
+              <span><span class='inline-block w-2 h-2 rounded-full bg-red-400 align-middle'></span> <70% faible</span>
+            </p>
+          </div>
+          ${groupBlock}
+          ${featureBlock}
+          ${listBlock('Top qualité (meilleurs fichiers)', best)}
+          ${listBlock('Priorités d\'amélioration (faible couverture)', worst)}
+          <p class='text-xs opacity-50 mt-4'>Source : coverage-final.json – regroupements dossiers & fonctionnalités heuristiques.</p>
+        `;
+    }
+    // Appels
+    loadCoverage();
     loadAllData();
 </script>
-
-
 </body>
 </html>

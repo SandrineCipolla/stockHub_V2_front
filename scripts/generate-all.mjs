@@ -26,7 +26,7 @@ for (const { name, cmd } of generators) {
     console.log(`🧩 ${name}`);
     console.log(`==============================`);
     try {
-        const output = execSync(cmd, { stdio: "inherit" });
+        execSync(cmd, { stdio: "inherit" });
     } catch (err) {
         console.error(`❌ Erreur pendant ${name}:`, err.message);
     }
@@ -34,3 +34,13 @@ for (const { name, cmd } of generators) {
 
 console.log("\n✅ Tous les rapports JSON ont été générés !");
 console.log("➡️  Ils sont disponibles dans documentation/metrics/data/");
+
+// Ajout Audit Complet
+try {
+  console.log('\n==============================');
+  console.log('🧩 Audit Complet Agrégé');
+  console.log('==============================');
+  execSync('node scripts/audit-full.mjs', { stdio: 'inherit' });
+} catch (e) {
+  console.error('❌ Audit complet échoué:', e.message);
+}
