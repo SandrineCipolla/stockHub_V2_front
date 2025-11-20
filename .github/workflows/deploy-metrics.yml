@@ -1,0 +1,73 @@
+name: 📊 Deploy Metrics Dashboard to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🛠️ Build project
+        run: npm run build
+
+      - name: 🌐 Start local server
+        run: |
+          npm install -g serve
+          serve -s dist -l 4173 &
+          sleep 5
+
+      - name: 📊 Generate metrics data
+        run: |
+          mkdir -p documentation/metrics/data
+          node scripts/audit-fps.mjs || echo "FPS audit failed"
+          node scripts/audit-wcag.mjs || echo "A11Y audit failed"
+          node scripts/audit-datasets.mjs || echo "Datasets audit failed"
+          node scripts/audit-colorblind.mjs || echo "Colorblind audit failed"
+          node scripts/generate-lighthouse.mjs || echo "Lighthouse generation failed"
+          node scripts/generate-eco.mjs || echo "Eco generation failed"
+          node scripts/generate-coverage.mjs || echo "Coverage generation failed"
+          node scripts/audit-full.mjs || echo "Full audit failed"
+          # Copie coverage AVANT upload
+          if [ -d coverage ]; then
+            mkdir -p documentation/metrics/coverage
+            cp -r coverage/* documentation/metrics/coverage/ || true
+          fi
+
+      - name: 🏗️ Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: 📂 Upload metrics folder
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './documentation/metrics'
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

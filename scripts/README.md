@@ -2,14 +2,14 @@
 
 ## 📋 Liste des Scripts
 
-| Script | Description | Commande |
-|--------|-------------|----------|
-| `test-performance-fps.mjs` | Tests FPS avec animations | `npm run audit:fps` |
-| `test-reduced-motion.mjs` | Tests accessibilité prefers-reduced-motion | `npm run audit:a11y` |
-| `test-animations-datasets.mjs` | Tests scalabilité avec différents datasets | `npm run audit:datasets` |
-| `test-daltonisme.mjs` | Tests contraste et daltonisme (4 types) | `npm run audit:daltonisme` |
-| `audit-complet.mjs` | Audit complet (tout-en-un) | `npm run audit:full` |
-| `generate-sitemap.ts` | Génération sitemap SEO | Automatique dans build |
+| Script                 | Description                                | Commande                   |
+| ---------------------- | ------------------------------------------ | -------------------------- |
+| `audit-fps.mjs`        | Tests FPS avec animations                  | `npm run audit:fps`        |
+| `audit-a11y.mjs`       | Tests accessibilité prefers-reduced-motion | `npm run audit:a11y`       |
+| `audit-datasets.mjs`   | Tests scalabilité avec différents datasets | `npm run audit:datasets`   |
+| `audit-colorblind.mjs` | Tests contraste et daltonisme (4 types)    | `npm run audit:daltonisme` |
+| `audit-full.mjs`       | Audit complet (tout-en-un)                 | `npm run audit:full`       |
+| `generate-sitemap.ts`  | Génération sitemap SEO                     | Automatique dans build     |
 
 ---
 
@@ -54,12 +54,14 @@ npm run audit:full
 
 ---
 
-## 📊 test-performance-fps.mjs
+## 📊 audit-fps.mjs
 
 ### Objectif
+
 Mesurer les FPS pendant les animations pour garantir une expérience fluide.
 
 ### Scénarios
+
 1. **Chargement initial** : Animations entrance avec délai en cascade
 2. **Hover animations** : Scale + élévation des cartes
 3. **Scroll** : Smooth scrolling avec animations
@@ -67,71 +69,85 @@ Mesurer les FPS pendant les animations pour garantir une expérience fluide.
 5. **Compteurs** : Animations CountUp des métriques
 
 ### Seuil de Réussite
+
 - FPS moyen ≥ 55
 
 ### Résultats Actuels
+
 - FPS moyen : **60.81** ✅
 - Tous scénarios passent
 
 ### Technologie
+
 - Puppeteer (browser automation)
 - requestAnimationFrame (mesure FPS)
 
 ---
 
-## ♿ test-reduced-motion.mjs
+## ♿ audit-a11y.mjs
 
 ### Objectif
+
 Vérifier le respect de la préférence utilisateur `prefers-reduced-motion`.
 
 ### Tests
+
 1. **Mode normal** : Animations activées
 2. **Mode reduced motion** : Durées réduites à 0.00001s
 3. **Hook useReducedMotion** : Détection media query
 4. **CountUp** : Respecte la préférence
 
 ### Conformité
+
 - WCAG 2.1 - Animation from Interactions
 
 ### Résultats Actuels
+
 - **100% des tests passent** ✅
 
 ### Technologie
+
 - Puppeteer
 - emulateMediaFeatures (simulation prefers-reduced-motion)
 
 ---
 
-## 🎨 test-daltonisme.mjs
+## 🎨 audit-colorblind.mjs
 
 ### Objectif
+
 Vérifier l'accessibilité visuelle des couleurs de statuts pour tous les utilisateurs, y compris ceux atteints de daltonisme.
 
 ### Tests Effectués
 
 #### 1. Contraste WCAG
+
 - Teste toutes les couleurs de statuts (5 statuts × 2 thèmes)
 - Vérifie les ratios de contraste selon WCAG 2.1
 - Niveaux : UI (≥3:1), AA (≥4.5:1), AAA (≥7:1)
 
 #### 2. Simulation Daltonisme
+
 - **Protanopie** : Déficit rouge (~1% hommes)
 - **Deutéranopie** : Déficit vert (~1% hommes)
 - **Tritanopie** : Déficit bleu (~0.01% population)
 - **Achromatopsie** : Vision monochrome (très rare)
 
 #### 3. Différentiabilité
+
 - Calcule la distance perceptuelle (Delta E) entre couleurs
 - Seuil de différentiabilité : ≥40 en espace RGB euclidien
 - Teste toutes les paires de statuts (10 combinaisons)
 
 #### 4. Indicateurs Non-Couleur
+
 - Vérifie la présence d'icônes (✓, ⚠, !, ✕, ↑)
 - Labels textuels visibles
 - Bordures colorées de 4px
 - Attributs ARIA (role="status", aria-label)
 
 ### Résultats Actuels
+
 - Contraste : **8/10 tests passent** (optimal et low échouent sur fond clair)
 - Protanopie : 9/10 paires ✅
 - Deutéranopie : 10/10 paires ✅
@@ -139,74 +155,88 @@ Vérifier l'accessibilité visuelle des couleurs de statuts pour tous les utilis
 - Achromatopsie : 4/10 paires ⚠️ (compensé par icônes)
 
 ### Conclusion
+
 ✅ **BON** - Quelques paires de couleurs difficiles à différencier pour certains types de daltonisme, mais **parfaitement compensées** par les indicateurs visuels non-couleur (icônes, labels, bordures, ARIA).
 
 L'application reste **pleinement utilisable même en vision monochrome**.
 
 ### Technologie
+
 - Algorithmes de Brettel, Viénot et Mollon (1997)
 - Matrices de transformation RGB pour simulation
 - Calcul luminance relative (WCAG)
 - Distance Delta E (approximation euclidienne RGB)
 
 ### Rapport JSON
+
 Sauvegardé dans `documentation/metrics/daltonisme-{timestamp}.json`
 
 ---
 
-## 📈 test-animations-datasets.mjs
+## 📈 audit-datasets.mjs
 
 ### Objectif
+
 Mesurer la scalabilité des animations avec différentes tailles de données.
 
 ### Datasets Testés
+
 - **Petit** : 5 stocks
 - **Moyen** : 50 stocks
 - **Grand** : 200 stocks
 - **Très grand** : 500 stocks
 
 ### Métriques
+
 - FPS moyen par dataset
 - Dégradation de performance
 
 ### Seuil de Réussite
+
 - Dégradation < 10%
 
 ### Résultats Actuels
+
 - FPS moyen : **60.93**
 - Dégradation : **0.8%** ⭐
 
 ### Technologie
+
 - Puppeteer
 - localStorage injection (mock datasets)
 
 ---
 
-## 🔍 audit-complet.mjs
+## 🔍 audit-full.mjs
 
 ### Objectif
+
 Script tout-en-un regroupant tous les audits de performance, accessibilité, éco-conception et qualité code.
 
 ### Catégories Testées
 
 #### 1. Performance (📊)
+
 - Tests FPS (5 scénarios)
 - Tests scalabilité (4 datasets)
 - Audit Lighthouse (performance + metrics)
 
 #### 2. Accessibilité (♿)
+
 - prefers-reduced-motion (4 tests)
 - Contraste des couleurs (5 statuts × 2 thèmes)
 - Navigation clavier (info)
 - Score Lighthouse accessibility
 
 #### 3. Éco-conception (🌱)
+
 - Analyse bundle (taille + gzip)
 - Estimation CO2 par chargement
 - Analyse requêtes réseau
 - Bonnes pratiques (6 checks)
 
 #### 4. Qualité Code (💎)
+
 - Vérification TypeScript
 - Tests unitaires (369 tests)
 - Coverage (info)
@@ -214,6 +244,7 @@ Script tout-en-un regroupant tous les audits de performance, accessibilité, éc
 ### Rapport JSON
 
 Génère un rapport JSON complet :
+
 ```
 documentation/metrics/audit-complet-{timestamp}.json
 ```
@@ -244,6 +275,7 @@ documentation/metrics/audit-complet-{timestamp}.json
 ```
 
 ### Durée
+
 ~5-10 minutes (selon la machine)
 
 ---
@@ -253,11 +285,13 @@ documentation/metrics/audit-complet-{timestamp}.json
 ### Ajouter un Nouveau Test
 
 1. **Créer le script**
+
    ```bash
    touch scripts/test-nouveau.mjs
    ```
 
 2. **Structure de base**
+
    ```javascript
    import puppeteer from 'puppeteer';
 
@@ -279,6 +313,7 @@ documentation/metrics/audit-complet-{timestamp}.json
    ```
 
 3. **Ajouter le script npm**
+
    ```json
    "scripts": {
      "audit:nouveau": "node scripts/test-nouveau.mjs"
@@ -287,10 +322,7 @@ documentation/metrics/audit-complet-{timestamp}.json
 
 4. **Intégrer dans audit-complet.mjs**
    ```javascript
-   const nouveauResult = runCommand(
-     'node scripts/test-nouveau.mjs',
-     'Nouveau test'
-   );
+   const nouveauResult = runCommand('node scripts/test-nouveau.mjs', 'Nouveau test');
    ```
 
 ---
@@ -298,21 +330,25 @@ documentation/metrics/audit-complet-{timestamp}.json
 ## 📚 Dépendances
 
 ### Puppeteer (^24.24.0)
+
 - Browser automation
 - Tests E2E
 - Mesure performance
 
 **Installation** :
+
 ```bash
 npm install -D puppeteer
 ```
 
 ### Lighthouse (via npx)
+
 - Audit performance
 - Audit accessibilité
 - Web Vitals
 
 **Utilisation** :
+
 ```bash
 npx lighthouse http://localhost:4173
 ```
@@ -321,15 +357,15 @@ npx lighthouse http://localhost:4173
 
 ## 🎯 Objectifs de Performance
 
-| Métrique | Objectif | Actuel | Status |
-|----------|----------|--------|--------|
-| FPS moyen | >55 | 60.81 | ✅ |
-| Lighthouse Performance | ≥98 | 99 | ✅ |
-| Lighthouse Accessibility | ≥96 | 96 | ✅ |
-| Dégradation scalabilité | <10% | 0.8% | ⭐ |
-| Bundle gzippé | <600KB | 113.99KB | ✅ |
-| Tests unitaires | >300 | 369 | ✅ |
-| TypeScript errors | 0 | 0 | ✅ |
+| Métrique                 | Objectif | Actuel   | Status |
+| ------------------------ | -------- | -------- | ------ |
+| FPS moyen                | >55      | 60.81    | ✅     |
+| Lighthouse Performance   | ≥98      | 99       | ✅     |
+| Lighthouse Accessibility | ≥96      | 96       | ✅     |
+| Dégradation scalabilité  | <10%     | 0.8%     | ⭐     |
+| Bundle gzippé            | <600KB   | 113.99KB | ✅     |
+| Tests unitaires          | >300     | 369      | ✅     |
+| TypeScript errors        | 0        | 0        | ✅     |
 
 ---
 
@@ -401,6 +437,7 @@ jobs:
 **Cause** : Serveur preview non lancé
 
 **Solution** :
+
 ```bash
 npm run build && npm run preview
 ```
@@ -410,6 +447,7 @@ npm run build && npm run preview
 **Cause** : Puppeteer mal installé
 
 **Solution** :
+
 ```bash
 npm install -D puppeteer
 ```
@@ -417,11 +455,13 @@ npm install -D puppeteer
 ### Tests FPS échouent
 
 **Causes possibles** :
+
 - Machine surchargée
 - Serveur pas prêt
 - Animations non chargées
 
 **Solutions** :
+
 - Fermer applications gourmandes
 - Augmenter timeout dans le script
 - Vérifier que le build est à jour
@@ -431,13 +471,16 @@ npm install -D puppeteer
 ## 📖 Documentation
 
 ### Complète
+
 - [TESTS-PERFORMANCE.md](../documentation/TESTS-PERFORMANCE.md)
 - [ANIMATIONS.md](../documentation/ANIMATIONS.md)
 
 ### Lighthouse
+
 - [Documentation officielle](https://developers.google.com/web/tools/lighthouse)
 
 ### Puppeteer
+
 - [Documentation officielle](https://pptr.dev/)
 
 ---
@@ -445,10 +488,11 @@ npm install -D puppeteer
 ## 📝 Changelog
 
 ### 2025-10-20
-- ✅ Création `test-performance-fps.mjs`
-- ✅ Création `test-reduced-motion.mjs`
-- ✅ Création `test-animations-datasets.mjs`
-- ✅ Création `audit-complet.mjs`
+
+- ✅ Création `audit-fps.mjs`
+- ✅ Création `audit-a11y.mjs`
+- ✅ Création `audit-datasets.mjs`
+- ✅ Création `audit-full.mjs`
 - ✅ Ajout scripts npm
 - ✅ Documentation complète
 

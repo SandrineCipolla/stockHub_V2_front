@@ -32,7 +32,7 @@ coverage/
 documentation/propositionIA/propositionIA.tsx
 
 # Temporary audit report files
-documentation/metrics/*.json
+documentation/metrics/data/*.json
 
 # Claude Code configuration (personal)
 CLAUDE.md

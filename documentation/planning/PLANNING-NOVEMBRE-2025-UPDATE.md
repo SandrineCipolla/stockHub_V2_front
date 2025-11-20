@@ -102,7 +102,7 @@
 
 **Durée** : ~2h
 
-- ✅ Création script `test-risk-levels-colors.mjs`
+- ✅ Création script `audit-wcag.mjs`
 - ✅ Audit automatisé contrastes WCAG
 - ✅ Tests daltonisme (4 types)
 - ✅ Documentation complète `ACCESSIBILITY-COLOR-AUDIT-2025-11-17.md`

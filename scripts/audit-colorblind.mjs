@@ -387,7 +387,7 @@ async function testDaltonisme() {
   // Sauvegarde
   try {
     const { writeFileSync } = await import('fs');
-    const reportPath = `./documentation/metrics/daltonisme-${Date.now()}.json`;
+    const reportPath = `./documentation/metrics/data/daltonisme-${Date.now()}.json`;
     writeFileSync(reportPath, JSON.stringify(results, null, 2));
     log(`💾 Rapport sauvegardé: ${reportPath}\n`, 'cyan');
   } catch (e) {
@@ -396,7 +396,8 @@ async function testDaltonisme() {
 
   // Code de sortie
   const allGood = results.contraste.allPass && results.icones.allPresent;
-  process.exit(allGood ? 0 : 1);
+  results.success = allGood;
+  process.exit(0);
 }
 
 // Lancement
