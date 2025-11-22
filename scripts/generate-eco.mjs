@@ -1,5 +1,5 @@
 /**
-c * 🌱 GÉNÉRATION JSON ÉCO-CONCEPTION – StockHub V2 (résilient)
+ * 🌱 GÉNÉRATION JSON ÉCO-CONCEPTION – StockHub V2 (résilient)
  */
 import {execSync} from 'child_process';
 import {existsSync, readdirSync, readFileSync, statSync, writeFileSync} from 'fs';

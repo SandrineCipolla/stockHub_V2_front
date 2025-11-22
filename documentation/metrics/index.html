@@ -42,6 +42,240 @@
         .tooltip-box { position:absolute; left:0; top:110%; z-index:20; background:#1f1f2e; color:#fff; padding:.5rem .75rem; font-size:.65rem; line-height:1rem; border:1px solid rgba(255,255,255,.1); width:200px; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,.4); opacity:0; transform:translateY(-4px); pointer-events:none; transition:.15s ease; }
         .tooltip-wrapper:focus .tooltip-box,
         .tooltip-wrapper:hover .tooltip-box { opacity:1; transform:translateY(0); }
+
+        /* Animations et effets visuels */
+        .metric-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+        }
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--sh-purple-500), var(--sh-purple-300));
+        }
+        .pulse-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+            transition: stroke-dasharray 0.8s ease-in-out;
+        }
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container { position: relative; height: 200px; }
+        .chart-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Retour au centrage original */
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .chart-overlay-text {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Nouveaux styles pour les cercles de score Lighthouse */
+        .lighthouse-container {
+            min-height: 400px;
+            padding: 1.5rem;
+        }
+
+        .score-circle {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+
+        .score-circle-large {
+            width: 140px;
+            height: 140px;
+        }
+
+        .score-circle svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .score-circle-progress {
+            transition: stroke-dasharray 1.5s ease-in-out;
+            filter: drop-shadow(0 0 8px currentColor);
+            stroke-dasharray: 0 282.6; /* Valeur par défaut, sera mise à jour par JS */
+        }
+
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Classes utilitaires pour les couleurs de score */
+        .text-score-excellent { color: #10b981; }
+        .text-score-good { color: #f59e0b; }
+        .text-score-poor { color: #ef4444; }
+
+        /* Classes pour les badges de notes */
+        .badge-grade-a { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .badge-grade-b { background: linear-gradient(135deg, #10b981, #f59e0b); color: white; }
+        .badge-grade-c { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .badge-grade-d { background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; }
+        .badge-grade-f { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+
+        /* Nouveaux styles pour les onglets de daltonisme */
+        .daltonisme-tab {
+            background-color: transparent;
+            color: #9ca3af;
+            border: none;
+            cursor: pointer;
+        }
+
+        .daltonisme-tab.active {
+            background-color: var(--sh-purple-500);
+            color: white;
+        }
+
+        .daltonisme-tab:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #d1d5db;
+        }
+
+        .daltonisme-panel {
+            display: none;
+        }
+
+        .daltonisme-panel.active {
+            display: block;
+        }
+
+        /* Styles pour les visualisations de couleurs */
+        .color-preview {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            position: relative;
+            cursor: help;
+        }
+
+        .color-preview.simulated::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            border: 1px solid #1f2937;
+        }
+
+        /* Styles pour les grilles de comparaison */
+        .color-comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .daltonism-type-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .daltonism-type-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Styles pour les métriques Delta E */
+        .delta-e-indicator {
+            font-family: monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .delta-e-good {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .delta-e-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .delta-e-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Animations pour l'état de chargement */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Styles responsifs pour les onglets */
+        @media (max-width: 768px) {
+            .daltonisme-tab {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            .color-comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #daltonisme-content .grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 
@@ -58,45 +292,230 @@
         <span id="generated-date"></span>
     </p>
 
-    <a class="mt-4 inline-block text-[var(--sh-purple-300)] underline hover:text-[var(--sh-purple-400)]"
-       href="https://sandrinecipolla.github.io/stockHub_V2_front/metrics/"
+    <!-- Lien contextuel selon l'environnement -->
+    <a class="mt-4 inline-block text-[var(--sh-purple-300)] underline hover:text-[var(--sh-purple-400)]" href="#"
+       id="context-link"
+       style="display: none;"
        target="_blank">
-        🌍 Voir la version publique GitHub Pages
     </a>
 </header>
 
 <script>
-    document.getElementById("generated-date").textContent =
-        new Date().toLocaleString("fr-FR");
+    // Date de génération
+    document.getElementById("generated-date").textContent = new Date().toLocaleString("fr-FR");
+
+    // Lien contextuel
+    const contextLink = document.getElementById("context-link");
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isGitHubPages = window.location.hostname.includes('github.io');
+
+    if (isLocal) {
+        // En local : lien vers GitHub Pages
+        contextLink.href = "https://sandrinecipolla.github.io/stockHub_V2_front/documentation/metrics/";
+        contextLink.textContent = "🌍 Voir la version publique GitHub Pages";
+        contextLink.style.display = "inline-block";
+    } else if (isGitHubPages) {
+        // Sur GitHub Pages : lien vers le repo
+        contextLink.href = "https://github.com/SandrineCipolla/stockHub_V2_front";
+        contextLink.textContent = "📂 Voir le code source sur GitHub";
+        contextLink.style.display = "inline-block";
+    }
+    // Sur Vercel ou autre : pas de lien
 </script>
 
 <!-- GRID -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-    <section class="card"><h2 class="section-title">🔦 Lighthouse</h2><canvas id="chart-lighthouse"></canvas></section>
-    <section class="card"><h2 class="section-title">⚠️ WCAG Risk Levels</h2><canvas id="chart-wcag"></canvas></section>
-    <section class="card"><h2 class="section-title">👁 Daltonisme</h2><canvas id="chart-daltonisme"></canvas></section>
-    <section class="card"><h2 class="section-title">⚡ Performance FPS</h2><p id="fps-result"></p></section>
-    <section class="card"><h2 class="section-title">♿ Accessibilité — Reduced Motion</h2><p id="a11y-result"></p></section>
-    <section class="card"><h2 class="section-title">📊 Scalabilité — Datasets</h2><p id="dataset-result"></p></section>
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">🔦 Lighthouse</h2>
+        <div class="lighthouse-container" id="lighthouse-content">
+            <div class="flex items-center justify-center h-32 text-gray-400">
+                <p>⏳ Chargement des scores Lighthouse...</p>
+            </div>
+        </div>
+    </section>
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">⚠️ WCAG Risk Levels</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Analyse des contrastes de couleurs selon les niveaux de risque (critical, high, medium, low)
+        </p>
+        <div class="chart-container">
+            <canvas id="chart-wcag"></canvas>
+        </div>
+    </section>
+    <section class="card metric-card fade-in" id="daltonisme-section">
+        <h2 class="section-title flex items-center gap-3">
+            👁 Tests de Daltonisme & Accessibilité Visuelle
+            <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="daltonisme-status-badge">
+                ⏳ Chargement...
+            </div>
+        </h2>
+
+        <!-- Navigation par onglets -->
+        <div class="mb-6">
+            <div class="flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg">
+                <button class="daltonisme-tab active px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="overview">
+                    📊 Vue d'ensemble
+                </button>
+                <button class="daltonisme-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="contrast">
+                    🎨 Contraste WCAG
+                </button>
+                <button class="daltonisme-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="simulation">
+                    👁 Simulation
+                </button>
+                <button class="daltonisme-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="difference">
+                    🔍 Différentiabilité
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenu des onglets -->
+        <div id="daltonisme-content">
+            <!-- Vue d'ensemble -->
+            <div class="daltonisme-panel active" data-panel="overview">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Graphique principal -->
+                    <div class="chart-container">
+                        <canvas id="chart-daltonisme"></canvas>
+                    </div>
+
+                    <!-- Métriques clés -->
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-400" id="contrast-score">-</div>
+                                <div class="text-xs text-gray-400">Tests contraste</div>
+                            </div>
+                            <div class="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-lg">
+                                <div class="text-2xl font-bold text-green-400" id="daltonism-score">-</div>
+                                <div class="text-xs text-gray-400">Différentiabilité</div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-800/30 rounded-lg" id="status-colors-preview">
+                            <div class="text-sm font-medium text-gray-300 mb-3">Couleurs de statut StockHub</div>
+                            <div class="flex flex-wrap gap-2" id="color-status-grid">
+                                <!-- Sera rempli dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Résumé global -->
+                <div class="mt-6 p-4 bg-gray-800/30 rounded-lg" id="global-summary">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Tests de contraste -->
+            <div class="daltonisme-panel" data-panel="contrast">
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
+                            🎨 Tests de Contraste WCAG 2.1
+                            <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-300 rounded">AA/AAA</span>
+                        </h3>
+                        <div class="space-y-3" id="contrast-tests-grid">
+                            <!-- Sera rempli dynamiquement -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-200 mb-4">📋 Critères WCAG</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                                <div class="font-medium text-green-300">Level AAA (≥ 7:1)</div>
+                                <div class="text-green-200 text-xs">Contraste excellent - Texte normal</div>
+                            </div>
+                            <div class="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                                <div class="font-medium text-yellow-300">Level AA (≥ 4.5:1)</div>
+                                <div class="text-yellow-200 text-xs">Contraste bon - Standard requis</div>
+                            </div>
+                            <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                                <div class="font-medium text-blue-300">UI Components (≥ 3:1)</div>
+                                <div class="text-blue-200 text-xs">Contraste minimal - Éléments d'interface</div>
+                            </div>
+                            <div class="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                                <div class="font-medium text-red-300">FAIL (< 3:1)</div>
+                                <div class="text-red-200 text-xs">Contraste insuffisant - À corriger</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation des types de daltonisme -->
+            <div class="daltonisme-panel" data-panel="simulation">
+                <h3 class="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
+                    👁 Simulation des Types de Daltonisme
+                    <span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-300 rounded">4 types testés</span>
+                </h3>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" id="simulation-grid">
+                    <!-- Sera rempli dynamiquement avec chaque type de daltonisme -->
+                </div>
+            </div>
+
+            <!-- Tests de différentiabilité -->
+            <div class="daltonisme-panel" data-panel="difference">
+                <h3 class="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
+                    🔍 Analyse de Différentiabilité des Couleurs
+                    <span class="text-xs px-2 py-1 bg-orange-500/20 text-orange-300 rounded">Delta E</span>
+                </h3>
+
+                <div class="space-y-6" id="difference-analysis">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">⚡ Performance FPS</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Mesure des performances d'animation et de rendu (objectif : 60 FPS stable)
+        </p>
+        <div id="fps-result"></div>
+    </section>
+
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">♿ Accessibilité — Reduced Motion</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Respect de la préférence "prefers-reduced-motion" pour les utilisateurs sensibles au mouvement
+        </p>
+        <div id="a11y-result"></div>
+    </section>
+
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">📊 Scalabilité — Datasets</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Test de performance avec différentes tailles de jeux de données (de 10 à 10 000 items)
+        </p>
+        <div id="dataset-result"></div>
+    </section>
 </div>
 
 <!-- COVERAGE -->
 <section class="mt-14 card" id="coverage-section">
     <h2 class="section-title">📈 Coverage des tests</h2>
+    <p class="text-sm text-gray-400 mb-6">
+        Couverture de code par les tests unitaires (Vitest) - Analyse détaillée par fonctionnalité
+    </p>
     <div class="space-y-4 text-sm" id="coverage-content">
-        <p class="opacity-70">Chargement du résumé de coverage…</p>
+        <p class="opacity-70">⏳ Chargement du résumé de coverage…</p>
     </div>
 </section>
 
 <!-- AUDIT COMPLET RNCP -->
 <section class="mt-14 card" id="audit-rncp">
     <h2 class="section-title">📚 Audit Complet RNCP — Synthèse</h2>
+    <p class="text-sm text-gray-400 mb-6">
+        Agrégation de tous les audits (Performance, Accessibilité, Éco-conception, Qualité) pour démonstration RNCP 2027
+    </p>
     <div class="text-md opacity-90 mb-4" id="audit-rncp-content">
-        Chargement des données RNCP...
+        ⏳ Chargement des données RNCP...
     </div>
 
     <button class="px-4 py-2 bg-[var(--sh-purple-500)] rounded-lg hover:bg-[var(--sh-purple-400)] transition"
-            onclick="document.getElementById('audit-details').classList.toggle('hidden')">
+            onclick="toggleAuditDetails()">
         📂 Voir / Masquer les détails
     </button>
 
@@ -128,25 +547,68 @@
 <!-- SCRIPT DYNAMIQUE -->
 <script>
     const jsonBasePaths = [
-        "./data/", // local
-        "https://sandrinecipolla.github.io/stockHub_V2_front/metrics/data/" // GitHub Pages
+        "./data/" // local uniquement (GitHub Pages utilise la liste statique)
     ];
 
     async function findLatestJSON(prefix) {
-        for (const base of jsonBasePaths) {
-            try {
-                const resp = await fetch(base);
-                if (!resp.ok) continue;
+        // Détecter si on est en local ou sur GitHub Pages
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+        // Liste statique des fichiers disponibles (fallback si le listage de dossier ne fonctionne pas)
+        const staticFileList = [
+            'lighthouse-1763634146672.json',
+            'risk-levels-audit-1763634259430.json',
+            'daltonisme-1763648733792.json',
+            'fps-1763634225042.json',
+            'a11y-1763635763804.json',
+            'datasets-1763634247354.json',
+            'audit-complet-1763634146592.json'
+        ];
+
+        // Mapping des préfixes aux patterns de fichiers
+        const prefixMapping = {
+            'lighthouse': /^lighthouse-\d+\.json$/,
+            'risk-levels': /^risk-levels-audit-\d+\.json$/,
+            'daltonisme': /^daltonisme-\d+\.json$/,
+            'fps': /^fps-\d+\.json$/,
+            'a11y': /^a11y-\d+\.json$/,
+            'datasets': /^datasets-\d+\.json$/,
+            'audit-complet': /^audit-complet-\d+\.json$/
+        };
+
+        const pattern = prefixMapping[prefix];
+        if (!pattern) {
+            console.log(`Pattern non trouvé pour le préfixe: ${prefix}`);
+            return null;
+        }
+
+        try {
+            // Essayer d'abord de lister dynamiquement le dossier data
+            const resp = await fetch("./data/");
+            if (resp.ok) {
                 const text = await resp.text();
                 const matches = [...text.matchAll(/href="([^"]+\.json)"/g)]
                     .map(m => m[1])
-                    .filter(name => name.startsWith(prefix));
+                    .filter(name => pattern.test(name));
                 if (matches.length > 0) {
-                    matches.sort().reverse();
-                    return base + matches[0];
+                    matches.sort().reverse(); // Le plus récent en premier (timestamp descendant)
+                    console.log(`Fichier trouvé pour ${prefix}: ${matches[0]}`);
+                    return "./data/" + matches[0];
                 }
-            } catch {}
+            }
+        } catch (e) {
+            console.log(`Erreur lors du listage dynamique pour ${prefix}:`, e);
         }
+
+        // Fallback : utiliser la liste statique
+        const staticMatches = staticFileList.filter(name => pattern.test(name));
+        if (staticMatches.length > 0) {
+            staticMatches.sort().reverse();
+            console.log(`Fichier statique trouvé pour ${prefix}: ${staticMatches[0]}`);
+            return "./data/" + staticMatches[0];
+        }
+
+        console.log(`Aucun fichier trouvé pour le préfixe: ${prefix}`);
         return null;
     }
 
@@ -185,63 +647,1353 @@
     }
 
     function renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets }) {
-        // Lighthouse
+        // Nouvelle visualisation Lighthouse avec des cercles de score individuels
         if (lighthouse?.scores) {
-            new Chart(document.getElementById("chart-lighthouse"), {
-                type: "radar",
-                data: {
-                    labels: ["Performance", "Accessibilité", "SEO", "Best Practices"],
-                    datasets: [{
-                        label: "Scores Lighthouse",
-                        data: [
-                            lighthouse.scores.performance || 0,
-                            lighthouse.scores.accessibility || 0,
-                            lighthouse.scores.seo || 0,
-                            lighthouse.scores.bestPractices || 0
-                        ],
-                        borderColor: "#a78bfa",
-                        backgroundColor: "rgba(167,139,250,0.3)"
-                    }]
-                },
-                options: { scales: { r: { beginAtZero: true, max: 100 } } }
-            });
+            const scores = lighthouse.scores;
+            const avgScore = Math.round((scores.performance + scores.accessibility + scores.seo + scores.bestPractices) / 4);
+
+            // Fonction pour obtenir la couleur selon le score
+            const getScoreColor = (score) => {
+                if (score >= 90) return '#10b981'; // green
+                if (score >= 70) return '#f59e0b'; // amber
+                return '#ef4444'; // red
+            };
+
+            // Fonction pour obtenir la classe de couleur texte
+            const getScoreTextClass = (score) => {
+                if (score >= 90) return 'text-score-excellent';
+                if (score >= 70) return 'text-score-good';
+                return 'text-score-poor';
+            };
+
+            // Fonction pour obtenir la note alphabétique
+            const getGradeLetter = (score) => {
+                if (score >= 90) return 'A';
+                if (score >= 80) return 'B';
+                if (score >= 70) return 'C';
+                if (score >= 60) return 'D';
+                return 'F';
+            };
+
+            // Fonction pour obtenir la classe du badge de note
+            const getGradeBadgeClass = (score) => {
+                if (score >= 90) return 'badge-grade-a';
+                if (score >= 80) return 'badge-grade-b';
+                if (score >= 70) return 'badge-grade-c';
+                if (score >= 60) return 'badge-grade-d';
+                return 'badge-grade-f';
+            };
+
+            // Nouvelle visualisation avec cercles animés et scores individuels
+            const lighthouseContainer = document.getElementById("lighthouse-content");
+            lighthouseContainer.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Score moyen principal -->
+                    <div class="text-center">
+                        <div class="score-circle score-circle-large mx-auto">
+                            <svg>
+                                <circle cx="50%" cy="50%" r="45%" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
+                                <circle cx="50%" cy="50%" r="45%" stroke="${getScoreColor(avgScore)}"
+                                        stroke-width="4" fill="none" stroke-linecap="round"
+                                        class="score-circle-progress" data-score="${avgScore}"/>
+                            </svg>
+                            <div class="score-text">
+                                <div class="text-2xl font-bold ${getScoreTextClass(avgScore)}">${avgScore}</div>
+                                <div class="text-xs text-gray-400 mt-1">Score Global</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="${getGradeBadgeClass(avgScore)} grade-badge mx-auto" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                ${getGradeLetter(avgScore)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grille des scores individuels -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="score-circle mx-auto">
+                                <svg>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="rgba(255,255,255,0.1)" stroke-width="3" fill="none"/>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="${getScoreColor(scores.performance)}"
+                                            stroke-width="3" fill="none" stroke-linecap="round"
+                                            class="score-circle-progress" data-score="${scores.performance}"/>
+                                </svg>
+                                <div class="score-text">
+                                    <div class="text-lg font-bold ${getScoreTextClass(scores.performance)}">${scores.performance}</div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="text-sm font-medium text-gray-300">Performance</div>
+                                <div class="text-xs text-gray-500">Vitesse de chargement</div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="score-circle mx-auto">
+                                <svg>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="rgba(255,255,255,0.1)" stroke-width="3" fill="none"/>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="${getScoreColor(scores.accessibility)}"
+                                            stroke-width="3" fill="none" stroke-linecap="round"
+                                            class="score-circle-progress" data-score="${scores.accessibility}"/>
+                                </svg>
+                                <div class="score-text">
+                                    <div class="text-lg font-bold ${getScoreTextClass(scores.accessibility)}">${scores.accessibility}</div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="text-sm font-medium text-gray-300">Accessibilité</div>
+                                <div class="text-xs text-gray-500">Conformité a11y</div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="score-circle mx-auto">
+                                <svg>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="rgba(255,255,255,0.1)" stroke-width="3" fill="none"/>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="${getScoreColor(scores.seo)}"
+                                            stroke-width="3" fill="none" stroke-linecap="round"
+                                            class="score-circle-progress" data-score="${scores.seo}"/>
+                                </svg>
+                                <div class="score-text">
+                                    <div class="text-lg font-bold ${getScoreTextClass(scores.seo)}">${scores.seo}</div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="text-sm font-medium text-gray-300">SEO</div>
+                                <div class="text-xs text-gray-500">Optimisation moteurs</div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="score-circle mx-auto">
+                                <svg>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="rgba(255,255,255,0.1)" stroke-width="3" fill="none"/>
+                                    <circle cx="50%" cy="50%" r="45%" stroke="${getScoreColor(scores.bestPractices)}"
+                                            stroke-width="3" fill="none" stroke-linecap="round"
+                                            class="score-circle-progress" data-score="${scores.bestPractices}"/>
+                                </svg>
+                                <div class="score-text">
+                                    <div class="text-lg font-bold ${getScoreTextClass(scores.bestPractices)}">${scores.bestPractices}</div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="text-sm font-medium text-gray-300">Bonnes Pratiques</div>
+                                <div class="text-xs text-gray-500">Standards web</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Légende des scores -->
+                    <div class="flex justify-center space-x-4 text-xs pt-3 border-t border-white/10">
+                        <div class="flex items-center space-x-1">
+                            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <span class="text-gray-400">≥90 Excellent</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                            <span class="text-gray-400">70-89 Bon</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                            <span class="text-gray-400">&lt;70 À améliorer</span>
+                        </div>
+                    </div>
+
+                    <!-- Métriques détaillées si disponibles -->
+                    ${lighthouse.metrics ? `
+                        <div class="mt-4 pt-4 border-t border-white/10">
+                            <div class="text-xs text-gray-400 mb-2">Métriques Web Vitals</div>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="flex justify-between p-2 bg-gray-800/50 rounded">
+                                    <span class="text-gray-300">FCP</span>
+                                    <span class="font-mono text-gray-200">${lighthouse.metrics.fcp || 'N/A'}</span>
+                                </div>
+                                <div class="flex justify-between p-2 bg-gray-800/50 rounded">
+                                    <span class="text-gray-300">LCP</span>
+                                    <span class="font-mono text-gray-200">${lighthouse.metrics.lcp || 'N/A'}</span>
+                                </div>
+                                <div class="flex justify-between p-2 bg-gray-800/50 rounded">
+                                    <span class="text-gray-300">TBT</span>
+                                    <span class="font-mono text-gray-200">${lighthouse.metrics.tbt || 'N/A'}</span>
+                                </div>
+                                <div class="flex justify-between p-2 bg-gray-800/50 rounded">
+                                    <span class="text-gray-300">CLS</span>
+                                    <span class="font-mono text-gray-200">${lighthouse.metrics.cls || 'N/A'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // Ajouter l'animation après un court délai pour l'effet visuel
+            setTimeout(() => {
+                const progressRings = lighthouseContainer.querySelectorAll('.score-circle-progress');
+                progressRings.forEach(ring => {
+                    const score = parseInt(ring.getAttribute('data-score'));
+                    const dasharray = `${(score / 100) * 282.6} 282.6`;
+                    ring.style.strokeDasharray = dasharray;
+                });
+            }, 200);
+
+        } else {
+            document.getElementById("lighthouse-content").innerHTML =
+                '<div class="flex items-center justify-center h-32 text-gray-400"><p>⏳ Analyse Lighthouse en cours...</p></div>';
         }
 
-        // WCAG
+        // WCAG - Amélioration avec affichage plus pertinent et agrégé
         if (wcag) {
+            // Extraire les données selon la vraie structure
+            let critiques = 0, eleves = 0, moyens = 0, faibles = 0;
+            const detailedProblems = {
+                critical: [],
+                high: [],
+                medium: [],
+                low: []
+            };
+
+            // Analyse des thèmes pour identifier les patterns et fichiers
+            const themeAnalysis = {};
+            const fileProblems = {};
+
+            if (wcag.contraste) {
+                Object.entries(wcag.contraste).forEach(([themeName, theme]) => {
+                    if (theme.tests) {
+                        theme.tests.forEach(test => {
+                            // Essayer d'extraire le nom de fichier depuis le sélecteur ou contexte
+                            let fileName = 'Fichier non spécifié';
+                            if (test.selector) {
+                                // Essayer d'identifier le fichier depuis le sélecteur
+                                if (test.selector.includes('.') || test.selector.includes('#')) {
+                                    fileName = `CSS (${themeName})`;
+                                } else {
+                                    fileName = `Component (${themeName})`;
+                                }
+                            }
+                            if (test.file) {
+                                fileName = test.file;
+                            } else if (test.source) {
+                                fileName = test.source;
+                            }
+
+                            const problem = {
+                                element: test.selector || `Élément du thème ${themeName}`,
+                                description: test.description || test.message || `Problème de contraste dans ${fileName}`,
+                                ratio: test.contrastRatio || 'N/A',
+                                expected: test.expectedRatio || 'N/A',
+                                theme: themeName,
+                                file: fileName,
+                                colors: test.colors || null
+                            };
+
+                            // Agrégation par thème
+                            if (!themeAnalysis[themeName]) {
+                                themeAnalysis[themeName] = { critical: 0, high: 0, medium: 0, low: 0 };
+                            }
+
+                            // Agrégation par fichier
+                            if (!fileProblems[fileName]) {
+                                fileProblems[fileName] = { critical: 0, high: 0, medium: 0, low: 0, problems: [] };
+                            }
+
+                            switch(test.level) {
+                                case 'critical':
+                                    critiques++;
+                                    themeAnalysis[themeName].critical++;
+                                    fileProblems[fileName].critical++;
+                                    detailedProblems.critical.push(problem);
+                                    fileProblems[fileName].problems.push(problem);
+                                    break;
+                                case 'high':
+                                    eleves++;
+                                    themeAnalysis[themeName].high++;
+                                    fileProblems[fileName].high++;
+                                    detailedProblems.high.push(problem);
+                                    fileProblems[fileName].problems.push(problem);
+                                    break;
+                                case 'medium':
+                                    moyens++;
+                                    themeAnalysis[themeName].medium++;
+                                    fileProblems[fileName].medium++;
+                                    detailedProblems.medium.push(problem);
+                                    fileProblems[fileName].problems.push(problem);
+                                    break;
+                                case 'low':
+                                    faibles++;
+                                    themeAnalysis[themeName].low++;
+                                    fileProblems[fileName].low++;
+                                    detailedProblems.low.push(problem);
+                                    fileProblems[fileName].problems.push(problem);
+                                    break;
+                            }
+                        });
+                    }
+                });
+            }
+
+            const total = critiques + eleves + moyens + faibles;
+
             new Chart(document.getElementById("chart-wcag"), {
                 type: "bar",
                 data: {
-                    labels: ["Critique", "Élevé", "Moyen", "Faible"],
+                    labels: ["🔴 Critique", "🟠 Élevé", "🟡 Moyen", "🟢 Faible"],
                     datasets: [{
-                        data: [wcag.critique, wcag.eleve, wcag.moyen, wcag.faible],
-                        backgroundColor: ["#ef4444", "#f97316", "#facc15", "#4ade80"]
+                        data: [critiques, eleves, moyens, faibles],
+                        backgroundColor: ["#ef4444", "#f97316", "#facc15", "#4ade80"],
+                        borderRadius: 4
                     }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const percentage = total > 0 ? ((context.parsed.y / total) * 100).toFixed(1) : 0;
+                                    return `${context.parsed.y} problèmes (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#9ca3af' }
+                        },
+                        x: {
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
                 }
             });
+
+            // Générer un résumé par thème plus pertinent
+            const generateThemeOverview = () => {
+                if (Object.keys(themeAnalysis).length === 0) return '';
+
+                return Object.entries(themeAnalysis)
+                    .filter(([theme, data]) => data.critical + data.high + data.medium + data.low > 0)
+                    .map(([theme, data]) => {
+                        const themeTotal = data.critical + data.high + data.medium + data.low;
+                        const severity = data.critical > 0 ? 'critical' : data.high > 0 ? 'high' : data.medium > 0 ? 'medium' : 'low';
+                        const severityColors = {
+                            critical: 'bg-red-900/30 border-red-500/20',
+                            high: 'bg-orange-900/30 border-orange-500/20',
+                            medium: 'bg-yellow-900/30 border-yellow-500/20',
+                            low: 'bg-green-900/30 border-green-500/20'
+                        };
+
+                        return `
+                            <div class="p-3 ${severityColors[severity]} border rounded-lg">
+                                <div class="font-medium mb-1">Thème: ${theme}</div>
+                                <div class="text-xs space-y-1">
+                                    <div>${themeTotal} problème${themeTotal > 1 ? 's' : ''} de contraste détecté${themeTotal > 1 ? 's' : ''}</div>
+                                    <div class="flex gap-4 text-xs">
+                                        ${data.critical > 0 ? `<span class="text-red-400">${data.critical} critique${data.critical > 1 ? 's' : ''}</span>` : ''}
+                                        ${data.high > 0 ? `<span class="text-orange-400">${data.high} élevé${data.high > 1 ? 's' : ''}</span>` : ''}
+                                        ${data.medium > 0 ? `<span class="text-yellow-400">${data.medium} moyen${data.medium > 1 ? 's' : ''}</span>` : ''}
+                                        ${data.low > 0 ? `<span class="text-green-400">${data.low} faible${data.low > 1 ? 's' : ''}</span>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+            };
+
+            // Générer un résumé par fichier plus pertinent
+            const generateFileOverview = () => {
+                const filesWithProblems = Object.entries(fileProblems)
+                    .filter(([file, data]) => data.critical + data.high + data.medium + data.low > 0)
+                    .sort((a, b) => {
+                        const aTotal = a[1].critical * 4 + a[1].high * 3 + a[1].medium * 2 + a[1].low;
+                        const bTotal = b[1].critical * 4 + b[1].high * 3 + b[1].medium * 2 + b[1].low;
+                        return bTotal - aTotal; // Plus critique en premier
+                    });
+
+                if (filesWithProblems.length === 0) return '';
+
+                return filesWithProblems.slice(0, 5).map(([fileName, data]) => {
+                    const fileTotal = data.critical + data.high + data.medium + data.low;
+                    const severity = data.critical > 0 ? 'critical' : data.high > 0 ? 'high' : data.medium > 0 ? 'medium' : 'low';
+                    const severityColors = {
+                        critical: 'bg-red-900/30 border-red-500/20',
+                        high: 'bg-orange-900/30 border-orange-500/20',
+                        medium: 'bg-yellow-900/30 border-yellow-500/20',
+                        low: 'bg-green-900/30 border-green-500/20'
+                    };
+
+                    // Générer la liste détaillée des éléments problématiques
+                    const problemDetails = data.problems.slice(0, 3).map(problem => {
+                        const levelColors = {
+                            critical: 'text-red-400 bg-red-500/10',
+                            high: 'text-orange-400 bg-orange-500/10',
+                            medium: 'text-yellow-400 bg-yellow-500/10',
+                            low: 'text-green-400 bg-green-500/10'
+                        };
+
+
+                        const level = problem.level || (data.critical > 0 ? 'critical' : data.high > 0 ? 'high' : data.medium > 0 ? 'medium' : 'low');
+
+                        // Identifier le type d'élément plus précisément
+                        let elementType = 'Élément HTML';
+                        let elementInfo = problem.element || 'Non spécifié';
+
+                        if (problem.element) {
+                            if (problem.element.startsWith('.')) {
+                                elementType = 'Classe CSS';
+                                elementInfo = problem.element;
+                            } else if (problem.element.startsWith('#')) {
+                                elementType = 'ID CSS';
+                                elementInfo = problem.element;
+                            } else if (problem.element.includes('[')) {
+                                elementType = 'Attribut CSS';
+                                elementInfo = problem.element;
+                            } else if (problem.element.match(/^[a-z]+$/)) {
+                                elementType = 'Balise HTML';
+                                elementInfo = `<${problem.element}>`;
+                            }
+                        }
+
+                        const contrastInfo = problem.ratio !== 'N/A' && problem.expected !== 'N/A'
+                            ? `Ratio: ${problem.ratio} (requis: ${problem.expected})`
+                            : 'Ratio non disponible';
+
+                        return `
+                            <div class="p-2 ${levelColors[level]} rounded text-xs border-l-2 ${level === 'critical' ? 'border-red-500' : level === 'high' ? 'border-orange-500' : level === 'medium' ? 'border-yellow-500' : 'border-green-500'}">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-medium">${elementType}</span>
+                                    <span class="text-xs opacity-75">${level}</span>
+                                </div>
+                                <div class="font-mono text-xs bg-black/20 p-1 rounded mb-1 break-all">${elementInfo}</div>
+                                <div class="text-xs opacity-75">${contrastInfo}</div>
+                                ${problem.colors ? `<div class="text-xs opacity-60 mt-1">Couleurs: ${JSON.stringify(problem.colors)}</div>` : ''}
+                            </div>
+                        `;
+                    }).join('');
+
+                    const remainingCount = data.problems.length - 3;
+
+                    return `
+                        <div class="p-3 ${severityColors[severity]} border rounded-lg">
+                            <div class="font-medium text-gray-200 mb-2 break-all">${fileName}</div>
+                            <div class="text-xs space-y-1 mb-3">
+                                <div class="text-gray-300">${fileTotal} problème${fileTotal > 1 ? 's' : ''} de contraste</div>
+                                <div class="flex flex-wrap gap-2 text-xs">
+                                    ${data.critical > 0 ? `<span class="px-2 py-1 bg-red-500/20 text-red-400 rounded">${data.critical} critique${data.critical > 1 ? 's' : ''}</span>` : ''}
+                                    ${data.high > 0 ? `<span class="px-2 py-1 bg-orange-500/20 text-orange-400 rounded">${data.high} élevé${data.high > 1 ? 's' : ''}</span>` : ''}
+                                    ${data.medium > 0 ? `<span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded">${data.medium} moyen${data.medium > 1 ? 's' : ''}</span>` : ''}
+                                    ${data.low > 0 ? `<span class="px-2 py-1 bg-green-500/20 text-green-400 rounded">${data.low} faible${data.low > 1 ? 's' : ''}</span>` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Détails des éléments problématiques -->
+                            <div class="space-y-2">
+                                <div class="text-xs font-medium text-gray-300">Éléments affectés :</div>
+                                ${problemDetails}
+                                ${remainingCount > 0 ? `
+                                    <div class="text-center text-gray-400 text-xs pt-2 border-t border-white/10">
+                                        +${remainingCount} autre${remainingCount > 1 ? 's' : ''} élément${remainingCount > 1 ? 's' : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <!-- Instructions de correction -->
+                            <div class="mt-3 p-2 bg-blue-500/10 border border-blue-500/20 rounded text-xs">
+                                <div class="font-medium text-blue-300 mb-1">🔧 Comment corriger :</div>
+                                <div class="text-blue-200 space-y-1">
+                                    ${fileName.includes('CSS') ?
+                                        '<div>• Modifier les couleurs dans votre feuille de style CSS</div><div>• Utiliser des couleurs avec un contraste plus élevé</div>' :
+                                        '<div>• Vérifier les styles inline ou les classes CSS appliquées</div><div>• Modifier la couleur du texte ou de l\'arrière-plan</div>'
+                                    }
+                                    <div>• Tester avec <a href="https://webaim.org/resources/contrastchecker/" class="underline text-blue-300" target="_blank">WebAIM Contrast Checker</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            };
+
+            // Générer les priorités d'action plus utiles
+            const generateActionPriorities = () => {
+                const priorities = [];
+
+                if (critiques > 0) {
+                    priorities.push({
+                        level: 'Urgent',
+                        color: 'text-red-400',
+                        icon: '🚨',
+                        action: `Corriger ${critiques} problème${critiques > 1 ? 's' : ''} critique${critiques > 1 ? 's' : ''} de contraste`,
+                        impact: 'Bloque l\'accessibilité pour les utilisateurs malvoyants'
+                    });
+                }
+
+                if (eleves > 0) {
+                    priorities.push({
+                        level: 'Important',
+                        color: 'text-orange-400',
+                        icon: '⚠️',
+                        action: `Améliorer ${eleves} élément${eleves > 1 ? 's' : ''} avec contraste insuffisant`,
+                        impact: 'Difficultés de lecture pour certains utilisateurs'
+                    });
+                }
+
+                if (moyens > 0 || faibles > 0) {
+                    const total = moyens + faibles;
+                    priorities.push({
+                        level: 'Amélioration',
+                        color: 'text-yellow-400',
+                        icon: '📋',
+                        action: `Optimiser ${total} élément${total > 1 ? 's' : ''} pour un meilleur contraste`,
+                        impact: 'Améliore l\'expérience utilisateur globale'
+                    });
+                }
+
+                if (priorities.length === 0) return '';
+
+                return priorities.map(priority => `
+                    <div class="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg">
+                        <div class="text-lg">${priority.icon}</div>
+                        <div class="flex-1">
+                            <div class="font-medium ${priority.color} mb-1">${priority.level}: ${priority.action}</div>
+                            <div class="text-xs text-gray-400">${priority.impact}</div>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            // Ajouter l'affichage optimisé avec scroll plus grand et informations plus pertinentes
+            const wcagContainer = document.getElementById("chart-wcag").parentElement;
+
+            // Résumé global fixe (en dehors du scroll)
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'mt-4 mb-4';
+            summaryDiv.innerHTML = `
+                <div class="text-center p-4 bg-gray-800/30 rounded-lg">
+                    ${total > 0 ?
+                        `<div class="text-xl font-bold text-gray-200">${total} problème${total > 1 ? 's' : ''} de contraste</div>
+                         <div class="text-sm text-gray-400">
+                            🔴 ${critiques} critique${critiques > 1 ? 's' : ''} •
+                            🟠 ${eleves} élevé${eleves > 1 ? 's' : ''} •
+                            🟡 ${moyens} moyen${moyens > 1 ? 's' : ''} •
+                            🟢 ${faibles} faible${faibles > 1 ? 's' : ''}
+                         </div>` :
+                        '<div class="text-lg font-bold text-green-400">✅ Aucun problème de contraste détecté</div>'
+                    }
+                </div>
+            `;
+            wcagContainer.appendChild(summaryDiv);
+
+            // Zone de scroll agrandie avec détails pertinents
+            const detailsDiv = document.createElement('div');
+            detailsDiv.className = 'space-y-4 max-h-80 overflow-y-auto pr-2 border-t border-gray-700/50 pt-4';
+            detailsDiv.innerHTML = `
+                ${Object.keys(fileProblems).length > 0 ? `
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-200 mb-3 sticky top-0 bg-[var(--sh-card-bg)] py-2 z-10 border-b border-gray-700/30">
+                            📋 Problèmes détectés par fichier
+                        </h4>
+                        <div class="space-y-3">
+                            ${Object.entries(fileProblems)
+                                .filter(([file, data]) => data.critical + data.high + data.medium + data.low > 0)
+                                .sort((a, b) => {
+                                    const aScore = a[1].critical * 4 + a[1].high * 3 + a[1].medium * 2 + a[1].low;
+                                    const bScore = b[1].critical * 4 + b[1].high * 3 + b[1].medium * 2 + b[1].low;
+                                    return bScore - aScore;
+                                })
+                                .map(([fileName, data]) => {
+                                    const fileTotal = data.critical + data.high + data.medium + data.low;
+                                    const priority = data.critical > 0 ? 'Critique' : data.high > 0 ? 'Élevé' : data.medium > 0 ? 'Moyen' : 'Faible';
+                                    const priorityColor = data.critical > 0 ? 'text-red-400 bg-red-900/20' : data.high > 0 ? 'text-orange-400 bg-orange-900/20' : data.medium > 0 ? 'text-yellow-400 bg-yellow-900/20' : 'text-green-400 bg-green-900/20';
+
+                                    const problemsDetails = data.problems.slice(0, 5).map((problem, index) => {
+                                        // Identifier le type d'élément de façon plus précise
+                                        let elementDescription = 'Élément non spécifié';
+                                        let selectorInfo = '';
+                                        let actionSuggestion = '';
+
+                                        if (problem.element && problem.element !== 'Non spécifié') {
+                                            if (problem.element.startsWith('.')) {
+                                                elementDescription = `Classe CSS "${problem.element}"`;
+                                                selectorInfo = problem.element;
+                                                actionSuggestion = 'Ajuster les couleurs dans le CSS';
+                                            } else if (problem.element.startsWith('#')) {
+                                                elementDescription = `ID "${problem.element}"`;
+                                                selectorInfo = problem.element;
+                                                actionSuggestion = 'Modifier les couleurs de cet élément';
+                                            } else if (problem.element.includes('background-color') || problem.element.includes('color:')) {
+                                                elementDescription = 'Propriété CSS de couleur';
+                                                selectorInfo = problem.element;
+                                                actionSuggestion = 'Réviser cette déclaration CSS';
+                                            } else if (problem.element.match(/^[a-z]+$/)) {
+                                                elementDescription = `Balise <${problem.element}>`;
+                                                selectorInfo = `<${problem.element}>`;
+                                                actionSuggestion = 'Vérifier le style appliqué à cette balise';
+                                            } else {
+                                                elementDescription = 'Sélecteur CSS';
+                                                selectorInfo = problem.element;
+                                                actionSuggestion = 'Examiner ce sélecteur dans le CSS';
+                                            }
+                                        }
+
+                                        // Informations sur le contraste plus exploitables
+                                        let contrastInfo = '';
+                                        let fixSuggestion = '';
+                                        if (problem.ratio && problem.ratio !== 'N/A' && problem.ratio !== 'Ratio non disponible') {
+                                            const currentRatio = parseFloat(problem.ratio);
+                                            const requiredRatio = problem.expected && problem.expected !== 'N/A' ? parseFloat(problem.expected) : 4.5;
+                                            if (!isNaN(currentRatio) && !isNaN(requiredRatio)) {
+                                                contrastInfo = `Contraste actuel: ${currentRatio.toFixed(2)}:1 (requis: ${requiredRatio}:1)`;
+                                                const improvement = ((requiredRatio / currentRatio) * 100 - 100).toFixed(0);
+                                                fixSuggestion = `Améliorer le contraste de ${improvement}% minimum`;
+                                            } else {
+                                                contrastInfo = `Ratio: ${problem.ratio}`;
+                                                fixSuggestion = 'Vérifier manuellement le contraste';
+                                            }
+                                        } else {
+                                            contrastInfo = 'Contraste à vérifier manuellement';
+                                            fixSuggestion = 'Utiliser un outil de test de contraste';
+                                        }
+
+                                        // Couleurs impliquées
+                                        let colorInfo = '';
+                                        if (problem.colors && typeof problem.colors === 'object') {
+                                            const colors = Object.entries(problem.colors).map(([key, value]) => `${key}: ${value}`).join(', ');
+                                            colorInfo = colors;
+                                        } else if (problem.foreground && problem.background) {
+                                            colorInfo = `Texte: ${problem.foreground}, Fond: ${problem.background}`;
+                                        }
+
+                                        const levelColor = data.critical > 0 ? 'border-red-500 bg-red-500/5' : data.high > 0 ? 'border-orange-500 bg-orange-500/5' : data.medium > 0 ? 'border-yellow-500 bg-yellow-500/5' : 'border-green-500 bg-green-500/5';
+
+                                        return `
+                                            <div class="p-3 border-l-3 ${levelColor} bg-gray-800/30 rounded-r">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <div class="font-medium text-gray-100">${elementDescription}</div>
+                                                    <span class="text-xs px-2 py-1 ${priorityColor} rounded">${priority}</span>
+                                                </div>
+                                                ${selectorInfo ? `<div class="font-mono text-xs bg-black/30 p-2 rounded mb-2 break-all text-blue-300">${selectorInfo}</div>` : ''}
+                                                <div class="text-xs text-gray-300 space-y-1">
+                                                    <div>📊 ${contrastInfo}</div>
+                                                    ${colorInfo ? `<div>🎨 ${colorInfo}</div>` : ''}
+                                                    <div class="text-yellow-300">💡 ${actionSuggestion}</div>
+                                                    ${fixSuggestion ? `<div class="text-green-300">🔧 ${fixSuggestion}</div>` : ''}
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('');
+
+                                    const remainingCount = data.problems.length - 5;
+
+                                    return `
+                                        <div class="bg-gray-900/50 border border-gray-700/50 rounded-lg overflow-hidden">
+                                            <div class="p-3 bg-gray-800/50">
+                                                <div class="flex justify-between items-center">
+                                                    <div class="font-medium text-gray-100 break-all">${fileName}</div>
+                                                    <div class="text-xs ${priorityColor} px-2 py-1 rounded">
+                                                        ${fileTotal} problème${fileTotal > 1 ? 's' : ''}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="p-3 space-y-2">
+                                                ${problemsDetails}
+                                                ${remainingCount > 0 ? `
+                                                    <div class="text-center p-2 text-xs text-gray-400 bg-gray-800/30 rounded">
+                                                        + ${remainingCount} autre${remainingCount > 1 ? 's' : ''} problème${remainingCount > 1 ? 's' : ''} dans ce fichier
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-700/50 pt-4">
+                        <h4 class="text-sm font-bold text-gray-200 mb-3">🎯 Actions recommandées par priorité</h4>
+                        <div class="space-y-2">
+                            ${critiques > 0 ? `
+                                <div class="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-red-400 font-bold">🔴 URGENT</span>
+                                        <span class="text-sm text-gray-300">${critiques} problème${critiques > 1 ? 's' : ''} critique${critiques > 1 ? 's' : ''}</span>
+                                    </div>
+                                    <div class="text-xs text-gray-300">
+                                        Ces éléments ont un contraste très insuffisant et doivent être corrigés immédiatement pour respecter les standards WCAG AA.
+                                    </div>
+                                </div>
+                            ` : ''}
+                            ${eleves > 0 ? `
+                                <div class="p-3 bg-orange-900/20 border border-orange-500/30 rounded-lg">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-orange-400 font-bold">🟠 ÉLEVÉ</span>
+                                        <span class="text-sm text-gray-300">${eleves} problème${eleves > 1 ? 's' : ''} élevé${eleves > 1 ? 's' : ''}</span>
+                                    </div>
+                                    <div class="text-xs text-gray-300">
+                                        Contraste insuffisant nécessitant une correction pour améliorer l'accessibilité.
+                                    </div>
+                                </div>
+                            ` : ''}
+                            ${moyens > 0 ? `
+                                <div class="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-yellow-400 font-bold">🟡 MOYEN</span>
+                                        <span class="text-sm text-gray-300">${moyens} problème${moyens > 1 ? 's' : ''} moyen${moyens > 1 ? 's' : ''}</span>
+                                    </div>
+                                    <div class="text-xs text-gray-300">
+                                        Améliorations recommandées pour optimiser l'expérience utilisateur.
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="border-t border-gray-700/50 pt-4">
+                    <h4 class="text-sm font-bold text-gray-200 mb-3">🔧 Outils et ressources</h4>
+                    <div class="grid grid-cols-1 gap-3 text-xs">
+                        <div class="p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
+                            <div class="font-medium text-blue-400 mb-2">Standards WCAG 2.1</div>
+                            <div class="space-y-1 text-gray-300">
+                                <div>• <strong>Niveau AA :</strong> ratio ≥ 4.5:1 (texte normal)</div>
+                                <div>• <strong>Niveau AAA :</strong> ratio ≥ 7:1 (recommandé)</div>
+                                <div>• <strong>Gros texte :</strong> ratio ≥ 3:1 (18pt+ ou 14pt bold)</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
+                            <div class="font-medium text-purple-400 mb-2">Outils de test</div>
+                            <div class="space-y-1 text-gray-300">
+                                <div>• <a href="https://webaim.org/resources/contrastchecker/" class="text-purple-300 hover:text-purple-200 underline" target="_blank">WebAIM Contrast Checker</a></div>
+                                <div>• <a href="https://www.tpgi.com/color-contrast-checker/" class="text-purple-300 hover:text-purple-200 underline" target="_blank">TPGi Color Contrast Checker</a></div>
+                                <div>• Outils développeur du navigateur (Accessibility tab)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            wcagContainer.appendChild(detailsDiv);
+        } else {
+            document.getElementById("chart-wcag").innerHTML =
+                '<div class="flex items-center justify-center h-32 text-gray-400"><p>⏳ Analyse WCAG en cours...</p></div>';
         }
 
-        // Daltonisme
+        // Daltonisme - Affichage amélioré avec tous les tests détaillés
         if (daltonisme) {
-            new Chart(document.getElementById("chart-daltonisme"), {
-                type: "pie",
-                data: {
-                    labels: Object.keys(daltonisme),
-                    datasets: [{
-                        data: Object.values(daltonisme),
-                        backgroundColor: ["#8b5cf6", "#a78bfa", "#c4b5fd", "#e9d5ff"]
-                    }]
+            // Analyser les données de contraste daltonisme
+            const stats = { passed: 0, failed: 0, aaa: 0, aa: 0, fail: 0 };
+            const allTests = [];
+
+            if (daltonisme.contraste && daltonisme.contraste.tests) {
+                daltonisme.contraste.tests.forEach(test => {
+                    if (test.passes) stats.passed++;
+                    else stats.failed++;
+
+                    switch(test.level) {
+                        case 'AAA': stats.aaa++; break;
+                        case 'AA': stats.aa++; break;
+                        case 'FAIL': stats.fail++; break;
+                    }
+
+                    // Ajouter le test à la liste complète
+                    allTests.push({
+                        ...test,
+                        type: 'contraste'
+                    });
+                });
+            }
+
+            // Analyser les autres types de tests s'ils existent
+            Object.entries(daltonisme).forEach(([testType, testData]) => {
+                if (testType !== 'contraste' && testData && testData.tests) {
+                    testData.tests.forEach(test => {
+                        allTests.push({
+                            ...test,
+                            type: testType
+                        });
+                    });
                 }
             });
+
+            // Fonctions pour la gestion des onglets daltonisme
+            function initDaltonismeTabs() {
+                const tabs = document.querySelectorAll('.daltonisme-tab');
+                const panels = document.querySelectorAll('.daltonisme-panel');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const targetPanel = tab.dataset.tab;
+
+                        // Désactiver tous les onglets et panneaux
+                        tabs.forEach(t => t.classList.remove('active'));
+                        panels.forEach(p => p.classList.remove('active'));
+
+                        // Activer l'onglet et le panneau sélectionnés
+                        tab.classList.add('active');
+                        const panel = document.querySelector(`[data-panel="${targetPanel}"]`);
+                        if (panel) panel.classList.add('active');
+                    });
+                });
+            }
+
+            // Fonction pour remplir les couleurs de statut
+            function populateStatusColors() {
+                const STATUS_COLORS = {
+                    optimal: { name: 'Optimal', light: '#10b981', dark: '#34d399', label: '✓' },
+                    low: { name: 'Stock Faible', light: '#f59e0b', dark: '#fbbf24', label: '⚠' },
+                    critical: { name: 'Critique', light: '#ef4444', dark: '#f87171', label: '!' },
+                    outOfStock: { name: 'Rupture', light: '#6b7280', dark: '#9ca3af', label: '✕' },
+                    overstocked: { name: 'Surstock', light: '#3b82f6', dark: '#60a5fa', label: '↑' }
+                };
+
+                const colorGrid = document.getElementById('color-status-grid');
+                if (colorGrid) {
+                    colorGrid.innerHTML = Object.entries(STATUS_COLORS).map(([key, status]) => `
+                        <div class="flex items-center gap-2 p-2 bg-gray-700/30 rounded">
+                            <div class="color-preview" style="background-color: ${status.light}" title="${status.name} (light mode)"></div>
+                            <div class="color-preview" style="background-color: ${status.dark}" title="${status.name} (dark mode)"></div>
+                            <span class="text-xs text-gray-300">${status.label} ${status.name}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Fonction pour remplir les tests de contraste
+            function populateContrastTests() {
+                const contrastGrid = document.getElementById('contrast-tests-grid');
+                if (contrastGrid && daltonisme.contraste && daltonisme.contraste.tests) {
+                    contrastGrid.innerHTML = daltonisme.contraste.tests.map(test => {
+                        // Calculer la conformité réelle basée sur le ratio de contraste
+                        const ratio = test.ratio || test.contrastRatio || 0;
+                        const expectedRatio = test.expectedRatio || (test.level === 'AAA' ? 7.0 : test.level === 'AA' ? 4.5 : 3.0);
+
+                        // Déterminer la conformité réelle
+                        const actuallyPasses = ratio >= expectedRatio;
+
+                        // Recalculer le level basé sur le ratio réel
+                        let actualLevel = 'FAIL';
+                        if (ratio >= 7.0) {
+                            actualLevel = 'AAA';
+                        } else if (ratio >= 4.5) {
+                            actualLevel = 'AA';
+                        } else if (ratio >= 3.0) {
+                            actualLevel = 'UI';
+                        }
+
+                        const levelColor = actualLevel === 'AAA' ? 'border-green-500 bg-green-900/20' :
+                                         actualLevel === 'AA' ? 'border-yellow-500 bg-yellow-900/20' :
+                                         actualLevel === 'UI' ? 'border-blue-500 bg-blue-900/20' :
+                                         'border-red-500 bg-red-900/20';
+
+                        const statusIcon = actuallyPasses ? '✅' : '❌';
+                        const statusText = actuallyPasses ? 'Conforme' : 'Non conforme';
+                        const statusColor = actuallyPasses ? 'text-green-400' : 'text-red-400';
+
+                        // Extraire le contexte du test pour plus de clarté
+                        const testContext = test.context || test.description || test.selector || 'Élément non spécifié';
+                        const testType = test.type || 'Contraste de couleur';
+                        const backgroundMode = test.background || 'mode non spécifié';
+                        const statusType = test.status || 'statut non spécifié';
+
+                        // Déterminer l'icône et la couleur du mode
+                        let modeDisplay = '';
+                        if (backgroundMode === 'dark') {
+                            modeDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-800 text-gray-200 rounded-md border border-gray-600">
+                                🌙 Mode sombre
+                            </span>`;
+                        } else if (backgroundMode === 'light') {
+                            modeDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-md border border-gray-300">
+                                ☀️ Mode clair
+                            </span>`;
+                        } else {
+                            modeDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-md border border-purple-500/30">
+                                ❓ ${backgroundMode}
+                            </span>`;
+                        }
+
+                        // Affichage du type de statut testé
+                        const statusColors = {
+                            optimal: 'bg-green-500/20 text-green-400 border-green-500/30',
+                            low: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+                            critical: 'bg-red-500/20 text-red-400 border-red-500/30',
+                            outOfStock: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+                            overstocked: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+                        };
+                        const statusColorClass = statusColors[statusType] || 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+
+                        let statusDisplay = `<span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-md border ${statusColorClass}">
+                            📊 ${statusType}
+                        </span>`;
+
+                        // Informations sur les couleurs testées
+                        let colorInfo = '';
+                        if (test.foregroundColor && test.backgroundColor) {
+                            colorInfo = `Texte: ${test.foregroundColor} sur ${test.backgroundColor}`;
+                        } else if (test.colors) {
+                            const colors = Object.entries(test.colors).map(([key, value]) => `${key}: ${value}`).join(' / ');
+                            colorInfo = colors;
+                        } else if (test.element) {
+                            colorInfo = `Élément: ${test.element}`;
+                        }
+
+                        return `
+                            <div class="p-4 ${levelColor} border rounded-lg">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-lg">${statusIcon}</span>
+                                        <div class="flex-1">
+                                            <div class="font-medium ${statusColor}">${statusText}</div>
+                                            <div class="mt-2 flex flex-wrap gap-2">
+                                                ${modeDisplay}
+                                                ${statusDisplay}
+                                            </div>
+                                            ${colorInfo ? `<div class="text-xs text-blue-300 mt-2">${colorInfo}</div>` : ''}
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full ${
+                                        actualLevel === 'AAA' ? 'bg-green-500/20 text-green-400' :
+                                        actualLevel === 'AA' ? 'bg-yellow-500/20 text-yellow-400' :
+                                        actualLevel === 'UI' ? 'bg-blue-500/20 text-blue-400' :
+                                        'bg-red-500/20 text-red-400'
+                                    }">
+                                        ${actualLevel}
+                                    </span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-300">Ratio de contraste:</span>
+                                        <span class="font-mono ${statusColor}">${test.ratio?.toFixed(2) || 'N/A'}:1</span>
+                                    </div>
+                                    ${test.expectedRatio ? `
+                                        <div class="flex justify-between text-xs">
+                                            <span class="text-gray-400">Requis:</span>
+                                            <span class="font-mono text-gray-300">${test.expectedRatio}:1</span>
+                                        </div>
+                                    ` : ''}
+                                    <div class="text-xs ${statusColor} bg-gray-800/50 p-2 rounded">
+                                        ${test.passes ?
+                                            '✅ Respecte les standards WCAG - Lisible pour tous les utilisateurs' :
+                                            '❌ Contraste insuffisant - Difficile à lire pour les utilisateurs malvoyants'
+                                        }
+                                    </div>
+                                    ${testContext && testContext !== 'Élément non spécifié' ? `
+                                        <div class="text-xs text-gray-500 border-t border-gray-700 pt-2 mt-2">
+                                            <span class="font-medium">Contexte:</span> ${testContext}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Fonction pour remplir les simulations de daltonisme
+            function populateSimulations() {
+                const simulationGrid = document.getElementById('simulation-grid');
+                if (simulationGrid && daltonisme.daltonisme) {
+                    const daltonismTypes = {
+                        protanopia: { name: 'Protanopie', desc: 'Déficit rouge-vert (~1% hommes)', color: '#ef4444' },
+                        deuteranopia: { name: 'Deutéranopie', desc: 'Déficit rouge-vert (~1% hommes)', color: '#f59e0b' },
+                        tritanopia: { name: 'Tritanopie', desc: 'Déficit bleu-jaune (~0.01%)', color: '#3b82f6' },
+                        achromatopsie: { name: 'Achromatopsie', desc: 'Monochrome (très rare)', color: '#6b7280' }
+                    };
+
+                    simulationGrid.innerHTML = Object.entries(daltonisme.daltonisme).map(([type, data]) => {
+                        const typeInfo = daltonismTypes[type] || { name: type, desc: 'Type de daltonisme', color: '#8b5cf6' };
+                        const passedDifferences = data.differences?.filter(d => d.differentiable).length || 0;
+                        const totalDifferences = data.differences?.length || 0;
+                        const percentage = totalDifferences > 0 ? ((passedDifferences / totalDifferences) * 100).toFixed(0) : 0;
+
+                        return `
+                            <div class="daltonism-type-card">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-4 h-4 rounded-full" style="background-color: ${typeInfo.color}"></div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-200">${typeInfo.name}</h4>
+                                        <p class="text-xs text-gray-400">${typeInfo.desc}</p>
+                                    </div                                </div>
+
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-300">Différentiabilité:</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg ${data.allDifferentiable ? '✅' : '⚠️'}">${data.allDifferentiable ? '✅' : '⚠️'}</span>
+                                            <span class="font-semibold ${percentage >= 80 ? 'text-green-400' : percentage >= 60 ? 'text-yellow-400' : 'text-red-400'}">
+                                                ${percentage}%
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-xs text-gray-400">
+                                        ${passedDifferences}/${totalDifferences} paires de couleurs distinguables
+                                    </div>
+
+                                    ${data.simulatedColors ? `
+                                        <div class="mt-3">
+                                            <div class="text-xs text-gray-300 mb-2">Aperçu des couleurs simulées:</div>
+                                            <div class="flex gap-1">
+                                                ${Object.entries(data.simulatedColors).map(([status, colors]) => `
+                                                    <div class="tooltip-wrapper" tabindex="0">
+                                                        <div class="color-preview simulated" style="background-color: ${colors.simulated}" title="Couleur simulée"></div>
+                                                        <div class="tooltip-box">
+                                                            <div class="font-medium">${status}</div>
+                                                            <div>Original: ${colors.original}</div>
+                                                            <div>Simulé: ${colors.simulated}</div>
+                                                        </div>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Fonction pour remplir l'analyse de différentiabilité
+            function populateDifferenceAnalysis() {
+                const differenceContainer = document.getElementById('difference-analysis');
+                if (differenceContainer && daltonisme.daltonisme) {
+                    differenceContainer.innerHTML = Object.entries(daltonisme.daltonisme).map(([type, data]) => {
+                        const differences = data.differences || [];
+
+                        return `
+                            <div class="space-y-4">
+                                <h4 class="text-lg font-semibold text-gray-200 capitalize">${type}</h4>
+                                <div class="grid grid-cols-1 gap-3">
+                                    ${differences.map(diff => {
+                                        const deltaClass = diff.differentiable ? 'delta-e-good' :
+                                                         diff.deltaSimulated >= 30 ? 'delta-e-warning' : 'delta-e-critical';
+
+                                        return `
+                                            <div class="p-4 bg-gray-800/50 border border-gray-700/50 rounded-lg">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <div class="text-sm text-gray-200">${diff.pair}</div>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-lg">${diff.differentiable ? '✅' : '⚠️'}</span>
+                                                        <span class="delta-e-indicator ${deltaClass}">
+                                                            ΔE: ${diff.deltaSimulated?.toFixed(1) || 'N/A'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex justify-between text-xs text-gray-400">
+                                                    <span>Original ΔE: ${diff.deltaOriginal?.toFixed(1) || 'N/A'}</span>
+                                                    <span>Seuil: ≥40 pour différentiation</span>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Mettre à jour les métriques principales
+            function updateMainMetrics() {
+                const contrastScore = document.getElementById('contrast-score');
+                const daltonismScore = document.getElementById('daltonism-score');
+                const statusBadge = document.getElementById('daltonisme-status-badge');
+                const globalSummary = document.getElementById('global-summary');
+
+                if (contrastScore) {
+                    const contrastPercent = stats.passed + stats.failed > 0 ?
+                        Math.round((stats.passed / (stats.passed + stats.failed)) * 100) : 0;
+                    contrastScore.textContent = `${contrastPercent}%`;
+                }
+
+                if (daltonismScore && daltonisme.daltonisme) {
+                    const daltonismTypes = Object.values(daltonisme.daltonisme);
+                    const allDifferentiable = daltonismTypes.filter(d => d.allDifferentiable).length;
+                    const totalTypes = daltonismTypes.length;
+                    const daltonismPercent = totalTypes > 0 ? Math.round((allDifferentiable / totalTypes) * 100) : 0;
+                    daltonismScore.textContent = `${daltonismPercent}%`;
+                }
+
+                if (statusBadge) {
+                    const overallStatus = (stats.passed > stats.failed) &&
+                        Object.values(daltonisme.daltonisme || {}).every(d => d.allDifferentiable);
+                    statusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                        overallStatus ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'
+                    }`;
+                    statusBadge.textContent = overallStatus ? '✅ Conforme' : '⚠️ À améliorer';
+                }
+
+                if (globalSummary) {
+                    const totalTests = allTests.length;
+                    const passedTests = stats.passed;
+                    const daltonismTypes = Object.keys(daltonisme.daltonisme || {}).length;
+
+                    globalSummary.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div class="text-2xl font-bold text-blue-400">${totalTests}</div>
+                                <div class="text-xs text-gray-400">Tests de contraste</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-purple-400">${daltonismTypes}</div>
+                                <div class="text-xs text-gray-400">Types de daltonisme</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold ${passedTests > (totalTests - passedTests) ? 'text-green-400' : 'text-red-400'}">
+                                    ${totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0}%
+                                </div>
+                                <div class="text-xs text-gray-400">Conformité globale</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            const daltonismeContainer = document.getElementById("chart-daltonisme").parentElement;
+
+            // Créer le graphique en donut (plus petit maintenant)
+            new Chart(document.getElementById("chart-daltonisme"), {
+                type: "doughnut",
+                data: {
+                    labels: ["Tests réussis", "Tests échoués"],
+                    datasets: [{
+                        data: [stats.passed, stats.failed],
+                        backgroundColor: ["#10b981", "#ef4444"],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = stats.passed + stats.failed;
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return `${context.label}: ${context.parsed} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Ajouter l'overlay avec statistiques centrales
+            const overlay = document.createElement('div');
+            overlay.className = 'chart-overlay';
+            overlay.innerHTML = `
+                <div class="chart-overlay-text">
+                    <div class="text-2xl font-bold ${stats.passed > stats.failed ? 'text-green-400' : 'text-red-400'}">
+                        ${stats.passed + stats.failed > 0 ? ((stats.passed / (stats.passed + stats.failed)) * 100).toFixed(0) : 0}%
+                    </div>
+                    <div class="text-xs text-gray-300 font-medium">Conformité</div>
+                </div>
+            `;
+            daltonismeContainer.appendChild(overlay);
+
+            // Initialiser tous les composants de la section daltonisme
+            setTimeout(() => {
+                initDaltonismeTabs();
+                populateStatusColors();
+                populateContrastTests();
+                populateSimulations();
+                populateDifferenceAnalysis();
+                updateMainMetrics();
+            }, 100);
+
+        } else {
+            document.getElementById("chart-daltonisme").innerHTML =
+                '<div class="flex items-center justify-center h-32 text-gray-400"><p>⏳ Test daltonisme en cours...</p></div>';
         }
 
-        // Texte
-        document.getElementById("fps-result").textContent =
-            fps ? `FPS moyen : ${fps.avgOverall || 'N/A'} ${fps.allPassed ? '✅' : '❌'}` : "En attente...";
-        document.getElementById("a11y-result").textContent =
-            a11y ? `${a11y.passed ? '✅ Conforme' : '❌ Non conforme'}` : "En attente...";
-        document.getElementById("dataset-result").textContent =
-            datasets ? `Dégradation : ${datasets.degradation || 'N/A'}%` : "En attente...";
+        // FPS - Affichage amélioré avec graphique circulaire SVG
+        const fpsEl = document.getElementById("fps-result");
+        if (fps?.avgOverall != null) {
+            const avgFps = parseFloat(fps.avgOverall);
+            const statusIcon = fps.allPassed ? '✅' : '❌';
+            const statusColor = fps.allPassed ? 'text-green-400' : 'text-red-400';
+            const testsCount = fps.tests?.length || 0;
+            const progressPercent = Math.min(100, (avgFps / 60) * 100);
+            const strokeDasharray = `${progressPercent * 2.51} 251`;
+
+            fpsEl.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="relative">
+                            <svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 84 84">
+                                <circle cx="42" cy="42" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
+                                <circle cx="42" cy="42" r="40" stroke="${avgFps >= 60 ? '#10b981' : avgFps >= 45 ? '#f59e0b' : '#ef4444'}"
+                                        stroke-width="4" fill="none" stroke-linecap="round"
+                                        stroke-dasharray="${strokeDasharray}" class="transition-all duration-1000 ease-out"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-lg font-bold ${statusColor}">${avgFps.toFixed(0)}</div>
+                                    <div class="text-xs text-gray-400">FPS</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1 ml-4 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium">Performance</span>
+                                <span class="text-2xl">${statusIcon}</span>
+                            </div>
+                            <div class="text-xs text-gray-300">${testsCount} tests • ${avgFps.toFixed(1)} FPS moyen</div>
+                            <div class="text-xs ${fps.allPassed ? 'text-green-400' : 'text-red-400'}">
+                                ${fps.allPassed ? 'Animations fluides ✨' : 'Optimisation requise ⚠️'}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                        <div class="p-2 bg-gray-800 rounded">
+                            <div class="text-green-400 font-semibold">${fps.tests?.filter(t => t.passed).length || 0}</div>
+                            <div class="text-gray-400">Passés</div>
+                        </div>
+                        <div class="p-2 bg-gray-800 rounded">
+                            <div class="text-red-400 font-semibold">${fps.tests?.filter(t => !t.passed).length || 0}</div>
+                            <div class="text-gray-400">Échoués</div>
+                        </div>
+                        <div class="p-2 bg-gray-800 rounded">
+                            <div class="text-blue-400 font-semibold">60</div>
+                            <div class="text-gray-400">Cible</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            fpsEl.innerHTML = `
+                <div class="flex items-center justify-center h-32">
+                    <div class="text-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto mb-2"></div>
+                        <p class="text-gray-400 text-sm">Tests FPS en cours...</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // A11y - Affichage avec badge visuel
+        const a11yEl = document.getElementById("a11y-result");
+        if (a11y != null) {
+            const statusIcon = a11y.passed ? '✅' : '❌';
+            const statusColor = a11y.passed ? 'text-green-400' : 'text-red-400';
+            const badgeColor = a11y.passed ? 'bg-green-500' : 'bg-red-500';
+            const statusText = a11y.passed ? 'Conforme' : 'Non conforme';
+            a11yEl.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 ${badgeColor} rounded-full flex items-center justify-center text-white text-xl font-bold">
+                                ${a11y.passed ? '♿' : '⚠️'}
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold ${statusColor}">${statusText}</div>
+                                <div class="text-xs text-gray-400">Reduced Motion</div>
+                            </div>
+                        </div>
+                        <div class="text-3xl">${statusIcon}</div>
+                    </div>
+                    <div class="p-3 bg-gray-800 rounded-lg">
+                        <div class="text-xs text-gray-300 mb-2">
+                            ${a11y.passed ?
+                                '🎯 Les animations respectent prefers-reduced-motion' :
+                                '❗ Certaines animations ignorent les préférences utilisateur'
+                            }
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            Test automatique de la directive CSS prefers-reduced-motion
+                        </div>
+                    </div>
+                    ${a11y.passed ?
+                        '<div class="flex items-center space-x-2 text-xs text-green-400"><span class="pulse-dot bg-green-400"></span><span>Accessibilité optimisée</span></div>' :
+                        '<div class="flex items-center space-x-2 text-xs text-red-400"><span class="pulse-dot bg-red-400"></span><span>Améliorations nécessaires</span></div>'
+                    }
+                </div>
+            `;
+        } else {
+            a11yEl.innerHTML = `
+                <div class="flex items-center justify-center h-32">
+                    <div class="text-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto mb-2"></div>
+                        <p class="text-gray-400 text-sm">Test accessibilité en cours...</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Datasets - Affichage avec gauge visuel
+        const datasetEl = document.getElementById("dataset-result");
+        if (datasets?.degradation != null && datasets.degradation !== 'N/A') {
+            const degradation = parseFloat(datasets.degradation);
+            const isGood = degradation < 5;
+            const isMedium = degradation < 15;
+            const statusIcon = isGood ? '✅' : isMedium ? '⚠️' : '❌';
+            const statusColor = isGood ? 'text-green-400' : isMedium ? 'text-yellow-400' : 'text-red-400';
+            const gaugeColor = isGood ? '#10b981' : isMedium ? '#f59e0b' : '#ef4444';
+            const statusText = isGood ? 'Excellent' : isMedium ? 'Acceptable' : 'Problématique';
+            const gaugePercent = Math.min(100, (degradation / 20) * 100);
+            const gaugeDasharray = `${gaugePercent * 1.88} 188`;
+
+            datasetEl.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="relative">
+                            <svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
+                                <circle cx="32" cy="32" r="30" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
+                                <circle cx="32" cy="32" r="30" stroke="${gaugeColor}"
+                                        stroke-width="4" fill="none" stroke-linecap="round"
+                                        stroke-dasharray="${gaugeDasharray}" class="transition-all duration-1000 ease-out"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-sm font-bold ${statusColor}">${degradation.toFixed(1)}%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1 ml-4 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium">Scalabilité</span>
+                                <span class="text-2xl">${statusIcon}</span>
+                            </div>
+                            <div class="text-xs ${statusColor} font-medium">${statusText}</div>
+                            <div class="text-xs text-gray-400">Objectif: < 5%</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                        <div class="p-2 bg-gray-800 rounded">
+                            <div class="text-green-400 font-semibold">< 5%</div>
+                            <div class="text-gray-400">Excellent</div>
+                        </div>
+                        <div class="p-2 bg-gray-800 rounded">
+                            <div class="text-yellow-400 font-semibold">5-15%</div>
+                            <div class="text-gray-400">Acceptable</div>
+                        </div>
+                        <div class="p-2 bg-gray-800 rounded">
+                            <div class="text-red-400 font-semibold">> 15%</div>
+                            <div class="text-gray-400">Critique</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            datasetEl.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center">
+                            <span class="text-2xl">🔍</span>
+                        </div>
+                        <div class="flex-1 ml-4 space-y-1">
+                            <div class="text-lg font-bold text-gray-400">Données manquantes</div>
+                            <div class="text-xs text-gray-500">Tests de scalabilité requis</div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-gray-800 rounded-lg border border-dashed border-gray-600">
+                        <div class="text-xs text-gray-400 text-center">
+                            Exécutez <code class="bg-gray-700 px-1 rounded">npm run test:datasets</code> pour générer les métriques
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
     }
 
     function renderAudit(audit) {
@@ -277,18 +2029,45 @@
     }
 
     async function loadCoverage() {
-        // Chargement et traitement des données de couverture (version rétablie simple)
+        // Chargement et traitement des données de couverture - CORRIGÉ pour utiliser le bon chemin
         const candidates = [
-            'coverage/coverage-final.json',
-            '../coverage/coverage-final.json',
-            '../../coverage/coverage-final.json'
+            './coverage/coverage-final.json', // Local - dossier metrics
+            '../../../coverage/coverage-final.json', // Racine du projet depuis metrics
+            '../../coverage/coverage-final.json', // Alternative
+            'https://sandrinecipolla.github.io/stockHub_V2_front/coverage/coverage-final.json' // GitHub Pages (si publié)
         ];
         let data = null;
+        let usedUrl = null;
+
         for (const url of candidates) {
-            try { const r = await fetch(url); if (r.ok) { data = await r.json(); break; } } catch {}
+            try {
+                console.log(`Tentative de chargement: ${url}`);
+                const r = await fetch(url);
+                if (r.ok) {
+                    data = await r.json();
+                    usedUrl = url;
+                    console.log(`Coverage chargée depuis: ${url}`);
+                    break;
+                } else {
+                    console.log(`Échec ${url}: ${r.status}`);
+                }
+            } catch (e) {
+                console.log(`Erreur ${url}:`, e.message);
+            }
         }
+
         const container = document.getElementById('coverage-content');
-        if (!data) { container.innerHTML = '<p class="text-red-400">Impossible de charger coverage-final.json (non publié).</p>'; return; }
+        if (!data) {
+            container.innerHTML = `
+                <p class="text-red-400">❌ Impossible de charger coverage-final.json</p>
+                <p class="text-xs opacity-60 mt-2">Tentatives effectuées :</p>
+                <ul class="text-xs opacity-60 mt-1">
+                    ${candidates.map(url => `<li>• ${url}</li>`).join('')}
+                </ul>
+                <p class="text-xs opacity-60 mt-2">Assurez-vous que les tests de couverture ont été exécutés avec <code>npm run test:coverage</code></p>
+            `;
+            return;
+        }
 
         const GROUP_RULES = [
             { id:'dashboard', label:'Dashboard', help:'Vue principale et widgets du tableau de bord', match:f=> /pages[\\\/]Dashboard|Dashboard/i.test(f) },
@@ -401,6 +2180,7 @@
         container.innerHTML = `
           <div class='mb-4'>
             <p class='text-lg'>Couverture globale (instructions) : <span class='font-semibold ${colorFor(globalPct)}'>${globalPct.toFixed(1)}%</span></p>
+            <p class='text-xs opacity-60'>Source: ${usedUrl}</p>
             <p class='text-xs opacity-60 flex gap-3'>
               <span><span class='inline-block w-2 h-2 rounded-full bg-green-400 align-middle'></span> ≥85% bon</span>
               <span><span class='inline-block w-2 h-2 rounded-full bg-yellow-400 align-middle'></span> 70–84% moyen</span>
