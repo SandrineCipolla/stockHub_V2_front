@@ -20,7 +20,7 @@ async function generateCoverageJSON() {
 
   try {
     console.log('⏳ Exécution des tests coverage (Vitest)...');
-    execSync('npm run test:coverage -- --reporter=json --silent', { stdio: 'inherit' });
+    execSync('npm run test:coverage', { stdio: 'inherit' });
   } catch (e) {
     notes.push('Tests échoués: ' + e.message);
   }
