@@ -60,6 +60,8 @@ jobs:
             mkdir -p documentation/metrics/coverage
             cp -r coverage/* documentation/metrics/coverage/ || true
           fi
+          # Mettre à jour la liste statique des fichiers JSON dans index.html
+          node scripts/update-metrics-files.mjs
 
       - name: 🏗️ Setup Pages
         uses: actions/configure-pages@v5
