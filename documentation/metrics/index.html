@@ -292,16 +292,35 @@
         <span id="generated-date"></span>
     </p>
 
-    <a class="mt-4 inline-block text-[var(--sh-purple-300)] underline hover:text-[var(--sh-purple-400)]"
-       href="https://sandrinecipolla.github.io/stockHub_V2_front/metrics/"
-       target="_blank">
-        🌍 Voir la version publique GitHub Pages
+    <!-- Lien contextuel selon l'environnement -->
+    <a id="context-link" class="mt-4 inline-block text-[var(--sh-purple-300)] underline hover:text-[var(--sh-purple-400)]"
+       href="#"
+       target="_blank"
+       style="display: none;">
     </a>
 </header>
 
 <script>
-    document.getElementById("generated-date").textContent =
-        new Date().toLocaleString("fr-FR");
+    // Date de génération
+    document.getElementById("generated-date").textContent = new Date().toLocaleString("fr-FR");
+
+    // Lien contextuel
+    const contextLink = document.getElementById("context-link");
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isGitHubPages = window.location.hostname.includes('github.io');
+
+    if (isLocal) {
+        // En local : lien vers GitHub Pages
+        contextLink.href = "https://sandrinecipolla.github.io/stockHub_V2_front/documentation/metrics/";
+        contextLink.textContent = "🌍 Voir la version publique GitHub Pages";
+        contextLink.style.display = "inline-block";
+    } else if (isGitHubPages) {
+        // Sur GitHub Pages : lien vers le repo
+        contextLink.href = "https://github.com/SandrineCipolla/stockHub_V2_front";
+        contextLink.textContent = "📂 Voir le code source sur GitHub";
+        contextLink.style.display = "inline-block";
+    }
+    // Sur Vercel ou autre : pas de lien
 </script>
 
 <!-- GRID -->
@@ -528,8 +547,7 @@
 <!-- SCRIPT DYNAMIQUE -->
 <script>
     const jsonBasePaths = [
-        "./data/", // local
-        "https://sandrinecipolla.github.io/stockHub_V2_front/data/"
+        "./data/" // local uniquement (GitHub Pages utilise la liste statique)
     ];
 
     async function findLatestJSON(prefix) {
