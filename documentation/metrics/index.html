@@ -314,7 +314,15 @@
             </div>
         </div>
     </section>
-    <section class="card metric-card fade-in"><h2 class="section-title">⚠️ WCAG Risk Levels</h2><div class="chart-container"><canvas id="chart-wcag"></canvas></div></section>
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">⚠️ WCAG Risk Levels</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Analyse des contrastes de couleurs selon les niveaux de risque (critical, high, medium, low)
+        </p>
+        <div class="chart-container">
+            <canvas id="chart-wcag"></canvas>
+        </div>
+    </section>
     <section class="card metric-card fade-in" id="daltonisme-section">
         <h2 class="section-title flex items-center gap-3">
             👁 Tests de Daltonisme & Accessibilité Visuelle
@@ -441,24 +449,50 @@
             </div>
         </div>
     </section>
-    <section class="card metric-card fade-in"><h2 class="section-title">⚡ Performance FPS</h2><div id="fps-result"></div></section>
-    <section class="card metric-card fade-in"><h2 class="section-title">♿ Accessibilité — Reduced Motion</h2><div id="a11y-result"></div></section>
-    <section class="card metric-card fade-in"><h2 class="section-title">📊 Scalabilité — Datasets</h2><div id="dataset-result"></div></section>
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">⚡ Performance FPS</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Mesure des performances d'animation et de rendu (objectif : 60 FPS stable)
+        </p>
+        <div id="fps-result"></div>
+    </section>
+
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">♿ Accessibilité — Reduced Motion</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Respect de la préférence "prefers-reduced-motion" pour les utilisateurs sensibles au mouvement
+        </p>
+        <div id="a11y-result"></div>
+    </section>
+
+    <section class="card metric-card fade-in">
+        <h2 class="section-title">📊 Scalabilité — Datasets</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Test de performance avec différentes tailles de jeux de données (de 10 à 10 000 items)
+        </p>
+        <div id="dataset-result"></div>
+    </section>
 </div>
 
 <!-- COVERAGE -->
 <section class="mt-14 card" id="coverage-section">
     <h2 class="section-title">📈 Coverage des tests</h2>
+    <p class="text-sm text-gray-400 mb-6">
+        Couverture de code par les tests unitaires (Vitest) - Analyse détaillée par fonctionnalité
+    </p>
     <div class="space-y-4 text-sm" id="coverage-content">
-        <p class="opacity-70">Chargement du résumé de coverage…</p>
+        <p class="opacity-70">⏳ Chargement du résumé de coverage…</p>
     </div>
 </section>
 
 <!-- AUDIT COMPLET RNCP -->
 <section class="mt-14 card" id="audit-rncp">
     <h2 class="section-title">📚 Audit Complet RNCP — Synthèse</h2>
+    <p class="text-sm text-gray-400 mb-6">
+        Agrégation de tous les audits (Performance, Accessibilité, Éco-conception, Qualité) pour démonstration RNCP 2027
+    </p>
     <div class="text-md opacity-90 mb-4" id="audit-rncp-content">
-        Chargement des données RNCP...
+        ⏳ Chargement des données RNCP...
     </div>
 
     <button class="px-4 py-2 bg-[var(--sh-purple-500)] rounded-lg hover:bg-[var(--sh-purple-400)] transition"
