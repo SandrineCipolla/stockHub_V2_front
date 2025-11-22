@@ -11,7 +11,7 @@ interface SitemapRoute {
 const envBase = process.env.PUBLIC_BASE_URL || process.env.VITE_PUBLIC_BASE_URL;
 const repoName = process.env.GITHUB_REPOSITORY?.split('/')?.[1];
 const ghPagesBase = repoName
-  ? `https://$${'{'}process.env.GITHUB_ACTOR || 'username'}${'}'}.github.io/${repoName}`
+  ? `https://${process.env.GITHUB_ACTOR || 'username'}.github.io/${repoName}`
   : undefined;
 const baseUrl = envBase || ghPagesBase || 'https://stockhub-v2.vercel.app'; // Remplacez par votre vraie URL
 

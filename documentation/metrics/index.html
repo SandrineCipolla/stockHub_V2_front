@@ -293,10 +293,10 @@
     </p>
 
     <!-- Lien contextuel selon l'environnement -->
-    <a id="context-link" class="mt-4 inline-block text-[var(--sh-purple-300)] underline hover:text-[var(--sh-purple-400)]"
-       href="#"
-       target="_blank"
-       style="display: none;">
+    <a class="mt-4 inline-block text-[var(--sh-purple-300)] underline hover:text-[var(--sh-purple-400)]" href="#"
+       id="context-link"
+       style="display: none;"
+       target="_blank">
     </a>
 </header>
 
@@ -1031,6 +1031,7 @@
                             medium: 'text-yellow-400 bg-yellow-500/10',
                             low: 'text-green-400 bg-green-500/10'
                         };
+
 
                         const level = problem.level || (data.critical > 0 ? 'critical' : data.high > 0 ? 'high' : data.medium > 0 ? 'medium' : 'low');
 
