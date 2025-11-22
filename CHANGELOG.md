@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.3.0...v1.3.1) (2025-11-22)
+
+
+### Bug Fixes
+
+* **ci:** resolve Rollup optional ([6ac2b10](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6ac2b10bb881e708ded79bc7f8824b124c07545b))
+* **ci:** update static file list after ([c492059](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c4920599a1ddd02b27c1d21b449e6f945798034c))
+* **metrics:** remove --silent flag from coverage generation to ensure tests run properly ([19b01d8](https://github.com/SandrineCipolla/stockHub_V2_front/commit/19b01d8089ec2265d4458b7f1e44be16162c284b))
+
 ## [1.3.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.2.0...v1.3.0) (2025-11-18)
 
 
