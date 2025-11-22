@@ -2,13 +2,8 @@ name: 📊 Deploy Metrics Dashboard to GitHub Pages
 
 on:
   push:
-    branches: ["main","HTM-interactive-quality-metrics-dashboard"]
+    branches: ["main"]
   workflow_dispatch:
-    inputs:
-      runScope:
-        description: 'full | metrics-only | pages-only'
-        required: true
-        default: 'full'
 
 permissions:
   contents: read
@@ -20,28 +15,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  metrics:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
           cache: 'npm'
 
-      - name: 🧹 Clean install (optional deps workaround)
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install -g npm@latest
-          npm install --include=optional
+      - name: 📦 Install dependencies
+        run: npm ci
 
       - name: 🛠️ Build project
         run: npm run build
 
-      - name: 🌐 Start local server (audits)
+      - name: 🌐 Start local server
         run: |
           npm install -g serve
           serve -s dist -l 4173 &
@@ -58,42 +54,16 @@ jobs:
           node scripts/generate-eco.mjs || echo "Eco generation failed"
           node scripts/generate-coverage.mjs || echo "Coverage generation failed"
           node scripts/audit-full.mjs || echo "Full audit failed"
+          # Copie coverage AVANT upload
           if [ -d coverage ]; then
             mkdir -p documentation/metrics/coverage
             cp -r coverage/* documentation/metrics/coverage/ || true
           fi
 
-      - name: 📂 Validate metrics folder
-        run: |
-          if [ ! -d documentation/metrics ]; then
-            echo "❌ metrics folder missing"; exit 1; fi
-
-      - name: 💾 Upload metrics artifact (preview)
-        uses: actions/upload-artifact@v4
-        with:
-          name: metrics-preview-${{ github.sha }}
-          path: documentation/metrics
-
-  deploy:
-    needs: metrics
-    # if: github.ref == 'refs/heads/main'  # Temporairement désactivé pour test depuis branche
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v5
-
-      - name: ⬇️ Download metrics artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: metrics-preview-${{ github.sha }}
-          path: documentation/metrics
-
       - name: 🏗️ Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
-      - name: 📂 Upload Pages artifact
+      - name: 📂 Upload metrics folder
         uses: actions/upload-pages-artifact@v3
         with:
           path: './documentation/metrics'
@@ -101,6 +71,3 @@ jobs:
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-# NOTE: Feature branch runs now stop after metrics artifact upload (no Pages deployment) to avoid environment protection rejection.
-# To force deployment from a branch, temporarily remove the 'if: github.ref == \"refs/heads/main\"' guard on job 'deploy'.
