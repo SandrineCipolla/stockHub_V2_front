@@ -3,7 +3,7 @@
  * Parse coverage-final.json (Istanbul v8) pour produire un résumé léger.
  */
 import {execSync} from 'child_process';
-import {existsSync, readFileSync, writeFileSync} from 'fs';
+import {existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync} from 'fs';
 
 async function generateCoverageJSON() {
   console.log('📊 Génération du JSON coverage…');
@@ -104,6 +104,18 @@ async function generateCoverageJSON() {
 
   writeFileSync(outputPath, JSON.stringify(result, null, 2));
   console.log(`💾 Report coverage généré : ${outputPath}`);
+
+  // Copier coverage-final.json vers documentation/metrics/coverage/ pour le dashboard
+  const coverageDestDir = './documentation/metrics/coverage';
+  if (existsSync(coverageJsonPath)) {
+    mkdirSync(coverageDestDir, { recursive: true });
+    const destPath = `${coverageDestDir}/coverage-final.json`;
+    copyFileSync(coverageJsonPath, destPath);
+    console.log(`📋 Fichier coverage-final.json copié vers ${destPath}`);
+  } else {
+    console.log(`⚠️  coverage-final.json non trouvé, impossible de copier`);
+  }
+
   process.exit(0);
 }
 
