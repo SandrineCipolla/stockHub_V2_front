@@ -54,12 +54,18 @@ jobs:
           node scripts/generate-lighthouse.mjs || echo "Lighthouse generation failed"
           node scripts/generate-eco.mjs || echo "Eco generation failed"
           node scripts/generate-coverage.mjs || echo "Coverage generation failed"
-          node scripts/audit-full.mjs || echo "Full audit failed"
-          # Copie coverage AVANT upload
+          # Copie coverage IMMÉDIATEMENT après generation
           if [ -d coverage ]; then
+            echo "📁 Contenu du dossier coverage:"
+            ls -la coverage/ | head -20
             mkdir -p documentation/metrics/coverage
             cp -r coverage/* documentation/metrics/coverage/ || true
+            echo "✅ Fichiers copiés vers documentation/metrics/coverage/"
+            ls -la documentation/metrics/coverage/ | head -20
+          else
+            echo "⚠️  Dossier coverage introuvable"
           fi
+          node scripts/audit-full.mjs || echo "Full audit failed"
           # Mettre à jour la liste statique des fichiers JSON dans index.html
           node scripts/update-metrics-files.mjs
 
