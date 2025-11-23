@@ -832,8 +832,18 @@
                 const progressRings = lighthouseContainer.querySelectorAll('.score-circle-progress');
                 progressRings.forEach(ring => {
                     const score = parseInt(ring.getAttribute('data-score'));
-                    const dasharray = `${(score / 100) * 282.6} 282.6`;
-                    ring.style.strokeDasharray = dasharray;
+
+                    // Détecter la taille du cercle pour ajuster la circonférence
+                    const isLargeCircle = ring.closest('.score-circle-large') !== null;
+
+                    // Circonférence ajustée selon la taille du cercle
+                    // Cercle large (140px) vs cercle normal (100px) = ratio 1.4
+                    const circumference = isLargeCircle ? 396 : 283; // 283 * 1.4 ≈ 396
+
+                    // Calculer le dash array pour le pourcentage de score
+                    const strokeDashArray = (score / 100) * circumference;
+
+                    ring.style.strokeDasharray = `${strokeDashArray} ${circumference}`;
                 });
             }, 200);
 
