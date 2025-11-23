@@ -8,7 +8,7 @@ import {writeFileSync} from "fs";
 
 const TEST_URL = 'http://localhost:4173';
 const MIN_FPS_THRESHOLD = 55;
-const TEST_DURATION = 5000; // 5 secondes
+const TEST_DURATION = 3000; // 3 secondes (optimisé pour CI)
 
 async function measureFPS(page, testName, action = null) {
   console.log(`\n📊 Test FPS: ${testName}`);

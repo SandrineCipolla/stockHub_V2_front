@@ -29,6 +29,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
       - name: 📦 Install dependencies (workaround for npm optional deps bug)
         run: |
@@ -47,10 +48,13 @@ jobs:
       - name: 📊 Generate metrics data
         run: |
           mkdir -p documentation/metrics/data
-          node scripts/audit-fps.mjs || echo "FPS audit failed"
-          node scripts/audit-wcag.mjs || echo "A11Y audit failed"
-          node scripts/audit-datasets.mjs || echo "Datasets audit failed"
-          node scripts/audit-colorblind.mjs || echo "Colorblind audit failed"
+          # Lancer les audits indépendants en parallèle (gain ~1min)
+          node scripts/audit-fps.mjs &
+          node scripts/audit-wcag.mjs &
+          node scripts/audit-datasets.mjs &
+          node scripts/audit-colorblind.mjs &
+          wait  # Attendre que tous les audits parallèles se terminent
+          # Audits qui dépendent du serveur (séquentiels)
           node scripts/generate-lighthouse.mjs || echo "Lighthouse generation failed"
           node scripts/generate-eco.mjs || echo "Eco generation failed"
           node scripts/generate-coverage.mjs || echo "Coverage generation failed"
