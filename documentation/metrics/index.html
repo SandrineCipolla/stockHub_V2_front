@@ -153,28 +153,28 @@
         .badge-grade-f { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
 
         /* Nouveaux styles pour les onglets de daltonisme */
-        .daltonisme-tab {
+        .daltonisme-tab, .wcag-tab {
             background-color: transparent;
             color: #9ca3af;
             border: none;
             cursor: pointer;
         }
 
-        .daltonisme-tab.active {
+        .daltonisme-tab.active, .wcag-tab.active {
             background-color: var(--sh-purple-500);
             color: white;
         }
 
-        .daltonisme-tab:hover:not(.active) {
+        .daltonisme-tab:hover:not(.active), .wcag-tab:hover:not(.active) {
             background-color: rgba(255, 255, 255, 0.1);
             color: #d1d5db;
         }
 
-        .daltonisme-panel {
+        .daltonisme-panel, .wcag-panel {
             display: none;
         }
 
-        .daltonisme-panel.active {
+        .daltonisme-panel.active, .wcag-panel.active {
             display: block;
         }
 
@@ -334,12 +334,83 @@
         </div>
     </section>
     <section class="card metric-card fade-in">
-        <h2 class="section-title">⚠️ WCAG Risk Levels</h2>
-        <p class="text-sm text-gray-400 mb-4">
+        <h2 class="section-title flex items-center gap-3">
+            ⚠️ WCAG Risk Levels
+            <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="wcag-status-badge">
+                ⏳ Chargement...
+            </div>
+        </h2>
+        <p class="text-sm text-gray-400 mb-6">
             Analyse des contrastes de couleurs selon les niveaux de risque (critical, high, medium, low)
         </p>
-        <div class="chart-container">
-            <canvas id="chart-wcag"></canvas>
+
+        <!-- Navigation par onglets WCAG -->
+        <div class="mb-6">
+            <div class="flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg">
+                <button class="wcag-tab active px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="overview">
+                    📊 Vue d'ensemble
+                </button>
+                <button class="wcag-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="critical">
+                    🔴 Critique
+                </button>
+                <button class="wcag-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="high">
+                    🟠 Élevé
+                </button>
+                <button class="wcag-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="medium">
+                    🟡 Moyen
+                </button>
+                <button class="wcag-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="low">
+                    🟢 Faible
+                </button>
+                <button class="wcag-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="solutions">
+                    🔧 Solutions
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenu des onglets WCAG -->
+        <div id="wcag-content">
+            <!-- Vue d'ensemble -->
+            <div class="wcag-panel active" data-panel="overview">
+                <div class="chart-container">
+                    <canvas id="chart-wcag"></canvas>
+                </div>
+            </div>
+
+            <!-- Onglet Critique -->
+            <div class="wcag-panel" data-panel="critical">
+                <div id="critical-problems">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Onglet Élevé -->
+            <div class="wcag-panel" data-panel="high">
+                <div id="high-problems">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Onglet Moyen -->
+            <div class="wcag-panel" data-panel="medium">
+                <div id="medium-problems">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Onglet Faible -->
+            <div class="wcag-panel" data-panel="low">
+                <div id="low-problems">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Onglet Solutions -->
+            <div class="wcag-panel" data-panel="solutions">
+                <div id="wcag-solutions">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
         </div>
     </section>
     <section class="card metric-card fade-in" id="daltonisme-section">
@@ -411,7 +482,7 @@
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
-                            🎨 Tests de Contraste WCAG 2.1
+                            <span>&#127912; Tests de Contraste WCAG 2.1</span>
                             <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-300 rounded">AA/AAA</span>
                         </h3>
                         <div class="space-y-3" id="contrast-tests-grid">
@@ -420,7 +491,7 @@
                     </div>
 
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-200 mb-4">📋 Critères WCAG</h3>
+                        <h3 class="text-lg font-semibold text-gray-200 mb-4"><span>📋 Critères WCAG</span></h3>
                         <div class="space-y-3 text-sm">
                             <div class="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
                                 <div class="font-medium text-green-300">Level AAA (≥ 7:1)</div>
@@ -435,7 +506,7 @@
                                 <div class="text-blue-200 text-xs">Contraste minimal - Éléments d'interface</div>
                             </div>
                             <div class="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-                                <div class="font-medium text-red-300">FAIL (< 3:1)</div>
+                                <div class="font-medium text-red-300">FAIL (&lt; 3:1)</div>
                                 <div class="text-red-200 text-xs">Contraste insuffisant - À corriger</div>
                             </div>
                         </div>
@@ -446,7 +517,7 @@
             <!-- Simulation des types de daltonisme -->
             <div class="daltonisme-panel" data-panel="simulation">
                 <h3 class="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
-                    👁 Simulation des Types de Daltonisme
+                    <span>Simulation des Types de Daltonisme</span>
                     <span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-300 rounded">4 types testés</span>
                 </h3>
 
@@ -458,7 +529,7 @@
             <!-- Tests de différentiabilité -->
             <div class="daltonisme-panel" data-panel="difference">
                 <h3 class="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
-                    🔍 Analyse de Différentiabilité des Couleurs
+                    <span>&#128269; Analyse de Différentiabilité des Couleurs</span>
                     <span class="text-xs px-2 py-1 bg-orange-500/20 text-orange-300 rounded">Delta E</span>
                 </h3>
 
@@ -521,19 +592,19 @@
 
     <div class="hidden mt-6 space-y-6" id="audit-details">
         <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">📊 Performance</h3>
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>📊 Performance</span></h3>
             <div id="audit-performance"></div>
         </div>
         <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">♿ Accessibilité</h3>
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>♿ Accessibilité</span></h3>
             <div id="audit-accessibility"></div>
         </div>
         <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">🌱 Éco-conception</h3>
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>🌱 Éco-conception</span></h3>
             <div id="audit-eco"></div>
         </div>
         <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold">💎 Qualité du code</h3>
+            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>💎 Qualité du code</span></h3>
             <div id="audit-quality"></div>
         </div>
     </div>
@@ -852,90 +923,66 @@
                 '<div class="flex items-center justify-center h-32 text-gray-400"><p>⏳ Analyse Lighthouse en cours...</p></div>';
         }
 
-        // WCAG - Amélioration avec affichage plus pertinent et agrégé
+        // WCAG - Nouvelle version avec onglets et informations détaillées
         if (wcag) {
-            // Extraire les données selon la vraie structure
-            let critiques = 0, eleves = 0, moyens = 0, faibles = 0;
-            const detailedProblems = {
-                critical: [],
-                high: [],
-                medium: [],
-                low: []
-            };
+            try {
+                // Extraire les données selon la vraie structure du JSON risk-levels-audit
+                let critiques = 0, eleves = 0, moyens = 0, faibles = 0;
+                const detailedProblems = {
+                    critical: [],
+                    high: [],
+                    medium: [],
+                    low: []
+                };
 
-            // Analyse des thèmes pour identifier les patterns et fichiers
-            const themeAnalysis = {};
-            const fileProblems = {};
+                if (wcag.contraste) {
+                    Object.entries(wcag.contraste).forEach(([themeName, theme]) => {
+                        if (theme.tests) {
+                            theme.tests.forEach(test => {
+                                // Ne traiter que les tests qui échouent
+                                if (!test.passesNormal && test.ratio != null && test.hex) {
+                                // Déterminer la criticité selon l'écart au seuil WCAG AA (4.5:1)
+                                const requiredRatio = 4.5;
+                                const gap = requiredRatio - test.ratio;
+                                let problemLevel = 'medium';
 
-            if (wcag.contraste) {
-                Object.entries(wcag.contraste).forEach(([themeName, theme]) => {
-                    if (theme.tests) {
-                        theme.tests.forEach(test => {
-                            // Essayer d'extraire le nom de fichier depuis le sélecteur ou contexte
-                            let fileName = 'Fichier non spécifié';
-                            if (test.selector) {
-                                // Essayer d'identifier le fichier depuis le sélecteur
-                                if (test.selector.includes('.') || test.selector.includes('#')) {
-                                    fileName = `CSS (${themeName})`;
-                                } else {
-                                    fileName = `Component (${themeName})`;
+                                if (gap >= 2.0) problemLevel = 'critical'; // Très loin du seuil
+                                else if (gap >= 1.0) problemLevel = 'high'; // Assez loin
+                                else if (gap >= 0.5) problemLevel = 'medium'; // Proche
+                                else problemLevel = 'low'; // Très proche
+
+                                const problem = {
+                                    riskLevel: test.level || 'unknown', // critical, high, medium, low (risk level du stock)
+                                    color: test.hex,
+                                    ratio: test.ratio.toFixed(2),
+                                    expected: requiredRatio.toFixed(1),
+                                    theme: themeName,
+                                    passesLarge: test.passesLarge || false,
+                                    wcagLevel: test.wcagLevel || 'FAIL',
+                                    gap: gap.toFixed(2),
+                                    location: 'Design System: sh-stock-prediction-card',
+                                    file: 'stockhub_design_system/src/components/organisms/sh-stock-prediction-card',
+                                    problemLevel: problemLevel
+                                };
+
+                                switch(problemLevel) {
+                                    case 'critical':
+                                        critiques++;
+                                        detailedProblems.critical.push(problem);
+                                        break;
+                                    case 'high':
+                                        eleves++;
+                                        detailedProblems.high.push(problem);
+                                        break;
+                                    case 'medium':
+                                        moyens++;
+                                        detailedProblems.medium.push(problem);
+                                        break;
+                                    case 'low':
+                                        faibles++;
+                                        detailedProblems.low.push(problem);
+                                        break;
                                 }
-                            }
-                            if (test.file) {
-                                fileName = test.file;
-                            } else if (test.source) {
-                                fileName = test.source;
-                            }
-
-                            const problem = {
-                                element: test.selector || `Élément du thème ${themeName}`,
-                                description: test.description || test.message || `Problème de contraste dans ${fileName}`,
-                                ratio: test.contrastRatio || 'N/A',
-                                expected: test.expectedRatio || 'N/A',
-                                theme: themeName,
-                                file: fileName,
-                                colors: test.colors || null
-                            };
-
-                            // Agrégation par thème
-                            if (!themeAnalysis[themeName]) {
-                                themeAnalysis[themeName] = { critical: 0, high: 0, medium: 0, low: 0 };
-                            }
-
-                            // Agrégation par fichier
-                            if (!fileProblems[fileName]) {
-                                fileProblems[fileName] = { critical: 0, high: 0, medium: 0, low: 0, problems: [] };
-                            }
-
-                            switch(test.level) {
-                                case 'critical':
-                                    critiques++;
-                                    themeAnalysis[themeName].critical++;
-                                    fileProblems[fileName].critical++;
-                                    detailedProblems.critical.push(problem);
-                                    fileProblems[fileName].problems.push(problem);
-                                    break;
-                                case 'high':
-                                    eleves++;
-                                    themeAnalysis[themeName].high++;
-                                    fileProblems[fileName].high++;
-                                    detailedProblems.high.push(problem);
-                                    fileProblems[fileName].problems.push(problem);
-                                    break;
-                                case 'medium':
-                                    moyens++;
-                                    themeAnalysis[themeName].medium++;
-                                    fileProblems[fileName].medium++;
-                                    detailedProblems.medium.push(problem);
-                                    fileProblems[fileName].problems.push(problem);
-                                    break;
-                                case 'low':
-                                    faibles++;
-                                    themeAnalysis[themeName].low++;
-                                    fileProblems[fileName].low++;
-                                    detailedProblems.low.push(problem);
-                                    fileProblems[fileName].problems.push(problem);
-                                    break;
                             }
                         });
                     }
@@ -944,6 +991,7 @@
 
             const total = critiques + eleves + moyens + faibles;
 
+            // Créer le graphique WCAG
             new Chart(document.getElementById("chart-wcag"), {
                 type: "bar",
                 data: {
@@ -978,410 +1026,166 @@
                 }
             });
 
-            // Générer un résumé par thème plus pertinent
-            const generateThemeOverview = () => {
-                if (Object.keys(themeAnalysis).length === 0) return '';
+            // Fonction pour initialiser les onglets WCAG
+            function initWcagTabs() {
+                const tabs = document.querySelectorAll('.wcag-tab');
+                const panels = document.querySelectorAll('.wcag-panel');
 
-                return Object.entries(themeAnalysis)
-                    .filter(([theme, data]) => data.critical + data.high + data.medium + data.low > 0)
-                    .map(([theme, data]) => {
-                        const themeTotal = data.critical + data.high + data.medium + data.low;
-                        const severity = data.critical > 0 ? 'critical' : data.high > 0 ? 'high' : data.medium > 0 ? 'medium' : 'low';
-                        const severityColors = {
-                            critical: 'bg-red-900/30 border-red-500/20',
-                            high: 'bg-orange-900/30 border-orange-500/20',
-                            medium: 'bg-yellow-900/30 border-yellow-500/20',
-                            low: 'bg-green-900/30 border-green-500/20'
-                        };
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const targetPanel = tab.dataset.tab;
 
-                        return `
-                            <div class="p-3 ${severityColors[severity]} border rounded-lg">
-                                <div class="font-medium mb-1">Thème: ${theme}</div>
-                                <div class="text-xs space-y-1">
-                                    <div>${themeTotal} problème${themeTotal > 1 ? 's' : ''} de contraste détecté${themeTotal > 1 ? 's' : ''}</div>
-                                    <div class="flex gap-4 text-xs">
-                                        ${data.critical > 0 ? `<span class="text-red-400">${data.critical} critique${data.critical > 1 ? 's' : ''}</span>` : ''}
-                                        ${data.high > 0 ? `<span class="text-orange-400">${data.high} élevé${data.high > 1 ? 's' : ''}</span>` : ''}
-                                        ${data.medium > 0 ? `<span class="text-yellow-400">${data.medium} moyen${data.medium > 1 ? 's' : ''}</span>` : ''}
-                                        ${data.low > 0 ? `<span class="text-green-400">${data.low} faible${data.low > 1 ? 's' : ''}</span>` : ''}
-                                    </div>
-                                </div>
+                        // Désactiver tous les onglets et panneaux
+                        tabs.forEach(t => t.classList.remove('active'));
+                        panels.forEach(p => p.classList.remove('active'));
+
+                        // Activer l'onglet et le panneau sélectionnés
+                        tab.classList.add('active');
+                        const panel = document.querySelector(`[data-panel="${targetPanel}"]`);
+                        if (panel) panel.classList.add('active');
+                    });
+                });
+            }
+
+            // Fonction pour remplir les onglets de problèmes
+            function populateWcagProblems() {
+                const levels = ['critical', 'high', 'medium', 'low'];
+                const levelColors = {
+                    critical: 'border-red-500 bg-red-500/10',
+                    high: 'border-orange-500 bg-orange-500/10',
+                    medium: 'border-yellow-500 bg-yellow-500/10',
+                    low: 'border-green-500 bg-green-500/10'
+                };
+
+                levels.forEach(level => {
+                    const container = document.getElementById(`${level}-problems`);
+                    const problems = detailedProblems[level];
+
+                    if (!container) return;
+
+                    if (!problems || problems.length === 0) {
+                        container.innerHTML = `
+                            <div class="flex flex-col items-center justify-center h-32 text-gray-400">
+                                <div class="text-4xl mb-2">✅</div>
+                                <p>Aucun problème de niveau ${level}</p>
                             </div>
                         `;
-                    }).join('');
-            };
-
-            // Générer un résumé par fichier plus pertinent
-            const generateFileOverview = () => {
-                const filesWithProblems = Object.entries(fileProblems)
-                    .filter(([file, data]) => data.critical + data.high + data.medium + data.low > 0)
-                    .sort((a, b) => {
-                        const aTotal = a[1].critical * 4 + a[1].high * 3 + a[1].medium * 2 + a[1].low;
-                        const bTotal = b[1].critical * 4 + b[1].high * 3 + b[1].medium * 2 + b[1].low;
-                        return bTotal - aTotal; // Plus critique en premier
-                    });
-
-                if (filesWithProblems.length === 0) return '';
-
-                return filesWithProblems.slice(0, 5).map(([fileName, data]) => {
-                    const fileTotal = data.critical + data.high + data.medium + data.low;
-                    const severity = data.critical > 0 ? 'critical' : data.high > 0 ? 'high' : data.medium > 0 ? 'medium' : 'low';
-                    const severityColors = {
-                        critical: 'bg-red-900/30 border-red-500/20',
-                        high: 'bg-orange-900/30 border-orange-500/20',
-                        medium: 'bg-yellow-900/30 border-yellow-500/20',
-                        low: 'bg-green-900/30 border-green-500/20'
-                    };
-
-                    // Générer la liste détaillée des éléments problématiques
-                    const problemDetails = data.problems.slice(0, 3).map(problem => {
-                        const levelColors = {
-                            critical: 'text-red-400 bg-red-500/10',
-                            high: 'text-orange-400 bg-orange-500/10',
-                            medium: 'text-yellow-400 bg-yellow-500/10',
-                            low: 'text-green-400 bg-green-500/10'
-                        };
-
-
-                        const level = problem.level || (data.critical > 0 ? 'critical' : data.high > 0 ? 'high' : data.medium > 0 ? 'medium' : 'low');
-
-                        // Identifier le type d'élément plus précisément
-                        let elementType = 'Élément HTML';
-                        let elementInfo = problem.element || 'Non spécifié';
-
-                        if (problem.element) {
-                            if (problem.element.startsWith('.')) {
-                                elementType = 'Classe CSS';
-                                elementInfo = problem.element;
-                            } else if (problem.element.startsWith('#')) {
-                                elementType = 'ID CSS';
-                                elementInfo = problem.element;
-                            } else if (problem.element.includes('[')) {
-                                elementType = 'Attribut CSS';
-                                elementInfo = problem.element;
-                            } else if (problem.element.match(/^[a-z]+$/)) {
-                                elementType = 'Balise HTML';
-                                elementInfo = `<${problem.element}>`;
-                            }
-                        }
-
-                        const contrastInfo = problem.ratio !== 'N/A' && problem.expected !== 'N/A'
-                            ? `Ratio: ${problem.ratio} (requis: ${problem.expected})`
-                            : 'Ratio non disponible';
-
-                        return `
-                            <div class="p-2 ${levelColors[level]} rounded text-xs border-l-2 ${level === 'critical' ? 'border-red-500' : level === 'high' ? 'border-orange-500' : level === 'medium' ? 'border-yellow-500' : 'border-green-500'}">
-                                <div class="flex justify-between items-start mb-1">
-                                    <span class="font-medium">${elementType}</span>
-                                    <span class="text-xs opacity-75">${level}</span>
-                                </div>
-                                <div class="font-mono text-xs bg-black/20 p-1 rounded mb-1 break-all">${elementInfo}</div>
-                                <div class="text-xs opacity-75">${contrastInfo}</div>
-                                ${problem.colors ? `<div class="text-xs opacity-60 mt-1">Couleurs: ${JSON.stringify(problem.colors)}</div>` : ''}
-                            </div>
-                        `;
-                    }).join('');
-
-                    const remainingCount = data.problems.length - 3;
-
-                    return `
-                        <div class="p-3 ${severityColors[severity]} border rounded-lg">
-                            <div class="font-medium text-gray-200 mb-2 break-all">${fileName}</div>
-                            <div class="text-xs space-y-1 mb-3">
-                                <div class="text-gray-300">${fileTotal} problème${fileTotal > 1 ? 's' : ''} de contraste</div>
-                                <div class="flex flex-wrap gap-2 text-xs">
-                                    ${data.critical > 0 ? `<span class="px-2 py-1 bg-red-500/20 text-red-400 rounded">${data.critical} critique${data.critical > 1 ? 's' : ''}</span>` : ''}
-                                    ${data.high > 0 ? `<span class="px-2 py-1 bg-orange-500/20 text-orange-400 rounded">${data.high} élevé${data.high > 1 ? 's' : ''}</span>` : ''}
-                                    ${data.medium > 0 ? `<span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded">${data.medium} moyen${data.medium > 1 ? 's' : ''}</span>` : ''}
-                                    ${data.low > 0 ? `<span class="px-2 py-1 bg-green-500/20 text-green-400 rounded">${data.low} faible${data.low > 1 ? 's' : ''}</span>` : ''}
-                                </div>
-                            </div>
-
-                            <!-- Détails des éléments problématiques -->
-                            <div class="space-y-2">
-                                <div class="text-xs font-medium text-gray-300">Éléments affectés :</div>
-                                ${problemDetails}
-                                ${remainingCount > 0 ? `
-                                    <div class="text-center text-gray-400 text-xs pt-2 border-t border-white/10">
-                                        +${remainingCount} autre${remainingCount > 1 ? 's' : ''} élément${remainingCount > 1 ? 's' : ''}
-                                    </div>
-                                ` : ''}
-                            </div>
-
-                            <!-- Instructions de correction -->
-                            <div class="mt-3 p-2 bg-blue-500/10 border border-blue-500/20 rounded text-xs">
-                                <div class="font-medium text-blue-300 mb-1">🔧 Comment corriger :</div>
-                                <div class="text-blue-200 space-y-1">
-                                    ${fileName.includes('CSS') ?
-                                        '<div>• Modifier les couleurs dans votre feuille de style CSS</div><div>• Utiliser des couleurs avec un contraste plus élevé</div>' :
-                                        '<div>• Vérifier les styles inline ou les classes CSS appliquées</div><div>• Modifier la couleur du texte ou de l\'arrière-plan</div>'
-                                    }
-                                    <div>• Tester avec <a href="https://webaim.org/resources/contrastchecker/" class="underline text-blue-300" target="_blank">WebAIM Contrast Checker</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            };
-
-            // Générer les priorités d'action plus utiles
-            const generateActionPriorities = () => {
-                const priorities = [];
-
-                if (critiques > 0) {
-                    priorities.push({
-                        level: 'Urgent',
-                        color: 'text-red-400',
-                        icon: '🚨',
-                        action: `Corriger ${critiques} problème${critiques > 1 ? 's' : ''} critique${critiques > 1 ? 's' : ''} de contraste`,
-                        impact: 'Bloque l\'accessibilité pour les utilisateurs malvoyants'
-                    });
-                }
-
-                if (eleves > 0) {
-                    priorities.push({
-                        level: 'Important',
-                        color: 'text-orange-400',
-                        icon: '⚠️',
-                        action: `Améliorer ${eleves} élément${eleves > 1 ? 's' : ''} avec contraste insuffisant`,
-                        impact: 'Difficultés de lecture pour certains utilisateurs'
-                    });
-                }
-
-                if (moyens > 0 || faibles > 0) {
-                    const total = moyens + faibles;
-                    priorities.push({
-                        level: 'Amélioration',
-                        color: 'text-yellow-400',
-                        icon: '📋',
-                        action: `Optimiser ${total} élément${total > 1 ? 's' : ''} pour un meilleur contraste`,
-                        impact: 'Améliore l\'expérience utilisateur globale'
-                    });
-                }
-
-                if (priorities.length === 0) return '';
-
-                return priorities.map(priority => `
-                    <div class="flex items-start gap-3 p-3 bg-gray-800/50 rounded-lg">
-                        <div class="text-lg">${priority.icon}</div>
-                        <div class="flex-1">
-                            <div class="font-medium ${priority.color} mb-1">${priority.level}: ${priority.action}</div>
-                            <div class="text-xs text-gray-400">${priority.impact}</div>
-                        </div>
-                    </div>
-                `).join('');
-            };
-
-            // Ajouter l'affichage optimisé avec scroll plus grand et informations plus pertinentes
-            const wcagContainer = document.getElementById("chart-wcag").parentElement;
-
-            // Résumé global fixe (en dehors du scroll)
-            const summaryDiv = document.createElement('div');
-            summaryDiv.className = 'mt-4 mb-4';
-            summaryDiv.innerHTML = `
-                <div class="text-center p-4 bg-gray-800/30 rounded-lg">
-                    ${total > 0 ?
-                        `<div class="text-xl font-bold text-gray-200">${total} problème${total > 1 ? 's' : ''} de contraste</div>
-                         <div class="text-sm text-gray-400">
-                            🔴 ${critiques} critique${critiques > 1 ? 's' : ''} •
-                            🟠 ${eleves} élevé${eleves > 1 ? 's' : ''} •
-                            🟡 ${moyens} moyen${moyens > 1 ? 's' : ''} •
-                            🟢 ${faibles} faible${faibles > 1 ? 's' : ''}
-                         </div>` :
-                        '<div class="text-lg font-bold text-green-400">✅ Aucun problème de contraste détecté</div>'
+                        return;
                     }
-                </div>
-            `;
-            wcagContainer.appendChild(summaryDiv);
 
-            // Zone de scroll agrandie avec détails pertinents
-            const detailsDiv = document.createElement('div');
-            detailsDiv.className = 'space-y-4 max-h-80 overflow-y-auto pr-2 border-t border-gray-700/50 pt-4';
-            detailsDiv.innerHTML = `
-                ${Object.keys(fileProblems).length > 0 ? `
-                    <div>
-                        <h4 class="text-sm font-bold text-gray-200 mb-3 sticky top-0 bg-[var(--sh-card-bg)] py-2 z-10 border-b border-gray-700/30">
-                            📋 Problèmes détectés par fichier
-                        </h4>
-                        <div class="space-y-3">
-                            ${Object.entries(fileProblems)
-                                .filter(([file, data]) => data.critical + data.high + data.medium + data.low > 0)
-                                .sort((a, b) => {
-                                    const aScore = a[1].critical * 4 + a[1].high * 3 + a[1].medium * 2 + a[1].low;
-                                    const bScore = b[1].critical * 4 + b[1].high * 3 + b[1].medium * 2 + b[1].low;
-                                    return bScore - aScore;
-                                })
-                                .map(([fileName, data]) => {
-                                    const fileTotal = data.critical + data.high + data.medium + data.low;
-                                    const priority = data.critical > 0 ? 'Critique' : data.high > 0 ? 'Élevé' : data.medium > 0 ? 'Moyen' : 'Faible';
-                                    const priorityColor = data.critical > 0 ? 'text-red-400 bg-red-900/20' : data.high > 0 ? 'text-orange-400 bg-orange-900/20' : data.medium > 0 ? 'text-yellow-400 bg-yellow-900/20' : 'text-green-400 bg-green-900/20';
+                    container.innerHTML = `
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-200 mb-4">
+                                ${problems.length} problème${problems.length > 1 ? 's' : ''} de niveau ${level}
+                            </h3>
+                            ${problems.map((problem, index) => `
+                                <div class="p-4 ${levelColors[level]} border rounded-lg">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div class="font-medium text-gray-200 flex items-center gap-2">
+                                            <div class="w-6 h-6 rounded border-2 border-white/30" style="background-color: ${problem.color}" title="${problem.color}"></div>
+                                            Risk Level "${problem.riskLevel}" - Thème ${problem.theme}
+                                        </div>
+                                        <span class="text-xs px-2 py-1 bg-gray-600 text-gray-200 rounded">
+                                            ${level.toUpperCase()}
+                                        </span>
+                                    </div>
 
-                                    const problemsDetails = data.problems.slice(0, 5).map((problem, index) => {
-                                        // Identifier le type d'élément de façon plus précise
-                                        let elementDescription = 'Élément non spécifié';
-                                        let selectorInfo = '';
-                                        let actionSuggestion = '';
+                                    <div class="space-y-2 text-sm text-gray-300">
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div><strong>Couleur:</strong> <code class="bg-gray-700 px-2 py-0.5 rounded">${problem.color}</code></div>
+                                            <div><strong>Thème:</strong> ${problem.theme}</div>
+                                            <div><strong>Ratio actuel:</strong> <span class="text-red-400">${problem.ratio}:1</span></div>
+                                            <div><strong>Ratio requis:</strong> <span class="text-green-400">${problem.expected}:1</span></div>
+                                            <div><strong>Écart:</strong> <span class="text-orange-400">${problem.gap}</span></div>
+                                            <div><strong>Texte large:</strong> ${problem.passesLarge ? '✅ Passe' : '❌ Échoue'}</div>
+                                        </div>
 
-                                        if (problem.element && problem.element !== 'Non spécifié') {
-                                            if (problem.element.startsWith('.')) {
-                                                elementDescription = `Classe CSS "${problem.element}"`;
-                                                selectorInfo = problem.element;
-                                                actionSuggestion = 'Ajuster les couleurs dans le CSS';
-                                            } else if (problem.element.startsWith('#')) {
-                                                elementDescription = `ID "${problem.element}"`;
-                                                selectorInfo = problem.element;
-                                                actionSuggestion = 'Modifier les couleurs de cet élément';
-                                            } else if (problem.element.includes('background-color') || problem.element.includes('color:')) {
-                                                elementDescription = 'Propriété CSS de couleur';
-                                                selectorInfo = problem.element;
-                                                actionSuggestion = 'Réviser cette déclaration CSS';
-                                            } else if (problem.element.match(/^[a-z]+$/)) {
-                                                elementDescription = `Balise <${problem.element}>`;
-                                                selectorInfo = `<${problem.element}>`;
-                                                actionSuggestion = 'Vérifier le style appliqué à cette balise';
-                                            } else {
-                                                elementDescription = 'Sélecteur CSS';
-                                                selectorInfo = problem.element;
-                                                actionSuggestion = 'Examiner ce sélecteur dans le CSS';
-                                            }
-                                        }
-
-                                        // Informations sur le contraste plus exploitables
-                                        let contrastInfo = '';
-                                        let fixSuggestion = '';
-                                        if (problem.ratio && problem.ratio !== 'N/A' && problem.ratio !== 'Ratio non disponible') {
-                                            const currentRatio = parseFloat(problem.ratio);
-                                            const requiredRatio = problem.expected && problem.expected !== 'N/A' ? parseFloat(problem.expected) : 4.5;
-                                            if (!isNaN(currentRatio) && !isNaN(requiredRatio)) {
-                                                contrastInfo = `Contraste actuel: ${currentRatio.toFixed(2)}:1 (requis: ${requiredRatio}:1)`;
-                                                const improvement = ((requiredRatio / currentRatio) * 100 - 100).toFixed(0);
-                                                fixSuggestion = `Améliorer le contraste de ${improvement}% minimum`;
-                                            } else {
-                                                contrastInfo = `Ratio: ${problem.ratio}`;
-                                                fixSuggestion = 'Vérifier manuellement le contraste';
-                                            }
-                                        } else {
-                                            contrastInfo = 'Contraste à vérifier manuellement';
-                                            fixSuggestion = 'Utiliser un outil de test de contraste';
-                                        }
-
-                                        // Couleurs impliquées
-                                        let colorInfo = '';
-                                        if (problem.colors && typeof problem.colors === 'object') {
-                                            const colors = Object.entries(problem.colors).map(([key, value]) => `${key}: ${value}`).join(', ');
-                                            colorInfo = colors;
-                                        } else if (problem.foreground && problem.background) {
-                                            colorInfo = `Texte: ${problem.foreground}, Fond: ${problem.background}`;
-                                        }
-
-                                        const levelColor = data.critical > 0 ? 'border-red-500 bg-red-500/5' : data.high > 0 ? 'border-orange-500 bg-orange-500/5' : data.medium > 0 ? 'border-yellow-500 bg-yellow-500/5' : 'border-green-500 bg-green-500/5';
-
-                                        return `
-                                            <div class="p-3 border-l-3 ${levelColor} bg-gray-800/30 rounded-r">
-                                                <div class="flex justify-between items-start mb-2">
-                                                    <div class="font-medium text-gray-100">${elementDescription}</div>
-                                                    <span class="text-xs px-2 py-1 ${priorityColor} rounded">${priority}</span>
-                                                </div>
-                                                ${selectorInfo ? `<div class="font-mono text-xs bg-black/30 p-2 rounded mb-2 break-all text-blue-300">${selectorInfo}</div>` : ''}
-                                                <div class="text-xs text-gray-300 space-y-1">
-                                                    <div>📊 ${contrastInfo}</div>
-                                                    ${colorInfo ? `<div>🎨 ${colorInfo}</div>` : ''}
-                                                    <div class="text-yellow-300">💡 ${actionSuggestion}</div>
-                                                    ${fixSuggestion ? `<div class="text-green-300">🔧 ${fixSuggestion}</div>` : ''}
-                                                </div>
-                                            </div>
-                                        `;
-                                    }).join('');
-
-                                    const remainingCount = data.problems.length - 5;
-
-                                    return `
-                                        <div class="bg-gray-900/50 border border-gray-700/50 rounded-lg overflow-hidden">
-                                            <div class="p-3 bg-gray-800/50">
-                                                <div class="flex justify-between items-center">
-                                                    <div class="font-medium text-gray-100 break-all">${fileName}</div>
-                                                    <div class="text-xs ${priorityColor} px-2 py-1 rounded">
-                                                        ${fileTotal} problème${fileTotal > 1 ? 's' : ''}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="p-3 space-y-2">
-                                                ${problemsDetails}
-                                                ${remainingCount > 0 ? `
-                                                    <div class="text-center p-2 text-xs text-gray-400 bg-gray-800/30 rounded">
-                                                        + ${remainingCount} autre${remainingCount > 1 ? 's' : ''} problème${remainingCount > 1 ? 's' : ''} dans ce fichier
-                                                    </div>
-                                                ` : ''}
+                                        <div class="mt-3 p-3 bg-purple-500/10 border border-purple-500/20 rounded">
+                                            <strong class="text-purple-300">📍 Emplacement:</strong>
+                                            <div class="text-xs mt-2 space-y-1">
+                                                <div>• <strong>Composant:</strong> ${problem.location}</div>
+                                                <div>• <strong>Chemin:</strong> <code class="bg-gray-700 px-1 rounded">${problem.file}</code></div>
+                                                <div>• <strong>Variable à chercher:</strong> <code class="bg-gray-700 px-1 rounded">${problem.riskLevel}</code> dans le mode <code class="bg-gray-700 px-1 rounded">${problem.theme}</code></div>
                                             </div>
                                         </div>
-                                    `;
-                                }).join('')}
+
+                                        <div class="mt-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded">
+                                            <strong class="text-blue-300">💡 Comment corriger:</strong>
+                                            <div class="text-xs mt-2 space-y-1">
+                                                <div>1. Ouvrir le repo Design System: <code class="bg-gray-700 px-1 rounded">C:\\Users\\sandr\\Dev\\RNCP7\\stockhub_design_system</code></div>
+                                                <div>2. Chercher le fichier <code class="bg-gray-700 px-1 rounded">sh-stock-prediction-card</code></div>
+                                                <div>3. Trouver la couleur <code class="bg-gray-700 px-1 rounded">${problem.color}</code> pour risk level "${problem.riskLevel}" en mode ${problem.theme}</div>
+                                                <div>4. Remplacer par une couleur plus foncée (ex: <code class="bg-gray-700 px-1 rounded">#b45309</code> ratio 5.02:1)</div>
+                                                <div>5. Tester avec WebAIM: <a href="https://webaim.org/resources/contrastchecker/?fcolor=${problem.color.replace('#','')}&bcolor=${problem.theme === 'dark' ? '1e293b' : 'ffffff'}" class="text-blue-400 underline" target="_blank">Ouvrir WebAIM</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                });
+            }
+
+            // Remplir l'onglet solutions
+            document.getElementById('wcag-solutions').innerHTML = `
+                <div class="space-y-6">
+                    <h3 class="text-lg font-semibold text-gray-200"><span>🛠️ Outils et ressources</span></h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                            <h4 class="font-medium text-blue-300 mb-2">WebAIM Contrast Checker</h4>
+                            <p class="text-xs text-gray-300 mb-2">Outil gratuit pour tester le contraste</p>
+                            <a href="https://webaim.org/resources/contrastchecker/" class="text-blue-400 underline text-xs" target="_blank">
+                                → Ouvrir WebAIM
+                            </a>
+                        </div>
+                        <div class="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                            <h4 class="font-medium text-green-300 mb-2">DevTools navigateur</h4>
+                            <p class="text-xs text-gray-300">F12 > Onglet Accessibility</p>
                         </div>
                     </div>
 
-                    <div class="border-t border-gray-700/50 pt-4">
-                        <h4 class="text-sm font-bold text-gray-200 mb-3">🎯 Actions recommandées par priorité</h4>
-                        <div class="space-y-2">
-                            ${critiques > 0 ? `
-                                <div class="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <span class="text-red-400 font-bold">🔴 URGENT</span>
-                                        <span class="text-sm text-gray-300">${critiques} problème${critiques > 1 ? 's' : ''} critique${critiques > 1 ? 's' : ''}</span>
-                                    </div>
-                                    <div class="text-xs text-gray-300">
-                                        Ces éléments ont un contraste très insuffisant et doivent être corrigés immédiatement pour respecter les standards WCAG AA.
-                                    </div>
-                                </div>
-                            ` : ''}
-                            ${eleves > 0 ? `
-                                <div class="p-3 bg-orange-900/20 border border-orange-500/30 rounded-lg">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <span class="text-orange-400 font-bold">🟠 ÉLEVÉ</span>
-                                        <span class="text-sm text-gray-300">${eleves} problème${eleves > 1 ? 's' : ''} élevé${eleves > 1 ? 's' : ''}</span>
-                                    </div>
-                                    <div class="text-xs text-gray-300">
-                                        Contraste insuffisant nécessitant une correction pour améliorer l'accessibilité.
-                                    </div>
-                                </div>
-                            ` : ''}
-                            ${moyens > 0 ? `
-                                <div class="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <span class="text-yellow-400 font-bold">🟡 MOYEN</span>
-                                        <span class="text-sm text-gray-300">${moyens} problème${moyens > 1 ? 's' : ''} moyen${moyens > 1 ? 's' : ''}</span>
-                                    </div>
-                                    <div class="text-xs text-gray-300">
-                                        Améliorations recommandées pour optimiser l'expérience utilisateur.
-                                    </div>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                ` : ''}
-
-                <div class="border-t border-gray-700/50 pt-4">
-                    <h4 class="text-sm font-bold text-gray-200 mb-3">🔧 Outils et ressources</h4>
-                    <div class="grid grid-cols-1 gap-3 text-xs">
-                        <div class="p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
-                            <div class="font-medium text-blue-400 mb-2">Standards WCAG 2.1</div>
-                            <div class="space-y-1 text-gray-300">
-                                <div>• <strong>Niveau AA :</strong> ratio ≥ 4.5:1 (texte normal)</div>
-                                <div>• <strong>Niveau AAA :</strong> ratio ≥ 7:1 (recommandé)</div>
-                                <div>• <strong>Gros texte :</strong> ratio ≥ 3:1 (18pt+ ou 14pt bold)</div>
+                    <div class="border-t border-gray-600 pt-4">
+                        <h4 class="font-medium text-gray-200 mb-3">Standards WCAG 2.1</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div class="p-3 bg-green-500/10 border border-green-500/20 rounded">
+                                <div class="font-medium text-green-300">AAA (≥ 7:1)</div>
+                                <div class="text-gray-300">Excellent</div>
                             </div>
-                        </div>
-                        <div class="p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
-                            <div class="font-medium text-purple-400 mb-2">Outils de test</div>
-                            <div class="space-y-1 text-gray-300">
-                                <div>• <a href="https://webaim.org/resources/contrastchecker/" class="text-purple-300 hover:text-purple-200 underline" target="_blank">WebAIM Contrast Checker</a></div>
-                                <div>• <a href="https://www.tpgi.com/color-contrast-checker/" class="text-purple-300 hover:text-purple-200 underline" target="_blank">TPGi Color Contrast Checker</a></div>
-                                <div>• Outils développeur du navigateur (Accessibility tab)</div>
+                            <div class="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded">
+                                <div class="font-medium text-yellow-300">AA (≥ 4.5:1)</div>
+                                <div class="text-gray-300">Standard requis</div>
+                            </div>
+                            <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded">
+                                <div class="font-medium text-blue-300">UI (≥ 3:1)</div>
+                                <div class="text-gray-300">Interface</div>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
-            wcagContainer.appendChild(detailsDiv);
+
+            // Mettre à jour le badge de statut
+            const wcagStatusBadge = document.getElementById('wcag-status-badge');
+            if (wcagStatusBadge) {
+                const hasCritical = critiques > 0;
+                wcagStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                    hasCritical ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'
+                }`;
+                wcagStatusBadge.textContent = hasCritical ? `${critiques} Critique${critiques > 1 ? 's' : ''}` : '✅ Conforme';
+            }
+
+            // Initialiser les onglets et remplir le contenu
+            setTimeout(() => {
+                initWcagTabs();
+                populateWcagProblems();
+            }, 100);
+
+            } catch (error) {
+                console.error('Erreur lors du traitement des données WCAG:', error);
+                document.getElementById("chart-wcag").innerHTML =
+                    '<div class="flex items-center justify-center h-32 text-red-400"><p>❌ Erreur lors du chargement des données WCAG</p></div>';
+            }
         } else {
             document.getElementById("chart-wcag").innerHTML =
                 '<div class="flex items-center justify-center h-32 text-gray-400"><p>⏳ Analyse WCAG en cours...</p></div>';
@@ -1621,7 +1425,8 @@
                                     <div>
                                         <h4 class="font-semibold text-gray-200">${typeInfo.name}</h4>
                                         <p class="text-xs text-gray-400">${typeInfo.desc}</p>
-                                    </div                                </div>
+                                    </div>
+                                </div>
 
                                 <div class="space-y-3">
                                     <div class="flex justify-between items-center">
