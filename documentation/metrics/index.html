@@ -178,6 +178,28 @@
             display: block;
         }
 
+        /* Styles pour les onglets de types de daltonisme */
+        .difference-type-content {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .difference-type-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Styles pour les visualisations de couleurs */
         .color-preview {
             width: 24px;
@@ -463,7 +485,12 @@
                             </div>
                             <div class="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-lg">
                                 <div class="text-2xl font-bold text-green-400" id="daltonism-score">-</div>
-                                <div class="text-xs text-gray-400">Différentiabilité</div>
+                                <div class="text-xs text-gray-400 tooltip-wrapper" tabindex="0" style="cursor: help; border-bottom: 1px dotted #9ca3af;">
+                                    Score moyen ℹ️
+                                    <div class="tooltip-box">
+                                        Moyenne de différentiabilité des 4 types de daltonisme testés. Indique le % moyen de paires de couleurs distinguables (ex: Protanopie 90%, Deutéranopie 100%, Tritanopie 90%, Achromatopsie 40% = moyenne 80%).
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -533,12 +560,43 @@
 
             <!-- Tests de différentiabilité -->
             <div class="daltonisme-panel" data-panel="difference">
-                <h3 class="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
-                    <span>&#128269; Analyse de Différentiabilité des Couleurs</span>
-                    <span class="text-xs px-2 py-1 bg-orange-500/20 text-orange-300 rounded">Delta E</span>
+                <h3 class="text-lg font-semibold text-gray-200 mb-4">
+                    &#128269; Analyse de Différentiabilité des Couleurs
                 </h3>
 
-                <div class="space-y-6" id="difference-analysis">
+                <!-- Explication du seuil -->
+                <div class="mb-4 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-purple-300">
+                            <span class="font-semibold">Seuil de différentiabilité : ΔE ≥ 40</span>
+                        </div>
+                        <div class="tooltip-wrapper" tabindex="0" style="cursor: help;">
+                            <span class="text-purple-300 text-lg">ℹ️</span>
+                            <div class="tooltip-box" style="width: 300px; right: 0; left: auto;">
+                                <div class="font-semibold mb-2">Échelle Delta E (ΔE)</div>
+                                <div class="space-y-1 text-xs">
+                                    <div>• <strong>ΔE = 0</strong> : Couleurs identiques</div>
+                                    <div>• <strong>ΔE = 1-10</strong> : Différence très faible</div>
+                                    <div>• <strong>ΔE = 10-40</strong> : Différence visible mais faible</div>
+                                    <div>• <strong>ΔE ≥ 40</strong> : Différence clairement visible ✅</div>
+                                </div>
+                                <div class="mt-2 pt-2 border-t border-gray-600 text-xs">
+                                    Plus le ΔE est élevé, plus les couleurs sont différentes.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation par onglets types de daltonisme -->
+                <div class="mb-6">
+                    <div class="flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg" id="difference-tabs-container">
+                        <!-- Sera rempli dynamiquement -->
+                    </div>
+                </div>
+
+                <!-- Contenu des onglets types de daltonisme -->
+                <div id="difference-content">
                     <!-- Sera rempli dynamiquement -->
                 </div>
             </div>
@@ -1034,6 +1092,12 @@
 
             const total = critiques + eleves + moyens + faibles;
 
+            // Détruire l'ancien graphique WCAG s'il existe
+            const existingWcagChart = Chart.getChart("chart-wcag");
+            if (existingWcagChart) {
+                existingWcagChart.destroy();
+            }
+
             // Créer le graphique WCAG
             new Chart(document.getElementById("chart-wcag"), {
                 type: "bar",
@@ -1046,6 +1110,8 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -1073,6 +1139,7 @@
             function initWcagTabs() {
                 const tabs = document.querySelectorAll('.wcag-tab');
                 const panels = document.querySelectorAll('.wcag-panel');
+                const wcagContent = document.getElementById('wcag-content');
 
                 tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
@@ -1082,10 +1149,24 @@
                         tabs.forEach(t => t.classList.remove('active'));
                         panels.forEach(p => p.classList.remove('active'));
 
-                        // Activer l'onglet et le panneau sélectionnés
+                        // Activer l'onglet et le panneau sélectionnés (chercher uniquement dans wcag-content)
                         tab.classList.add('active');
-                        const panel = document.querySelector(`[data-panel="${targetPanel}"]`);
-                        if (panel) panel.classList.add('active');
+                        const panel = wcagContent.querySelector(`.wcag-panel[data-panel="${targetPanel}"]`);
+                        if (panel) {
+                            panel.classList.add('active');
+
+                            // Si on revient sur l'onglet overview, forcer le redraw du chart
+                            if (targetPanel === 'overview') {
+                                // Attendre que le panel soit visible avant de redessiner
+                                requestAnimationFrame(() => {
+                                    const chart = Chart.getChart("chart-wcag");
+                                    if (chart) {
+                                        chart.resize();
+                                        chart.update('none'); // 'none' pour éviter l'animation
+                                    }
+                                });
+                            }
+                        }
                     });
                 });
             }
@@ -1275,6 +1356,7 @@
             function initDaltonismeTabs() {
                 const tabs = document.querySelectorAll('.daltonisme-tab');
                 const panels = document.querySelectorAll('.daltonisme-panel');
+                const daltonismeContent = document.getElementById('daltonisme-content');
 
                 tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
@@ -1284,10 +1366,24 @@
                         tabs.forEach(t => t.classList.remove('active'));
                         panels.forEach(p => p.classList.remove('active'));
 
-                        // Activer l'onglet et le panneau sélectionnés
+                        // Activer l'onglet et le panneau sélectionnés (chercher uniquement dans daltonisme-content)
                         tab.classList.add('active');
-                        const panel = document.querySelector(`[data-panel="${targetPanel}"]`);
-                        if (panel) panel.classList.add('active');
+                        const panel = daltonismeContent.querySelector(`.daltonisme-panel[data-panel="${targetPanel}"]`);
+                        if (panel) {
+                            panel.classList.add('active');
+
+                            // Si on revient sur l'onglet overview, forcer le redraw du chart
+                            if (targetPanel === 'overview') {
+                                // Attendre que le panel soit visible avant de redessiner
+                                requestAnimationFrame(() => {
+                                    const chart = Chart.getChart("chart-daltonisme");
+                                    if (chart) {
+                                        chart.resize();
+                                        chart.update('none'); // 'none' pour éviter l'animation
+                                    }
+                                });
+                            }
+                        }
                     });
                 });
             }
@@ -1510,35 +1606,54 @@
                 }
             }
 
-            // Fonction pour remplir l'analyse de différentiabilité
+            // Fonction pour remplir l'analyse de différentiabilité avec onglets
             function populateDifferenceAnalysis() {
-                const differenceContainer = document.getElementById('difference-analysis');
-                if (differenceContainer && daltonisme.daltonisme) {
-                    differenceContainer.innerHTML = Object.entries(daltonisme.daltonisme).map(([type, data]) => {
+                const tabsContainer = document.getElementById('difference-tabs-container');
+                const contentContainer = document.getElementById('difference-content');
+
+                if (tabsContainer && contentContainer && daltonisme.daltonisme) {
+                    const typeNames = {
+                        protanopia: 'Protanopie',
+                        deuteranopia: 'Deutéranopie',
+                        tritanopia: 'Tritanopie',
+                        achromatopsie: 'Achromatopsie'
+                    };
+
+                    const entries = Object.entries(daltonisme.daltonisme);
+
+                    // Créer les onglets
+                    tabsContainer.innerHTML = entries.map(([type], index) => `
+                        <button class="difference-type-tab ${index === 0 ? 'active' : ''} px-4 py-2 text-sm font-medium rounded-md transition-all bg-transparent text-gray-400 hover:bg-gray-700/30" data-type="${type}">
+                            ${typeNames[type] || type}
+                        </button>
+                    `).join('');
+
+                    // Créer le contenu de chaque onglet
+                    contentContainer.innerHTML = entries.map(([type, data], index) => {
                         const differences = data.differences || [];
 
                         return `
-                            <div class="space-y-4">
-                                <h4 class="text-lg font-semibold text-gray-200 capitalize">${type}</h4>
+                            <div class="difference-type-content ${index === 0 ? 'active' : ''}" data-type-content="${type}">
                                 <div class="grid grid-cols-1 gap-3">
                                     ${differences.map(diff => {
                                         const deltaClass = diff.differentiable ? 'delta-e-good' :
                                                          diff.deltaSimulated >= 30 ? 'delta-e-warning' : 'delta-e-critical';
 
                                         return `
-                                            <div class="p-4 bg-gray-800/50 border border-gray-700/50 rounded-lg">
-                                                <div class="flex justify-between items-start mb-2">
-                                                    <div class="text-sm text-gray-200">${diff.pair}</div>
-                                                    <div class="flex items-center gap-2">
-                                                        <span class="text-lg">${diff.differentiable ? '✅' : '⚠️'}</span>
-                                                        <span class="delta-e-indicator ${deltaClass}">
-                                                            ΔE: ${diff.deltaSimulated?.toFixed(1) || 'N/A'}
-                                                        </span>
-                                                    </div>
+                                            <div class="p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg hover:border-gray-600/50 transition-colors">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <div class="text-sm font-medium text-gray-200">${diff.pair}</div>
+                                                    <span class="text-lg">${diff.differentiable ? '✅' : '⚠️'}</span>
                                                 </div>
-                                                <div class="flex justify-between text-xs text-gray-400">
-                                                    <span>Original ΔE: ${diff.deltaOriginal?.toFixed(1) || 'N/A'}</span>
-                                                    <span>Seuil: ≥40 pour différentiation</span>
+                                                <div class="grid grid-cols-2 gap-3 text-xs">
+                                                    <div class="p-2 bg-gray-700/30 rounded">
+                                                        <div class="text-gray-500 mb-1">👁️ Vision normale</div>
+                                                        <div class="font-mono text-blue-400 font-semibold">ΔE: ${diff.deltaOriginal?.toFixed(1) || 'N/A'}</div>
+                                                    </div>
+                                                    <div class="p-2 bg-gray-700/30 rounded">
+                                                        <div class="text-gray-500 mb-1">👁️ Vision daltonienne</div>
+                                                        <div class="font-mono font-semibold ${diff.differentiable ? 'text-green-400' : 'text-red-400'}">ΔE: ${diff.deltaSimulated?.toFixed(1) || 'N/A'}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         `;
@@ -1547,6 +1662,40 @@
                             </div>
                         `;
                     }).join('');
+
+                    // Initialiser les onglets
+                    initDifferenceTypeTabs();
+                }
+            }
+
+            // Fonction pour gérer les onglets de types de daltonisme
+            function initDifferenceTypeTabs() {
+                const tabs = document.querySelectorAll('.difference-type-tab');
+                const contents = document.querySelectorAll('.difference-type-content');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const targetType = tab.dataset.type;
+
+                        // Désactiver tous les onglets et contenus
+                        tabs.forEach(t => {
+                            t.classList.remove('active', 'bg-purple-500', 'text-white');
+                            t.classList.add('bg-transparent', 'text-gray-400');
+                        });
+                        contents.forEach(c => c.classList.remove('active'));
+
+                        // Activer l'onglet et le contenu sélectionnés
+                        tab.classList.add('active', 'bg-purple-500', 'text-white');
+                        tab.classList.remove('bg-transparent', 'text-gray-400');
+                        const content = document.querySelector(`[data-type-content="${targetType}"]`);
+                        if (content) content.classList.add('active');
+                    });
+                });
+
+                // Activer le premier onglet par défaut
+                if (tabs.length > 0) {
+                    tabs[0].classList.add('bg-purple-500', 'text-white');
+                    tabs[0].classList.remove('bg-transparent', 'text-gray-400');
                 }
             }
 
@@ -1565,10 +1714,23 @@
 
                 if (daltonismScore && daltonisme.daltonisme) {
                     const daltonismTypes = Object.values(daltonisme.daltonisme);
-                    const allDifferentiable = daltonismTypes.filter(d => d.allDifferentiable).length;
-                    const totalTypes = daltonismTypes.length;
-                    const daltonismPercent = totalTypes > 0 ? Math.round((allDifferentiable / totalTypes) * 100) : 0;
-                    daltonismScore.textContent = `${daltonismPercent}%`;
+
+                    // Calculer le pourcentage moyen de différentiabilité pour tous les types
+                    let totalPercent = 0;
+                    let typesCount = 0;
+
+                    daltonismTypes.forEach(type => {
+                        if (type.differences && type.differences.length > 0) {
+                            const differentiable = type.differences.filter(d => d.differentiable).length;
+                            const total = type.differences.length;
+                            const percent = (differentiable / total) * 100;
+                            totalPercent += percent;
+                            typesCount++;
+                        }
+                    });
+
+                    const averagePercent = typesCount > 0 ? Math.round(totalPercent / typesCount) : 0;
+                    daltonismScore.textContent = `${averagePercent}%`;
                 }
 
                 if (statusBadge) {
@@ -1608,8 +1770,14 @@
 
             const daltonismeContainer = document.getElementById("chart-daltonisme").parentElement;
 
+            // Détruire l'ancien graphique s'il existe
+            const existingChart = Chart.getChart("chart-daltonisme");
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
             // Créer le graphique en donut (plus petit maintenant)
-            new Chart(document.getElementById("chart-daltonisme"), {
+            const daltonismeChart = new Chart(document.getElementById("chart-daltonisme"), {
                 type: "doughnut",
                 data: {
                     labels: ["Tests réussis", "Tests échoués"],
@@ -1620,6 +1788,8 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -1632,22 +1802,9 @@
                             }
                         }
                     },
-                    cutout: '60%'
+                    cutout: '50%'
                 }
             });
-
-            // Ajouter l'overlay avec statistiques centrales
-            const overlay = document.createElement('div');
-            overlay.className = 'chart-overlay';
-            overlay.innerHTML = `
-                <div class="chart-overlay-text">
-                    <div class="text-2xl font-bold ${stats.passed > stats.failed ? 'text-green-400' : 'text-red-400'}">
-                        ${stats.passed + stats.failed > 0 ? ((stats.passed / (stats.passed + stats.failed)) * 100).toFixed(0) : 0}%
-                    </div>
-                    <div class="text-xs text-gray-300 font-medium">Conformité</div>
-                </div>
-            `;
-            daltonismeContainer.appendChild(overlay);
 
             // Initialiser tous les composants de la section daltonisme
             setTimeout(() => {

@@ -6,7 +6,7 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 11
+**Total sessions documentées** : 12
 **Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
@@ -14,7 +14,35 @@
 
 ## 🗓️ Sessions Actives (Documentation V2)
 
-### Session du 24 Novembre 2025 - Dashboard Quality Badges
+### Session du 24 Novembre 2025 - Dashboard UX Improvements (Partie 2)
+
+**Fichier** : [sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md](sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md)
+
+**Objectif** : Améliorer l'UX de la section Daltonisme, corriger bugs de navigation et optimiser affichage métriques
+
+**Réalisations** :
+
+- ✅ **Fix navigation onglets Daltonisme**
+  - Correction sélecteurs panels (conflit WCAG/Daltonisme résolu)
+  - Destruction/recréation graphique Chart.js
+  - Resize/update lors du retour sur overview
+  - requestAnimationFrame pour synchronisation render
+- ✅ **Suppression overlay redondant** (80% conformité au centre du donut)
+- ✅ **Amélioration label "Différentiabilité"**
+  - Changé en "Score moyen" avec info-bulle explicative
+  - Affichage 80% (moyenne) au lieu de 25% (strict)
+  - Ajout indicateurs visuels (ℹ️, soulignement pointillé)
+- ✅ **Optimisation onglet "Différentiabilité"**
+  - Système d'onglets par type de daltonisme (4 tabs)
+  - Seuil unique en haut avec info-bulle échelle Delta E
+  - Suppression ΔE en double + bande violette répétitive
+  - Animation fade-in pour changements d'onglet
+
+**Impact** : 🎉 **Section Daltonisme 100% fonctionnelle** et compréhensible
+
+---
+
+### Session du 24 Novembre 2025 - Dashboard Quality Badges (Partie 1)
 
 **Fichier** : [sessions/2025-11-24-DASHBOARD-BADGES.md](sessions/2025-11-24-DASHBOARD-BADGES.md)
 
