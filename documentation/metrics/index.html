@@ -326,7 +326,12 @@
 <!-- GRID -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
     <section class="card metric-card fade-in">
-        <h2 class="section-title">🔦 Lighthouse</h2>
+        <h2 class="section-title flex items-center gap-3">
+            🔦 Lighthouse
+            <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="lighthouse-status-badge">
+                ⏳ Chargement...
+            </div>
+        </h2>
         <div class="lighthouse-container" id="lighthouse-content">
             <div class="flex items-center justify-center h-32 text-gray-400">
                 <p>⏳ Chargement des scores Lighthouse...</p>
@@ -540,7 +545,12 @@
         </div>
     </section>
     <section class="card metric-card fade-in">
-        <h2 class="section-title">⚡ Performance FPS</h2>
+        <h2 class="section-title flex items-center gap-3">
+            ⚡ Performance FPS
+            <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="fps-status-badge">
+                ⏳ Chargement...
+            </div>
+        </h2>
         <p class="text-sm text-gray-400 mb-4">
             Mesure des performances d'animation et de rendu (objectif : 60 FPS stable)
         </p>
@@ -548,7 +558,12 @@
     </section>
 
     <section class="card metric-card fade-in">
-        <h2 class="section-title">♿ Accessibilité — Reduced Motion</h2>
+        <h2 class="section-title flex items-center gap-3">
+            ♿ Accessibilité — Reduced Motion
+            <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="a11y-status-badge">
+                ⏳ Chargement...
+            </div>
+        </h2>
         <p class="text-sm text-gray-400 mb-4">
             Respect de la préférence "prefers-reduced-motion" pour les utilisateurs sensibles au mouvement
         </p>
@@ -556,7 +571,12 @@
     </section>
 
     <section class="card metric-card fade-in">
-        <h2 class="section-title">📊 Scalabilité — Datasets</h2>
+        <h2 class="section-title flex items-center gap-3">
+            📊 Scalabilité — Datasets
+            <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="datasets-status-badge">
+                ⏳ Chargement...
+            </div>
+        </h2>
         <p class="text-sm text-gray-400 mb-4">
             Test de performance avec différentes tailles de jeux de données (de 10 à 10 000 items)
         </p>
@@ -566,7 +586,12 @@
 
 <!-- COVERAGE -->
 <section class="mt-14 card" id="coverage-section">
-    <h2 class="section-title">📈 Coverage des tests</h2>
+    <h2 class="section-title flex items-center gap-3">
+        📈 Coverage des tests
+        <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="coverage-status-badge">
+            ⏳ Chargement...
+        </div>
+    </h2>
     <p class="text-sm text-gray-400 mb-6">
         Couverture de code par les tests unitaires (Vitest) - Analyse détaillée par fonctionnalité
     </p>
@@ -577,7 +602,12 @@
 
 <!-- AUDIT COMPLET RNCP -->
 <section class="mt-14 card" id="audit-rncp">
-    <h2 class="section-title">📚 Audit Complet RNCP — Synthèse</h2>
+    <h2 class="section-title flex items-center gap-3">
+        📚 Audit Complet RNCP — Synthèse
+        <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="audit-rncp-status-badge">
+            ⏳ Chargement...
+        </div>
+    </h2>
     <p class="text-sm text-gray-400 mb-6">
         Agrégation de tous les audits (Performance, Accessibilité, Éco-conception, Qualité) pour démonstration RNCP 2027
     </p>
@@ -917,6 +947,19 @@
                     ring.style.strokeDasharray = `${strokeDashArray} ${circumference}`;
                 });
             }, 200);
+
+            // Mettre à jour le badge de statut Lighthouse
+            const lighthouseStatusBadge = document.getElementById('lighthouse-status-badge');
+            if (lighthouseStatusBadge) {
+                const hasExcellent = avgScore >= 90;
+                const hasGood = avgScore >= 70;
+                lighthouseStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                    hasExcellent ? 'bg-green-500/20 text-green-400' :
+                    hasGood ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-red-500/20 text-red-400'
+                }`;
+                lighthouseStatusBadge.textContent = hasExcellent ? '✅ Excellent' : hasGood ? '⚠️ Bon' : '❌ À améliorer';
+            }
 
         } else {
             document.getElementById("lighthouse-content").innerHTML =
@@ -1686,6 +1729,17 @@
             `;
         }
 
+        // Mettre à jour le badge de statut FPS
+        const fpsStatusBadge = document.getElementById('fps-status-badge');
+        if (fpsStatusBadge && fps?.avgOverall != null) {
+            const avgFps = parseFloat(fps.avgOverall);
+            const allPassed = fps.allPassed;
+            fpsStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                allPassed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+            }`;
+            fpsStatusBadge.textContent = allPassed ? `✅ ${avgFps.toFixed(0)} FPS` : `⚠️ ${avgFps.toFixed(0)} FPS`;
+        }
+
         // A11y - Affichage avec badge visuel
         const a11yEl = document.getElementById("a11y-result");
         if (a11y != null) {
@@ -1733,6 +1787,16 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Mettre à jour le badge de statut A11y
+        const a11yStatusBadge = document.getElementById('a11y-status-badge');
+        if (a11yStatusBadge && a11y != null) {
+            const passed = a11y.passed;
+            a11yStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                passed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+            }`;
+            a11yStatusBadge.textContent = passed ? '✅ Conforme' : '❌ Non conforme';
         }
 
         // Datasets - Affichage avec gauge visuel
@@ -1809,6 +1873,31 @@
                 </div>
             `;
         }
+
+        // Mettre à jour le badge de statut Datasets
+        const datasetsStatusBadge = document.getElementById('datasets-status-badge');
+        if (datasetsStatusBadge && datasets) {
+            // Si on a un champ degradation, l'utiliser
+            if (datasets.degradation != null && datasets.degradation !== 'N/A') {
+                const degradation = parseFloat(datasets.degradation);
+                const isGood = degradation < 5;
+                const isMedium = degradation < 15;
+                datasetsStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                    isGood ? 'bg-green-500/20 text-green-400' :
+                    isMedium ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-red-500/20 text-red-400'
+                }`;
+                datasetsStatusBadge.textContent = isGood ? '✅ Excellent' : isMedium ? '⚠️ Acceptable' : '❌ Critique';
+            }
+            // Sinon, utiliser allPassed pour afficher un statut simple
+            else if (datasets.allPassed != null) {
+                const avgFps = datasets.avgOverall ? parseFloat(datasets.avgOverall) : 60;
+                datasetsStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                    datasets.allPassed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                }`;
+                datasetsStatusBadge.textContent = datasets.allPassed ? `✅ ${avgFps.toFixed(0)} FPS` : '❌ Tests échoués';
+            }
+        }
     }
 
     function renderAudit(audit) {
@@ -1841,6 +1930,49 @@
 
         // Coverage
         qualityEl.innerHTML = audit.coverage && audit.coverage.statements!=null ? `<p class='text-sm'>Statements: <strong>${audit.coverage.statements}%</strong> | Fonctions: ${audit.coverage.functions??'N/A'}% | Branches: ${audit.coverage.branches??'N/A'}%</p>` : `<p class='text-xs opacity-60'>Couverture non disponible</p>`;
+
+        // Mettre à jour le badge de statut Audit RNCP
+        const auditRncpStatusBadge = document.getElementById('audit-rncp-status-badge');
+        if (auditRncpStatusBadge && audit) {
+            // Calculer un score global basé sur les différentes métriques
+            let score = 0;
+            let totalMetrics = 0;
+
+            // Lighthouse Performance (score /100)
+            if (audit.lighthouse?.scores?.performance != null) {
+                score += audit.lighthouse.scores.performance;
+                totalMetrics++;
+            }
+
+            // Lighthouse Accessibility (score /100)
+            if (audit.lighthouse?.scores?.accessibility != null) {
+                score += audit.lighthouse.scores.accessibility;
+                totalMetrics++;
+            }
+
+            // FPS (converti en score sur 100)
+            if (audit.fps?.allPassed != null) {
+                score += audit.fps.allPassed ? 100 : 50;
+                totalMetrics++;
+            }
+
+            // Coverage (score /100)
+            if (audit.coverage?.statements != null) {
+                score += audit.coverage.statements;
+                totalMetrics++;
+            }
+
+            const avgScore = totalMetrics > 0 ? score / totalMetrics : 0;
+            const isExcellent = avgScore >= 85;
+            const isGood = avgScore >= 70;
+
+            auditRncpStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                isExcellent ? 'bg-green-500/20 text-green-400' :
+                isGood ? 'bg-yellow-500/20 text-yellow-400' :
+                'bg-red-500/20 text-red-400'
+            }`;
+            auditRncpStatusBadge.textContent = isExcellent ? `✅ ${avgScore.toFixed(0)}%` : isGood ? `⚠️ ${avgScore.toFixed(0)}%` : `❌ ${avgScore.toFixed(0)}%`;
+        }
     }
 
     async function loadCoverage() {
@@ -2008,6 +2140,19 @@
           ${listBlock('Priorités d\'amélioration (faible couverture)', worst)}
           <p class='text-xs opacity-50 mt-4'>Source : coverage-final.json – regroupements dossiers & fonctionnalités heuristiques.</p>
         `;
+
+        // Mettre à jour le badge de statut Coverage
+        const coverageStatusBadge = document.getElementById('coverage-status-badge');
+        if (coverageStatusBadge) {
+            const isGood = globalPct >= 85;
+            const isMedium = globalPct >= 70;
+            coverageStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                isGood ? 'bg-green-500/20 text-green-400' :
+                isMedium ? 'bg-yellow-500/20 text-yellow-400' :
+                'bg-red-500/20 text-red-400'
+            }`;
+            coverageStatusBadge.textContent = isGood ? `✅ ${globalPct.toFixed(1)}%` : isMedium ? `⚠️ ${globalPct.toFixed(1)}%` : `❌ ${globalPct.toFixed(1)}%`;
+        }
     }
     // Appels
     loadCoverage();

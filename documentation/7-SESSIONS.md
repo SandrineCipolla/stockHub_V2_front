@@ -6,13 +6,76 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 9
+**Total sessions documentées** : 11
 **Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 24 Novembre 2025 - Dashboard Quality Badges
+
+**Fichier** : [sessions/2025-11-24-DASHBOARD-BADGES.md](sessions/2025-11-24-DASHBOARD-BADGES.md)
+
+**Objectif** : Ajouter des badges de statut visuels dans toutes les sections du dashboard
+
+**Réalisations** :
+
+- ✅ **8 badges de statut** ajoutés (vert/jaune/rouge)
+  - Lighthouse (moyenne 4 scores)
+  - WCAG Risk Levels (compte problèmes critiques)
+  - Daltonisme (tests passés/échoués)
+  - Performance FPS (moyenne FPS + allPassed)
+  - Reduced Motion (conforme/non conforme)
+  - Datasets (dégradation ou FPS fallback)
+  - Coverage (% instructions)
+  - Audit RNCP (moyenne 4 métriques)
+- ✅ **Mise à jour dynamique** des badges au chargement
+- ✅ **Logique de fallback** pour Datasets (mode dégradation ou FPS)
+- ✅ **Lazy loading** optimisé pour Audit RNCP
+- ✅ **Documentation exhaustive** créée :
+  - 9-DASHBOARD-QUALITY.md (référence technique complète)
+  - Session 2025-11-24 (journal détaillé)
+- ✅ **150 lignes de code** ajoutées (36 HTML + 114 JS)
+
+**Impact** : 🎉 **Dashboard production-ready** avec feedback visuel immédiat sur toutes les métriques
+
+---
+
+### Session du 20-22 Novembre 2025 - Dashboard Qualité Interactif
+
+**Fichier** : [sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md)
+
+**Objectif** : Créer un dashboard HTML unique qui agrège toutes les métriques de qualité
+
+**Réalisations** :
+
+- ✅ **Dashboard HTML complet** (2152 lignes)
+  - Structure responsive (TailwindCSS)
+  - 8 sections avec visualisations
+  - Design moderne dark mode
+- ✅ **Graphiques interactifs** :
+  - Cercles SVG animés (Lighthouse)
+  - Chart.js barres (WCAG Risk Levels)
+  - Chart.js donut (Daltonisme)
+  - Gauges circulaires (FPS, Datasets)
+  - Barres de progression (Coverage)
+- ✅ **Navigation par onglets** (10 onglets total) :
+  - WCAG : 6 onglets (vue d'ensemble, critique, élevé, moyen, faible, solutions)
+  - Daltonisme : 4 onglets (vue d'ensemble, contraste, simulation, différentiabilité)
+- ✅ **Chargement automatique** des dernières données (timestamps)
+- ✅ **Dual strategy** : Listage dynamique + fallback statique
+- ✅ **Lazy loading** : Section Audit RNCP (~15KB économisés)
+- ✅ **Scripts utilitaires** :
+  - serve-metrics.mjs (serveur local)
+  - update-metrics-files.mjs (MAJ liste statique)
+- ✅ **PRs mergées** : #44, #45, #46
+- ✅ **Fixes CI/CD** : Rollup deps, coverage generation, jsdom downgrade
+
+**Impact** : 🎉 **Outil central** pour évaluer la qualité du projet en un coup d'œil
+
+---
 
 ### Session du 18 Novembre 2025 - Tests SearchInputWrapper & Finalisation PR #34
 
@@ -230,6 +293,11 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 ## 🔍 Recherche par Thème
 
+**Dashboard & Métriques**
+
+- [24 Nov 2025](sessions/2025-11-24-DASHBOARD-BADGES.md) - Badges de statut dashboard (8 badges, feedback visuel)
+- [20-22 Nov 2025](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) - Dashboard qualité interactif (PRs #44-46)
+
 **Tests & Qualité**
 
 - [18 Nov 2025](sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md) - SearchInputWrapper tests (464 tests, 7/7 wrappers ✅)
@@ -291,5 +359,5 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 ---
 
-**Dernière mise à jour** : 18 Novembre 2025
-**Prochaine session** : Documentation harmonisation (Issue #25)
+**Dernière mise à jour** : 24 Novembre 2025
+**Sessions récentes** : Dashboard qualité interactif + badges de statut complétés

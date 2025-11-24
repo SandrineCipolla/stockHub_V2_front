@@ -19,8 +19,9 @@
 | **4** | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 | 🐛 Résolution problèmes web components               |
 | **5** | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                     | 🧪 Guide tests & métriques performance               |
 | **6** | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     | ♿ Accessibilité WCAG AA (audit complet)             |
-| **7** | [7-SESSIONS.md](7-SESSIONS.md)                               | 📅 Index sessions développement (9 sessions)         |
+| **7** | [7-SESSIONS.md](7-SESSIONS.md)                               | 📅 Index sessions développement (11 sessions)        |
 | **8** | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   | 🎓 Suivi compétences & livrables RNCP                |
+| **9** | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)             | 📊 **Dashboard Qualité** - Documentation complète    |
 
 ### Quick Links
 
@@ -111,10 +112,12 @@
 
 ### Index Sessions
 
-- [7-SESSIONS.md](7-SESSIONS.md) ⭐ **Index chronologique complet** (9 sessions documentées)
+- [7-SESSIONS.md](7-SESSIONS.md) ⭐ **Index chronologique complet** (11 sessions documentées)
 
 ### Sessions Récentes (Novembre 2025)
 
+- [sessions/2025-11-24-DASHBOARD-BADGES.md](sessions/2025-11-24-DASHBOARD-BADGES.md) ⭐ **NEW** - Badges de statut dashboard (8 badges)
+- [sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) ⭐ **NEW** - Dashboard qualité interactif (PRs #44-46)
 - [sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md](sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md) - Tests SearchInputWrapper (464 tests, 7/7 wrappers ✅)
 - [sessions/2025-11-13-ANALYTICS-MIGRATION.md](sessions/2025-11-13-ANALYTICS-MIGRATION.md) - Migration Analytics (100% Design System)
 - [sessions/2025-11-12-TESTS-UNITAIRES.md](sessions/2025-11-12-TESTS-UNITAIRES.md) - Correction tests (stratégie Shadow DOM)
@@ -350,6 +353,6 @@ Créer une issue : https://github.com/SandrineCipolla/stockHub_V2_front/issues
 
 ---
 
-**Dernière mise à jour** : 18 Novembre 2025
-**Version Documentation** : 2.0 (Réorganisée)
+**Dernière mise à jour** : 24 Novembre 2025
+**Version Documentation** : 2.1 (Dashboard Qualité ajouté)
 **Projet** : StockHub V2 - RNCP 7
