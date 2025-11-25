@@ -200,6 +200,17 @@
             display: block;
         }
 
+        /* Styles pour les onglets FPS */
+        .fps-tab-content {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .fps-tab-content.active {
+            display: block;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -1735,6 +1746,31 @@
                 });
             }
 
+            // Fonction pour gérer les onglets FPS
+            function initFpsTabs() {
+                const tabs = document.querySelectorAll('.fps-tab');
+                const contents = document.querySelectorAll('.fps-tab-content');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const targetIndex = tab.dataset.fpsIndex;
+
+                        // Désactiver tous les onglets et contenus
+                        tabs.forEach(t => {
+                            t.classList.remove('active', 'bg-purple-500', 'text-white');
+                            t.classList.add('text-gray-400');
+                        });
+                        contents.forEach(c => c.classList.remove('active'));
+
+                        // Activer l'onglet et le contenu sélectionnés
+                        tab.classList.add('active', 'bg-purple-500', 'text-white');
+                        tab.classList.remove('text-gray-400');
+                        const content = document.querySelector(`[data-fps-content="${targetIndex}"]`);
+                        if (content) content.classList.add('active');
+                    });
+                });
+            }
+
             // Mettre à jour les métriques principales
             function updateMainMetrics() {
                 const contrastScore = document.getElementById('contrast-score');
@@ -1857,18 +1893,33 @@
                 '<div class="flex items-center justify-center h-32 text-gray-400"><p>⏳ Test daltonisme en cours...</p></div>';
         }
 
-        // FPS - Affichage amélioré avec graphique circulaire SVG
+        // FPS - Affichage enrichi avec explication et onglets
         const fpsEl = document.getElementById("fps-result");
-        if (fps?.avgOverall != null) {
+        if (fps?.avgOverall != null && fps.tests && fps.tests.length > 0) {
             const avgFps = parseFloat(fps.avgOverall);
             const statusIcon = fps.allPassed ? '✅' : '❌';
             const statusColor = fps.allPassed ? 'text-green-400' : 'text-red-400';
-            const testsCount = fps.tests?.length || 0;
+            const tests = fps.tests;
             const progressPercent = Math.min(100, (avgFps / 60) * 100);
             const strokeDasharray = `${progressPercent * 2.51} 251`;
 
             fpsEl.innerHTML = `
                 <div class="space-y-4">
+                    <!-- Explication FPS -->
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <div class="text-2xl">💡</div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi le "FPS" ?</div>
+                                <div class="text-xs text-gray-300 space-y-1">
+                                    <p><strong>FPS</strong> = <strong>Frames Per Second</strong> (images par seconde). C'est le nombre d'images que l'écran affiche chaque seconde.</p>
+                                    <p class="pt-2"><strong class="text-blue-400">60 FPS</strong> = Objectif pour des animations <strong>fluides</strong> et une expérience utilisateur optimale. En dessous de 30 FPS, les animations deviennent <strong>saccadées</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Résumé avec gauge -->
                     <div class="flex items-center justify-between">
                         <div class="relative">
                             <svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 84 84">
@@ -1886,31 +1937,114 @@
                         </div>
                         <div class="flex-1 ml-4 space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium">Performance</span>
+                                <span class="text-sm font-medium">Performance globale</span>
                                 <span class="text-2xl">${statusIcon}</span>
                             </div>
-                            <div class="text-xs text-gray-300">${testsCount} tests • ${avgFps.toFixed(1)} FPS moyen</div>
+                            <div class="text-xs text-gray-300">${tests.length} scénarios testés</div>
                             <div class="text-xs ${fps.allPassed ? 'text-green-400' : 'text-red-400'}">
                                 ${fps.allPassed ? 'Animations fluides ✨' : 'Optimisation requise ⚠️'}
                             </div>
                         </div>
                     </div>
+
+                    <!-- Barème -->
                     <div class="grid grid-cols-3 gap-2 text-center text-xs">
                         <div class="p-2 bg-gray-800 rounded">
-                            <div class="text-green-400 font-semibold">${fps.tests?.filter(t => t.passed).length || 0}</div>
-                            <div class="text-gray-400">Passés</div>
+                            <div class="text-green-400 font-semibold">≥ 60 FPS</div>
+                            <div class="text-gray-400">Excellent</div>
                         </div>
                         <div class="p-2 bg-gray-800 rounded">
-                            <div class="text-red-400 font-semibold">${fps.tests?.filter(t => !t.passed).length || 0}</div>
-                            <div class="text-gray-400">Échoués</div>
+                            <div class="text-yellow-400 font-semibold">45-60 FPS</div>
+                            <div class="text-gray-400">Acceptable</div>
                         </div>
                         <div class="p-2 bg-gray-800 rounded">
-                            <div class="text-blue-400 font-semibold">60</div>
-                            <div class="text-gray-400">Cible</div>
+                            <div class="text-red-400 font-semibold">< 45 FPS</div>
+                            <div class="text-gray-400">Problématique</div>
                         </div>
+                    </div>
+
+                    <!-- Navigation onglets scénarios FPS -->
+                    <div class="mb-4">
+                        <div class="text-sm font-medium text-gray-200 mb-2">📊 Résultats détaillés par scénario</div>
+                        <div class="flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg" id="fps-tabs-container">
+                            ${tests.map((test, index) => {
+                                const isFirst = index === 0;
+                                const shortName = test.testName.split('(')[0].trim();
+                                return `
+                                    <button class="fps-tab ${isFirst ? 'active bg-purple-500 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700'}
+                                            px-2 py-1.5 rounded text-xs font-medium transition-colors"
+                                            data-fps-index="${index}">
+                                        ${shortName}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Contenu des onglets FPS -->
+                    <div id="fps-content-tabs">
+                        ${tests.map((test, index) => {
+                            const isFirst = index === 0;
+                            const fpsStatus = test.passed ? 'text-green-400' : 'text-red-400';
+                            const fpsIcon = test.passed ? '✅' : '❌';
+                            const statusBg = test.passed ? 'bg-green-500/10 border-green-500/30' : 'bg-red-500/10 border-red-500/30';
+
+                            return `
+                                <div class="fps-tab-content ${isFirst ? 'active' : ''}" data-fps-content="${index}">
+                                    <div class="p-4 ${statusBg} border rounded-lg space-y-3">
+                                        <!-- En-tête -->
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <div class="text-sm font-semibold text-gray-200">${test.testName}</div>
+                                                <div class="text-xs text-gray-400">Scénario ${index + 1}/${tests.length}</div>
+                                            </div>
+                                            <div class="text-3xl">${fpsIcon}</div>
+                                        </div>
+
+                                        <!-- FPS grid 3 colonnes -->
+                                        <div class="grid grid-cols-3 gap-3 text-center">
+                                            <div class="p-2 bg-gray-800/50 rounded">
+                                                <div class="text-xs text-gray-400 mb-1">FPS Moyen</div>
+                                                <div class="text-lg font-bold ${fpsStatus}">${test.avgFPS.toFixed(1)}</div>
+                                            </div>
+                                            <div class="p-2 bg-gray-800/50 rounded">
+                                                <div class="text-xs text-gray-400 mb-1">FPS Min</div>
+                                                <div class="text-sm font-semibold text-gray-300">${test.minFPS}</div>
+                                            </div>
+                                            <div class="p-2 bg-gray-800/50 rounded">
+                                                <div class="text-xs text-gray-400 mb-1">FPS Max</div>
+                                                <div class="text-sm font-semibold text-gray-300">${test.maxFPS}</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Détails -->
+                                        <div class="flex items-center justify-between text-xs">
+                                            <span class="text-gray-400">Frames mesurées</span>
+                                            <span class="font-semibold text-gray-300">${test.frameCount} frames</span>
+                                        </div>
+                                        <div class="flex items-center justify-between text-xs">
+                                            <span class="text-gray-400">Seuil minimum requis</span>
+                                            <span class="font-semibold text-gray-300">55 FPS</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- Moyenne globale -->
+                    <div class="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-purple-300">Moyenne globale</span>
+                            <span class="text-lg font-bold text-purple-400">${avgFps.toFixed(1)} FPS</span>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">Sur ${tests.length} scénarios d'utilisation testés</div>
                     </div>
                 </div>
             `;
+
+            // Initialiser les onglets FPS
+            setTimeout(() => initFpsTabs(), 100);
         } else {
             fpsEl.innerHTML = `
                 <div class="flex items-center justify-center h-32">
