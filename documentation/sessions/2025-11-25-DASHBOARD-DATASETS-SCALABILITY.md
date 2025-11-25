@@ -998,5 +998,504 @@ Dégradation = -0.5%
 
 ---
 
+## 9. Section Performance FPS - Améliorations UX
+
+**Problème** : Affichage basique avec toutes les informations empilées verticalement, peu d'explications pédagogiques.
+
+**Solution** : Application du même pattern d'amélioration que Datasets (onglets + encart éducatif).
+
+### 9.1. Encart Éducatif "C'est quoi le FPS ?"
+
+```html
+<div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+  <div class="flex items-start gap-3">
+    <div class="text-2xl">💡</div>
+    <div>
+      <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi le "FPS" ?</div>
+      <div class="text-xs text-gray-300 space-y-1">
+        <p><strong>FPS</strong> = <strong>Frames Per Second</strong> (images par seconde).</p>
+        <p>
+          <strong class="text-blue-400">60 FPS</strong> = Objectif pour des animations
+          <strong>fluides</strong>. En dessous de 30 FPS, les animations deviennent
+          <strong>saccadées</strong>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+### 9.2. Système d'Onglets pour 5 Scénarios
+
+**Onglets créés** :
+
+1. **Chargement initial** (entrance animations)
+2. **Survol** (hover interactions)
+3. **Scroll** (scroll performance)
+4. **Recherche** (search bar typing)
+5. **Compteurs** (counter animations)
+
+**Structure HTML** :
+
+```html
+<!-- Navigation onglets FPS -->
+<div class='flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg'>
+  ${tests.map((test, index) => {
+    const shortName = test.testName.split('(')[0].trim(); // "Chargement initial"
+    return `
+      <button class='fps-tab ${isFirst ? 'active bg-purple-500 text-white' : '...'}'
+              data-fps-index='${index}'>
+        ${shortName}
+      </button>
+    `;
+  }).join('')}
+</div>
+
+<!-- Contenu des onglets -->
+${tests.map((test, index) => `
+  <div class='fps-tab-content ${isFirst ? 'active' : ''}' data-fps-content='${index}'>
+    <div class='p-4 ${statusBg} border rounded-lg space-y-3'>
+      <!-- FPS grid 3 colonnes -->
+      <div class='grid grid-cols-3 gap-3 text-center'>
+        <div>FPS Moyen: ${test.avgFPS.toFixed(1)}</div>
+        <div>FPS Min: ${test.minFPS}</div>
+        <div>FPS Max: ${test.maxFPS}</div>
+      </div>
+      <div>Frames mesurées: ${test.frameCount} frames</div>
+      <div>Seuil minimum: 55 FPS</div>
+    </div>
+  </div>
+`).join('')}
+```
+
+### 9.3. CSS et JavaScript
+
+**CSS** (lignes 203-212) :
+
+```css
+.fps-tab-content {
+  display: none;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.fps-tab-content.active {
+  display: block;
+}
+```
+
+**JavaScript** (lignes 1760-1783) :
+
+```javascript
+function initFpsTabs() {
+  const tabs = document.querySelectorAll('.fps-tab');
+  const contents = document.querySelectorAll('.fps-tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetIndex = tab.dataset.fpsIndex;
+
+      // Désactiver tous
+      tabs.forEach(t => {
+        t.classList.remove('active', 'bg-purple-500', 'text-white');
+        t.classList.add('text-gray-400');
+      });
+      contents.forEach(c => c.classList.remove('active'));
+
+      // Activer sélectionné
+      tab.classList.add('active', 'bg-purple-500', 'text-white');
+      const content = document.querySelector(`[data-fps-content="${targetIndex}"]`);
+      if (content) content.classList.add('active');
+    });
+  });
+}
+```
+
+### 9.4. Cohérence Visuelle
+
+**Changement de couleurs** : `green` → `purple` pour les onglets et la moyenne globale
+
+- Onglets : `bg-green-500` → `bg-purple-500`
+- Moyenne globale : `bg-green-500/10 border-green-500/30` → `bg-purple-500/10 border-purple-500/30`
+- Textes : `text-green-300/400` → `text-purple-300/400`
+
+**Données conservées** : Couleurs de statut (vert/rouge) selon résultat des tests
+
+---
+
+## 10. Section Coverage des Tests - Refonte Complète
+
+**Problème** : Affichage vertical très long (~600px) avec toutes les informations empilées, aucune explication pédagogique.
+
+**Solution** : Système d'onglets à 4 niveaux + encart éducatif + gauge visuelle.
+
+### 10.1. Encart Éducatif "C'est quoi la Coverage ?"
+
+```html
+<div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+  <div class="flex items-start gap-3">
+    <div class="text-2xl">💡</div>
+    <div>
+      <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi la "Coverage" ?</div>
+      <div class="text-xs text-gray-300 space-y-1">
+        <p>
+          La <strong>couverture de code</strong> mesure le
+          <strong>pourcentage de code testé</strong> par les tests unitaires.
+        </p>
+        <p>
+          <strong class="text-blue-400">≥ 85%</strong> = Bonne couverture.
+          <strong class="text-yellow-400">70-84%</strong> = Moyenne.
+          <strong class="text-red-400">< 70%</strong> = Faible, risque de bugs.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+### 10.2. Système d'Onglets à 4 Niveaux
+
+**Onglets créés** :
+
+1. **Vue d'ensemble** : Résumé global (instructions totales/couvertes, pourcentage)
+2. **Par domaine** : Couverture par domaine fonctionnel (Dashboard, Analytics, Components, Hooks, Utils, Contexts, Data)
+3. **Par fonctionnalité** : Couverture par fonctionnalité utilisateur (Gestion Stocks CRUD, Prédictions IA, Alertes, Préférences, etc.)
+4. **Fichiers** : Top qualité (meilleurs fichiers) + Priorités d'amélioration (faible couverture)
+
+### 10.3. Gauge Visuelle
+
+```html
+<div class="relative">
+  <svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 84 84">
+    <circle cx="42" cy="42" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none" />
+    <circle
+      cx="42"
+      cy="42"
+      r="40"
+      stroke='${globalPct >= 85 ? "#10b981" : globalPct >= 70 ? "#f59e0b" : "#ef4444"}'
+      stroke-width="4"
+      fill="none"
+      stroke-linecap="round"
+      stroke-dasharray="${strokeDasharray}"
+      class="transition-all duration-1000 ease-out"
+    />
+  </svg>
+  <div class="absolute inset-0 flex items-center justify-center">
+    <div class="text-center">
+      <div class="text-lg font-bold ${colorFor(globalPct)}">${globalPct.toFixed(0)}%</div>
+      <div class="text-xs text-gray-400">Code</div>
+    </div>
+  </div>
+</div>
+```
+
+### 10.4. Structure des Onglets
+
+**Onglet 1 - Vue d'ensemble** :
+
+```html
+<div class="grid grid-cols-2 gap-3 text-center">
+  <div class="p-3 bg-gray-800/50 rounded">
+    <div class="text-xs text-gray-400 mb-1">Instructions totales</div>
+    <div class="text-lg font-bold text-gray-300">${totalStatements}</div>
+  </div>
+  <div class="p-3 bg-gray-800/50 rounded">
+    <div class="text-xs text-gray-400 mb-1">Instructions couvertes</div>
+    <div class="text-lg font-bold ${colorFor(globalPct)}">${coveredStatements}</div>
+  </div>
+</div>
+```
+
+**Onglet 2 - Par domaine** :
+
+```html
+${sortedGroups.map(g => `
+<div>
+  <div class="flex justify-between mb-1">
+    <span class="tooltip-wrapper text-xs"
+      >${g.label}
+      <span class="tooltip-box">${g.help}</span>
+    </span>
+    <span class="${colorFor(g.pct)} text-xs font-semibold">${g.pct.toFixed(1)}%</span>
+  </div>
+  ${bar(g.pct)}
+</div>
+`).join('')}
+```
+
+**Onglet 3 - Par fonctionnalité** :
+
+```html
+${sortedFeatureGroups.map(g => { const examples = g.files.slice(0,2).map(f => f.file).join(', ');
+return `
+<div>
+  <div class="flex justify-between mb-1">
+    <span class="tooltip-wrapper text-xs"
+      >${g.label}
+      <span class="tooltip-box">${g.help}<br /><em>Exemples: ${examples}</em></span>
+    </span>
+    <span class="${colorFor(g.pct)} text-xs font-semibold">${g.pct.toFixed(1)}%</span>
+  </div>
+  ${bar(g.pct)}
+</div>
+`; }).join('')}
+```
+
+**Onglet 4 - Fichiers** :
+
+```html
+<!-- Top qualité -->
+<div class="text-sm font-semibold text-gray-200 mb-2">✅ Top qualité (meilleurs fichiers)</div>
+<ul class="space-y-1 text-xs">
+  ${best.map(f => `
+  <li class="flex justify-between items-center p-2 bg-gray-800/50 rounded">
+    <span class="truncate max-w-[70%]">${f.file}</span>
+    <span class="${colorFor(f.pct)} font-semibold">${f.pct.toFixed(1)}%</span>
+  </li>
+  `).join('')}
+</ul>
+
+<!-- Priorités d'amélioration -->
+<div class="text-sm font-semibold text-gray-200 mb-2">⚠️ Priorités d'amélioration</div>
+<ul class="space-y-1 text-xs">
+  ${worst.map(f => `
+  <li class="flex justify-between items-center p-2 bg-gray-800/50 rounded">
+    <span class="truncate max-w-[70%]">${f.file}</span>
+    <span class="${colorFor(f.pct)} font-semibold">${f.pct.toFixed(1)}%</span>
+  </li>
+  `).join('')}
+</ul>
+```
+
+### 10.5. CSS et JavaScript
+
+**CSS** (lignes 214-223) :
+
+```css
+.coverage-tab-content {
+  display: none;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.coverage-tab-content.active {
+  display: block;
+}
+```
+
+**JavaScript** (lignes 2534-2557) - **Fonction globale** :
+
+```javascript
+// Fonction définie au niveau global (avant loadCoverage)
+function initCoverageTabs() {
+  const tabs = document.querySelectorAll('.coverage-tab');
+  const contents = document.querySelectorAll('.coverage-tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetIndex = tab.dataset.coverageIndex;
+
+      // Désactiver tous
+      tabs.forEach(t => {
+        t.classList.remove('active', 'bg-purple-500', 'text-white');
+        t.classList.add('text-gray-400');
+      });
+      contents.forEach(c => c.classList.remove('active'));
+
+      // Activer sélectionné
+      tab.classList.add('active', 'bg-purple-500', 'text-white');
+      const content = document.querySelector(`[data-coverage-content="${targetIndex}"]`);
+      if (content) content.classList.add('active');
+    });
+  });
+}
+```
+
+**Appel** (ligne 2906 dans `loadCoverage()`) :
+
+```javascript
+setTimeout(() => initCoverageTabs(), 100);
+```
+
+### 10.6. Problème de Portée Résolu
+
+**Erreur initiale** : `Uncaught ReferenceError: initCoverageTabs is not defined`
+
+**Cause** : La fonction était définie **à l'intérieur** de `loadAllData()` (ligne 814), mais appelée depuis `loadCoverage()` (fonction séparée).
+
+**Solution** :
+
+1. ❌ Supprimé définition locale dans `loadAllData()` (lignes 1785-1808)
+2. ✅ Ajouté définition globale avant `loadCoverage()` (lignes 2534-2557)
+3. ✅ Fonction accessible depuis `loadCoverage()` ligne 2906
+
+**Portée correcte** :
+
+```
+<script>
+  // Fonctions globales
+  async function loadAllData() { ... }
+  function initCoverageTabs() { ... }  // ← GLOBALE ✅
+  async function loadCoverage() {
+    // ...
+    setTimeout(() => initCoverageTabs(), 100); // ← Accessible ✅
+  }
+
+  // Appels
+  loadCoverage();
+  loadAllData();
+</script>
+```
+
+### 10.7. Barème de Couverture
+
+```html
+<div class="grid grid-cols-3 gap-2 text-center text-xs">
+  <div class="p-2 bg-gray-800 rounded">
+    <div class="text-green-400 font-semibold">≥ 85%</div>
+    <div class="text-gray-400">Excellent</div>
+  </div>
+  <div class="p-2 bg-gray-800 rounded">
+    <div class="text-yellow-400 font-semibold">70-84%</div>
+    <div class="text-gray-400">Moyen</div>
+  </div>
+  <div class="p-2 bg-gray-800 rounded">
+    <div class="text-red-400 font-semibold">< 70%</div>
+    <div class="text-gray-400">Faible</div>
+  </div>
+</div>
+```
+
+### 10.8. Gain d'Espace et UX
+
+**Avant** :
+
+- Hauteur : ~600px (toutes sections empilées)
+- 4 blocs affichés simultanément (domaines + fonctionnalités + top + worst)
+- Aucune explication pédagogique
+
+**Après** :
+
+- Hauteur : ~250px (gauge + onglets)
+- 1 vue à la fois avec navigation claire
+- Encart éducatif + barème explicite
+- Animation fade-in fluide
+
+**Réduction** : **-58% d'espace vertical** 📉
+
+---
+
+## 📊 Métriques Globales de la Session
+
+**Fichier modifié** : `documentation/metrics/index.html`
+
+**Lignes de code** :
+
+- Section Datasets : +190 lignes
+- Section FPS : +35 lignes (onglets + encart)
+- Section Coverage : +220 lignes
+- CSS : +18 lignes (3 × 6 lignes par section)
+- JavaScript : +70 lignes (3 fonctions initXxxTabs)
+- **Total** : **+513 lignes**
+
+**Fonctionnalités ajoutées** :
+
+- ✅ 3 encarts éducatifs "💡 C'est quoi ?" (Scalabilité, FPS, Coverage)
+- ✅ 3 systèmes d'onglets (Datasets: 4, FPS: 5, Coverage: 4)
+- ✅ 3 fonctions JavaScript (`initDatasetTabs`, `initFpsTabs`, `initCoverageTabs`)
+- ✅ 3 animations CSS fadeIn
+- ✅ 3 gauges visuelles SVG
+- ✅ 3 barèmes de seuils
+- ✅ 1 calcul automatique de dégradation
+- ✅ Cohérence visuelle purple pour tous les onglets
+
+**Améliorations UX** :
+
+- ✅ Gain d'espace vertical : Datasets (-48%), FPS (-40%), Coverage (-58%)
+- ✅ Navigation par onglets fluide avec animations
+- ✅ Explications pédagogiques pour concepts techniques
+- ✅ Design cohérent et professionnel
+- ✅ Accessibilité (navigation clavier, tooltips)
+
+---
+
+## 🐛 Problèmes Rencontrés et Solutions
+
+### Problème 1 : Fonction `initCoverageTabs` non définie
+
+**Erreur** : `Uncaught ReferenceError: initCoverageTabs is not defined at metrics/:2913:26`
+
+**Cause** : Portée incorrecte - fonction définie dans `loadAllData()` mais appelée depuis `loadCoverage()`
+
+**Debug** :
+
+1. Vérification de l'emplacement de la définition (ligne 1785 - dans `loadAllData()`)
+2. Vérification de l'appel (ligne 2906 - dans `loadCoverage()`)
+3. Identification du problème de portée
+
+**Solution** :
+
+1. Suppression de la définition locale (lignes 1785-1808)
+2. Ajout de la définition globale avant `loadCoverage()` (lignes 2534-2557)
+3. Test et validation ✅
+
+### Problème 2 : Couleurs incohérentes entre sections
+
+**Problème** : Section FPS utilisait `green` alors que Datasets et Coverage utilisaient `purple`
+
+**Solution** :
+
+- Changement systématique `bg-green-500` → `bg-purple-500`
+- Update dans 3 endroits : onglets HTML, moyenne globale, fonction JavaScript
+- Résultat : Cohérence visuelle parfaite
+
+---
+
+## 🎓 Leçons Apprises
+
+1. **Portée JavaScript** : Toujours définir les fonctions d'onglets au niveau global si elles sont appelées depuis plusieurs contextes
+2. **Pattern réutilisable** : Le pattern onglets + encart éducatif + gauge fonctionne parfaitement, réutilisé 3 fois avec succès
+3. **Cohérence visuelle** : Utiliser la même palette de couleurs (purple) pour tous les onglets crée une meilleure expérience
+4. **UX compacte** : Les onglets réduisent drastiquement l'espace vertical tout en améliorant la lisibilité
+5. **Pédagogie** : Les encarts "💡 C'est quoi ?" rendent les concepts techniques accessibles
+6. **Animations subtiles** : Le fade-in de 0.3s rend les transitions agréables sans être intrusives
+7. **Fallbacks robustes** : Toujours prévoir plusieurs niveaux de fallback pour les données
+
+---
+
+## 🔗 Références
+
+**Fichiers modifiés** :
+
+- ✅ `documentation/metrics/index.html` (3 sections refactorisées)
+
+**CSS ajouté** :
+
+- `.dataset-tab-content` + animation (lignes 192-201)
+- `.fps-tab-content` + animation (lignes 203-212)
+- `.coverage-tab-content` + animation (lignes 214-223)
+
+**JavaScript ajouté** :
+
+- `initDatasetTabs()` (lignes 1724-1747)
+- `initFpsTabs()` (lignes 1760-1783)
+- `initCoverageTabs()` (lignes 2534-2557)
+
+**Concepts techniques** :
+
+- Template literals JavaScript avec HTML
+- Event delegation avec `dataset` attributes
+- CSS animations (keyframes fadeIn)
+- SVG stroke-dasharray pour gauges circulaires
+- Calcul de dégradation performance
+
+**Impact RNCP** :
+
+- **C2.5** : Décisions techniques justifiées (choix onglets, pattern réutilisable)
+- **C3.2** : Documentation exhaustive des modifications
+- **C4.1** : Amélioration qualité et UX du dashboard
+
+---
+
 **Session précédente** : [2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md](2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md)
 **Session suivante** : TBD

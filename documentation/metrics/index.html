@@ -211,6 +211,17 @@
             display: block;
         }
 
+        /* Styles pour les onglets Coverage */
+        .coverage-tab-content {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .coverage-tab-content.active {
+            display: block;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -2520,6 +2531,31 @@ if (!prefersReducedMotion) {
         }
     }
 
+    // Fonction pour gérer les onglets Coverage
+    function initCoverageTabs() {
+        const tabs = document.querySelectorAll('.coverage-tab');
+        const contents = document.querySelectorAll('.coverage-tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetIndex = tab.dataset.coverageIndex;
+
+                // Désactiver tous les onglets et contenus
+                tabs.forEach(t => {
+                    t.classList.remove('active', 'bg-purple-500', 'text-white');
+                    t.classList.add('text-gray-400');
+                });
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Activer l'onglet et le contenu sélectionnés
+                tab.classList.add('active', 'bg-purple-500', 'text-white');
+                tab.classList.remove('text-gray-400');
+                const content = document.querySelector(`[data-coverage-content="${targetIndex}"]`);
+                if (content) content.classList.add('active');
+            });
+        });
+    }
+
     async function loadCoverage() {
         // Chargement et traitement des données de couverture - CORRIGÉ pour utiliser le bon chemin
         const candidates = [
@@ -2669,22 +2705,205 @@ if (!prefersReducedMotion) {
           </div>` : `<div class='mt-10 text-xs opacity-60'>Pas de regroupement fonctionnel détecté (règles non satisfaites).</div>`;
 
         const globalPct = pct(coveredStatements,totalStatements);
+        const progressPercent = Math.min(100, globalPct);
+        const strokeDasharray = `${progressPercent * 2.51} 251`;
+
         container.innerHTML = `
-          <div class='mb-4'>
-            <p class='text-lg'>Couverture globale (instructions) : <span class='font-semibold ${colorFor(globalPct)}'>${globalPct.toFixed(1)}%</span></p>
-            <p class='text-xs opacity-60'>Source: ${usedUrl}</p>
-            <p class='text-xs opacity-60 flex gap-3'>
-              <span><span class='inline-block w-2 h-2 rounded-full bg-green-400 align-middle'></span> ≥85% bon</span>
-              <span><span class='inline-block w-2 h-2 rounded-full bg-yellow-400 align-middle'></span> 70–84% moyen</span>
-              <span><span class='inline-block w-2 h-2 rounded-full bg-red-400 align-middle'></span> <70% faible</span>
-            </p>
+          <div class='space-y-4'>
+            <!-- Explication Coverage -->
+            <div class='p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg'>
+              <div class='flex items-start gap-3'>
+                <div class='text-2xl'>💡</div>
+                <div>
+                  <div class='text-sm font-semibold text-blue-300 mb-2'>C'est quoi la "Coverage" ?</div>
+                  <div class='text-xs text-gray-300 space-y-1'>
+                    <p>La <strong>couverture de code</strong> mesure le <strong>pourcentage de code testé</strong> par les tests unitaires.</p>
+                    <p class='pt-2'><strong class='text-blue-400'>≥ 85%</strong> = Bonne couverture, code bien testé. <strong class='text-yellow-400'>70-84%</strong> = Couverture moyenne. <strong class='text-red-400'>< 70%</strong> = Faible, risque de bugs non détectés.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Résumé avec gauge -->
+            <div class='flex items-center justify-between'>
+              <div class='relative'>
+                <svg class='w-16 h-16 transform -rotate-90' viewBox='0 0 84 84'>
+                  <circle cx='42' cy='42' r='40' stroke='rgba(255,255,255,0.1)' stroke-width='4' fill='none'/>
+                  <circle cx='42' cy='42' r='40' stroke='${globalPct >= 85 ? '#10b981' : globalPct >= 70 ? '#f59e0b' : '#ef4444'}'
+                          stroke-width='4' fill='none' stroke-linecap='round'
+                          stroke-dasharray='${strokeDasharray}' class='transition-all duration-1000 ease-out'/>
+                </svg>
+                <div class='absolute inset-0 flex items-center justify-center'>
+                  <div class='text-center'>
+                    <div class='text-lg font-bold ${colorFor(globalPct)}'>${globalPct.toFixed(0)}%</div>
+                    <div class='text-xs text-gray-400'>Code</div>
+                  </div>
+                </div>
+              </div>
+              <div class='flex-1 ml-4 space-y-2'>
+                <div class='flex items-center justify-between'>
+                  <span class='text-sm font-medium'>Couverture globale</span>
+                  <span class='text-2xl'>${globalPct >= 85 ? '✅' : globalPct >= 70 ? '⚠️' : '❌'}</span>
+                </div>
+                <div class='text-xs text-gray-300'>${totalStatements} instructions testées</div>
+                <div class='text-xs ${colorFor(globalPct)}'>
+                  ${coveredStatements} / ${totalStatements} instructions couvertes
+                </div>
+              </div>
+            </div>
+
+            <!-- Barème -->
+            <div class='grid grid-cols-3 gap-2 text-center text-xs'>
+              <div class='p-2 bg-gray-800 rounded'>
+                <div class='text-green-400 font-semibold'>≥ 85%</div>
+                <div class='text-gray-400'>Excellent</div>
+              </div>
+              <div class='p-2 bg-gray-800 rounded'>
+                <div class='text-yellow-400 font-semibold'>70-84%</div>
+                <div class='text-gray-400'>Moyen</div>
+              </div>
+              <div class='p-2 bg-gray-800 rounded'>
+                <div class='text-red-400 font-semibold'>< 70%</div>
+                <div class='text-gray-400'>Faible</div>
+              </div>
+            </div>
+
+            <!-- Navigation onglets Coverage -->
+            <div class='mb-4'>
+              <div class='text-sm font-medium text-gray-200 mb-2'>📊 Analyse détaillée</div>
+              <div class='flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg' id='coverage-tabs-container'>
+                <button class='coverage-tab active bg-purple-500 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors' data-coverage-index='0'>
+                  Vue d'ensemble
+                </button>
+                <button class='coverage-tab text-gray-400 hover:text-white hover:bg-gray-700 px-3 py-1.5 rounded text-xs font-medium transition-colors' data-coverage-index='1'>
+                  Par domaine
+                </button>
+                <button class='coverage-tab text-gray-400 hover:text-white hover:bg-gray-700 px-3 py-1.5 rounded text-xs font-medium transition-colors' data-coverage-index='2'>
+                  Par fonctionnalité
+                </button>
+                <button class='coverage-tab text-gray-400 hover:text-white hover:bg-gray-700 px-3 py-1.5 rounded text-xs font-medium transition-colors' data-coverage-index='3'>
+                  Fichiers
+                </button>
+              </div>
+            </div>
+
+            <!-- Contenu des onglets Coverage -->
+            <div id='coverage-content-tabs'>
+              <!-- Onglet 0: Vue d'ensemble -->
+              <div class='coverage-tab-content active' data-coverage-content='0'>
+                <div class='p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg space-y-3'>
+                  <div class='text-sm font-semibold text-gray-200'>📈 Résumé de la couverture</div>
+                  <div class='grid grid-cols-2 gap-3 text-center'>
+                    <div class='p-3 bg-gray-800/50 rounded'>
+                      <div class='text-xs text-gray-400 mb-1'>Instructions totales</div>
+                      <div class='text-lg font-bold text-gray-300'>${totalStatements}</div>
+                    </div>
+                    <div class='p-3 bg-gray-800/50 rounded'>
+                      <div class='text-xs text-gray-400 mb-1'>Instructions couvertes</div>
+                      <div class='text-lg font-bold ${colorFor(globalPct)}'>${coveredStatements}</div>
+                    </div>
+                  </div>
+                  <div class='flex items-center justify-between text-xs'>
+                    <span class='text-gray-400'>Pourcentage de couverture</span>
+                    <span class='font-semibold ${colorFor(globalPct)}'>${globalPct.toFixed(1)}%</span>
+                  </div>
+                  <div class='text-xs text-gray-400'>
+                    Source: <code class='text-purple-300'>${usedUrl.split('/').pop()}</code>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Onglet 1: Par domaine -->
+              <div class='coverage-tab-content' data-coverage-content='1'>
+                ${effectiveGroups.length ? `
+                  <div class='p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg space-y-3'>
+                    <div class='text-sm font-semibold text-gray-200'>🗂️ Couverture par domaine fonctionnel</div>
+                    <div class='space-y-3'>
+                      ${sortedGroups.map(g=>`
+                        <div>
+                          <div class='flex justify-between mb-1'>
+                            <span class='tooltip-wrapper text-xs' tabindex='0'>${g.label} <span class='tooltip-box'>${g.help}</span></span>
+                            <span class='${colorFor(g.pct)} text-xs font-semibold'>${g.pct.toFixed(1)}%</span>
+                          </div>
+                          ${bar(g.pct)}
+                        </div>
+                      `).join('')}
+                    </div>
+                    <div class='mt-3 pt-3 border-t border-gray-700 text-xs text-gray-400'>
+                      <strong>Top domaines:</strong> ${bestGroups.map(g=> g.label + ' (' + g.pct.toFixed(0)+'%)').join(', ')}
+                    </div>
+                  </div>
+                ` : `<div class='p-4 bg-gray-800/50 rounded-lg text-xs text-gray-400'>Aucun regroupement fonctionnel détecté.</div>`}
+              </div>
+
+              <!-- Onglet 2: Par fonctionnalité -->
+              <div class='coverage-tab-content' data-coverage-content='2'>
+                ${featureGroups.length ? `
+                  <div class='p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg space-y-3'>
+                    <div class='text-sm font-semibold text-gray-200'>⚙️ Couverture par fonctionnalité utilisateur</div>
+                    <div class='space-y-3'>
+                      ${sortedFeatureGroups.map(g=> {
+                        const examples = g.files.sort((a,b)=> b.statements - a.statements).slice(0,2).map(f=> f.file).join(', ');
+                        return `<div>
+                          <div class='flex justify-between mb-1'>
+                            <span class='tooltip-wrapper text-xs' tabindex='0'>${g.label} <span class='tooltip-box'>${g.help}${examples?`<br/><em>Exemples: ${examples}</em>`:''}</span></span>
+                            <span class='${colorFor(g.pct)} text-xs font-semibold'>${g.pct.toFixed(1)}%</span>
+                          </div>
+                          ${bar(g.pct)}
+                        </div>`;
+                      }).join('')}
+                    </div>
+                    <div class='mt-3 pt-3 border-t border-gray-700 text-xs text-gray-400'>
+                      <strong>Fonctionnalités mieux couvertes:</strong> ${topFeatureGroups.map(g=> g.label + ' (' + g.pct.toFixed(0)+'%)').join(', ')}
+                    </div>
+                  </div>
+                ` : `<div class='p-4 bg-gray-800/50 rounded-lg text-xs text-gray-400'>Pas de regroupement fonctionnel détecté.</div>`}
+              </div>
+
+              <!-- Onglet 3: Fichiers -->
+              <div class='coverage-tab-content' data-coverage-content='3'>
+                <div class='p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg space-y-4'>
+                  ${best.length ? `
+                    <div>
+                      <div class='text-sm font-semibold text-gray-200 mb-2'>✅ Top qualité (meilleurs fichiers)</div>
+                      <ul class='space-y-1 text-xs'>
+                        ${best.map(f=> `
+                          <li class='flex justify-between items-center p-2 bg-gray-800/50 rounded'>
+                            <span class='truncate max-w-[70%]' title='${f.file}'>${f.file}</span>
+                            <span class='${colorFor(f.pct)} font-semibold'>${f.pct.toFixed(1)}%</span>
+                          </li>
+                        `).join('')}
+                      </ul>
+                    </div>
+                  ` : ''}
+                  ${worst.length ? `
+                    <div class='pt-3 ${best.length ? 'border-t border-gray-700' : ''}'>
+                      <div class='text-sm font-semibold text-gray-200 mb-2'>⚠️ Priorités d'amélioration (faible couverture)</div>
+                      <ul class='space-y-1 text-xs'>
+                        ${worst.map(f=> `
+                          <li class='flex justify-between items-center p-2 bg-gray-800/50 rounded'>
+                            <span class='truncate max-w-[70%]' title='${f.file}'>${f.file}</span>
+                            <span class='${colorFor(f.pct)} font-semibold'>${f.pct.toFixed(1)}%</span>
+                          </li>
+                        `).join('')}
+                      </ul>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+
+            <!-- Note technique -->
+            <div class='p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg'>
+              <div class='text-xs text-gray-400'>
+                <strong class='text-purple-300'>Note:</strong> Données extraites de <code>coverage-final.json</code>. Regroupements basés sur l'arborescence des dossiers et des heuristiques fonctionnelles.
+              </div>
+            </div>
           </div>
-          ${groupBlock}
-          ${featureBlock}
-          ${listBlock('Top qualité (meilleurs fichiers)', best)}
-          ${listBlock('Priorités d\'amélioration (faible couverture)', worst)}
-          <p class='text-xs opacity-50 mt-4'>Source : coverage-final.json – regroupements dossiers & fonctionnalités heuristiques.</p>
         `;
+
+        // Initialiser les onglets Coverage
+        setTimeout(() => initCoverageTabs(), 100);
 
         // Mettre à jour le badge de statut Coverage
         const coverageStatusBadge = document.getElementById('coverage-status-badge');
