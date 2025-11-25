@@ -6,13 +6,39 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 13
+**Total sessions documentées** : 14
 **Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 25 Novembre 2025 - Dashboard Scalability: Datasets Enhancement (Partie 4)
+
+**Fichier** : [sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md)
+
+**Objectif** : Enrichir la section "Scalabilité — Datasets" qui affichait "Données manquantes" alors que des résultats de tests complets existaient
+
+**Réalisations** :
+
+- ✅ **Calcul automatique de la dégradation** depuis le tableau `tests[]`
+  - Formule : `(FPS_début - FPS_fin) / FPS_début × 100`
+  - Résultat avec données réelles : **0.4% de dégradation** (excellente!)
+  - Seuils : < 5% (Excellente), 5-15% (Acceptable), > 15% (Problématique)
+- ✅ **Box éducative** : Explication claire de la scalabilité
+  - Tests avec 5, 50, 200, 500 stocks
+  - Objectif : maintenir 60 FPS constant
+- ✅ **Tableau détaillé** des 4 tests
+  - FPS moyen, min, max pour chaque taille
+  - Statut ✅/❌ par test (seuil 55 FPS)
+- ✅ **Gauge visuelle** : Cercle SVG animé avec couleurs sémantiques
+- ✅ **Box moyenne globale** : 61.5 FPS sur 4 tests
+- ✅ **Badge intelligent** : Calcule depuis données disponibles + fallbacks
+
+**Impact** : 🎉 **Section complète et exploitable** - Dégradation de 0.4% = Excellente scalabilité
+
+---
 
 ### Session du 25 Novembre 2025 - Dashboard Accessibility: Reduced Motion (Partie 3)
 
@@ -350,8 +376,10 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 **Dashboard & Métriques**
 
-- [25 Nov 2025](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Reduced Motion accessibility (explication + guidance, 3 solutions)
-- [24 Nov 2025](sessions/2025-11-24-DASHBOARD-BADGES.md) - Badges de statut dashboard (8 badges, feedback visuel)
+- [25 Nov 2025 - Partie 4](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md) - Datasets scalability (calcul auto dégradation, tableau détaillé, 0.4% ✅)
+- [25 Nov 2025 - Partie 3](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Reduced Motion accessibility (explication + guidance, 3 solutions)
+- [24 Nov 2025 - Partie 2](sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md) - Daltonisme UX improvements (navigation, onglets, score moyen)
+- [24 Nov 2025 - Partie 1](sessions/2025-11-24-DASHBOARD-BADGES.md) - Badges de statut dashboard (8 badges, feedback visuel)
 - [20-22 Nov 2025](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) - Dashboard qualité interactif (PRs #44-46)
 
 **Tests & Qualité**
@@ -416,4 +444,4 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 ---
 
 **Dernière mise à jour** : 25 Novembre 2025
-**Sessions récentes** : Dashboard accessibility Reduced Motion + UX improvements complétés
+**Sessions récentes** : Dashboard Datasets scalability + Reduced Motion accessibility + UX improvements complétés

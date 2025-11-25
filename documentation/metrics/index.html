@@ -2024,21 +2024,50 @@ if (!prefersReducedMotion) {
             a11yStatusBadge.textContent = passed ? '✅ Conforme' : '❌ Non conforme';
         }
 
-        // Datasets - Affichage avec gauge visuel
+        // Datasets - Affichage enrichi avec calcul de dégradation
         const datasetEl = document.getElementById("dataset-result");
-        if (datasets?.degradation != null && datasets.degradation !== 'N/A') {
-            const degradation = parseFloat(datasets.degradation);
+
+        // Si on a des tests détaillés, calculer et afficher
+        if (datasets?.tests && datasets.tests.length > 0) {
+            const tests = datasets.tests;
+            const validTests = tests.filter(t => t.avgFPS > 0);
+
+            // Calculer la dégradation (différence entre premier et dernier test)
+            let degradation = 0;
+            if (validTests.length >= 2) {
+                const firstFPS = validTests[0].avgFPS;
+                const lastFPS = validTests[validTests.length - 1].avgFPS;
+                degradation = ((firstFPS - lastFPS) / firstFPS) * 100;
+            }
+
             const isGood = degradation < 5;
             const isMedium = degradation < 15;
             const statusIcon = isGood ? '✅' : isMedium ? '⚠️' : '❌';
             const statusColor = isGood ? 'text-green-400' : isMedium ? 'text-yellow-400' : 'text-red-400';
             const gaugeColor = isGood ? '#10b981' : isMedium ? '#f59e0b' : '#ef4444';
-            const statusText = isGood ? 'Excellent' : isMedium ? 'Acceptable' : 'Problématique';
-            const gaugePercent = Math.min(100, (degradation / 20) * 100);
+            const statusText = isGood ? 'Excellente' : isMedium ? 'Acceptable' : 'Problématique';
+            const gaugePercent = Math.min(100, (Math.abs(degradation) / 20) * 100);
             const gaugeDasharray = `${gaugePercent * 1.88} 188`;
+
+            const avgOverall = datasets.avgOverall || (validTests.reduce((sum, t) => sum + t.avgFPS, 0) / validTests.length);
 
             datasetEl.innerHTML = `
                 <div class="space-y-4">
+                    <!-- Explication de la scalabilité -->
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <div class="text-2xl">💡</div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi la "Scalabilité" ?</div>
+                                <div class="text-xs text-gray-300 space-y-1">
+                                    <p>La scalabilité mesure comment l'application <strong>maintient ses performances</strong> quand la quantité de données augmente.</p>
+                                    <p class="pt-2"><strong class="text-blue-400">Ici</strong> : On teste avec <strong>5, 50, 200 et 500 stocks</strong> pour voir si les animations restent fluides (60 FPS) même avec beaucoup de cartes produits.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Résumé avec gauge -->
                     <div class="flex items-center justify-between">
                         <div class="relative">
                             <svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
@@ -2049,23 +2078,25 @@ if (!prefersReducedMotion) {
                             </svg>
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="text-center">
-                                    <div class="text-sm font-bold ${statusColor}">${degradation.toFixed(1)}%</div>
+                                    <div class="text-sm font-bold ${statusColor}">${Math.abs(degradation).toFixed(1)}%</div>
                                 </div>
                             </div>
                         </div>
                         <div class="flex-1 ml-4 space-y-1">
                             <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium">Scalabilité</span>
+                                <span class="text-sm font-medium">Dégradation des performances</span>
                                 <span class="text-2xl">${statusIcon}</span>
                             </div>
-                            <div class="text-xs ${statusColor} font-medium">${statusText}</div>
-                            <div class="text-xs text-gray-400">Objectif: < 5%</div>
+                            <div class="text-xs ${statusColor} font-medium">Scalabilité ${statusText.toLowerCase()}</div>
+                            <div class="text-xs text-gray-400">De ${validTests[0]?.datasetCount || '?'} à ${validTests[validTests.length - 1]?.datasetCount || '?'} stocks</div>
                         </div>
                     </div>
+
+                    <!-- Barème de référence -->
                     <div class="grid grid-cols-3 gap-2 text-center text-xs">
                         <div class="p-2 bg-gray-800 rounded">
                             <div class="text-green-400 font-semibold">< 5%</div>
-                            <div class="text-gray-400">Excellent</div>
+                            <div class="text-gray-400">Excellente</div>
                         </div>
                         <div class="p-2 bg-gray-800 rounded">
                             <div class="text-yellow-400 font-semibold">5-15%</div>
@@ -2073,26 +2104,74 @@ if (!prefersReducedMotion) {
                         </div>
                         <div class="p-2 bg-gray-800 rounded">
                             <div class="text-red-400 font-semibold">> 15%</div>
-                            <div class="text-gray-400">Critique</div>
+                            <div class="text-gray-400">Problématique</div>
                         </div>
+                    </div>
+
+                    <!-- Tableau détaillé des tests -->
+                    <div class="p-3 bg-gray-800 rounded-lg">
+                        <div class="text-sm font-medium text-gray-200 mb-3">📊 Résultats détaillés</div>
+                        <div class="space-y-2">
+                            ${tests.map(test => {
+                                const fpsStatus = test.passed ? 'text-green-400' : 'text-red-400';
+                                const fpsIcon = test.passed ? '✅' : '❌';
+                                return `
+                                    <div class="flex items-center justify-between p-2 bg-gray-900/50 rounded">
+                                        <div class="flex-1">
+                                            <div class="text-xs font-medium text-gray-300">${test.datasetName}</div>
+                                            <div class="text-xs text-gray-500">${test.datasetCount} stocks</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-sm font-semibold ${fpsStatus}">${test.avgFPS.toFixed(1)} FPS ${fpsIcon}</div>
+                                            <div class="text-xs text-gray-500">Min: ${test.minFPS} | Max: ${test.maxFPS}</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Moyenne globale -->
+                    <div class="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-purple-300">Moyenne globale</span>
+                            <span class="text-lg font-bold text-purple-400">${avgOverall.toFixed(1)} FPS</span>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">Sur ${tests.length} tailles de datasets testées</div>
                     </div>
                 </div>
             `;
-        } else {
+        }
+        // Sinon afficher le message "données manquantes"
+        else {
             datasetEl.innerHTML = `
                 <div class="space-y-4">
+                    <!-- Explication de la scalabilité (même sans données) -->
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <div class="text-2xl">💡</div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi la "Scalabilité" ?</div>
+                                <div class="text-xs text-gray-300 space-y-1">
+                                    <p>La scalabilité mesure comment l'application <strong>maintient ses performances</strong> quand la quantité de données augmente.</p>
+                                    <p class="pt-2"><strong class="text-blue-400">Ce test</strong> : Mesure les FPS avec <strong>5, 50, 200 et 500 stocks</strong> pour voir si les animations restent fluides même avec beaucoup de données.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex items-center justify-between">
                         <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center">
                             <span class="text-2xl">🔍</span>
                         </div>
                         <div class="flex-1 ml-4 space-y-1">
                             <div class="text-lg font-bold text-gray-400">Données manquantes</div>
-                            <div class="text-xs text-gray-500">Tests de scalabilité requis</div>
+                            <div class="text-xs text-gray-500">Tests de scalabilité non exécutés</div>
                         </div>
                     </div>
                     <div class="p-3 bg-gray-800 rounded-lg border border-dashed border-gray-600">
                         <div class="text-xs text-gray-400 text-center">
-                            Exécutez <code class="bg-gray-700 px-1 rounded">npm run test:datasets</code> pour générer les métriques
+                            Exécutez <code class="bg-gray-700 px-1 rounded">npm run audit:datasets</code> pour générer les métriques
                         </div>
                     </div>
                 </div>
@@ -2102,8 +2181,29 @@ if (!prefersReducedMotion) {
         // Mettre à jour le badge de statut Datasets
         const datasetsStatusBadge = document.getElementById('datasets-status-badge');
         if (datasetsStatusBadge && datasets) {
-            // Si on a un champ degradation, l'utiliser
-            if (datasets.degradation != null && datasets.degradation !== 'N/A') {
+            // Si on a des tests, calculer la dégradation
+            if (datasets.tests && datasets.tests.length > 0) {
+                const validTests = datasets.tests.filter(t => t.avgFPS > 0);
+
+                // Calculer la dégradation
+                let degradation = 0;
+                if (validTests.length >= 2) {
+                    const firstFPS = validTests[0].avgFPS;
+                    const lastFPS = validTests[validTests.length - 1].avgFPS;
+                    degradation = ((firstFPS - lastFPS) / firstFPS) * 100;
+                }
+
+                const isGood = degradation < 5;
+                const isMedium = degradation < 15;
+                datasetsStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
+                    isGood ? 'bg-green-500/20 text-green-400' :
+                    isMedium ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-red-500/20 text-red-400'
+                }`;
+                datasetsStatusBadge.textContent = isGood ? '✅ Excellente' : isMedium ? '⚠️ Acceptable' : '❌ Problématique';
+            }
+            // Fallback : champ degradation direct (ancien format)
+            else if (datasets.degradation != null && datasets.degradation !== 'N/A') {
                 const degradation = parseFloat(datasets.degradation);
                 const isGood = degradation < 5;
                 const isMedium = degradation < 15;
@@ -2112,15 +2212,15 @@ if (!prefersReducedMotion) {
                     isMedium ? 'bg-yellow-500/20 text-yellow-400' :
                     'bg-red-500/20 text-red-400'
                 }`;
-                datasetsStatusBadge.textContent = isGood ? '✅ Excellent' : isMedium ? '⚠️ Acceptable' : '❌ Critique';
+                datasetsStatusBadge.textContent = isGood ? '✅ Excellente' : isMedium ? '⚠️ Acceptable' : '❌ Problématique';
             }
-            // Sinon, utiliser allPassed pour afficher un statut simple
+            // Fallback : allPassed simple
             else if (datasets.allPassed != null) {
                 const avgFps = datasets.avgOverall ? parseFloat(datasets.avgOverall) : 60;
                 datasetsStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
                     datasets.allPassed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
                 }`;
-                datasetsStatusBadge.textContent = datasets.allPassed ? `✅ ${avgFps.toFixed(0)} FPS` : '❌ Tests échoués';
+                datasetsStatusBadge.textContent = datasets.allPassed ? `✅ ${avgFps.toFixed(0)} FPS` : '❌ Échoués';
             }
         }
     }
