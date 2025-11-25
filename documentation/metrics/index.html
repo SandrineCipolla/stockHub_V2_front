@@ -1897,19 +1897,23 @@
             fpsStatusBadge.textContent = allPassed ? `✅ ${avgFps.toFixed(0)} FPS` : `⚠️ ${avgFps.toFixed(0)} FPS`;
         }
 
-        // A11y - Affichage avec badge visuel
+        // A11y - Affichage amélioré avec explications
         const a11yEl = document.getElementById("a11y-result");
         if (a11y != null) {
-            const statusIcon = a11y.passed ? '✅' : '❌';
-            const statusColor = a11y.passed ? 'text-green-400' : 'text-red-400';
-            const badgeColor = a11y.passed ? 'bg-green-500' : 'bg-red-500';
-            const statusText = a11y.passed ? 'Conforme' : 'Non conforme';
+            const passed = a11y.allPassed || a11y.passed || false;
+            const statusIcon = passed ? '✅' : '❌';
+            const statusColor = passed ? 'text-green-400' : 'text-red-400';
+            const badgeColor = passed ? 'bg-green-500' : 'bg-red-500';
+            const statusText = passed ? 'Conforme' : 'Non conforme';
+            const notes = a11y.notes || [];
+
             a11yEl.innerHTML = `
                 <div class="space-y-4">
+                    <!-- Statut principal -->
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-12 h-12 ${badgeColor} rounded-full flex items-center justify-center text-white text-xl font-bold">
-                                ${a11y.passed ? '♿' : '⚠️'}
+                                ${passed ? '♿' : '⚠️'}
                             </div>
                             <div>
                                 <div class="text-lg font-bold ${statusColor}">${statusText}</div>
@@ -1918,18 +1922,82 @@
                         </div>
                         <div class="text-3xl">${statusIcon}</div>
                     </div>
-                    <div class="p-3 bg-gray-800 rounded-lg">
-                        <div class="text-xs text-gray-300 mb-2">
-                            ${a11y.passed ?
-                                '🎯 Les animations respectent prefers-reduced-motion' :
-                                '❗ Certaines animations ignorent les préférences utilisateur'
-                            }
-                        </div>
-                        <div class="text-xs text-gray-500">
-                            Test automatique de la directive CSS prefers-reduced-motion
+
+                    <!-- Explication "C'est quoi ?" -->
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <div class="text-2xl">💡</div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi "Reduced Motion" ?</div>
+                                <div class="text-xs text-gray-300 space-y-1">
+                                    <p>Certaines personnes ont des troubles vestibulaires (oreille interne) ou sont sensibles aux mouvements à l'écran : animations, parallax, transitions peuvent provoquer nausées, vertiges ou migraines.</p>
+                                    <p class="pt-2"><strong class="text-blue-400">La directive CSS <code class="bg-gray-800 px-1 rounded">prefers-reduced-motion</code></strong> permet aux utilisateurs d'indiquer qu'ils préfèrent des animations réduites ou absentes.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    ${a11y.passed ?
+
+                    <!-- Détails du test -->
+                    <div class="p-3 bg-gray-800 rounded-lg">
+                        <div class="text-sm font-medium text-gray-200 mb-2">📊 Résultats du test</div>
+                        ${notes.length > 0 ? `
+                            <ul class="space-y-1 text-xs text-gray-300">
+                                ${notes.map(note => `<li class="flex items-start gap-2">
+                                    <span class="${note.includes('conforme') || note.includes('Aucun') ? 'text-green-400' : 'text-orange-400'}">•</span>
+                                    <span>${note}</span>
+                                </li>`).join('')}
+                            </ul>
+                        ` : `
+                            <div class="text-xs text-gray-400">
+                                ${passed ?
+                                    '✅ Les animations respectent prefers-reduced-motion' :
+                                    '❗ Certaines animations ne respectent pas les préférences utilisateur'
+                                }
+                            </div>
+                        `}
+                    </div>
+
+                    ${!passed ? `
+                        <!-- Recommandations si non conforme -->
+                        <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="text-2xl">🔧</div>
+                                <div>
+                                    <div class="text-sm font-semibold text-red-300 mb-2">Comment corriger ?</div>
+                                    <div class="text-xs text-gray-300 space-y-2">
+                                        <p><strong>1. CSS :</strong> Désactiver ou réduire les animations</p>
+                                        <pre class="bg-gray-900 p-2 rounded mt-1 overflow-x-auto"><code class="text-xs text-green-300">@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}</code></pre>
+
+                                        <p class="pt-2"><strong>2. Framer Motion :</strong> Utiliser <code class="bg-gray-800 px-1 rounded">MotionConfig</code></p>
+                                        <pre class="bg-gray-900 p-2 rounded mt-1 overflow-x-auto"><code class="text-xs text-green-300">import { MotionConfig } from 'framer-motion';
+
+&lt;MotionConfig reducedMotion="user"&gt;
+  {/* Vos animations ici */}
+&lt;/MotionConfig&gt;</code></pre>
+
+                                        <p class="pt-2"><strong>3. JavaScript :</strong> Détecter la préférence utilisateur</p>
+                                        <pre class="bg-gray-900 p-2 rounded mt-1 overflow-x-auto"><code class="text-xs text-green-300">const prefersReducedMotion =
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!prefersReducedMotion) {
+  // Animations normales
+}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Statut final -->
+                    ${passed ?
                         '<div class="flex items-center space-x-2 text-xs text-green-400"><span class="pulse-dot bg-green-400"></span><span>Accessibilité optimisée</span></div>' :
                         '<div class="flex items-center space-x-2 text-xs text-red-400"><span class="pulse-dot bg-red-400"></span><span>Améliorations nécessaires</span></div>'
                     }
@@ -1949,7 +2017,7 @@
         // Mettre à jour le badge de statut A11y
         const a11yStatusBadge = document.getElementById('a11y-status-badge');
         if (a11yStatusBadge && a11y != null) {
-            const passed = a11y.passed;
+            const passed = a11y.allPassed || a11y.passed || a11y.success || false;
             a11yStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
                 passed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
             }`;

@@ -6,13 +6,40 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 12
+**Total sessions documentées** : 13
 **Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 25 Novembre 2025 - Dashboard Accessibility: Reduced Motion (Partie 3)
+
+**Fichier** : [sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md)
+
+**Objectif** : Améliorer la section "Accessibilité — Reduced Motion" pour expliquer le concept, afficher les résultats de tests, et fournir des solutions concrètes
+
+**Réalisations** :
+
+- ✅ **Refonte complète section Reduced Motion** (+95 lignes)
+  - Explication éducative des troubles vestibulaires
+  - Directive CSS `prefers-reduced-motion` expliquée
+  - Affichage des notes de test (champ JSON précédemment ignoré)
+  - Couleurs sémantiques (bleu = info, rouge = problème, vert/orange = résultats)
+- ✅ **3 approches de correction** avec exemples copy-paste ready
+  - CSS @media query (solution universelle)
+  - Framer Motion `MotionConfig` (intégration React)
+  - JavaScript `matchMedia` (contrôle fin)
+- ✅ **Affichage conditionnel** : Guidance uniquement si non conforme
+- ✅ **Analyse complète du test** : Compréhension de `audit-a11y.mjs`
+  - Seuil 300ms pour animations
+  - Émulation `prefers-reduced-motion` via Puppeteer
+  - Structure JSON avec `allPassed`, `notes`, `timestamp`
+
+**Impact** : 🎉 **Dashboard pédagogique** - 0 connaissance préalable requise, guidance actionnable
+
+---
 
 ### Session du 24 Novembre 2025 - Dashboard UX Improvements (Partie 2)
 
@@ -323,6 +350,7 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 **Dashboard & Métriques**
 
+- [25 Nov 2025](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Reduced Motion accessibility (explication + guidance, 3 solutions)
 - [24 Nov 2025](sessions/2025-11-24-DASHBOARD-BADGES.md) - Badges de statut dashboard (8 badges, feedback visuel)
 - [20-22 Nov 2025](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) - Dashboard qualité interactif (PRs #44-46)
 
@@ -387,5 +415,5 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 ---
 
-**Dernière mise à jour** : 24 Novembre 2025
-**Sessions récentes** : Dashboard qualité interactif + badges de statut complétés
+**Dernière mise à jour** : 25 Novembre 2025
+**Sessions récentes** : Dashboard accessibility Reduced Motion + UX improvements complétés
