@@ -43,6 +43,33 @@
         .tooltip-wrapper:focus .tooltip-box,
         .tooltip-wrapper:hover .tooltip-box { opacity:1; transform:translateY(0); }
 
+        /* Layout Masonry (style Pinterest) */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 2.5rem;
+            padding: 0;
+        }
+
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+
+        .masonry-grid > * {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 2.5rem;
+            display: inline-block;
+            width: 100%;
+        }
+
         /* Animations et effets visuels */
         .metric-card {
             transition: all 0.3s ease;
@@ -378,8 +405,8 @@
     // Sur Vercel ou autre : pas de lien
 </script>
 
-<!-- GRID -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<!-- GRID MASONRY -->
+<div class="masonry-grid">
     <section class="card metric-card fade-in">
         <h2 class="section-title flex items-center gap-3">
             🔦 Lighthouse
@@ -496,8 +523,68 @@
         <div id="wcag-content">
             <!-- Vue d'ensemble -->
             <div class="wcag-panel active" data-panel="overview">
+                <!-- Contenu éducatif -->
+                <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg mb-6">
+                    <div class="flex items-start gap-3">
+                        <div class="text-2xl">💡</div>
+                        <div>
+                            <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi les WCAG Risk Levels ?</div>
+                            <div class="text-xs text-gray-300 space-y-2">
+                                <p><strong>WCAG</strong> (Web Content Accessibility Guidelines) définit les <strong>ratios de contraste minimum</strong> pour garantir la lisibilité :</p>
+                                <ul class="list-disc list-inside ml-2 space-y-1">
+                                    <li><strong>4.5:1</strong> minimum pour texte normal (niveau AA)</li>
+                                    <li><strong>3:1</strong> minimum pour texte large (≥18pt ou ≥14pt bold)</li>
+                                    <li><strong>7:1</strong> pour niveau AAA (excellence)</li>
+                                </ul>
+                                <p class="pt-2">Les <strong>risk levels</strong> catégorisent les paires de couleurs selon leur niveau de risque d'accessibilité :</p>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                                    <div class="flex items-center gap-2 p-2 bg-red-500/10 rounded">
+                                        <span>🔴</span>
+                                        <div>
+                                            <div class="font-bold text-red-400">Critique</div>
+                                            <div class="text-gray-400">Ratio &lt; 3:1</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 p-2 bg-orange-500/10 rounded">
+                                        <span>🟠</span>
+                                        <div>
+                                            <div class="font-bold text-orange-400">Élevé</div>
+                                            <div class="text-gray-400">3:1 - 4.5:1</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 p-2 bg-yellow-500/10 rounded">
+                                        <span>🟡</span>
+                                        <div>
+                                            <div class="font-bold text-yellow-400">Moyen</div>
+                                            <div class="text-gray-400">4.5:1 - 7:1</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 p-2 bg-green-500/10 rounded">
+                                        <span>🟢</span>
+                                        <div>
+                                            <div class="font-bold text-green-400">Faible</div>
+                                            <div class="text-gray-400">Ratio ≥ 7:1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistiques d'audit -->
+                <div id="wcag-stats" class="grid grid-cols-2 gap-4 mb-6">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+
+                <!-- Graphique -->
                 <div class="chart-container">
                     <canvas id="chart-wcag"></canvas>
+                </div>
+
+                <!-- Recommandations si problèmes critiques -->
+                <div id="wcag-recommendations" class="mt-6">
+                    <!-- Sera rempli dynamiquement -->
                 </div>
             </div>
 
@@ -737,10 +824,9 @@
         </p>
         <div id="dataset-result"></div>
     </section>
-</div>
 
-<!-- COVERAGE -->
-<section class="mt-14 card" id="coverage-section">
+    <!-- COVERAGE -->
+    <section class="card metric-card fade-in" id="coverage-section">
     <h2 class="section-title flex items-center gap-3">
         📈 Coverage des tests
         <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="coverage-status-badge">
@@ -755,7 +841,10 @@
     </div>
 </section>
 
-<!-- AUDIT COMPLET RNCP -->
+</div>
+<!-- Fin du conteneur masonry-grid -->
+
+<!-- AUDIT COMPLET RNCP (toujours à la fin, pleine largeur) -->
 <section class="mt-14 card metric-card fade-in" id="audit-rncp">
     <h2 class="section-title flex items-center gap-3">
         📚 Audit Complet RNCP — Synthèse
@@ -1344,6 +1433,97 @@
                     }
                 }
             });
+
+            // Remplir les statistiques d'audit
+            const wcagStatsContainer = document.getElementById('wcag-stats');
+            const totalTests = total;
+            const passRate = total > 0 ? (((critiques + eleves + moyens + faibles) / total) * 100).toFixed(1) : 0;
+
+            wcagStatsContainer.innerHTML = `
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="text-sm text-gray-400 mb-1">📊 Tests effectués</div>
+                    <div class="text-2xl font-bold text-purple-400">${totalTests}</div>
+                    <div class="text-xs text-gray-500 mt-1">Paires de couleurs analysées</div>
+                </div>
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="text-sm text-gray-400 mb-1">⚠️ Problèmes détectés</div>
+                    <div class="text-2xl font-bold ${critiques > 0 ? 'text-red-400' : 'text-green-400'}">${total}</div>
+                    <div class="text-xs text-gray-500 mt-1">${critiques > 0 ? `Dont ${critiques} critiques` : 'Aucun problème critique'}</div>
+                </div>
+            `;
+
+            // Ajouter les recommandations si problèmes critiques ou élevés
+            const wcagRecommendationsContainer = document.getElementById('wcag-recommendations');
+            if (critiques > 0 || eleves > 0) {
+                const recommendations = [];
+
+                if (critiques > 0) {
+                    recommendations.push({
+                        icon: '🔴',
+                        title: `${critiques} problème${critiques > 1 ? 's' : ''} critique${critiques > 1 ? 's' : ''} à corriger d'urgence`,
+                        desc: 'Ratio de contraste < 3:1. Ces couleurs sont illisibles pour beaucoup d\'utilisateurs.',
+                        action: 'Augmenter le contraste ou changer les couleurs'
+                    });
+                }
+
+                if (eleves > 0) {
+                    recommendations.push({
+                        icon: '🟠',
+                        title: `${eleves} problème${eleves > 1 ? 's' : ''} de niveau élevé`,
+                        desc: 'Ratio entre 3:1 et 4.5:1. Non conforme WCAG AA pour texte normal.',
+                        action: 'Améliorer le contraste pour atteindre 4.5:1 minimum'
+                    });
+                }
+
+                if (moyens > 0) {
+                    recommendations.push({
+                        icon: '🟡',
+                        title: `${moyens} problème${moyens > 1 ? 's' : ''} de niveau moyen`,
+                        desc: 'Ratio entre 4.5:1 et 7:1. Conforme AA mais pas AAA.',
+                        action: 'Optionnel : viser 7:1 pour excellence (AAA)'
+                    });
+                }
+
+                wcagRecommendationsContainer.innerHTML = `
+                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="text-sm font-semibold text-yellow-300 mb-3">⚠️ Recommandations d'amélioration</div>
+                        <div class="space-y-3">
+                            ${recommendations.map(rec => `
+                                <div class="flex items-start gap-3">
+                                    <div class="text-xl">${rec.icon}</div>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium text-yellow-200">${rec.title}</div>
+                                        <div class="text-xs text-gray-300 mt-1">${rec.desc}</div>
+                                        <div class="text-xs text-purple-400 mt-1 font-semibold">→ ${rec.action}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mt-4 p-3 bg-gray-800/50 rounded text-xs">
+                            <div class="font-semibold text-gray-300 mb-2">🔧 Outils recommandés :</div>
+                            <ul class="list-disc list-inside space-y-1 text-gray-400">
+                                <li><strong>WebAIM Contrast Checker</strong> : Tester vos ratios de contraste</li>
+                                <li><strong>Chrome DevTools</strong> : Suggestion de couleurs accessibles</li>
+                                <li><strong>Figma A11y plugins</strong> : Vérifier le design en amont</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            } else if (total > 0) {
+                wcagRecommendationsContainer.innerHTML = `
+                    <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">✅</div>
+                            <div>
+                                <div class="text-sm font-semibold text-green-300">Excellent ! Tous les contrastes sont conformes WCAG</div>
+                                <div class="text-xs text-gray-300 mt-1">
+                                    ${faibles > 0 ? `${faibles} paire${faibles > 1 ? 's' : ''} atteint${faibles > 1 ? '' : ''} même le niveau AAA (≥7:1)` : 'Tous les tests sont validés'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
 
             // Fonction pour initialiser les onglets WCAG
             function initWcagTabs() {
