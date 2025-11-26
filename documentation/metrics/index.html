@@ -1482,7 +1482,6 @@
             // Remplir les statistiques d'audit
             const wcagStatsContainer = document.getElementById('wcag-stats');
             const totalTests = total;
-            const passRate = total > 0 ? (((critiques + eleves + moyens + faibles) / total) * 100).toFixed(1) : 0;
 
             wcagStatsContainer.innerHTML = `
                 <div class="p-4 bg-gray-800/50 rounded-lg">
@@ -2071,9 +2070,6 @@
                             <div class="difference-type-content ${index === 0 ? 'active' : ''}" data-type-content="${type}">
                                 <div class="grid grid-cols-1 gap-3">
                                     ${differences.map(diff => {
-                                        const deltaClass = diff.differentiable ? 'delta-e-good' :
-                                                         diff.deltaSimulated >= 30 ? 'delta-e-warning' : 'delta-e-critical';
-
                                         return `
                                             <div class="p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg hover:border-gray-600/50 transition-colors">
                                                 <div class="flex justify-between items-center mb-2">
@@ -2253,8 +2249,6 @@
                 }
             }
 
-            const daltonismeContainer = document.getElementById("chart-daltonisme").parentElement;
-
             // Détruire l'ancien graphique s'il existe
             const existingChart = Chart.getChart("chart-daltonisme");
             if (existingChart) {
@@ -2262,7 +2256,7 @@
             }
 
             // Créer le graphique en donut (plus petit maintenant)
-            const daltonismeChart = new Chart(document.getElementById("chart-daltonisme"), {
+            new Chart(document.getElementById("chart-daltonisme"), {
                 type: "doughnut",
                 data: {
                     labels: ["Tests réussis", "Tests échoués"],
@@ -3461,12 +3455,6 @@ if (!prefersReducedMotion) {
 
     // Fonction pour remplir les détails Lighthouse par onglet
     function renderLighthouseDetails(lighthouse, scores, failedAudits) {
-        const getScoreColor = (score) => {
-            if (score >= 90) return '#10b981';
-            if (score >= 70) return '#f59e0b';
-            return '#ef4444';
-        };
-
         const getScoreClass = (score) => {
             if (score >= 90) return 'text-green-400';
             if (score >= 70) return 'text-yellow-400';
