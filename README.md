@@ -191,6 +191,22 @@ stockHub_V2_front/
 | `npm run ci:build`   | Build de production pour CI                      |
 | `npm run ci:check`   | Pipeline complet (quality + tests + build)       |
 
+### Audits & Métriques
+
+| Script                      | Description                                           |
+| --------------------------- | ----------------------------------------------------- |
+| `npm run audit:full`        | Audit complet (Lighthouse, FPS, A11y, Datasets, WCAG) |
+| `npm run audit:fps`         | Audit performance FPS (animations)                    |
+| `npm run audit:a11y`        | Audit accessibilité (Reduced Motion)                  |
+| `npm run audit:datasets`    | Audit scalabilité (datasets)                          |
+| `npm run audit:daltonisme`  | Tests daltonisme et accessibilité visuelle            |
+| `npm run audit:risk-levels` | Tests contrastes WCAG Risk Levels                     |
+
+**Dashboard Qualité** : Consultez [documentation/metrics/](./documentation/metrics/) pour visualiser toutes les métriques de manière interactive.
+
+- 📊 **Local** : http://localhost:5173/documentation/metrics/
+- 🌐 **En ligne** : https://sandrinecipolla.github.io/stockHub_V2_front/documentation/metrics/
+
 ## 🪝 Git Hooks (Husky)
 
 Le projet utilise Husky pour automatiser les vérifications de qualité à chaque commit et push.
@@ -367,7 +383,16 @@ npm run clean:deadcode
 
 - **Sandrine Cipolla** - Développeuse Full Stack
 
-## 🔗 Liens Utiles
+## 📚 Documentation
+
+### Documentation Interne
+
+- **[Guide Web Components](./documentation/WEB_COMPONENTS_GUIDE.md)** - Intégration du Design System
+- **[Dashboard Qualité](./documentation/9-DASHBOARD-QUALITY.md)** - Documentation complète du dashboard interactif (métriques, visualisations, badges)
+- **[Audit RNCP Dashboard](./documentation/10-AUDIT-RNCP-DASHBOARD.md)** - Section audit global RNCP
+- **[CLAUDE.md](./CLAUDE.md)** - Instructions de développement et conventions
+
+### Documentation Externe
 
 - [Documentation React](https://react.dev/)
 - [Documentation TypeScript](https://www.typescriptlang.org/docs/)

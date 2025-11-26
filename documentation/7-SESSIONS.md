@@ -6,13 +6,191 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 9
+**Total sessions documentées** : 15
 **Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 26 Novembre 2025 - Dashboard Masonry Layout & Educational Content (Partie 5)
+
+**Fichier** : [sessions/2025-11-26-DASHBOARD-MASONRY-LAYOUT.md](sessions/2025-11-26-DASHBOARD-MASONRY-LAYOUT.md)
+
+**Objectif** : Optimiser l'affichage du dashboard avec un layout Masonry Pinterest-style et ajouter du contenu éducatif aux sections WCAG et Daltonisme
+
+**Réalisations** :
+
+- ✅ **Layout Masonry CSS** (Pinterest-style)
+  - Grid CSS columns (2 colonnes responsive)
+  - Optimisation espace vertical (pas d'espaces vides)
+  - Performance native (zéro JavaScript)
+  - Responsive 1 colonne mobile / 2 colonnes desktop
+- ✅ **Positionnement intelligent Audit RNCP**
+  - Sorti du Masonry grid
+  - Toujours en fin de page (pleine largeur)
+  - Récapitulatif global cohérent
+- ✅ **Contenu éducatif WCAG Risk Levels** (💡)
+  - Définition WCAG + ratios de contraste (4.5:1, 3:1, 7:1)
+  - Grid visuel des 4 risk levels (Critique, Élevé, Moyen, Faible)
+  - Statistiques d'audit dynamiques (tests effectués, problèmes détectés)
+  - Recommandations conditionnelles + outils suggérés (WebAIM, DevTools, Figma)
+- ✅ **Contenu éducatif Daltonisme** (💡)
+  - Définition + statistiques (8% hommes, 0.5% femmes)
+  - Grid visuel des 4 types (Protanopie, Deutéranopie, Tritanopie, Achromatopsie)
+  - Importance de ne pas se baser uniquement sur la couleur
+- ✅ **Bug fixes**
+  - Type assertion ESLint error → `instanceof` type guard (SearchInputWrapper.tsx)
+  - HTML parse error → échappement `&lt;0.01%`
+
+**Impact** : 🎉 **Dashboard optimisé et pédagogique** - Layout fluide + Explications 0 connaissance requise
+
+---
+
+### Session du 25 Novembre 2025 - Dashboard Scalability: Datasets Enhancement (Partie 4)
+
+**Fichier** : [sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md)
+
+**Objectif** : Enrichir la section "Scalabilité — Datasets" qui affichait "Données manquantes" alors que des résultats de tests complets existaient
+
+**Réalisations** :
+
+- ✅ **Calcul automatique de la dégradation** depuis le tableau `tests[]`
+  - Formule : `(FPS_début - FPS_fin) / FPS_début × 100`
+  - Résultat avec données réelles : **0.4% de dégradation** (excellente!)
+  - Seuils : < 5% (Excellente), 5-15% (Acceptable), > 15% (Problématique)
+- ✅ **Box éducative** : Explication claire de la scalabilité
+  - Tests avec 5, 50, 200, 500 stocks
+  - Objectif : maintenir 60 FPS constant
+- ✅ **Tableau détaillé** des 4 tests
+  - FPS moyen, min, max pour chaque taille
+  - Statut ✅/❌ par test (seuil 55 FPS)
+- ✅ **Gauge visuelle** : Cercle SVG animé avec couleurs sémantiques
+- ✅ **Box moyenne globale** : 61.5 FPS sur 4 tests
+- ✅ **Badge intelligent** : Calcule depuis données disponibles + fallbacks
+
+**Impact** : 🎉 **Section complète et exploitable** - Dégradation de 0.4% = Excellente scalabilité
+
+---
+
+### Session du 25 Novembre 2025 - Dashboard Accessibility: Reduced Motion (Partie 3)
+
+**Fichier** : [sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md)
+
+**Objectif** : Améliorer la section "Accessibilité — Reduced Motion" pour expliquer le concept, afficher les résultats de tests, et fournir des solutions concrètes
+
+**Réalisations** :
+
+- ✅ **Refonte complète section Reduced Motion** (+95 lignes)
+  - Explication éducative des troubles vestibulaires
+  - Directive CSS `prefers-reduced-motion` expliquée
+  - Affichage des notes de test (champ JSON précédemment ignoré)
+  - Couleurs sémantiques (bleu = info, rouge = problème, vert/orange = résultats)
+- ✅ **3 approches de correction** avec exemples copy-paste ready
+  - CSS @media query (solution universelle)
+  - Framer Motion `MotionConfig` (intégration React)
+  - JavaScript `matchMedia` (contrôle fin)
+- ✅ **Affichage conditionnel** : Guidance uniquement si non conforme
+- ✅ **Analyse complète du test** : Compréhension de `audit-a11y.mjs`
+  - Seuil 300ms pour animations
+  - Émulation `prefers-reduced-motion` via Puppeteer
+  - Structure JSON avec `allPassed`, `notes`, `timestamp`
+
+**Impact** : 🎉 **Dashboard pédagogique** - 0 connaissance préalable requise, guidance actionnable
+
+---
+
+### Session du 24 Novembre 2025 - Dashboard UX Improvements (Partie 2)
+
+**Fichier** : [sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md](sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md)
+
+**Objectif** : Améliorer l'UX de la section Daltonisme, corriger bugs de navigation et optimiser affichage métriques
+
+**Réalisations** :
+
+- ✅ **Fix navigation onglets Daltonisme**
+  - Correction sélecteurs panels (conflit WCAG/Daltonisme résolu)
+  - Destruction/recréation graphique Chart.js
+  - Resize/update lors du retour sur overview
+  - requestAnimationFrame pour synchronisation render
+- ✅ **Suppression overlay redondant** (80% conformité au centre du donut)
+- ✅ **Amélioration label "Différentiabilité"**
+  - Changé en "Score moyen" avec info-bulle explicative
+  - Affichage 80% (moyenne) au lieu de 25% (strict)
+  - Ajout indicateurs visuels (ℹ️, soulignement pointillé)
+- ✅ **Optimisation onglet "Différentiabilité"**
+  - Système d'onglets par type de daltonisme (4 tabs)
+  - Seuil unique en haut avec info-bulle échelle Delta E
+  - Suppression ΔE en double + bande violette répétitive
+  - Animation fade-in pour changements d'onglet
+
+**Impact** : 🎉 **Section Daltonisme 100% fonctionnelle** et compréhensible
+
+---
+
+### Session du 24 Novembre 2025 - Dashboard Quality Badges (Partie 1)
+
+**Fichier** : [sessions/2025-11-24-DASHBOARD-BADGES.md](sessions/2025-11-24-DASHBOARD-BADGES.md)
+
+**Objectif** : Ajouter des badges de statut visuels dans toutes les sections du dashboard
+
+**Réalisations** :
+
+- ✅ **8 badges de statut** ajoutés (vert/jaune/rouge)
+  - Lighthouse (moyenne 4 scores)
+  - WCAG Risk Levels (compte problèmes critiques)
+  - Daltonisme (tests passés/échoués)
+  - Performance FPS (moyenne FPS + allPassed)
+  - Reduced Motion (conforme/non conforme)
+  - Datasets (dégradation ou FPS fallback)
+  - Coverage (% instructions)
+  - Audit RNCP (moyenne 4 métriques)
+- ✅ **Mise à jour dynamique** des badges au chargement
+- ✅ **Logique de fallback** pour Datasets (mode dégradation ou FPS)
+- ✅ **Lazy loading** optimisé pour Audit RNCP
+- ✅ **Documentation exhaustive** créée :
+  - 9-DASHBOARD-QUALITY.md (référence technique complète)
+  - Session 2025-11-24 (journal détaillé)
+- ✅ **150 lignes de code** ajoutées (36 HTML + 114 JS)
+
+**Impact** : 🎉 **Dashboard production-ready** avec feedback visuel immédiat sur toutes les métriques
+
+---
+
+### Session du 20-22 Novembre 2025 - Dashboard Qualité Interactif
+
+**Fichier** : [sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md)
+
+**Objectif** : Créer un dashboard HTML unique qui agrège toutes les métriques de qualité
+
+**Réalisations** :
+
+- ✅ **Dashboard HTML complet** (2152 lignes)
+  - Structure responsive (TailwindCSS)
+  - 8 sections avec visualisations
+  - Design moderne dark mode
+- ✅ **Graphiques interactifs** :
+  - Cercles SVG animés (Lighthouse)
+  - Chart.js barres (WCAG Risk Levels)
+  - Chart.js donut (Daltonisme)
+  - Gauges circulaires (FPS, Datasets)
+  - Barres de progression (Coverage)
+- ✅ **Navigation par onglets** (10 onglets total) :
+  - WCAG : 6 onglets (vue d'ensemble, critique, élevé, moyen, faible, solutions)
+  - Daltonisme : 4 onglets (vue d'ensemble, contraste, simulation, différentiabilité)
+- ✅ **Chargement automatique** des dernières données (timestamps)
+- ✅ **Dual strategy** : Listage dynamique + fallback statique
+- ✅ **Lazy loading** : Section Audit RNCP (~15KB économisés)
+- ✅ **Scripts utilitaires** :
+  - serve-metrics.mjs (serveur local)
+  - update-metrics-files.mjs (MAJ liste statique)
+- ✅ **PRs mergées** : #44, #45, #46
+- ✅ **Fixes CI/CD** : Rollup deps, coverage generation, jsdom downgrade
+
+**Impact** : 🎉 **Outil central** pour évaluer la qualité du projet en un coup d'œil
+
+---
 
 ### Session du 18 Novembre 2025 - Tests SearchInputWrapper & Finalisation PR #34
 
@@ -230,6 +408,14 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 ## 🔍 Recherche par Thème
 
+**Dashboard & Métriques**
+
+- [25 Nov 2025 - Partie 4](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md) - Datasets scalability (calcul auto dégradation, tableau détaillé, 0.4% ✅)
+- [25 Nov 2025 - Partie 3](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Reduced Motion accessibility (explication + guidance, 3 solutions)
+- [24 Nov 2025 - Partie 2](sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md) - Daltonisme UX improvements (navigation, onglets, score moyen)
+- [24 Nov 2025 - Partie 1](sessions/2025-11-24-DASHBOARD-BADGES.md) - Badges de statut dashboard (8 badges, feedback visuel)
+- [20-22 Nov 2025](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) - Dashboard qualité interactif (PRs #44-46)
+
 **Tests & Qualité**
 
 - [18 Nov 2025](sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md) - SearchInputWrapper tests (464 tests, 7/7 wrappers ✅)
@@ -291,5 +477,5 @@ Lors de l'ajout d'une nouvelle session, utiliser ce template :
 
 ---
 
-**Dernière mise à jour** : 18 Novembre 2025
-**Prochaine session** : Documentation harmonisation (Issue #25)
+**Dernière mise à jour** : 25 Novembre 2025
+**Sessions récentes** : Dashboard Datasets scalability + Reduced Motion accessibility + UX improvements complétés
