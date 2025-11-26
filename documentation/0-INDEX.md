@@ -10,19 +10,20 @@
 
 ### Guides Essentiels
 
-| #      | Fichier                                                      | Description                                          |
-| ------ | ------------------------------------------------------------ | ---------------------------------------------------- |
-| **0**  | [0-INDEX.md](0-INDEX.md)                                     | 📍 Vous êtes ici - Index principal                   |
-| **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                 | 🚀 **Démarrage rapide** - Installation, premiers pas |
-| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)       | 🎨 Guide utilisation web components React            |
-| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md) | 🔗 **Harmonisation Frontend ↔ Design System**       |
-| **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 | 🐛 Résolution problèmes web components               |
-| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                     | 🧪 Guide tests & métriques performance               |
-| **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     | ♿ Accessibilité WCAG AA (audit complet)             |
-| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                               | 📅 Index sessions développement (11 sessions)        |
-| **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   | 🎓 Suivi compétences & livrables RNCP                |
-| **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)             | 📊 **Dashboard Qualité** - Documentation complète    |
-| **10** | [10-AUDIT-RNCP-DASHBOARD.md](10-AUDIT-RNCP-DASHBOARD.md)     | 🎯 **Audit RNCP Dashboard** - Section avec tabs      |
+| #      | Fichier                                                            | Description                                          |
+| ------ | ------------------------------------------------------------------ | ---------------------------------------------------- |
+| **0**  | [0-INDEX.md](0-INDEX.md)                                           | 📍 Vous êtes ici - Index principal                   |
+| **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                       | 🚀 **Démarrage rapide** - Installation, premiers pas |
+| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)             | 🎨 Guide utilisation web components React            |
+| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)       | 🔗 **Harmonisation Frontend ↔ Design System**       |
+| **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                       | 🐛 Résolution problèmes web components               |
+| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                           | 🧪 Guide tests & métriques performance               |
+| **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                           | ♿ Accessibilité WCAG AA (audit complet)             |
+| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                     | 📅 Index sessions développement (11 sessions)        |
+| **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                         | 🎓 Suivi compétences & livrables RNCP                |
+| **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)                   | 📊 **Dashboard Qualité** - Documentation complète    |
+| **10** | [10-AUDIT-RNCP-DASHBOARD.md](10-AUDIT-RNCP-DASHBOARD.md)           | 🎯 **Audit RNCP Dashboard** - Section avec tabs      |
+| **11** | [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](11-LIGHTHOUSE-DYNAMIC-AUDITS.md) | 🔦 **Lighthouse** - Extraction dynamique audits      |
 
 ### Quick Links
 
@@ -117,7 +118,8 @@
 
 ### Sessions Récentes (Novembre 2025)
 
-- [sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md](sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md) ⭐ **NEW** - Audit RNCP avec tabs navigation + downloads JSON
+- [sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md](sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md) ⭐ **NEW** - Lighthouse extraction dynamique audits échoués
+- [sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md](sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md) - Audit RNCP avec tabs navigation + downloads JSON
 - [sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md) - Tests datasets scalabilité
 - [sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Section Reduced Motion éducative
 - [sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md](sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md) - Améliorations UX dashboard
@@ -225,8 +227,10 @@ documentation/
 ├── 8-RNCP-CHECKLIST.md                # 🎓 RNCP
 ├── 9-DASHBOARD-QUALITY.md             # 📊 Dashboard Qualité
 ├── 10-AUDIT-RNCP-DASHBOARD.md         # 🎯 Audit RNCP Dashboard
+├── 11-LIGHTHOUSE-DYNAMIC-AUDITS.md    # 🔦 Lighthouse extraction dynamique
 │
 ├── sessions/                           # Sessions développement
+│   ├── 2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md
 │   ├── 2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md
 │   ├── 2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md
 │   ├── 2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md
@@ -367,5 +371,5 @@ Créer une issue : https://github.com/SandrineCipolla/stockHub_V2_front/issues
 ---
 
 **Dernière mise à jour** : 26 Novembre 2025
-**Version Documentation** : 2.2 (Audit RNCP Dashboard ajouté)
+**Version Documentation** : 2.3 (Lighthouse extraction dynamique audits)
 **Projet** : StockHub V2 - RNCP 7

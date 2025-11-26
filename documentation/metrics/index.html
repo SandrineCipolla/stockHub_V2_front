@@ -845,6 +845,7 @@
         // Liste statique des fichiers disponibles (fallback si le listage de dossier ne fonctionne pas)
         const staticFileList = [
             'lighthouse-1763634146672.json',
+            'lighthouse-raw-1763634146672.json',
             'risk-levels-audit-1763634259430.json',
             'daltonisme-1763648733792.json',
             'fps-1763634225042.json',
@@ -856,6 +857,7 @@
         // Mapping des préfixes aux patterns de fichiers
         const prefixMapping = {
             'lighthouse': /^lighthouse-\d+\.json$/,
+            'lighthouse-raw': /^lighthouse-raw-\d+\.json$/,
             'risk-levels': /^risk-levels-audit-\d+\.json$/,
             'daltonisme': /^daltonisme-\d+\.json$/,
             'fps': /^fps-\d+\.json$/,
@@ -907,6 +909,54 @@
         return resp.json();
     }
 
+    // Fonction pour extraire les audits échoués depuis le fichier raw Lighthouse
+    function extractFailedAudits(rawLighthouseData) {
+        if (!rawLighthouseData || !rawLighthouseData.audits) {
+            return null;
+        }
+
+        const categories = {
+            performance: [],
+            accessibility: [],
+            'best-practices': [],
+            seo: []
+        };
+
+        // Parcourir tous les audits et filtrer ceux qui ont échoué
+        Object.entries(rawLighthouseData.audits).forEach(([id, audit]) => {
+            if (audit.score !== null && audit.score < 1) {
+                const failedAudit = {
+                    id: audit.id,
+                    title: audit.title,
+                    description: audit.description,
+                    score: audit.score,
+                    displayValue: audit.displayValue
+                };
+
+                // Catégoriser basé sur les patterns d'ID
+                if (id.includes('contrast') || id.includes('aria') || id.includes('label') ||
+                    id.includes('heading') || id.includes('button') || id.includes('link') ||
+                    id.includes('tabindex') || id.includes('lang') || id.includes('meta') ||
+                    id.includes('name') || id.includes('role')) {
+                    categories.accessibility.push(failedAudit);
+                } else if (id.includes('https') || id.includes('console') || id.includes('image') ||
+                           id.includes('doctype') || id.includes('charset') || id.includes('vulnerable')) {
+                    categories['best-practices'].push(failedAudit);
+                } else if (id.includes('meta-description') || id.includes('robots') ||
+                           id.includes('canonical') || id.includes('hreflang') || id.includes('title')) {
+                    categories.seo.push(failedAudit);
+                } else if (id.includes('paint') || id.includes('speed') || id.includes('render') ||
+                           id.includes('layout') || id.includes('cls') || id.includes('lcp') ||
+                           id.includes('fcp') || id.includes('tti') || id.includes('tbt') ||
+                           id.includes('blocking')) {
+                    categories.performance.push(failedAudit);
+                }
+            }
+        });
+
+        return categories;
+    }
+
     async function loadAllData() {
         const lighthouse = await loadJSON('lighthouse');
         const wcag = await loadJSON('risk-levels');
@@ -918,13 +968,16 @@
         // Charger l'audit RNCP complet
         const audit = await loadJSON('audit-complet');
 
-        // Charger les audits Lighthouse échoués
+        // Charger le fichier raw Lighthouse et extraire les audits échoués
         let lighthouseFailedAudits = null;
         try {
-            const resp = await fetch('./data/lighthouse-failed-audits.json');
-            lighthouseFailedAudits = await resp.json();
+            const rawLighthouse = await loadJSON('lighthouse-raw');
+            if (rawLighthouse) {
+                lighthouseFailedAudits = extractFailedAudits(rawLighthouse);
+                console.log('✅ Audits Lighthouse échoués extraits dynamiquement:', lighthouseFailedAudits);
+            }
         } catch (e) {
-            console.log('Lighthouse failed audits non disponibles:', e);
+            console.log('⚠️ Impossible d\'extraire les audits échoués depuis le fichier raw:', e);
         }
 
         renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets, lighthouseFailedAudits });
