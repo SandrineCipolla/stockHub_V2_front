@@ -6,13 +6,47 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 14
+**Total sessions documentées** : 15
 **Période** : Octobre 2024 - Novembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 26 Novembre 2025 - Dashboard Masonry Layout & Educational Content (Partie 5)
+
+**Fichier** : [sessions/2025-11-26-DASHBOARD-MASONRY-LAYOUT.md](sessions/2025-11-26-DASHBOARD-MASONRY-LAYOUT.md)
+
+**Objectif** : Optimiser l'affichage du dashboard avec un layout Masonry Pinterest-style et ajouter du contenu éducatif aux sections WCAG et Daltonisme
+
+**Réalisations** :
+
+- ✅ **Layout Masonry CSS** (Pinterest-style)
+  - Grid CSS columns (2 colonnes responsive)
+  - Optimisation espace vertical (pas d'espaces vides)
+  - Performance native (zéro JavaScript)
+  - Responsive 1 colonne mobile / 2 colonnes desktop
+- ✅ **Positionnement intelligent Audit RNCP**
+  - Sorti du Masonry grid
+  - Toujours en fin de page (pleine largeur)
+  - Récapitulatif global cohérent
+- ✅ **Contenu éducatif WCAG Risk Levels** (💡)
+  - Définition WCAG + ratios de contraste (4.5:1, 3:1, 7:1)
+  - Grid visuel des 4 risk levels (Critique, Élevé, Moyen, Faible)
+  - Statistiques d'audit dynamiques (tests effectués, problèmes détectés)
+  - Recommandations conditionnelles + outils suggérés (WebAIM, DevTools, Figma)
+- ✅ **Contenu éducatif Daltonisme** (💡)
+  - Définition + statistiques (8% hommes, 0.5% femmes)
+  - Grid visuel des 4 types (Protanopie, Deutéranopie, Tritanopie, Achromatopsie)
+  - Importance de ne pas se baser uniquement sur la couleur
+- ✅ **Bug fixes**
+  - Type assertion ESLint error → `instanceof` type guard (SearchInputWrapper.tsx)
+  - HTML parse error → échappement `&lt;0.01%`
+
+**Impact** : 🎉 **Dashboard optimisé et pédagogique** - Layout fluide + Explications 0 connaissance requise
+
+---
 
 ### Session du 25 Novembre 2025 - Dashboard Scalability: Datasets Enhancement (Partie 4)
 

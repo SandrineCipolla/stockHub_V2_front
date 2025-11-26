@@ -119,24 +119,25 @@ documentation/
       /* Classes pour cartes, badges, animations */
       /* Styles cercles de score Lighthouse */
       /* Styles onglets (WCAG, Daltonisme) */
+      /* Layout Masonry (CSS columns) */
     </style>
   </head>
   <body class="bg-[var(--sh-dark-bg)] text-white">
     <!-- Header avec date et lien contextuel -->
 
     <main class="container mx-auto p-6">
-      <!-- Grid principal 2 colonnes -->
-      <div class="grid md:grid-cols-2 gap-6">
+      <!-- Grid Masonry (Pinterest-style, 2 colonnes responsive) -->
+      <div class="masonry-grid">
         <!-- Section Lighthouse -->
-        <!-- Section WCAG Risk Levels -->
-        <!-- Section Daltonisme -->
+        <!-- Section WCAG Risk Levels (avec 💡 éducatif) -->
+        <!-- Section Daltonisme (avec 💡 éducatif) -->
         <!-- Section Performance FPS -->
         <!-- Section Reduced Motion -->
         <!-- Section Datasets -->
+        <!-- Section Coverage -->
       </div>
 
-      <!-- Sections pleine largeur -->
-      <section><!-- Coverage --></section>
+      <!-- Section pleine largeur (toujours en fin de page) -->
       <section><!-- Audit RNCP --></section>
     </main>
 
@@ -199,15 +200,22 @@ documentation/
 
 **Ligne** : 341-420
 
-**Visualisation** : Graphique en barres (Chart.js) + 6 onglets
+**Visualisation** : 💡 Contenu éducatif + Graphique en barres (Chart.js) + 6 onglets
+
+**Contenu éducatif** (💡) :
+
+- Définition WCAG et ratios de contraste (4.5:1, 3:1, 7:1)
+- Grid visuel des 4 risk levels (Critique, Élevé, Moyen, Faible)
+- Statistiques d'audit dynamiques (tests effectués, problèmes détectés)
+- Recommandations conditionnelles avec outils suggérés
 
 **Onglets** :
 
-1. **📊 Vue d'ensemble** : Graphique des problèmes par niveau
-2. **🔴 Critique** : Liste détaillée (ratio < 2.5:1)
-3. **🟠 Élevé** : Problèmes niveau élevé (ratio 2.5-3.5:1)
-4. **🟡 Moyen** : Problèmes niveau moyen (ratio 3.5-4.0:1)
-5. **🟢 Faible** : Problèmes niveau faible (ratio 4.0-4.5:1)
+1. **📊 Vue d'ensemble** : Statistiques + Graphique + Recommandations dynamiques
+2. **🔴 Critique** : Liste détaillée (ratio < 3:1)
+3. **🟠 Élevé** : Problèmes niveau élevé (ratio 3:1-4.5:1)
+4. **🟡 Moyen** : Problèmes niveau moyen (ratio 4.5:1-7:1)
+5. **🟢 Faible** : Problèmes niveau faible (ratio ≥ 7:1)
 6. **🔧 Solutions** : Outils et ressources WCAG
 
 **Classification des problèmes** :
@@ -238,7 +246,18 @@ else problemLevel = 'low'; // Très proche
 
 **Ligne** : 421-546
 
-**Visualisation** : Graphique donut (Chart.js) + 4 onglets
+**Visualisation** : 💡 Contenu éducatif + Graphique donut (Chart.js) + 4 onglets
+
+**Contenu éducatif** (💡) :
+
+- Définition du daltonisme (8% hommes, 0.5% femmes)
+- Grid visuel des 4 types de daltonisme :
+  - 🔴 Protanopie (difficulté rouge/vert, 1% hommes)
+  - 🟢 Deutéranopie (difficulté rouge/vert, ~5% hommes, le plus courant)
+  - 🔵 Tritanopie (difficulté bleu/jaune, <0.01%, très rare)
+  - ⚫ Achromatopsie (vision en niveaux de gris, extrêmement rare)
+- Importance de ne pas se baser uniquement sur la couleur
+- Objectif des tests : vérifier la différentiabilité des couleurs de statut
 
 **Onglets** :
 
@@ -252,11 +271,7 @@ else problemLevel = 'low'; // Très proche
    - Pour chaque test : status, mode, ratio, level WCAG
 
 3. **👁 Simulation**
-   - 4 types de daltonisme testés :
-     - Protanopie (~1% hommes)
-     - Deutéranopie (~1% hommes)
-     - Tritanopie (~0.01%)
-     - Achromatopsie (rare)
+   - 4 types de daltonisme testés (Protanopie, Deutéranopie, Tritanopie, Achromatopsie)
    - % différentiabilité par type
    - Aperçu couleurs simulées
 
@@ -1142,19 +1157,21 @@ const hasExcellent = avgScore >= 85;
 
 ### Sessions de développement
 
-| Date               | Session                                                                | Travail                                |
-| ------------------ | ---------------------------------------------------------------------- | -------------------------------------- |
-| **20-22 nov 2025** | [Dashboard Interactif](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) | Création dashboard (PRs #44, #45, #46) |
-| **24 nov 2025**    | [Dashboard Badges](sessions/2025-11-24-DASHBOARD-BADGES.md)            | Ajout 8 badges de statut               |
+| Date               | Session                                                                     | Travail                                |
+| ------------------ | --------------------------------------------------------------------------- | -------------------------------------- |
+| **20-22 nov 2025** | [Dashboard Interactif](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md)      | Création dashboard (PRs #44, #45, #46) |
+| **24 nov 2025**    | [Dashboard Badges](sessions/2025-11-24-DASHBOARD-BADGES.md)                 | Ajout 8 badges de statut               |
+| **26 nov 2025**    | [Dashboard Masonry Layout](sessions/2025-11-26-DASHBOARD-MASONRY-LAYOUT.md) | Layout Masonry + Contenu éducatif 💡   |
 
 ### Versions
 
-| Version | Date        | Changements                                |
-| ------- | ----------- | ------------------------------------------ |
-| 1.0.0   | 20 nov 2025 | Dashboard initial (structure + graphiques) |
-| 1.1.0   | 21 nov 2025 | Onglets WCAG + Daltonisme                  |
-| 1.2.0   | 22 nov 2025 | Optimisations + Coverage + Audit RNCP      |
-| 1.3.0   | 24 nov 2025 | 8 badges de statut ajoutés                 |
+| Version | Date        | Changements                                         |
+| ------- | ----------- | --------------------------------------------------- |
+| 1.0.0   | 20 nov 2025 | Dashboard initial (structure + graphiques)          |
+| 1.1.0   | 21 nov 2025 | Onglets WCAG + Daltonisme                           |
+| 1.2.0   | 22 nov 2025 | Optimisations + Coverage + Audit RNCP               |
+| 1.3.0   | 24 nov 2025 | 8 badges de statut ajoutés                          |
+| 1.4.0   | 26 nov 2025 | Layout Masonry CSS + 💡 éducatif (WCAG, Daltonisme) |
 
 ---
 
@@ -1204,7 +1221,7 @@ const hasExcellent = avgScore >= 85;
 
 ---
 
-**Dernière mise à jour** : 24 novembre 2025
-**Version** : 1.3.0
+**Dernière mise à jour** : 26 novembre 2025
+**Version** : 1.4.0
 **Projet** : StockHub V2 - Frontend
 **Auteur** : Sandrine Cipolla
