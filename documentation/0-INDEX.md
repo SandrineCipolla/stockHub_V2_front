@@ -10,18 +10,19 @@
 
 ### Guides Essentiels
 
-| #     | Fichier                                                      | Description                                          |
-| ----- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| **0** | [0-INDEX.md](0-INDEX.md)                                     | 📍 Vous êtes ici - Index principal                   |
-| **1** | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                 | 🚀 **Démarrage rapide** - Installation, premiers pas |
-| **2** | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)       | 🎨 Guide utilisation web components React            |
-| **3** | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md) | 🔗 **Harmonisation Frontend ↔ Design System**       |
-| **4** | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 | 🐛 Résolution problèmes web components               |
-| **5** | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                     | 🧪 Guide tests & métriques performance               |
-| **6** | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     | ♿ Accessibilité WCAG AA (audit complet)             |
-| **7** | [7-SESSIONS.md](7-SESSIONS.md)                               | 📅 Index sessions développement (11 sessions)        |
-| **8** | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   | 🎓 Suivi compétences & livrables RNCP                |
-| **9** | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)             | 📊 **Dashboard Qualité** - Documentation complète    |
+| #      | Fichier                                                      | Description                                          |
+| ------ | ------------------------------------------------------------ | ---------------------------------------------------- |
+| **0**  | [0-INDEX.md](0-INDEX.md)                                     | 📍 Vous êtes ici - Index principal                   |
+| **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                 | 🚀 **Démarrage rapide** - Installation, premiers pas |
+| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)       | 🎨 Guide utilisation web components React            |
+| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md) | 🔗 **Harmonisation Frontend ↔ Design System**       |
+| **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 | 🐛 Résolution problèmes web components               |
+| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                     | 🧪 Guide tests & métriques performance               |
+| **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     | ♿ Accessibilité WCAG AA (audit complet)             |
+| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                               | 📅 Index sessions développement (11 sessions)        |
+| **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   | 🎓 Suivi compétences & livrables RNCP                |
+| **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)             | 📊 **Dashboard Qualité** - Documentation complète    |
+| **10** | [10-AUDIT-RNCP-DASHBOARD.md](10-AUDIT-RNCP-DASHBOARD.md)     | 🎯 **Audit RNCP Dashboard** - Section avec tabs      |
 
 ### Quick Links
 
@@ -116,8 +117,12 @@
 
 ### Sessions Récentes (Novembre 2025)
 
-- [sessions/2025-11-24-DASHBOARD-BADGES.md](sessions/2025-11-24-DASHBOARD-BADGES.md) ⭐ **NEW** - Badges de statut dashboard (8 badges)
-- [sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) ⭐ **NEW** - Dashboard qualité interactif (PRs #44-46)
+- [sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md](sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md) ⭐ **NEW** - Audit RNCP avec tabs navigation + downloads JSON
+- [sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md) - Tests datasets scalabilité
+- [sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Section Reduced Motion éducative
+- [sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md](sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md) - Améliorations UX dashboard
+- [sessions/2025-11-24-DASHBOARD-BADGES.md](sessions/2025-11-24-DASHBOARD-BADGES.md) - Badges de statut dashboard (8 badges)
+- [sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) - Dashboard qualité interactif (PRs #44-46)
 - [sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md](sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md) - Tests SearchInputWrapper (464 tests, 7/7 wrappers ✅)
 - [sessions/2025-11-13-ANALYTICS-MIGRATION.md](sessions/2025-11-13-ANALYTICS-MIGRATION.md) - Migration Analytics (100% Design System)
 - [sessions/2025-11-12-TESTS-UNITAIRES.md](sessions/2025-11-12-TESTS-UNITAIRES.md) - Correction tests (stratégie Shadow DOM)
@@ -218,8 +223,16 @@ documentation/
 ├── 6-ACCESSIBILITY.md                 # ♿ Accessibilité
 ├── 7-SESSIONS.md                      # 📅 Index sessions
 ├── 8-RNCP-CHECKLIST.md                # 🎓 RNCP
+├── 9-DASHBOARD-QUALITY.md             # 📊 Dashboard Qualité
+├── 10-AUDIT-RNCP-DASHBOARD.md         # 🎯 Audit RNCP Dashboard
 │
 ├── sessions/                           # Sessions développement
+│   ├── 2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md
+│   ├── 2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md
+│   ├── 2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md
+│   ├── 2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md
+│   ├── 2025-11-24-DASHBOARD-BADGES.md
+│   ├── 2025-11-20-22-DASHBOARD-INTERACTIF.md
 │   ├── 2025-11-18-SEARCH-WRAPPER-TESTS.md
 │   ├── 2025-11-13-ANALYTICS-MIGRATION.md
 │   ├── 2025-11-12-TESTS-UNITAIRES.md
@@ -353,6 +366,6 @@ Créer une issue : https://github.com/SandrineCipolla/stockHub_V2_front/issues
 
 ---
 
-**Dernière mise à jour** : 24 Novembre 2025
-**Version Documentation** : 2.1 (Dashboard Qualité ajouté)
+**Dernière mise à jour** : 26 Novembre 2025
+**Version Documentation** : 2.2 (Audit RNCP Dashboard ajouté)
 **Projet** : StockHub V2 - RNCP 7

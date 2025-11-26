@@ -367,7 +367,15 @@ npm run clean:deadcode
 
 - **Sandrine Cipolla** - Développeuse Full Stack
 
-## 🔗 Liens Utiles
+## 📚 Documentation
+
+### Documentation Interne
+
+- **[Guide Web Components](./documentation/WEB_COMPONENTS_GUIDE.md)** - Intégration du Design System
+- **[Audit RNCP Dashboard](./documentation/AUDIT_RNCP_DASHBOARD.md)** - Documentation complète de la section audit qualité
+- **[CLAUDE.md](./CLAUDE.md)** - Instructions de développement et conventions
+
+### Documentation Externe
 
 - [Documentation React](https://react.dev/)
 - [Documentation TypeScript](https://www.typescriptlang.org/docs/)

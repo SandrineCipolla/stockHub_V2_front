@@ -153,28 +153,28 @@
         .badge-grade-f { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
 
         /* Nouveaux styles pour les onglets de daltonisme */
-        .daltonisme-tab, .wcag-tab {
+        .daltonisme-tab, .wcag-tab, .rncp-tab {
             background-color: transparent;
             color: #9ca3af;
             border: none;
             cursor: pointer;
         }
 
-        .daltonisme-tab.active, .wcag-tab.active {
+        .daltonisme-tab.active, .wcag-tab.active, .rncp-tab.active {
             background-color: var(--sh-purple-500);
             color: white;
         }
 
-        .daltonisme-tab:hover:not(.active), .wcag-tab:hover:not(.active) {
+        .daltonisme-tab:hover:not(.active), .wcag-tab:hover:not(.active), .rncp-tab:hover:not(.active) {
             background-color: rgba(255, 255, 255, 0.1);
             color: #d1d5db;
         }
 
-        .daltonisme-panel, .wcag-panel {
+        .daltonisme-panel, .wcag-panel, .rncp-panel {
             display: none;
         }
 
-        .daltonisme-panel.active, .wcag-panel.active {
+        .daltonisme-panel.active, .wcag-panel.active, .rncp-panel.active {
             display: block;
         }
 
@@ -692,7 +692,7 @@
 </section>
 
 <!-- AUDIT COMPLET RNCP -->
-<section class="mt-14 card" id="audit-rncp">
+<section class="mt-14 card metric-card fade-in" id="audit-rncp">
     <h2 class="section-title flex items-center gap-3">
         📚 Audit Complet RNCP — Synthèse
         <div class="text-xs px-3 py-1 rounded-full bg-gray-700 text-gray-300" id="audit-rncp-status-badge">
@@ -702,31 +702,63 @@
     <p class="text-sm text-gray-400 mb-6">
         Agrégation de tous les audits (Performance, Accessibilité, Éco-conception, Qualité) pour démonstration RNCP 2027
     </p>
-    <div class="text-md opacity-90 mb-4" id="audit-rncp-content">
-        ⏳ Chargement des données RNCP...
+
+    <!-- Navigation par onglets RNCP -->
+    <div class="mb-6">
+        <div class="flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg">
+            <button class="rncp-tab active px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="overview">
+                📊 Vue d'ensemble
+            </button>
+            <button class="rncp-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="performance">
+                ⚡ Performance
+            </button>
+            <button class="rncp-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="accessibility">
+                ♿ Accessibilité
+            </button>
+            <button class="rncp-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="eco">
+                🌱 Éco-conception
+            </button>
+            <button class="rncp-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="quality">
+                💎 Qualité
+            </button>
+        </div>
     </div>
 
-    <button class="px-4 py-2 bg-[var(--sh-purple-500)] rounded-lg hover:bg-[var(--sh-purple-400)] transition"
-            onclick="toggleAuditDetails()">
-        📂 Voir / Masquer les détails
-    </button>
+    <!-- Contenu des onglets RNCP -->
+    <div id="rncp-content">
+        <!-- Vue d'ensemble -->
+        <div class="rncp-panel active" data-panel="overview">
+            <div id="rncp-overview">
+                ⏳ Chargement de la vue d'ensemble...
+            </div>
+        </div>
 
-    <div class="hidden mt-6 space-y-6" id="audit-details">
-        <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>📊 Performance</span></h3>
-            <div id="audit-performance"></div>
+        <!-- Onglet Performance -->
+        <div class="rncp-panel" data-panel="performance">
+            <div id="rncp-performance">
+                ⏳ Chargement des données de performance...
+            </div>
         </div>
-        <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>♿ Accessibilité</span></h3>
-            <div id="audit-accessibility"></div>
+
+        <!-- Onglet Accessibilité -->
+        <div class="rncp-panel" data-panel="accessibility">
+            <div id="rncp-accessibility">
+                ⏳ Chargement des données d'accessibilité...
+            </div>
         </div>
-        <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>🌱 Éco-conception</span></h3>
-            <div id="audit-eco"></div>
+
+        <!-- Onglet Éco-conception -->
+        <div class="rncp-panel" data-panel="eco">
+            <div id="rncp-eco">
+                ⏳ Chargement des données d'éco-conception...
+            </div>
         </div>
-        <div class="border-t border-white/10 pt-4">
-            <h3 class="text-xl text-[var(--sh-purple-300)] font-semibold"><span>💎 Qualité du code</span></h3>
-            <div id="audit-quality"></div>
+
+        <!-- Onglet Qualité -->
+        <div class="rncp-panel" data-panel="quality">
+            <div id="rncp-quality">
+                ⏳ Chargement des données de qualité...
+            </div>
         </div>
     </div>
 </section>
@@ -818,23 +850,15 @@
         const fps = await loadJSON('fps');
         const a11y = await loadJSON('a11y');
         const datasets = await loadJSON('datasets');
-        // NE PLUS charger audit complet ici (lazy load)
-        renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets });
-        // Placeholder audit synthétique léger
-        const auditLink = await findLatestJSON('audit-complet');
-        const auditContent = document.getElementById('audit-rncp-content');
-        auditContent.innerHTML = auditLink ? `<p class='text-sm'>Audit agrégé disponible (<a class='underline text-[var(--sh-purple-300)]' href='${auditLink}' target='_blank' rel='noopener'>télécharger JSON</a>). Cliquez sur détails pour charger.</p>` : `<p class='text-sm opacity-60'>Audit agrégé non présent. Générer via script.</p>`;
-    }
 
-    // Surcharge du bouton: charger audit au premier clic si pas déjà chargé
-    let auditLoaded = false;
-    async function toggleAuditDetails() {
-        const details = document.getElementById('audit-details');
-        details.classList.toggle('hidden');
-        if (!auditLoaded && !details.classList.contains('hidden')) {
-            const audit = await loadJSON('audit-complet');
+        // Charger l'audit RNCP complet
+        const audit = await loadJSON('audit-complet');
+
+        renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets });
+
+        // Rendre l'audit RNCP dans les nouveaux onglets
+        if (audit) {
             renderAudit(audit);
-            auditLoaded = true;
         }
     }
 
@@ -2457,71 +2481,44 @@ if (!prefersReducedMotion) {
     }
 
     function renderAudit(audit) {
-        const el = document.getElementById('audit-rncp-content');
-        const perfEl = document.getElementById('audit-performance');
-        const accEl = document.getElementById('audit-accessibility');
-        const ecoEl = document.getElementById('audit-eco');
-        const qualityEl = document.getElementById('audit-quality');
+        if (!audit) {
+            document.getElementById('rncp-overview').innerHTML = '<p class="mt-2 text-yellow-400 text-xs">Impossible de charger audit-complet.</p>';
+            return;
+        }
 
-        if (!audit) { el.innerHTML += '<p class="mt-2 text-yellow-400 text-xs">Impossible de charger audit-complet.</p>'; return; }
-        el.innerHTML += `<p class='mt-2 text-xs opacity-50'>Chargé: ${new Date(audit.timestamp).toLocaleString('fr-FR')}</p>`;
+        // Stocker l'audit pour le téléchargement
+        currentAudit = audit;
 
-        // Performance
-        perfEl.innerHTML = `<ul class='text-sm space-y-1'>${[
-            audit.lighthouse?.scores?.performance!=null?`<li>Perf Lighthouse: <strong>${audit.lighthouse.scores.performance}%</strong></li>`:null,
-            audit.fps?.avgOverall!=null?`<li>FPS moyen: <strong>${audit.fps.avgOverall}</strong> ${audit.fps.allPassed?'✅':'⚠️'}</li>`:null,
-            audit.datasets?.degradation!=null?`<li>Dégradation datasets: <strong>${audit.datasets.degradation}%</strong></li>`:null
-        ].filter(Boolean).join('')}</ul>`;
+        // Calculer le score global
+        let score = 0;
+        let totalMetrics = 0;
 
-        // Accessibilité
-        accEl.innerHTML = `<ul class='text-sm space-y-1'>${[
-            audit.lighthouse?.scores?.accessibility!=null?`<li>Accessibilité Lighthouse: <strong>${audit.lighthouse.scores.accessibility}%</strong></li>`:null,
-            audit.a11y?`<li>Reduced Motion: ${audit.a11y.passed?'✅ Conforme':'❌ Non conforme'}</li>`:null,
-            audit.daltonisme?`<li>Daltonisme: ${Object.entries(audit.daltonisme).map(([k,v])=>`${k}:${v}`).join(', ')}</li>`:null,
-            audit.riskLevels?`<li>WCAG Risk Levels: Critique ${audit.riskLevels.critique}, Élevé ${audit.riskLevels.eleve}, Moyen ${audit.riskLevels.moyen}, Faible ${audit.riskLevels.faible}</li>`:null
-        ].filter(Boolean).join('')}</ul>`;
+        if (audit.lighthouse?.scores?.performance != null) {
+            score += audit.lighthouse.scores.performance;
+            totalMetrics++;
+        }
+        if (audit.lighthouse?.scores?.accessibility != null) {
+            score += audit.lighthouse.scores.accessibility;
+            totalMetrics++;
+        }
+        if (audit.fps?.allPassed != null) {
+            score += audit.fps.allPassed ? 100 : 50;
+            totalMetrics++;
+        }
+        // Utiliser statements ou lines selon disponibilité
+        const coverageScore = audit.coverage?.statements || audit.coverage?.lines || 0;
+        if (coverageScore > 0) {
+            score += coverageScore;
+            totalMetrics++;
+        }
 
-        // Éco
-        ecoEl.innerHTML = audit.eco ? `<p class='text-sm'>Éco (indicateurs principaux): <code>${Object.keys(audit.eco).slice(0,5).join(', ')}</code></p>` : `<p class='text-xs opacity-60'>Absent</p>`;
+        const avgScore = totalMetrics > 0 ? score / totalMetrics : 0;
+        const isExcellent = avgScore >= 85;
+        const isGood = avgScore >= 70;
 
-        // Coverage
-        qualityEl.innerHTML = audit.coverage && audit.coverage.statements!=null ? `<p class='text-sm'>Statements: <strong>${audit.coverage.statements}%</strong> | Fonctions: ${audit.coverage.functions??'N/A'}% | Branches: ${audit.coverage.branches??'N/A'}%</p>` : `<p class='text-xs opacity-60'>Couverture non disponible</p>`;
-
-        // Mettre à jour le badge de statut Audit RNCP
+        // Mettre à jour le badge de statut
         const auditRncpStatusBadge = document.getElementById('audit-rncp-status-badge');
-        if (auditRncpStatusBadge && audit) {
-            // Calculer un score global basé sur les différentes métriques
-            let score = 0;
-            let totalMetrics = 0;
-
-            // Lighthouse Performance (score /100)
-            if (audit.lighthouse?.scores?.performance != null) {
-                score += audit.lighthouse.scores.performance;
-                totalMetrics++;
-            }
-
-            // Lighthouse Accessibility (score /100)
-            if (audit.lighthouse?.scores?.accessibility != null) {
-                score += audit.lighthouse.scores.accessibility;
-                totalMetrics++;
-            }
-
-            // FPS (converti en score sur 100)
-            if (audit.fps?.allPassed != null) {
-                score += audit.fps.allPassed ? 100 : 50;
-                totalMetrics++;
-            }
-
-            // Coverage (score /100)
-            if (audit.coverage?.statements != null) {
-                score += audit.coverage.statements;
-                totalMetrics++;
-            }
-
-            const avgScore = totalMetrics > 0 ? score / totalMetrics : 0;
-            const isExcellent = avgScore >= 85;
-            const isGood = avgScore >= 70;
-
+        if (auditRncpStatusBadge) {
             auditRncpStatusBadge.className = `text-xs px-3 py-1 rounded-full ${
                 isExcellent ? 'bg-green-500/20 text-green-400' :
                 isGood ? 'bg-yellow-500/20 text-yellow-400' :
@@ -2529,6 +2526,559 @@ if (!prefersReducedMotion) {
             }`;
             auditRncpStatusBadge.textContent = isExcellent ? `✅ ${avgScore.toFixed(0)}%` : isGood ? `⚠️ ${avgScore.toFixed(0)}%` : `❌ ${avgScore.toFixed(0)}%`;
         }
+
+        // === VUE D'ENSEMBLE ===
+        const perfScore = audit.lighthouse?.scores?.performance || 0;
+        const a11yScore = audit.lighthouse?.scores?.accessibility || 0;
+        const qualityScore = audit.coverage?.statements || audit.coverage?.lines || 0;
+        const fpsScore = audit.fps?.allPassed ? 100 : (audit.fps?.avgOverall ? (audit.fps.avgOverall / 60) * 100 : 0);
+
+        document.getElementById('rncp-overview').innerHTML = `
+            <!-- Explication RNCP -->
+            <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg mb-6">
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">💡</div>
+                    <div>
+                        <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi l'audit RNCP ?</div>
+                        <div class="text-xs text-gray-300 space-y-1">
+                            <p>L'<strong>audit RNCP</strong> agrège tous les audits de qualité (Performance, Accessibilité, Éco-conception, Qualité du code) pour démontrer les compétences acquises dans le cadre du <strong>RNCP niveau 7</strong> (Bac+5).</p>
+                            <p class="pt-2">Cet audit vérifie la conformité du projet selon les standards professionnels : <strong>Lighthouse</strong>, <strong>WCAG</strong>, <strong>performances FPS</strong>, et <strong>couverture de tests</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scores globaux avec gauges -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                ${createScoreGauge('Performance', perfScore, '⚡')}
+                ${createScoreGauge('Accessibilité', a11yScore, '♿')}
+                ${createScoreGauge('Qualité', qualityScore, '💎')}
+                ${createScoreGauge('FPS', fpsScore, '🎬')}
+            </div>
+
+            <!-- Score moyen -->
+            <div class="text-center p-6 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-lg border border-purple-500/30">
+                <div class="text-5xl font-bold ${isExcellent ? 'text-green-400' : isGood ? 'text-yellow-400' : 'text-red-400'}">
+                    ${avgScore.toFixed(0)}%
+                </div>
+                <div class="text-sm text-gray-300 mt-2">Score moyen RNCP</div>
+                <div class="text-xs text-gray-400 mt-1">Basé sur ${totalMetrics} métriques</div>
+            </div>
+
+            <!-- Téléchargement audit complet -->
+            <div class="mt-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-sm font-medium text-gray-300">📥 Télécharger l'audit complet</div>
+                        <div class="text-xs text-gray-400 mt-1">Fichier JSON avec toutes les métriques détaillées</div>
+                    </div>
+                    <button onclick="downloadAuditJSON()"
+                            class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm font-medium rounded-lg transition-all flex items-center gap-2">
+                        <span>📄</span>
+                        <span>Télécharger JSON</span>
+                    </button>
+                </div>
+            </div>
+
+            <p class='mt-4 text-xs opacity-50 text-center'>Dernière mise à jour : ${new Date(audit.timestamp).toLocaleString('fr-FR')}</p>
+        `;
+
+        // === PERFORMANCE ===
+        const perfLighthouse = audit.lighthouse?.scores?.performance || 0;
+        const avgFps = audit.fps?.avgOverall || 0;
+        const degradation = audit.datasets?.degradation || 0;
+        const fpsStatus = audit.fps?.allPassed;
+
+        document.getElementById('rncp-performance').innerHTML = `
+            <!-- Explication Performance -->
+            <div class="p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg mb-6">
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">💡</div>
+                    <div>
+                        <div class="text-sm font-semibold text-orange-300 mb-2">Pourquoi la performance est importante ?</div>
+                        <div class="text-xs text-gray-300 space-y-1">
+                            <p>Une application <strong>performante</strong> améliore l'expérience utilisateur et réduit la consommation d'énergie.</p>
+                            <p class="pt-2">Les audits mesurent : <strong>temps de chargement</strong> (Lighthouse), <strong>fluidité des animations</strong> (FPS ≥ 60), et <strong>dégradation des performances</strong> (datasets).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Lighthouse Performance -->
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-sm font-medium">⚡ Lighthouse Performance</div>
+                        <div class="text-2xl font-bold ${perfLighthouse >= 90 ? 'text-green-400' : perfLighthouse >= 50 ? 'text-yellow-400' : 'text-red-400'}">
+                            ${perfLighthouse}%
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="h-2 rounded-full transition-all duration-1000"
+                             style="width: ${perfLighthouse}%; background: ${perfLighthouse >= 90 ? '#10b981' : perfLighthouse >= 50 ? '#f59e0b' : '#ef4444'}"></div>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-2">
+                        ${perfLighthouse >= 90 ? '✅ Excellent' : perfLighthouse >= 50 ? '⚠️ À améliorer' : '❌ Critique'}
+                    </div>
+                </div>
+
+                <!-- FPS Moyen -->
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-sm font-medium">🎬 FPS Moyen</div>
+                        <div class="text-2xl font-bold ${avgFps >= 60 ? 'text-green-400' : avgFps >= 45 ? 'text-yellow-400' : 'text-red-400'}">
+                            ${avgFps.toFixed(0)} FPS
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="h-2 rounded-full transition-all duration-1000"
+                             style="width: ${Math.min(100, (avgFps / 60) * 100)}%; background: ${avgFps >= 60 ? '#10b981' : avgFps >= 45 ? '#f59e0b' : '#ef4444'}"></div>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-2">
+                        ${fpsStatus ? '✅ Animations fluides' : '⚠️ Optimisation requise'} • Objectif : 60 FPS
+                    </div>
+                </div>
+
+                ${degradation > 0 ? `
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-sm font-medium">📊 Dégradation Datasets</div>
+                        <div class="text-2xl font-bold ${degradation < 10 ? 'text-green-400' : degradation < 30 ? 'text-yellow-400' : 'text-red-400'}">
+                            ${degradation}%
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-400">
+                        ${degradation < 10 ? '✅ Impact minimal' : degradation < 30 ? '⚠️ Impact modéré' : '❌ Impact significatif'}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Téléchargement -->
+                <div class="mt-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-gray-300">📥 Télécharger l'audit Performance</div>
+                            <div class="text-xs text-gray-400 mt-1">Fichier JSON avec métriques de performance détaillées</div>
+                        </div>
+                        <button onclick="downloadAuditJSON('performance')"
+                                class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm font-medium rounded-lg transition-all flex items-center gap-2">
+                            <span>📄</span>
+                            <span>Télécharger</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // === ACCESSIBILITÉ ===
+        const a11yLighthouse = audit.lighthouse?.scores?.accessibility || 0;
+        const reducedMotion = audit.a11y?.passed;
+        const wcagData = audit.riskLevels;
+
+        document.getElementById('rncp-accessibility').innerHTML = `
+            <!-- Explication Accessibilité -->
+            <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-lg mb-6">
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">💡</div>
+                    <div>
+                        <div class="text-sm font-semibold text-green-300 mb-2">Pourquoi l'accessibilité est essentielle ?</div>
+                        <div class="text-xs text-gray-300 space-y-1">
+                            <p>L'<strong>accessibilité numérique</strong> garantit que tous les utilisateurs, y compris ceux en situation de handicap, peuvent utiliser l'application.</p>
+                            <p class="pt-2">Les audits vérifient : <strong>contrastes WCAG</strong>, <strong>navigation clavier</strong>, <strong>ARIA</strong>, <strong>daltonisme</strong>, et <strong>reduced motion</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Lighthouse Accessibility -->
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-sm font-medium">♿ Lighthouse Accessibility</div>
+                        <div class="text-2xl font-bold ${a11yLighthouse >= 90 ? 'text-green-400' : a11yLighthouse >= 50 ? 'text-yellow-400' : 'text-red-400'}">
+                            ${a11yLighthouse}%
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="h-2 rounded-full transition-all duration-1000"
+                             style="width: ${a11yLighthouse}%; background: ${a11yLighthouse >= 90 ? '#10b981' : a11yLighthouse >= 50 ? '#f59e0b' : '#ef4444'}"></div>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-2">
+                        ${a11yLighthouse >= 90 ? '✅ Excellent' : a11yLighthouse >= 50 ? '⚠️ À améliorer' : '❌ Critique'}
+                    </div>
+                </div>
+
+                ${reducedMotion !== undefined ? `
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm font-medium">🎭 Reduced Motion</div>
+                        <div class="text-xl">${reducedMotion ? '✅' : '❌'}</div>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-2">
+                        ${reducedMotion ? 'Conforme - Animations réduites disponibles' : 'Non conforme - Support à ajouter'}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${wcagData ? `
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="text-sm font-medium mb-3">🎨 Contrastes WCAG (Risk Levels)</div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="flex items-center justify-between p-2 bg-red-500/10 rounded">
+                            <span>🔴 Critique</span>
+                            <span class="font-bold">${wcagData.critique || 0}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-orange-500/10 rounded">
+                            <span>🟠 Élevé</span>
+                            <span class="font-bold">${wcagData.eleve || 0}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-yellow-500/10 rounded">
+                            <span>🟡 Moyen</span>
+                            <span class="font-bold">${wcagData.moyen || 0}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-green-500/10 rounded">
+                            <span>🟢 Faible</span>
+                            <span class="font-bold">${wcagData.faible || 0}</span>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                ${audit.daltonisme?.daltonisme ? `
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="text-sm font-medium mb-3">👁 Tests Daltonisme</div>
+                    <div class="text-xs text-gray-300 space-y-2">
+                        ${Object.entries(audit.daltonisme.daltonisme).map(([type, data]) =>
+                            `<div class="flex items-center justify-between p-2 bg-gray-700/50 rounded">
+                                <div>
+                                    <div class="font-medium">${type === 'protanopia' ? 'Protanopie' : type === 'deuteranopia' ? 'Deutéranopie' : type === 'tritanopia' ? 'Tritanopie' : 'Achromatopsie'}</div>
+                                    <div class="text-[10px] text-gray-400">${data.description}</div>
+                                </div>
+                                <span class="text-lg">${data.allDifferentiable ? '✅' : '⚠️'}</span>
+                            </div>`
+                        ).join('')}
+                    </div>
+                    ${audit.daltonisme.recommandations?.length > 0 ? `
+                        <div class="mt-3 p-2 bg-blue-500/10 border border-blue-500/30 rounded text-[10px] text-gray-300">
+                            <div class="font-semibold mb-1">💡 Compensations :</div>
+                            ${audit.daltonisme.recommandations.map(r =>
+                                `<div>• ${r.solution}</div>`
+                            ).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+                ` : ''}
+
+                <!-- Téléchargement -->
+                <div class="mt-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-gray-300">📥 Télécharger l'audit Accessibilité</div>
+                            <div class="text-xs text-gray-400 mt-1">Fichier JSON avec métriques d'accessibilité détaillées</div>
+                        </div>
+                        <button onclick="downloadAuditJSON('accessibility')"
+                                class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm font-medium rounded-lg transition-all flex items-center gap-2">
+                            <span>📄</span>
+                            <span>Télécharger</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // === ÉCO-CONCEPTION ===
+        const ecoData = audit.eco;
+        const buildSuccess = ecoData?.build?.succeeded;
+        const requestsPassed = ecoData?.requests?.passed;
+        const requestCount = ecoData?.requests?.count || 0;
+        const bestPractices = ecoData?.bestPractices || [];
+        const ecoNotes = ecoData?.notes || [];
+
+        document.getElementById('rncp-eco').innerHTML = `
+            <!-- Explication Éco-conception -->
+            <div class="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg mb-6">
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">💡</div>
+                    <div>
+                        <div class="text-sm font-semibold text-emerald-300 mb-2">C'est quoi l'éco-conception web ?</div>
+                        <div class="text-xs text-gray-300 space-y-1">
+                            <p>L'<strong>éco-conception</strong> vise à réduire l'impact environnemental des applications web : <strong>réduction du poids</strong>, <strong>optimisation des ressources</strong>, et <strong>consommation énergétique minimale</strong>.</p>
+                            <p class="pt-2">Indicateurs : <strong>taille du bundle</strong>, <strong>nombre de requêtes</strong>, <strong>optimisation des images</strong>, et <strong>cache HTTP</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            ${ecoData ? `
+                <div class="space-y-4">
+                    <!-- Statut Build -->
+                    <div class="p-4 bg-gray-800/50 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm font-medium">🔨 Build Production</div>
+                            <div class="text-xl">${buildSuccess ? '✅' : '❌'}</div>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-2">
+                            ${buildSuccess ? 'Build réussi - Application prête pour production' : 'Échec du build'}
+                        </div>
+                    </div>
+
+                    <!-- Requêtes HTTP -->
+                    <div class="p-4 bg-gray-800/50 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="text-sm font-medium">🌐 Requêtes HTTP</div>
+                            <div class="text-xl font-bold ${requestsPassed ? 'text-green-400' : 'text-yellow-400'}">
+                                ${requestCount}
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            ${requestsPassed ? '✅ Nombre de requêtes optimal' : '⚠️ Trop de requêtes'}
+                        </div>
+                    </div>
+
+                    ${bestPractices.length > 0 ? `
+                    <!-- Bonnes pratiques -->
+                    <div class="p-4 bg-gray-800/50 rounded-lg">
+                        <div class="text-sm font-medium mb-3">✨ Bonnes Pratiques Éco-conception</div>
+                        <div class="space-y-2 text-xs">
+                            ${bestPractices.map(practice =>
+                                `<div class="flex items-start gap-2 p-2 bg-gray-700/50 rounded">
+                                    <span class="text-lg">${practice.ok ? '✅' : '❌'}</span>
+                                    <div class="flex-1">
+                                        <div class="font-medium">${practice.name}</div>
+                                        <div class="text-gray-400 text-[10px] mt-0.5">${practice.info}</div>
+                                    </div>
+                                </div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    ${ecoNotes.length > 0 ? `
+                    <!-- Notes et améliorations -->
+                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="text-sm font-medium mb-2">📝 Notes</div>
+                        <div class="text-xs text-gray-300 space-y-1">
+                            ${ecoNotes.map(note => `<div>• ${note}</div>`).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- Résumé -->
+                    <div class="p-4 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-lg border border-emerald-500/30 text-center">
+                        <div class="text-3xl font-bold ${ecoData.success ? 'text-green-400' : 'text-yellow-400'}">
+                            ${ecoData.success ? '✅' : '⚠️'}
+                        </div>
+                        <div class="text-sm text-gray-300 mt-2">
+                            ${ecoData.success ? 'Audit éco-conception réussi' : 'Améliorations possibles'}
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            ${bestPractices.filter(p => p.ok).length}/${bestPractices.length} bonnes pratiques appliquées
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Téléchargement -->
+                <div class="mt-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-gray-300">📥 Télécharger l'audit Éco-conception</div>
+                            <div class="text-xs text-gray-400 mt-1">Fichier JSON avec métriques d'éco-conception détaillées</div>
+                        </div>
+                        <button onclick="downloadAuditJSON('eco')"
+                                class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm font-medium rounded-lg transition-all flex items-center gap-2">
+                            <span>📄</span>
+                            <span>Télécharger</span>
+                        </button>
+                    </div>
+                </div>
+            ` : `
+                <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl">⚠️</div>
+                        <div class="text-sm text-yellow-300">
+                            Données d'éco-conception non disponibles. Exécutez un audit éco-conception pour obtenir ces métriques.
+                        </div>
+                    </div>
+                </div>
+            `}
+        `;
+
+        // === QUALITÉ DU CODE ===
+        const statementsScore = audit.coverage?.statements || 0;
+        const functionsScore = audit.coverage?.functions || 0;
+        const branchesScore = audit.coverage?.branches || 0;
+        const linesScore = audit.coverage?.lines || 0;
+
+        // Utiliser le meilleur score disponible pour le résumé
+        const mainCoverageScore = statementsScore > 0 ? statementsScore : linesScore;
+        const mainCoverageLabel = statementsScore > 0 ? 'statements' : 'lignes';
+        const hasCoverageData = mainCoverageScore > 0 || functionsScore > 0 || branchesScore > 0;
+
+        document.getElementById('rncp-quality').innerHTML = `
+            <!-- Explication Qualité -->
+            <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg mb-6">
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">💡</div>
+                    <div>
+                        <div class="text-sm font-semibold text-purple-300 mb-2">Pourquoi mesurer la qualité du code ?</div>
+                        <div class="text-xs text-gray-300 space-y-1">
+                            <p>La <strong>qualité du code</strong> se mesure par la <strong>couverture de tests</strong> : pourcentage de code testé automatiquement.</p>
+                            <p class="pt-2">Objectif : <strong>≥ 80%</strong> pour garantir la fiabilité et faciliter la maintenance. Les métriques incluent : <strong>statements</strong>, <strong>fonctions</strong>, <strong>branches</strong>, et <strong>lignes</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            ${hasCoverageData ? `
+                <div class="space-y-4">
+                    ${linesScore > 0 ? createCoverageBar('Lignes', linesScore) : ''}
+                    ${functionsScore > 0 ? createCoverageBar('Fonctions', functionsScore) : ''}
+                    ${branchesScore > 0 ? createCoverageBar('Branches', branchesScore) : ''}
+                    ${statementsScore > 0 ? createCoverageBar('Statements', statementsScore) : ''}
+                </div>
+
+                <!-- Résumé -->
+                <div class="mt-6 p-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg border border-purple-500/30 text-center">
+                    <div class="text-3xl font-bold ${mainCoverageScore >= 80 ? 'text-green-400' : mainCoverageScore >= 60 ? 'text-yellow-400' : 'text-red-400'}">
+                        ${mainCoverageScore.toFixed(1)}%
+                    </div>
+                    <div class="text-sm text-gray-300 mt-2">Couverture globale (${mainCoverageLabel})</div>
+                    <div class="text-xs text-gray-400 mt-1">
+                        ${mainCoverageScore >= 80 ? '✅ Excellente couverture' : mainCoverageScore >= 60 ? '⚠️ Couverture acceptable' : '❌ Couverture insuffisante'}
+                    </div>
+                </div>
+
+                <!-- Téléchargement -->
+                <div class="mt-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-gray-300">📥 Télécharger l'audit Qualité</div>
+                            <div class="text-xs text-gray-400 mt-1">Fichier JSON avec métriques de couverture détaillées</div>
+                        </div>
+                        <button onclick="downloadAuditJSON('quality')"
+                                class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm font-medium rounded-lg transition-all flex items-center gap-2">
+                            <span>📄</span>
+                            <span>Télécharger</span>
+                        </button>
+                    </div>
+                </div>
+            ` : `
+                <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl">⚠️</div>
+                        <div class="text-sm text-yellow-300">
+                            Données de couverture non disponibles. Exécutez <code class="px-2 py-1 bg-gray-800 rounded">npm run test:coverage</code> pour générer ces métriques.
+                        </div>
+                    </div>
+                </div>
+            `}
+        `;
+
+        // Initialiser les onglets RNCP
+        initRncpTabs();
+    }
+
+    // Variable globale pour stocker l'audit actuel
+    let currentAudit = null;
+
+    // Fonction pour télécharger l'audit en JSON
+    function downloadAuditJSON(section = 'complet') {
+        if (!currentAudit) {
+            alert('Aucun audit disponible pour le téléchargement.');
+            return;
+        }
+
+        const timestamp = new Date(currentAudit.timestamp).toISOString().split('T')[0];
+        let filename, data;
+
+        if (section === 'complet') {
+            filename = `audit-rncp-complet-${timestamp}.json`;
+            data = currentAudit;
+        } else if (section === 'performance') {
+            filename = `audit-performance-${timestamp}.json`;
+            data = {
+                timestamp: currentAudit.timestamp,
+                lighthouse: currentAudit.lighthouse,
+                fps: currentAudit.fps,
+                datasets: currentAudit.datasets
+            };
+        } else if (section === 'accessibility') {
+            filename = `audit-accessibilite-${timestamp}.json`;
+            data = {
+                timestamp: currentAudit.timestamp,
+                lighthouse: { scores: { accessibility: currentAudit.lighthouse?.scores?.accessibility } },
+                a11y: currentAudit.a11y,
+                daltonisme: currentAudit.daltonisme,
+                riskLevels: currentAudit.riskLevels
+            };
+        } else if (section === 'eco') {
+            filename = `audit-eco-conception-${timestamp}.json`;
+            data = {
+                timestamp: currentAudit.timestamp,
+                eco: currentAudit.eco
+            };
+        } else if (section === 'quality') {
+            filename = `audit-qualite-${timestamp}.json`;
+            data = {
+                timestamp: currentAudit.timestamp,
+                coverage: currentAudit.coverage
+            };
+        }
+
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    // Fonction utilitaire pour créer une jauge de score
+    function createScoreGauge(label, score, icon) {
+        const color = score >= 90 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+        const strokeDasharray = `${(score / 100) * 251} 251`;
+
+        return `
+            <div class="text-center p-4 bg-gray-800/50 rounded-lg">
+                <div class="relative mx-auto" style="width: 80px; height: 80px;">
+                    <svg class="w-20 h-20 transform -rotate-90" viewBox="0 0 84 84">
+                        <circle cx="42" cy="42" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
+                        <circle cx="42" cy="42" r="40" stroke="${color}" stroke-width="4" fill="none"
+                                stroke-linecap="round" stroke-dasharray="${strokeDasharray}"
+                                class="transition-all duration-1000 ease-out"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="text-xl font-bold" style="color: ${color}">${score.toFixed(0)}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-sm mt-2">${icon} ${label}</div>
+            </div>
+        `;
+    }
+
+    // Fonction utilitaire pour créer une barre de couverture
+    function createCoverageBar(label, percentage) {
+        const color = percentage >= 80 ? '#10b981' : percentage >= 60 ? '#f59e0b' : '#ef4444';
+
+        return `
+            <div class="p-3 bg-gray-800/50 rounded-lg">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="text-sm font-medium">${label}</div>
+                    <div class="text-lg font-bold" style="color: ${color}">${percentage.toFixed(1)}%</div>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div class="h-2 rounded-full transition-all duration-1000"
+                         style="width: ${percentage}%; background: ${color}"></div>
+                </div>
+            </div>
+        `;
     }
 
     // Fonction pour gérer les onglets Coverage
@@ -2552,6 +3102,40 @@ if (!prefersReducedMotion) {
                 tab.classList.remove('text-gray-400');
                 const content = document.querySelector(`[data-coverage-content="${targetIndex}"]`);
                 if (content) content.classList.add('active');
+            });
+        });
+    }
+
+    // Fonction pour gérer les onglets RNCP
+    function initRncpTabs() {
+        const tabs = document.querySelectorAll('.rncp-tab');
+        const panels = document.querySelectorAll('.rncp-panel');
+        const rncpContent = document.getElementById('rncp-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // Désactiver tous les onglets
+                tabs.forEach(t => {
+                    t.classList.remove('active', 'bg-purple-500', 'text-white');
+                    t.classList.add('text-gray-400');
+                });
+
+                // Désactiver tous les panneaux
+                panels.forEach(p => {
+                    p.classList.remove('active');
+                });
+
+                // Activer l'onglet cliqué
+                tab.classList.add('active', 'bg-purple-500', 'text-white');
+                tab.classList.remove('text-gray-400');
+
+                // Activer le panneau correspondant
+                const targetPanel = rncpContent.querySelector(`[data-panel="${targetTab}"]`);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
             });
         });
     }
