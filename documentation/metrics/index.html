@@ -153,28 +153,28 @@
         .badge-grade-f { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
 
         /* Nouveaux styles pour les onglets de daltonisme */
-        .daltonisme-tab, .wcag-tab, .rncp-tab {
+        .daltonisme-tab, .wcag-tab, .rncp-tab, .lighthouse-tab {
             background-color: transparent;
             color: #9ca3af;
             border: none;
             cursor: pointer;
         }
 
-        .daltonisme-tab.active, .wcag-tab.active, .rncp-tab.active {
+        .daltonisme-tab.active, .wcag-tab.active, .rncp-tab.active, .lighthouse-tab.active {
             background-color: var(--sh-purple-500);
             color: white;
         }
 
-        .daltonisme-tab:hover:not(.active), .wcag-tab:hover:not(.active), .rncp-tab:hover:not(.active) {
+        .daltonisme-tab:hover:not(.active), .wcag-tab:hover:not(.active), .rncp-tab:hover:not(.active), .lighthouse-tab:hover:not(.active) {
             background-color: rgba(255, 255, 255, 0.1);
             color: #d1d5db;
         }
 
-        .daltonisme-panel, .wcag-panel, .rncp-panel {
+        .daltonisme-panel, .wcag-panel, .rncp-panel, .lighthouse-panel {
             display: none;
         }
 
-        .daltonisme-panel.active, .wcag-panel.active, .rncp-panel.active {
+        .daltonisme-panel.active, .wcag-panel.active, .rncp-panel.active, .lighthouse-panel.active {
             display: block;
         }
 
@@ -387,9 +387,73 @@
                 ⏳ Chargement...
             </div>
         </h2>
-        <div class="lighthouse-container" id="lighthouse-content">
-            <div class="flex items-center justify-center h-32 text-gray-400">
-                <p>⏳ Chargement des scores Lighthouse...</p>
+
+        <!-- Navigation par onglets Lighthouse -->
+        <div class="mb-6">
+            <div class="flex flex-wrap gap-1 bg-gray-800/50 p-1 rounded-lg">
+                <button class="lighthouse-tab active px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="overview">
+                    📊 Vue d'ensemble
+                </button>
+                <button class="lighthouse-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="performance">
+                    ⚡ Performance
+                </button>
+                <button class="lighthouse-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="accessibility">
+                    ♿ Accessibilité
+                </button>
+                <button class="lighthouse-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="seo">
+                    🔍 SEO
+                </button>
+                <button class="lighthouse-tab px-4 py-2 text-sm font-medium rounded-md transition-all" data-tab="best-practices">
+                    ✅ Best Practices
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenu des onglets Lighthouse -->
+        <div id="lighthouse-tabs-content">
+            <!-- Vue d'ensemble -->
+            <div class="lighthouse-panel active" data-panel="overview">
+                <div class="lighthouse-container" id="lighthouse-content">
+                    <div class="flex items-center justify-center h-32 text-gray-400">
+                        <p>⏳ Chargement des scores Lighthouse...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div class="lighthouse-panel" data-panel="performance">
+                <div id="lighthouse-performance-content">
+                    <div class="flex items-center justify-center h-32 text-gray-400">
+                        <p>⏳ Chargement...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accessibilité -->
+            <div class="lighthouse-panel" data-panel="accessibility">
+                <div id="lighthouse-accessibility-content">
+                    <div class="flex items-center justify-center h-32 text-gray-400">
+                        <p>⏳ Chargement...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO -->
+            <div class="lighthouse-panel" data-panel="seo">
+                <div id="lighthouse-seo-content">
+                    <div class="flex items-center justify-center h-32 text-gray-400">
+                        <p>⏳ Chargement...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="lighthouse-panel" data-panel="best-practices">
+                <div id="lighthouse-best-practices-content">
+                    <div class="flex items-center justify-center h-32 text-gray-400">
+                        <p>⏳ Chargement...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -854,7 +918,16 @@
         // Charger l'audit RNCP complet
         const audit = await loadJSON('audit-complet');
 
-        renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets });
+        // Charger les audits Lighthouse échoués
+        let lighthouseFailedAudits = null;
+        try {
+            const resp = await fetch('./data/lighthouse-failed-audits.json');
+            lighthouseFailedAudits = await resp.json();
+        } catch (e) {
+            console.log('Lighthouse failed audits non disponibles:', e);
+        }
+
+        renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets, lighthouseFailedAudits });
 
         // Rendre l'audit RNCP dans les nouveaux onglets
         if (audit) {
@@ -862,7 +935,7 @@
         }
     }
 
-    function renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets }) {
+    function renderCharts({ lighthouse, wcag, daltonisme, fps, a11y, datasets, lighthouseFailedAudits }) {
         // Nouvelle visualisation Lighthouse avec des cercles de score individuels
         if (lighthouse?.scores) {
             const scores = lighthouse.scores;
@@ -904,6 +977,27 @@
             const lighthouseContainer = document.getElementById("lighthouse-content");
             lighthouseContainer.innerHTML = `
                 <div class="space-y-6">
+                    <!-- Contenu éducatif -->
+                    <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg mb-6">
+                        <div class="flex items-start gap-3">
+                            <div class="text-2xl">💡</div>
+                            <div>
+                                <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi Lighthouse ?</div>
+                                <div class="text-xs text-gray-300 space-y-1">
+                                    <p><strong>Lighthouse</strong> est un outil open-source développé par <strong>Google</strong> qui audite automatiquement la qualité des applications web.</p>
+                                    <p class="pt-2">Il mesure <strong>4 catégories principales</strong> :</p>
+                                    <ul class="list-disc list-inside ml-2 space-y-1 pt-1">
+                                        <li><strong>Performance</strong> : Vitesse de chargement (FCP, LCP, TBT, CLS)</li>
+                                        <li><strong>Accessibilité</strong> : Conformité WCAG, navigation clavier, ARIA</li>
+                                        <li><strong>SEO</strong> : Optimisation pour moteurs de recherche (meta, robots.txt)</li>
+                                        <li><strong>Best Practices</strong> : Sécurité HTTPS, console errors, images optimisées</li>
+                                    </ul>
+                                    <p class="pt-2 text-blue-400">Les scores vont de <strong>0 à 100</strong> : <strong>≥90 = Excellent</strong>, <strong>70-89 = Bon</strong>, <strong>&lt;70 = À améliorer</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Score moyen principal -->
                     <div class="text-center">
                         <div class="score-circle score-circle-large mx-auto">
@@ -1075,6 +1169,12 @@
                 }`;
                 lighthouseStatusBadge.textContent = hasExcellent ? '✅ Excellent' : hasGood ? '⚠️ Bon' : '❌ À améliorer';
             }
+
+            // Remplir les autres onglets Lighthouse
+            renderLighthouseDetails(lighthouse, scores, lighthouseFailedAudits);
+
+            // Initialiser la navigation par onglets
+            initLighthouseTabs();
 
         } else {
             document.getElementById("lighthouse-content").innerHTML =
@@ -3079,6 +3179,484 @@ if (!prefersReducedMotion) {
                 </div>
             </div>
         `;
+    }
+
+    // Fonction pour remplir les détails Lighthouse par onglet
+    function renderLighthouseDetails(lighthouse, scores, failedAudits) {
+        const getScoreColor = (score) => {
+            if (score >= 90) return '#10b981';
+            if (score >= 70) return '#f59e0b';
+            return '#ef4444';
+        };
+
+        const getScoreClass = (score) => {
+            if (score >= 90) return 'text-green-400';
+            if (score >= 70) return 'text-yellow-400';
+            return 'text-red-400';
+        };
+
+        // Onglet Performance - Utiliser les audits réels échoués
+        const perfRecommendations = [];
+
+        if (failedAudits?.performance && failedAudits.performance.length > 0) {
+            // Utiliser les vrais audits échoués
+            failedAudits.performance.forEach(audit => {
+                let icon = '⚡';
+                if (audit.id.includes('paint')) icon = '🎨';
+                else if (audit.id.includes('blocking')) icon = '🚫';
+                else if (audit.id.includes('image')) icon = '🖼️';
+
+                perfRecommendations.push({
+                    icon: icon,
+                    title: audit.title,
+                    desc: audit.description.replace(/\[.*?\]\(.*?\)/g, '').substring(0, 150) + (audit.description.length > 150 ? '...' : ''),
+                    displayValue: audit.displayValue || ''
+                });
+            });
+        } else {
+            // Fallback sur les recommandations génériques si pas de données
+            if (scores.performance < 90) {
+                perfRecommendations.push({
+                    icon: '📦',
+                    title: 'Optimiser les ressources (images, JS, CSS)',
+                    desc: 'Compresser les images (WebP), minifier JS/CSS, utiliser code splitting',
+                    displayValue: ''
+                });
+            }
+        }
+
+        document.getElementById('lighthouse-performance-content').innerHTML = `
+            <div class="space-y-4">
+                <div class="p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <div class="text-2xl">💡</div>
+                        <div>
+                            <div class="text-sm font-semibold text-orange-300 mb-2">Pourquoi la Performance est cruciale ?</div>
+                            <div class="text-xs text-gray-300 space-y-1">
+                                <p>Une application <strong>rapide</strong> améliore l'expérience utilisateur, réduit le taux de rebond, et favorise le référencement.</p>
+                                <p class="pt-2"><strong>Core Web Vitals</strong> (Google) : métriques essentielles pour l'UX.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center p-6 bg-gray-800/50 rounded-lg">
+                    <div class="text-4xl font-bold ${getScoreClass(scores.performance)} mb-2">${scores.performance}</div>
+                    <div class="text-sm text-gray-400">Score Performance</div>
+                    ${scores.performance >= 90 ?
+                        '<div class="mt-2 text-xs text-green-400">✅ Performance excellente !</div>' :
+                        scores.performance >= 70 ?
+                        '<div class="mt-2 text-xs text-yellow-400">⚠️ Performance correcte, optimisations possibles.</div>' :
+                        '<div class="mt-2 text-xs text-red-400">❌ Performance à améliorer d\'urgence.</div>'
+                    }
+                </div>
+
+                ${perfRecommendations.length > 0 ? `
+                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="text-sm font-semibold text-yellow-300 mb-3">⚠️ Points à améliorer (depuis rapport Lighthouse)</div>
+                        <div class="space-y-3">
+                            ${perfRecommendations.map(rec => `
+                                <div class="flex items-start gap-3">
+                                    <div class="text-xl">${rec.icon}</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="text-sm font-medium text-yellow-200">${rec.title}</div>
+                                            ${rec.displayValue ? `<div class="text-xs text-yellow-400 font-mono">${rec.displayValue}</div>` : ''}
+                                        </div>
+                                        <div class="text-xs text-gray-300 mt-1">${rec.desc}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${lighthouse.metrics ? `
+                    <div class="space-y-2">
+                        <div class="text-sm font-medium text-gray-300 mb-3">⚡ Core Web Vitals</div>
+
+                        <div class="p-3 bg-gray-800/50 rounded-lg">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="text-sm font-medium">First Contentful Paint (FCP)</div>
+                                <div class="text-sm font-mono ${getScoreClass(100)}">${lighthouse.metrics.fcp || lighthouse.metrics.firstContentfulPaint || 'N/A'}s</div>
+                            </div>
+                            <div class="text-xs text-gray-400">Temps avant affichage du premier contenu</div>
+                        </div>
+
+                        <div class="p-3 bg-gray-800/50 rounded-lg">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="text-sm font-medium">Largest Contentful Paint (LCP)</div>
+                                <div class="text-sm font-mono ${getScoreClass(100)}">${lighthouse.metrics.lcp || lighthouse.metrics.largestContentfulPaint || 'N/A'}s</div>
+                            </div>
+                            <div class="text-xs text-gray-400">Temps de chargement du plus grand élément visible</div>
+                        </div>
+
+                        <div class="p-3 bg-gray-800/50 rounded-lg">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="text-sm font-medium">Total Blocking Time (TBT)</div>
+                                <div class="text-sm font-mono ${getScoreClass(100)}">${lighthouse.metrics.tbt || lighthouse.metrics.totalBlockingTime || 'N/A'}ms</div>
+                            </div>
+                            <div class="text-xs text-gray-400">Temps où la page est bloquée (non interactive)</div>
+                        </div>
+
+                        <div class="p-3 bg-gray-800/50 rounded-lg">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="text-sm font-medium">Cumulative Layout Shift (CLS)</div>
+                                <div class="text-sm font-mono ${getScoreClass(100)}">${lighthouse.metrics.cls || lighthouse.metrics.cumulativeLayoutShift || 'N/A'}</div>
+                            </div>
+                            <div class="text-xs text-gray-400">Stabilité visuelle (déplacements inattendus)</div>
+                        </div>
+
+                        <div class="p-3 bg-gray-800/50 rounded-lg">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="text-sm font-medium">Speed Index</div>
+                                <div class="text-sm font-mono ${getScoreClass(100)}">${lighthouse.metrics.speedIndex || 'N/A'}s</div>
+                            </div>
+                            <div class="text-xs text-gray-400">Vitesse d'affichage du contenu visible</div>
+                        </div>
+                    </div>
+                ` : '<p class="text-xs text-gray-400">Métriques Web Vitals non disponibles</p>'}
+            </div>
+        `;
+
+        // Onglet Accessibilité - Utiliser les audits réels échoués
+        const a11yRecommendations = [];
+
+        if (failedAudits?.accessibility && failedAudits.accessibility.length > 0) {
+            // Utiliser les vrais audits échoués
+            failedAudits.accessibility.forEach(audit => {
+                let icon = '♿';
+                if (audit.id.includes('aria')) icon = '🏷️';
+                else if (audit.id.includes('button') || audit.id.includes('link')) icon = '🔘';
+                else if (audit.id.includes('contrast')) icon = '🎨';
+                else if (audit.id.includes('label') || audit.id.includes('name')) icon = '📝';
+
+                a11yRecommendations.push({
+                    icon: icon,
+                    title: audit.title,
+                    desc: audit.description.replace(/\[.*?\]\(.*?\)/g, '').substring(0, 150) + (audit.description.length > 150 ? '...' : ''),
+                    displayValue: audit.displayValue || ''
+                });
+            });
+        } else {
+            // Fallback sur les recommandations génériques si pas de données
+            if (scores.accessibility < 90) {
+                a11yRecommendations.push({
+                    icon: '🏷️',
+                    title: 'Ajouter des labels ARIA manquants',
+                    desc: 'Vérifier que tous les éléments interactifs ont des aria-label ou aria-labelledby',
+                    displayValue: ''
+                });
+            }
+        }
+
+        document.getElementById('lighthouse-accessibility-content').innerHTML = `
+            <div class="space-y-4">
+                <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <div class="text-2xl">💡</div>
+                        <div>
+                            <div class="text-sm font-semibold text-purple-300 mb-2">Pourquoi l'Accessibilité ?</div>
+                            <div class="text-xs text-gray-300 space-y-1">
+                                <p>L'<strong>accessibilité</strong> garantit que votre application est utilisable par <strong>tous</strong>, y compris les personnes en situation de handicap.</p>
+                                <p class="pt-2">Lighthouse vérifie : <strong>ARIA</strong>, <strong>navigation clavier</strong>, <strong>contrastes</strong>, <strong>labels</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center p-6 bg-gray-800/50 rounded-lg">
+                    <div class="text-4xl font-bold ${getScoreClass(scores.accessibility)} mb-2">${scores.accessibility}</div>
+                    <div class="text-sm text-gray-400">Score Accessibilité</div>
+                    ${scores.accessibility >= 90 ?
+                        '<div class="mt-2 text-xs text-green-400">✅ Score excellent ! Continuez ainsi.</div>' :
+                        scores.accessibility >= 70 ?
+                        '<div class="mt-2 text-xs text-yellow-400">⚠️ Bon score, mais améliorations possibles ci-dessous.</div>' :
+                        '<div class="mt-2 text-xs text-red-400">❌ Score à améliorer - voir recommandations ci-dessous.</div>'
+                    }
+                </div>
+
+                ${a11yRecommendations.length > 0 ? `
+                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="text-sm font-semibold text-yellow-300 mb-3">⚠️ Points à améliorer (depuis rapport Lighthouse)</div>
+                        <div class="space-y-3">
+                            ${a11yRecommendations.map(rec => `
+                                <div class="flex items-start gap-3">
+                                    <div class="text-xl">${rec.icon}</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="text-sm font-medium text-yellow-200">${rec.title}</div>
+                                            ${rec.displayValue ? `<div class="text-xs text-yellow-400 font-mono">${rec.displayValue}</div>` : ''}
+                                        </div>
+                                        <div class="text-xs text-gray-300 mt-1">${rec.desc}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="text-sm font-medium text-gray-300 mb-3">♿ Points vérifiés</div>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Attributs ARIA appropriés</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Navigation clavier fonctionnelle</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Labels accessibles sur les formulaires</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Contrastes de couleurs suffisants</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Structure HTML sémantique</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Onglet SEO
+        const seoRecommendations = [];
+        if (scores.seo < 95) {
+            seoRecommendations.push({
+                icon: '📝',
+                title: 'Améliorer les meta descriptions',
+                desc: 'Ajouter des meta descriptions uniques et descriptives (150-160 caractères) sur chaque page'
+            });
+        }
+        if (scores.seo < 90) {
+            seoRecommendations.push({
+                icon: '🔗',
+                title: 'Vérifier les liens internes',
+                desc: 'S\'assurer que tous les liens internes sont fonctionnels et utilisent des ancres descriptives'
+            });
+        }
+        if (scores.seo < 85) {
+            seoRecommendations.push({
+                icon: '🗺️',
+                title: 'Créer/mettre à jour le sitemap.xml',
+                desc: 'Générer un sitemap.xml à jour et le soumettre à Google Search Console'
+            });
+        }
+        if (scores.seo < 80) {
+            seoRecommendations.push({
+                icon: '📱',
+                title: 'Optimiser pour mobile',
+                desc: 'Vérifier que le design est responsive et que le viewport est correctement configuré'
+            });
+        }
+
+        document.getElementById('lighthouse-seo-content').innerHTML = `
+            <div class="space-y-4">
+                <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <div class="text-2xl">💡</div>
+                        <div>
+                            <div class="text-sm font-semibold text-green-300 mb-2">Pourquoi le SEO ?</div>
+                            <div class="text-xs text-gray-300 space-y-1">
+                                <p>Le <strong>SEO</strong> (Search Engine Optimization) améliore la visibilité de votre application dans les <strong>moteurs de recherche</strong>.</p>
+                                <p class="pt-2">Lighthouse vérifie : <strong>meta tags</strong>, <strong>robots.txt</strong>, <strong>sitemap</strong>, <strong>structure des liens</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center p-6 bg-gray-800/50 rounded-lg">
+                    <div class="text-4xl font-bold ${getScoreClass(scores.seo)} mb-2">${scores.seo}</div>
+                    <div class="text-sm text-gray-400">Score SEO</div>
+                    ${scores.seo >= 90 ?
+                        '<div class="mt-2 text-xs text-green-400">✅ SEO optimal !</div>' :
+                        scores.seo >= 70 ?
+                        '<div class="mt-2 text-xs text-yellow-400">⚠️ SEO correct, améliorations possibles.</div>' :
+                        '<div class="mt-2 text-xs text-red-400">❌ SEO à améliorer pour meilleur référencement.</div>'
+                    }
+                </div>
+
+                ${seoRecommendations.length > 0 ? `
+                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="text-sm font-semibold text-yellow-300 mb-3">⚠️ Améliorations SEO recommandées</div>
+                        <div class="space-y-3">
+                            ${seoRecommendations.map(rec => `
+                                <div class="flex items-start gap-3">
+                                    <div class="text-xl">${rec.icon}</div>
+                                    <div>
+                                        <div class="text-sm font-medium text-yellow-200">${rec.title}</div>
+                                        <div class="text-xs text-gray-300 mt-1">${rec.desc}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="text-sm font-medium text-gray-300 mb-3">🔍 Points vérifiés</div>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Meta description présente</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Titre de page unique et descriptif</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">robots.txt valide</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Sitemap.xml disponible</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Liens internes fonctionnels</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Onglet Best Practices
+        const bestPracticesRecommendations = [];
+        if (scores.bestPractices < 100) {
+            bestPracticesRecommendations.push({
+                icon: '🔒',
+                title: 'Vérifier HTTPS sur toutes les ressources',
+                desc: 'S\'assurer que toutes les ressources (images, scripts, styles) sont chargées en HTTPS'
+            });
+        }
+        if (scores.bestPractices < 95) {
+            bestPracticesRecommendations.push({
+                icon: '🐛',
+                title: 'Corriger les erreurs console',
+                desc: 'Ouvrir DevTools > Console et corriger toutes les erreurs JavaScript affichées'
+            });
+        }
+        if (scores.bestPractices < 90) {
+            bestPracticesRecommendations.push({
+                icon: '📦',
+                title: 'Mettre à jour les dépendances vulnérables',
+                desc: 'Exécuter npm audit fix pour corriger les vulnérabilités de sécurité connues'
+            });
+        }
+        if (scores.bestPractices < 85) {
+            bestPracticesRecommendations.push({
+                icon: '🖼️',
+                title: 'Spécifier les dimensions des images',
+                desc: 'Ajouter width et height sur les balises <img> pour éviter les Layout Shifts'
+            });
+        }
+
+        document.getElementById('lighthouse-best-practices-content').innerHTML = `
+            <div class="space-y-4">
+                <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <div class="text-2xl">💡</div>
+                        <div>
+                            <div class="text-sm font-semibold text-blue-300 mb-2">Pourquoi les Best Practices ?</div>
+                            <div class="text-xs text-gray-300 space-y-1">
+                                <p>Les <strong>bonnes pratiques</strong> assurent la <strong>sécurité</strong>, la <strong>fiabilité</strong> et la <strong>maintenabilité</strong> de votre application.</p>
+                                <p class="pt-2">Lighthouse vérifie : <strong>HTTPS</strong>, <strong>console errors</strong>, <strong>images optimisées</strong>, <strong>dépendances à jour</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center p-6 bg-gray-800/50 rounded-lg">
+                    <div class="text-4xl font-bold ${getScoreClass(scores.bestPractices)} mb-2">${scores.bestPractices}</div>
+                    <div class="text-sm text-gray-400">Score Best Practices</div>
+                    ${scores.bestPractices >= 95 ?
+                        '<div class="mt-2 text-xs text-green-400">✅ Bonnes pratiques respectées !</div>' :
+                        scores.bestPractices >= 80 ?
+                        '<div class="mt-2 text-xs text-yellow-400">⚠️ Quelques ajustements recommandés.</div>' :
+                        '<div class="mt-2 text-xs text-red-400">❌ Bonnes pratiques à améliorer.</div>'
+                    }
+                </div>
+
+                ${bestPracticesRecommendations.length > 0 ? `
+                    <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                        <div class="text-sm font-semibold text-yellow-300 mb-3">⚠️ Actions recommandées</div>
+                        <div class="space-y-3">
+                            ${bestPracticesRecommendations.map(rec => `
+                                <div class="flex items-start gap-3">
+                                    <div class="text-xl">${rec.icon}</div>
+                                    <div>
+                                        <div class="text-sm font-medium text-yellow-200">${rec.title}</div>
+                                        <div class="text-xs text-gray-300 mt-1">${rec.desc}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="p-4 bg-gray-800/50 rounded-lg">
+                    <div class="text-sm font-medium text-gray-300 mb-3">✅ Points vérifiés</div>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">HTTPS activé (connexion sécurisée)</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Aucune erreur console JavaScript</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Images avec dimensions correctes</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Bibliothèques sans vulnérabilités connues</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-green-400">✓</span>
+                            <span class="text-gray-300">Doctype HTML5 déclaré</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Fonction pour gérer la navigation des onglets Lighthouse
+    function initLighthouseTabs() {
+        const tabs = document.querySelectorAll('.lighthouse-tab');
+        const panels = document.querySelectorAll('.lighthouse-panel');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // Désactiver tous les onglets
+                tabs.forEach(t => {
+                    t.classList.remove('active', 'bg-purple-500', 'text-white');
+                    t.classList.add('text-gray-400');
+                });
+
+                // Désactiver tous les panneaux
+                panels.forEach(p => p.classList.remove('active'));
+
+                // Activer l'onglet et panneau cliqués
+                tab.classList.add('active', 'bg-purple-500', 'text-white');
+                tab.classList.remove('text-gray-400');
+
+                const targetPanel = document.querySelector(`.lighthouse-panel[data-panel="${targetTab}"]`);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+            });
+        });
     }
 
     // Fonction pour gérer les onglets Coverage
