@@ -35,6 +35,7 @@
     "generate:coverage": "node scripts/generate-coverage.mjs",
     "generate:lighthouse": "node scripts/generate-lighthouse.mjs",
     "generate:all": "node scripts/generate-all.mjs",
+    "merge:audits": "node scripts/merge-audits.mjs",
     "metrics:update": "node scripts/update-metrics-files.mjs",
     "metrics:dashboard": "npm run generate:all && npm run metrics:update",
     "metrics:serve": "node scripts/serve-metrics.mjs",
