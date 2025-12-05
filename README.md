@@ -205,7 +205,7 @@ stockHub_V2_front/
 **Dashboard Qualité** : Consultez [documentation/metrics/](./documentation/metrics/) pour visualiser toutes les métriques de manière interactive.
 
 - 📊 **Local** : http://localhost:5173/documentation/metrics/
-- 🌐 **En ligne** : https://sandrinecipolla.github.io/stockHub_V2_front/documentation/metrics/
+- 🌐 **En ligne** : https://sandrinecipolla.github.io/stockHub_V2_front/
 
 ## 🪝 Git Hooks (Husky)
 
