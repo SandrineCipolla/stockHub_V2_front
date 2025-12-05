@@ -17,22 +17,44 @@ export default defineConfig(({ mode }) => {
         build: {
             rollupOptions: {
                 output: {
-                    manualChunks: {
-                        // Séparer React et ReactDOM dans leur propre chunk
-                        'react-vendor': ['react', 'react-dom'],
-                        // Séparer Framer Motion (animations)
-                        animations: ['framer-motion'],
-                        // Séparer les icônes Lucide
-                        icons: ['lucide-react'],
-                        // Séparer le Design System
-                        'design-system': ['@stockhub/design-system'],
+                    manualChunks(id) {
+                        // Séparer les vendors critiques (chargés en priorité)
+                        if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+                            return 'react-vendor';
+                        }
+                        // Design System (lazy loaded, non-critique)
+                        if (id.includes('@stockhub/design-system')) {
+                            return 'design-system';
+                        }
+                        // Framer Motion (animations, non-critique)
+                        if (id.includes('framer-motion')) {
+                            return 'animations';
+                        }
+                        // Lucide icons (nombreuses icônes, lazy load possible)
+                        if (id.includes('lucide-react')) {
+                            return 'icons';
+                        }
+                        // React Router (critique mais séparable)
+                        if (id.includes('react-router-dom')) {
+                            return 'router';
+                        }
+                        // Séparer les pages en chunks individuels pour route-based splitting
+                        if (id.includes('/src/pages/Dashboard')) {
+                            return 'page-dashboard';
+                        }
+                        if (id.includes('/src/pages/Analytics')) {
+                            return 'page-analytics';
+                        }
+                        // Autres node_modules dans un chunk commun
+                        if (id.includes('node_modules')) {
+                            return 'vendor';
+                        }
                     },
                 },
             },
-            // Limite d'avertissement ajustée après optimisations (code-splitting + terser)
-            // Le plus gros chunk actuel est design-system.js (472 kB) ce qui est acceptable
-            // Objectif futur: Réduire design-system en chargeant uniquement les composants utilisés
-            chunkSizeWarningLimit: 1000,
+            // Limite d'avertissement plus stricte pour forcer l'optimisation
+            // Objectif : tous les chunks < 500 KB
+            chunkSizeWarningLimit: 500,
             // Activer la minification
             minify: 'terser',
             terserOptions: {
@@ -45,6 +67,12 @@ export default defineConfig(({ mode }) => {
                     // - Pas besoin de drop_console qui supprime TOUT (y compris les erreurs)
                     drop_console: false,
                     drop_debugger: true, // Supprimer les debugger (ceux-ci sont toujours inutiles en prod)
+                    // Optimisations supplémentaires pour réduire la taille
+                    passes: 2, // Deux passes d'optimisation
+                    pure_funcs: ['console.log'], // Supprimer uniquement console.log (garder warn/error)
+                },
+                mangle: {
+                    safari10: true, // Compatibilité Safari 10+
                 },
             },
         },
