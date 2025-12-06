@@ -1,0 +1,145 @@
+name: ✅ CI - Quality & Tests
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  quality-check:
+    name: 🔍 Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install dependencies (workaround for npm optional deps bug)
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
+
+      - name: 🔎 TypeScript Check
+        run: npm run type-check
+
+      - name: 📏 ESLint Check
+        run: npm run lint
+
+      - name: 🧹 Knip (Dead Code Detection)
+        run: npm run clean:deadcode
+
+      - name: 🔍 Detect as const
+        run: npm run detect:as-const
+
+  test:
+    name: 🧪 Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install dependencies (workaround for npm optional deps bug)
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
+
+      - name: 🧪 Run Tests
+        run: npm run test:run
+
+      - name: 📊 Upload Coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install dependencies (workaround for npm optional deps bug)
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
+
+      - name: 🏗️ Build Project
+        run: npm run build
+
+      - name: 📦 Check Bundle Size
+        run: |
+          echo "📦 Build artifacts:"
+          ls -lh dist/assets/ | grep -E '\.(js|css)$' || echo "No assets found"
+
+          # Vérifier que dist/ existe et contient des fichiers
+          if [ ! -d "dist" ] || [ -z "$(ls -A dist)" ]; then
+            echo "❌ Build failed: dist/ is empty"
+            exit 1
+          fi
+
+          echo "✅ Build successful"
+
+  summary:
+    name: 📋 CI Summary
+    runs-on: ubuntu-latest
+    needs: [quality-check, test, build]
+    if: always()
+
+    steps:
+      - name: 📋 Check Results
+        run: |
+          echo "## CI Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.quality-check.result }}" == "success" ]; then
+            echo "✅ Quality checks passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.test.result }}" == "success" ]; then
+            echo "✅ Tests passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Tests failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.build.result }}" == "success" ]; then
+            echo "✅ Build successful" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Build failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: ❌ Fail if any job failed
+        if: needs.quality-check.result != 'success' || needs.test.result != 'success' || needs.build.result != 'success'
+        run: exit 1

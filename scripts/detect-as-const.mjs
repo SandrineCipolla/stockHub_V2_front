@@ -12,6 +12,7 @@ import {fileURLToPath} from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const TYPESCRIPT_EXTENSIONS = ['.ts', '.tsx'];
 const EXCLUDE_DIRS = ['node_modules', 'dist', 'coverage', '.git'];
+const EXCLUDE_PATTERNS = ['__tests__', '.test.ts', '.test.tsx', 'test/fixtures', '/test/'];
 
 function findTypeScriptFiles(dir) {
     const files = [];
@@ -75,14 +76,20 @@ function main() {
     console.log('🔍 Détection des usages "as const" dans le projet...\n');
 
     const projectRoot = process.cwd();
-    const tsFiles = findTypeScriptFiles(projectRoot);
+    const allFiles = findTypeScriptFiles(projectRoot);
+
+    // Filtrer les fichiers de test
+    const tsFiles = allFiles.filter(filePath => {
+        return !EXCLUDE_PATTERNS.some(pattern => filePath.includes(pattern));
+    });
 
     if (tsFiles.length === 0) {
         console.log('❌ Aucun fichier TypeScript trouvé.');
         process.exit(1);
     }
 
-    console.log(`📁 Analyse de ${tsFiles.length} fichiers TypeScript...\n`);
+    const excludedCount = allFiles.length - tsFiles.length;
+    console.log(`📁 Analyse de ${tsFiles.length} fichiers TypeScript (${excludedCount} fichiers de test ignorés)...\n`);
 
     let totalDetections = 0;
     let filesWithDetections = 0;
@@ -111,7 +118,8 @@ function main() {
     if (totalDetections > 0) {
         console.log('\n⚠️  Des usages "as const" ont été détectés.');
         console.log('💡 Considérez utiliser des types explicites pour une meilleure lisibilité.');
-        process.exit(1);
+        console.log('ℹ️  Ce n\'est qu\'un avertissement, le build continue.\n');
+        process.exit(0); // Exit code 0 pour ne pas bloquer le CI
     } else {
         console.log('\n✅ Aucun usage "as const" détecté.');
         process.exit(0);

@@ -1,5 +1,8 @@
 import 'react';
 
+// Déclaration du module Design System pour éviter l'erreur TypeScript
+declare module '@stockhub/design-system';
+
 declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {

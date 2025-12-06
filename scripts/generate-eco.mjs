@@ -23,14 +23,16 @@ async function generateEcoReport() {
 
   // Fallback analyse dist même si build partiel
   const distDir = './dist';
+  const assetsDir = './dist/assets';
   if (existsSync(distDir)) {
     try {
-      // Chercher un fichier index-*.js principal
-      const files = readdirSync(distDir);
+      // Chercher un fichier index-*.js principal dans assets/
+      const files = existsSync(assetsDir) ? readdirSync(assetsDir) : readdirSync(distDir);
+      const baseDir = existsSync(assetsDir) ? assetsDir : distDir;
       const jsFiles = files.filter(f=> /index-.*\.js$/.test(f));
       if (jsFiles.length) {
         const mainFile = jsFiles[0];
-        const filePath = path.join(distDir, mainFile);
+        const filePath = path.join(baseDir, mainFile);
         bundleSize = (statSync(filePath).size / 1024).toFixed(2);
         // gzip approximatif: ratio moyen ~0.35 si non disponible
         gzipSize = (bundleSize * 0.35).toFixed(2);

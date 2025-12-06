@@ -6,13 +6,88 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 15
-**Période** : Octobre 2024 - Novembre 2025
+**Total sessions documentées** : 17
+**Période** : Octobre 2024 - Décembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 6 Décembre 2025 - Lighthouse Multi-Run & Accessibility Analysis
+
+**Fichier** : [sessions/2025-12-06-METRICS-MULTIRUN-ACCESSIBILITY.md](sessions/2025-12-06-METRICS-MULTIRUN-ACCESSIBILITY.md)
+
+**Objectif** : Stabiliser les scores Lighthouse via multi-run avec médiane et analyser en profondeur les problèmes d'accessibilité critiques
+
+**Réalisations** :
+
+- ✅ **Clarification Métriques** (App vs Dashboard)
+  - Distinction claire: App (page `/`) vs Dashboard métriques (`/documentation/metrics/`)
+  - Comparaison multi-environnements (Local, DevTools, Production)
+  - Scores recommandés: **97 / 86 / 100 / 100** (production)
+- ✅ **Script Lighthouse Multi-Run** (Version 2.0)
+  - 3 audits successifs automatiques
+  - Calcul médiane pour chaque score
+  - Statistiques min/max/range affichées
+  - URL configurable via CLI argument
+  - Nouveau format JSON avec `scoresRange` et `multiRun` info
+- ✅ **Dashboard Metrics Enhanced**
+  - Affichage range sous chaque score (ex: "Range: 95-95")
+  - Message éducatif multi-run (médiane de 3 audits)
+  - Rétrocompatible avec anciens JSON
+  - Mise à jour automatique liste statique
+- ✅ **Analyse Accessibilité** (86/100 → 95+ objectif)
+  - 4 problèmes critiques identifiés et documentés
+  - ARIA prohibited attributes (Design System)
+  - Buttons without accessible name (Design System)
+  - Color contrast issues (Badges IA)
+  - Label content name mismatch (Notifications)
+- ✅ **Documentation & Issue**
+  - Nouveau doc: 15-APP-QUALITY-METRICS.md (métriques + solutions)
+  - GitHub Issue #51 créée avec plan d'action 3 phases
+  - Mise à jour 0-INDEX.md (version 2.5)
+
+**Impact** : 🎉 **Scores stables + Roadmap accessibilité** - Variabilité réduite, problèmes a11y documentés avec solutions
+
+**GitHub Issue** : [#51](https://github.com/SandrineCipolla/stockHub_V2_front/issues/51) - fix(a11y): Improve accessibility score from 86 to 95+
+
+---
+
+### Session du 5 Décembre 2025 - Performance Optimization, CI/CD & TypeScript Refactoring
+
+**Fichier** : [sessions/2025-12-05-PERFORMANCE-CI-TYPESCRIPT.md](sessions/2025-12-05-PERFORMANCE-CI-TYPESCRIPT.md)
+
+**Objectif** : Résoudre la dégradation de performance Lighthouse, mettre en place CI/CD automatique sur les PR, et améliorer la qualité TypeScript
+
+**Réalisations** :
+
+- ✅ **Performance Optimization** (95/100 Lighthouse)
+  - Lazy loading Design System (TBT -97%: 290ms → 10ms)
+  - Lazy loading des pages (React.lazy + Suspense)
+  - Route-based code splitting (Vite)
+  - FCP amélioré de 2.4s → 2.2s (-8.3%)
+- ✅ **CI/CD Workflow** (GitHub Actions)
+  - Workflow automatique sur PR (Quality + Tests + Build)
+  - Jobs parallèles (~2min total)
+  - Workaround bug npm optional dependencies
+  - Validation automatique avant merge
+- ✅ **TypeScript Refactoring** (0 `as const` en production)
+  - Script `detect-as-const` non-bloquant
+  - Remplacement `as const` → `Readonly<>` types explicites
+  - Ignore fichiers de test (19 fichiers)
+  - Fix Knip configuration (0 warnings)
+- ✅ **Documentation** (3 nouveaux docs)
+  - 12-PERFORMANCE-ANALYSIS.md (analyse complète)
+  - 13-METRICS-AUTOMATION-STRATEGY.md (stratégie)
+  - 14-CI-CD-WORKFLOWS.md (workflows GitHub Actions)
+  - Mise à jour 0-INDEX.md (version 2.4)
+
+**Impact** : 🎉 **Performance restaurée + CI/CD automatique** - PR validation automatisée, qualité code améliorée
+
+**Pull Request** : [#50](https://github.com/SandrineCipolla/stockHub_V2_front/pull/50)
+
+---
 
 ### Session du 26 Novembre 2025 - Dashboard Masonry Layout & Educational Content (Partie 5)
 
