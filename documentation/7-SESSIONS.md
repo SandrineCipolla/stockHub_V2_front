@@ -6,13 +6,48 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 15
-**Période** : Octobre 2024 - Novembre 2025
+**Total sessions documentées** : 16
+**Période** : Octobre 2024 - Décembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 5 Décembre 2025 - Performance Optimization, CI/CD & TypeScript Refactoring
+
+**Fichier** : [sessions/2025-12-05-PERFORMANCE-CI-TYPESCRIPT.md](sessions/2025-12-05-PERFORMANCE-CI-TYPESCRIPT.md)
+
+**Objectif** : Résoudre la dégradation de performance Lighthouse, mettre en place CI/CD automatique sur les PR, et améliorer la qualité TypeScript
+
+**Réalisations** :
+
+- ✅ **Performance Optimization** (95/100 Lighthouse)
+  - Lazy loading Design System (TBT -97%: 290ms → 10ms)
+  - Lazy loading des pages (React.lazy + Suspense)
+  - Route-based code splitting (Vite)
+  - FCP amélioré de 2.4s → 2.2s (-8.3%)
+- ✅ **CI/CD Workflow** (GitHub Actions)
+  - Workflow automatique sur PR (Quality + Tests + Build)
+  - Jobs parallèles (~2min total)
+  - Workaround bug npm optional dependencies
+  - Validation automatique avant merge
+- ✅ **TypeScript Refactoring** (0 `as const` en production)
+  - Script `detect-as-const` non-bloquant
+  - Remplacement `as const` → `Readonly<>` types explicites
+  - Ignore fichiers de test (19 fichiers)
+  - Fix Knip configuration (0 warnings)
+- ✅ **Documentation** (3 nouveaux docs)
+  - 12-PERFORMANCE-ANALYSIS.md (analyse complète)
+  - 13-METRICS-AUTOMATION-STRATEGY.md (stratégie)
+  - 14-CI-CD-WORKFLOWS.md (workflows GitHub Actions)
+  - Mise à jour 0-INDEX.md (version 2.4)
+
+**Impact** : 🎉 **Performance restaurée + CI/CD automatique** - PR validation automatisée, qualité code améliorée
+
+**Pull Request** : [#50](https://github.com/SandrineCipolla/stockHub_V2_front/pull/50)
+
+---
 
 ### Session du 26 Novembre 2025 - Dashboard Masonry Layout & Educational Content (Partie 5)
 

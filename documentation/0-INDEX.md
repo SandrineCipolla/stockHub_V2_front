@@ -10,20 +10,23 @@
 
 ### Guides Essentiels
 
-| #      | Fichier                                                            | Description                                          |
-| ------ | ------------------------------------------------------------------ | ---------------------------------------------------- |
-| **0**  | [0-INDEX.md](0-INDEX.md)                                           | 📍 Vous êtes ici - Index principal                   |
-| **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                       | 🚀 **Démarrage rapide** - Installation, premiers pas |
-| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)             | 🎨 Guide utilisation web components React            |
-| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)       | 🔗 **Harmonisation Frontend ↔ Design System**       |
-| **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                       | 🐛 Résolution problèmes web components               |
-| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                           | 🧪 Guide tests & métriques performance               |
-| **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                           | ♿ Accessibilité WCAG AA (audit complet)             |
-| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                     | 📅 Index sessions développement (11 sessions)        |
-| **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                         | 🎓 Suivi compétences & livrables RNCP                |
-| **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)                   | 📊 **Dashboard Qualité** - Documentation complète    |
-| **10** | [10-AUDIT-RNCP-DASHBOARD.md](10-AUDIT-RNCP-DASHBOARD.md)           | 🎯 **Audit RNCP Dashboard** - Section avec tabs      |
-| **11** | [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](11-LIGHTHOUSE-DYNAMIC-AUDITS.md) | 🔦 **Lighthouse** - Extraction dynamique audits      |
+| #      | Fichier                                                                | Description                                          |
+| ------ | ---------------------------------------------------------------------- | ---------------------------------------------------- |
+| **0**  | [0-INDEX.md](0-INDEX.md)                                               | 📍 Vous êtes ici - Index principal                   |
+| **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                           | 🚀 **Démarrage rapide** - Installation, premiers pas |
+| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)                 | 🎨 Guide utilisation web components React            |
+| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)           | 🔗 **Harmonisation Frontend ↔ Design System**       |
+| **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                           | 🐛 Résolution problèmes web components               |
+| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                               | 🧪 Guide tests & métriques performance               |
+| **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                               | ♿ Accessibilité WCAG AA (audit complet)             |
+| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                         | 📅 Index sessions développement (11 sessions)        |
+| **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                             | 🎓 Suivi compétences & livrables RNCP                |
+| **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)                       | 📊 **Dashboard Qualité** - Documentation complète    |
+| **10** | [10-AUDIT-RNCP-DASHBOARD.md](10-AUDIT-RNCP-DASHBOARD.md)               | 🎯 **Audit RNCP Dashboard** - Section avec tabs      |
+| **11** | [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](11-LIGHTHOUSE-DYNAMIC-AUDITS.md)     | 🔦 **Lighthouse** - Extraction dynamique audits      |
+| **12** | [12-PERFORMANCE-ANALYSIS.md](12-PERFORMANCE-ANALYSIS.md)               | ⚡ **Performance** - Analyse & optimisations         |
+| **13** | [13-METRICS-AUTOMATION-STRATEGY.md](13-METRICS-AUTOMATION-STRATEGY.md) | 🤖 **Métriques Auto** - Stratégie automatisation     |
+| **14** | [14-CI-CD-WORKFLOWS.md](14-CI-CD-WORKFLOWS.md)                         | 🔄 **CI/CD** - Workflows GitHub Actions              |
 
 ### Quick Links
 
@@ -228,6 +231,9 @@ documentation/
 ├── 9-DASHBOARD-QUALITY.md             # 📊 Dashboard Qualité
 ├── 10-AUDIT-RNCP-DASHBOARD.md         # 🎯 Audit RNCP Dashboard
 ├── 11-LIGHTHOUSE-DYNAMIC-AUDITS.md    # 🔦 Lighthouse extraction dynamique
+├── 12-PERFORMANCE-ANALYSIS.md         # ⚡ Analyse performance
+├── 13-METRICS-AUTOMATION-STRATEGY.md  # 🤖 Automatisation métriques
+├── 14-CI-CD-WORKFLOWS.md              # 🔄 CI/CD workflows
 │
 ├── sessions/                           # Sessions développement
 │   ├── 2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md
@@ -370,6 +376,6 @@ Créer une issue : https://github.com/SandrineCipolla/stockHub_V2_front/issues
 
 ---
 
-**Dernière mise à jour** : 26 Novembre 2025
-**Version Documentation** : 2.3 (Lighthouse extraction dynamique audits)
+**Dernière mise à jour** : 5 Décembre 2025
+**Version Documentation** : 2.4 (Performance + CI/CD + Automatisation métriques)
 **Projet** : StockHub V2 - RNCP 7
