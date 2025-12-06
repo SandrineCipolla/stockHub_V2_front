@@ -978,7 +978,7 @@
 
         // Liste statique des fichiers disponibles (fallback si le listage de dossier ne fonctionne pas)
         const staticFileList = [
-            'lighthouse-1764935225065.json',
+            'lighthouse-1765015324279.json',
             'risk-levels-audit-1764935342752.json',
             'daltonisme-1764935342607.json',
             'fps-1764935304289.json',
@@ -1179,6 +1179,11 @@
                                         <li><strong>Best Practices</strong> : Sécurité HTTPS, console errors, images optimisées</li>
                                     </ul>
                                     <p class="pt-2 text-blue-400">Les scores vont de <strong>0 à 100</strong> : <strong>≥90 = Excellent</strong>, <strong>70-89 = Bon</strong>, <strong>&lt;70 = À améliorer</strong>.</p>
+                                    ${lighthouse.info?.multiRun ? `
+                                    <p class="pt-2 text-green-400">
+                                        <strong>📊 Multi-Run :</strong> Ces scores sont la <strong>médiane</strong> de ${lighthouse.info.multiRun.runs} audits successifs pour des résultats stables.
+                                    </p>
+                                    ` : ''}
                                 </div>
                             </div>
                         </div>
@@ -1222,6 +1227,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">Performance</div>
                                 <div class="text-xs text-gray-500">Vitesse de chargement</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.performance}</div>` : ''}
                             </div>
                         </div>
 
@@ -1240,6 +1246,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">Accessibilité</div>
                                 <div class="text-xs text-gray-500">Conformité a11y</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.accessibility}</div>` : ''}
                             </div>
                         </div>
 
@@ -1258,6 +1265,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">SEO</div>
                                 <div class="text-xs text-gray-500">Optimisation moteurs</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.seo}</div>` : ''}
                             </div>
                         </div>
 
@@ -1276,6 +1284,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">Bonnes Pratiques</div>
                                 <div class="text-xs text-gray-500">Standards web</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.bestPractices}</div>` : ''}
                             </div>
                         </div>
                     </div>

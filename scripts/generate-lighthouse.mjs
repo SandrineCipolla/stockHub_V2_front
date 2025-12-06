@@ -1,25 +1,39 @@
 /**
- * 🔦 Génération d’un rapport Lighthouse optimisé pour le dashboard StockHub V2
+ * 🔦 Génération d'un rapport Lighthouse optimisé pour le dashboard StockHub V2
  * Mix RNCP : Scores clés + métriques + audits critiques + recommandations
+ *
+ * Version 2.0 : Multi-run avec calcul de médiane pour scores stables
  */
 
 import {exec} from "child_process";
-import {readFileSync, writeFileSync} from "fs";
+import {readFileSync, writeFileSync, unlinkSync} from "fs";
 import {promisify} from "util";
 
 const execAsync = promisify(exec);
 
-const TEST_URL = "http://localhost:4173"; // doit être servi avant l’audit
+// Configuration
+const TEST_URL = process.argv[2] || "http://localhost:4173"; // URL configurable via CLI
+const NUM_RUNS = 3; // Nombre de runs pour stabilité
 
-async function runLighthouse() {
-    console.log("🚀 Audit Lighthouse en cours…");
+/**
+ * Calcule la médiane d'un tableau de nombres
+ */
+function median(numbers) {
+    const sorted = [...numbers].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 === 0
+        ? (sorted[mid - 1] + sorted[mid]) / 2
+        : sorted[mid];
+}
 
+/**
+ * Exécute un seul run Lighthouse
+ */
+async function singleRun(runNumber) {
     const timestamp = Date.now();
-    const rawJsonPath = `./documentation/metrics/data/lighthouse-raw-${timestamp}.json`;
-    const finalJsonPath = `./documentation/metrics/data/lighthouse-${timestamp}.json`;
+    const rawJsonPath = `./documentation/metrics/data/lighthouse-raw-${timestamp}-run${runNumber}.json`;
 
     try {
-        // Exécution Lighthouse
         const cmd = `npx lighthouse ${TEST_URL} \
       --output=json \
       --output-path=${rawJsonPath} \
@@ -28,70 +42,185 @@ async function runLighthouse() {
       --chrome-flags="--headless --no-sandbox"`;
 
         await execAsync(cmd);
-        console.log(`💾 Rapport brut enregistré : ${rawJsonPath}`);
 
-        // Lecture du rapport JSON brut
         const raw = JSON.parse(readFileSync(rawJsonPath, 'utf-8'));
-        const categories = raw.categories;
 
-        // Extraction des métriques importantes
-        const fcp = raw.audits["first-contentful-paint"]?.displayValue;
-        const lcp = raw.audits["largest-contentful-paint"]?.displayValue;
-        const tbt = raw.audits["total-blocking-time"]?.displayValue;
-        const cls = raw.audits["cumulative-layout-shift"]?.displayValue;
+        // Nettoyer le fichier temporaire
+        unlinkSync(rawJsonPath);
 
-        // Audits critiques (fails)
-        const failingAudits = Object.entries(raw.audits)
-            .filter(([_, audit]) => audit.score !== null && audit.score < 0.9)
-            .map(([id, audit]) => ({
-                id,
-                title: audit.title,
-                score: audit.score,
-                description: audit.description || null
-            }))
-            .slice(0, 10); // top 10
-
-        // Recommandations basées sur les métriques
-        const recommendations = [];
-        const push = (msg) => recommendations.push({ message: msg });
-
-        if (parseFloat(fcp) > 1.5) push("Améliorer la vitesse du First Contentful Paint");
-        if (parseFloat(lcp) > 2.5) push("Optimiser le Largest Contentful Paint");
-        if (parseFloat(tbt) > 100) push("Réduire le Total Blocking Time");
-        if (parseFloat(cls) > 0.1) push("Corriger les décalages de layout (CLS)");
-
-        // JSON final optimisé pour dashboard
-        const final = {
+        return {
             scores: {
-                performance: categories.performance.score * 100,
-                accessibility: categories.accessibility.score * 100,
-                bestPractices: categories["best-practices"].score * 100,
-                seo: categories.seo.score * 100
+                performance: Math.round(raw.categories.performance.score * 100),
+                accessibility: Math.round(raw.categories.accessibility.score * 100),
+                bestPractices: Math.round(raw.categories["best-practices"].score * 100),
+                seo: Math.round(raw.categories.seo.score * 100)
             },
             metrics: {
-                fcp,
-                lcp,
-                tbt,
-                cls
+                fcp: raw.audits["first-contentful-paint"]?.displayValue,
+                lcp: raw.audits["largest-contentful-paint"]?.displayValue,
+                tbt: raw.audits["total-blocking-time"]?.displayValue,
+                cls: raw.audits["cumulative-layout-shift"]?.displayValue
             },
-            failingAudits,
-            recommendations,
-            info: {
-                url: raw.requestedUrl,
-                userAgent: raw.userAgent,
-                lighthouseVersion: raw.lighthouseVersion,
-                generatedAt: new Date().toISOString()
-            }
+            raw // Garder le raw complet pour le dernier run
         };
-
-        // Sauvegarde
-        writeFileSync(finalJsonPath, JSON.stringify(final, null, 2));
-        console.log(`✨ Rapport optimisé : ${finalJsonPath}`);
-
     } catch (err) {
-        console.error("❌ Erreur Lighthouse :", err);
-        process.exit(1);
+        console.error(`❌ Erreur run ${runNumber}:`, err.message);
+        throw err;
     }
 }
 
-runLighthouse();
+/**
+ * Exécute plusieurs runs Lighthouse et calcule les statistiques
+ */
+async function runLighthouseMulti() {
+    console.log(`🚀 Audit Lighthouse Multi-Run (${NUM_RUNS} runs)`);
+    console.log(`📍 URL: ${TEST_URL}\n`);
+
+    const results = [];
+
+    // Exécuter N runs
+    for (let i = 1; i <= NUM_RUNS; i++) {
+        console.log(`⏳ Run ${i}/${NUM_RUNS}...`);
+        const result = await singleRun(i);
+        results.push(result);
+
+        console.log(`   Perf ${result.scores.performance} | A11y ${result.scores.accessibility} | BP ${result.scores.bestPractices} | SEO ${result.scores.seo}`);
+
+        // Pause entre runs pour stabilité
+        if (i < NUM_RUNS) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+    }
+
+    console.log("\n📊 Calcul des statistiques...\n");
+
+    // Extraire les scores de chaque catégorie
+    const perfScores = results.map(r => r.scores.performance);
+    const a11yScores = results.map(r => r.scores.accessibility);
+    const bpScores = results.map(r => r.scores.bestPractices);
+    const seoScores = results.map(r => r.scores.seo);
+
+    // Calculer médiane et range
+    const stats = {
+        performance: {
+            median: Math.round(median(perfScores)),
+            min: Math.min(...perfScores),
+            max: Math.max(...perfScores),
+            range: Math.max(...perfScores) - Math.min(...perfScores)
+        },
+        accessibility: {
+            median: Math.round(median(a11yScores)),
+            min: Math.min(...a11yScores),
+            max: Math.max(...a11yScores),
+            range: Math.max(...a11yScores) - Math.min(...a11yScores)
+        },
+        bestPractices: {
+            median: Math.round(median(bpScores)),
+            min: Math.min(...bpScores),
+            max: Math.max(...bpScores),
+            range: Math.max(...bpScores) - Math.min(...bpScores)
+        },
+        seo: {
+            median: Math.round(median(seoScores)),
+            min: Math.min(...seoScores),
+            max: Math.max(...seoScores),
+            range: Math.max(...seoScores) - Math.min(...seoScores)
+        }
+    };
+
+    // Afficher résultats
+    console.log("📈 Résultats finaux:\n");
+
+    const formatStat = (name, stat) => {
+        const icon = stat.median >= 90 ? '✅' : stat.median >= 70 ? '⚠️' : '❌';
+        const rangeStr = stat.range > 0 ? ` (±${stat.range})` : ' (stable)';
+        return `${icon} ${name.padEnd(16)}: ${stat.median}${rangeStr.padEnd(12)} [min: ${stat.min}, max: ${stat.max}]`;
+    };
+
+    console.log(formatStat('Performance', stats.performance));
+    console.log(formatStat('Accessibility', stats.accessibility));
+    console.log(formatStat('Best Practices', stats.bestPractices));
+    console.log(formatStat('SEO', stats.seo));
+
+    // Utiliser le dernier run pour les détails complets
+    const lastRun = results[NUM_RUNS - 1];
+    const raw = lastRun.raw;
+    const categories = raw.categories;
+
+    // Extraction des métriques importantes (médiane des métriques)
+    const fcp = lastRun.metrics.fcp;
+    const lcp = lastRun.metrics.lcp;
+    const tbt = lastRun.metrics.tbt;
+    const cls = lastRun.metrics.cls;
+
+    // Audits critiques (fails)
+    const failingAudits = Object.entries(raw.audits)
+        .filter(([_, audit]) => audit.score !== null && audit.score < 0.9)
+        .map(([id, audit]) => ({
+            id,
+            title: audit.title,
+            score: audit.score,
+            description: audit.description || null
+        }))
+        .slice(0, 10); // top 10
+
+    // Recommandations basées sur les métriques
+    const recommendations = [];
+    const push = (msg) => recommendations.push({ message: msg });
+
+    if (parseFloat(fcp) > 1.5) push("Améliorer la vitesse du First Contentful Paint");
+    if (parseFloat(lcp) > 2.5) push("Optimiser le Largest Contentful Paint");
+    if (parseFloat(tbt) > 100) push("Réduire le Total Blocking Time");
+    if (parseFloat(cls) > 0.1) push("Corriger les décalages de layout (CLS)");
+
+    // JSON final optimisé pour dashboard (utilise les médianes)
+    const timestamp = Date.now();
+    const finalJsonPath = `./documentation/metrics/data/lighthouse-${timestamp}.json`;
+
+    const final = {
+        scores: {
+            performance: stats.performance.median,
+            accessibility: stats.accessibility.median,
+            bestPractices: stats.bestPractices.median,
+            seo: stats.seo.median
+        },
+        scoresRange: {
+            performance: `${stats.performance.min}-${stats.performance.max}`,
+            accessibility: `${stats.accessibility.min}-${stats.accessibility.max}`,
+            bestPractices: `${stats.bestPractices.min}-${stats.bestPractices.max}`,
+            seo: `${stats.seo.min}-${stats.seo.max}`
+        },
+        metrics: {
+            fcp,
+            lcp,
+            tbt,
+            cls
+        },
+        failingAudits,
+        recommendations,
+        info: {
+            url: raw.requestedUrl,
+            userAgent: raw.userAgent,
+            lighthouseVersion: raw.lighthouseVersion,
+            generatedAt: new Date().toISOString(),
+            multiRun: {
+                runs: NUM_RUNS,
+                method: 'median'
+            }
+        }
+    };
+
+    // Sauvegarder le rapport brut complet du dernier run
+    const rawJsonPath = `./documentation/metrics/data/lighthouse-raw-${timestamp}.json`;
+    writeFileSync(rawJsonPath, JSON.stringify(raw, null, 2));
+    console.log(`\n💾 Rapport brut enregistré : ${rawJsonPath}`);
+
+    // Sauvegarde du rapport final
+    writeFileSync(finalJsonPath, JSON.stringify(final, null, 2));
+    console.log(`✨ Rapport optimisé : ${finalJsonPath}\n`);
+}
+
+runLighthouseMulti().catch(err => {
+    console.error("❌ Erreur fatale:", err);
+    process.exit(1);
+});

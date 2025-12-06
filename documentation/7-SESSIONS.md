@@ -6,13 +6,53 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 16
+**Total sessions documentées** : 17
 **Période** : Octobre 2024 - Décembre 2025
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
 
 ## 🗓️ Sessions Actives (Documentation V2)
+
+### Session du 6 Décembre 2025 - Lighthouse Multi-Run & Accessibility Analysis
+
+**Fichier** : [sessions/2025-12-06-METRICS-MULTIRUN-ACCESSIBILITY.md](sessions/2025-12-06-METRICS-MULTIRUN-ACCESSIBILITY.md)
+
+**Objectif** : Stabiliser les scores Lighthouse via multi-run avec médiane et analyser en profondeur les problèmes d'accessibilité critiques
+
+**Réalisations** :
+
+- ✅ **Clarification Métriques** (App vs Dashboard)
+  - Distinction claire: App (page `/`) vs Dashboard métriques (`/documentation/metrics/`)
+  - Comparaison multi-environnements (Local, DevTools, Production)
+  - Scores recommandés: **97 / 86 / 100 / 100** (production)
+- ✅ **Script Lighthouse Multi-Run** (Version 2.0)
+  - 3 audits successifs automatiques
+  - Calcul médiane pour chaque score
+  - Statistiques min/max/range affichées
+  - URL configurable via CLI argument
+  - Nouveau format JSON avec `scoresRange` et `multiRun` info
+- ✅ **Dashboard Metrics Enhanced**
+  - Affichage range sous chaque score (ex: "Range: 95-95")
+  - Message éducatif multi-run (médiane de 3 audits)
+  - Rétrocompatible avec anciens JSON
+  - Mise à jour automatique liste statique
+- ✅ **Analyse Accessibilité** (86/100 → 95+ objectif)
+  - 4 problèmes critiques identifiés et documentés
+  - ARIA prohibited attributes (Design System)
+  - Buttons without accessible name (Design System)
+  - Color contrast issues (Badges IA)
+  - Label content name mismatch (Notifications)
+- ✅ **Documentation & Issue**
+  - Nouveau doc: 15-APP-QUALITY-METRICS.md (métriques + solutions)
+  - GitHub Issue #51 créée avec plan d'action 3 phases
+  - Mise à jour 0-INDEX.md (version 2.5)
+
+**Impact** : 🎉 **Scores stables + Roadmap accessibilité** - Variabilité réduite, problèmes a11y documentés avec solutions
+
+**GitHub Issue** : [#51](https://github.com/SandrineCipolla/stockHub_V2_front/issues/51) - fix(a11y): Improve accessibility score from 86 to 95+
+
+---
 
 ### Session du 5 Décembre 2025 - Performance Optimization, CI/CD & TypeScript Refactoring
 

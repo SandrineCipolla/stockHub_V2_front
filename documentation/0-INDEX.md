@@ -27,6 +27,7 @@
 | **12** | [12-PERFORMANCE-ANALYSIS.md](12-PERFORMANCE-ANALYSIS.md)               | ⚡ **Performance** - Analyse & optimisations         |
 | **13** | [13-METRICS-AUTOMATION-STRATEGY.md](13-METRICS-AUTOMATION-STRATEGY.md) | 🤖 **Métriques Auto** - Stratégie automatisation     |
 | **14** | [14-CI-CD-WORKFLOWS.md](14-CI-CD-WORKFLOWS.md)                         | 🔄 **CI/CD** - Workflows GitHub Actions              |
+| **15** | [15-APP-QUALITY-METRICS.md](15-APP-QUALITY-METRICS.md)                 | 🎯 **Métriques App** - État qualité & accessibilité  |
 
 ### Quick Links
 
