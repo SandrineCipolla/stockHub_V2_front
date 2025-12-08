@@ -12,7 +12,11 @@ import {fileURLToPath} from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const TYPESCRIPT_EXTENSIONS = ['.ts', '.tsx'];
 const EXCLUDE_DIRS = ['node_modules', 'dist', 'coverage', '.git'];
-const EXCLUDE_PATTERNS = ['__tests__', '.test.ts', '.test.tsx', 'test/fixtures', '/test/'];
+
+// Patterns d'exclusion organisés par catégorie
+const EXCLUDE_TEST_DIRS = ['__tests__', 'test'];
+const EXCLUDE_FILE_PATTERNS = ['.test.ts', '.test.tsx'];
+const EXCLUDE_PATH_SEGMENTS = ['test/fixtures', '/test/'];
 
 function findTypeScriptFiles(dir) {
     const files = [];
@@ -21,7 +25,8 @@ function findTypeScriptFiles(dir) {
         const items = readdirSync(dir);
 
         for (const item of items) {
-            if (EXCLUDE_DIRS.includes(item)) continue;
+            // Exclure les dossiers standards et les dossiers de test
+            if (EXCLUDE_DIRS.includes(item) || EXCLUDE_TEST_DIRS.includes(item)) continue;
 
             const fullPath = join(dir, item);
             const stat = statSync(fullPath);
@@ -78,9 +83,15 @@ function main() {
     const projectRoot = process.cwd();
     const allFiles = findTypeScriptFiles(projectRoot);
 
-    // Filtrer les fichiers de test
+    // Filtrer les fichiers de test en combinant tous les patterns d'exclusion
     const tsFiles = allFiles.filter(filePath => {
-        return !EXCLUDE_PATTERNS.some(pattern => filePath.includes(pattern));
+        // Exclure les fichiers avec des extensions de test
+        const hasTestExtension = EXCLUDE_FILE_PATTERNS.some(pattern => filePath.endsWith(pattern));
+
+        // Exclure les fichiers dans des chemins de test
+        const hasTestPath = EXCLUDE_PATH_SEGMENTS.some(segment => filePath.includes(segment));
+
+        return !hasTestExtension && !hasTestPath;
     });
 
     if (tsFiles.length === 0) {
