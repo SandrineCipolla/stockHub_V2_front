@@ -10,13 +10,9 @@ import '@stockhub/design-system/dist/tokens/design-tokens.css';
 // Les composants seront chargés en arrière-plan après le rendu initial
 setTimeout(() => {
   // @ts-expect-error - Le Design System n'a pas de fichier .d.ts, mais fonctionne en runtime
-  import('@stockhub/design-system')
-    .then(() => {
-      console.log('✅ Design System chargé');
-    })
-    .catch(err => {
-      console.error('❌ Erreur lors du chargement du Design System:', err);
-    });
+  import('@stockhub/design-system').catch(err => {
+    console.error('❌ Erreur lors du chargement du Design System:', err);
+  });
 }, 100); // Délai de 100ms pour laisser React charger d'abord
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
