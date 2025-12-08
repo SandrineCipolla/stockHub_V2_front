@@ -129,7 +129,7 @@ function main() {
     if (totalDetections > 0) {
         console.log('\n⚠️  Des usages "as const" ont été détectés.');
         console.log('💡 Considérez utiliser des types explicites pour une meilleure lisibilité.');
-        console.log('ℹ️  Ce n\'est qu\'un avertissement, le build continue.\n');
+        console.log("ℹ️  Ce n'est qu'un avertissement, le build continue.");
         process.exit(0); // Exit code 0 pour ne pas bloquer le CI
     } else {
         console.log('\n✅ Aucun usage "as const" détecté.');
