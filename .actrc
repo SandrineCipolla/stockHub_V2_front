@@ -1,0 +1,20 @@
+# Act configuration
+# Documentation: https://github.com/nektos/act
+
+# Use medium-sized image (balance between speed and compatibility)
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+
+# IMPORTANT: Sur Windows, utiliser --bind=false pour éviter conflits node_modules
+# Act clone le repo dans le container au lieu de monter le dossier Windows
+# Plus lent mais évite les erreurs "EIO: i/o error" avec packages natifs
+--bind=false
+
+# Container architecture
+--container-architecture linux/amd64
+
+# Reuse containers for speed (OPTIMISATION: garde node_modules entre runs)
+# Attention: peut causer des side-effects, supprimer container si problèmes
+--reuse
+
+# Verbose output (uncomment for debugging)
+# -v

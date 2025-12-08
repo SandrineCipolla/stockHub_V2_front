@@ -1,0 +1,17 @@
+# Act ignore file
+# Prevent Act from using local node_modules (Windows conflicts with Linux container)
+
+node_modules/
+.npm/
+.cache/
+dist/
+build/
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
