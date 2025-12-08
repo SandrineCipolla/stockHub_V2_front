@@ -61,7 +61,16 @@ interface ConsumptionTrend {
 /**
  * Configuration for AI algorithms
  */
-const AI_CONFIG = {
+const AI_CONFIG: Readonly<{
+  CRITICAL_DAYS_THRESHOLD: number;
+  HIGH_PRIORITY_DAYS: number;
+  OVERSTOCK_RATIO: number;
+  MIN_CONFIDENCE: number;
+  HIGH_CONFIDENCE: number;
+  SAFETY_STOCK_FACTOR: number;
+  LEAD_TIME_DAYS: number;
+  VOLATILITY_PENALTY: number;
+}> = {
   // Seuils de détection
   CRITICAL_DAYS_THRESHOLD: 3, // Rupture critique si < 3 jours
   HIGH_PRIORITY_DAYS: 7, // Priorité haute si < 7 jours
@@ -75,7 +84,7 @@ const AI_CONFIG = {
   SAFETY_STOCK_FACTOR: 0.2, // 20% de stock de sécurité
   LEAD_TIME_DAYS: 5, // Délai de réapprovisionnement
   VOLATILITY_PENALTY: 0.3, // Pénalité pour volatilité élevée
-} as const;
+};
 
 /**
  * Analyzes consumption trends based on historical data (simulated)

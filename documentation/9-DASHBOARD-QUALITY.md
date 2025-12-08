@@ -60,7 +60,7 @@ Le **Dashboard Qualité** (`documentation/metrics/index.html`) est un tableau de
 ### URLs
 
 - **Local** : http://localhost:5173/documentation/metrics/
-- **GitHub Pages** : https://sandrinecipolla.github.io/stockHub_V2_front/documentation/metrics/
+- **GitHub Pages** : https://sandrinecipolla.github.io/stockHub_V2_front/
 
 ### Commandes
 
@@ -1027,7 +1027,7 @@ Rafraîchir : **Ctrl+R** ou **F5**
 
 Automatique via GitHub Actions
 
-URL : https://sandrinecipolla.github.io/stockHub_V2_front/documentation/metrics/
+URL : https://sandrinecipolla.github.io/stockHub_V2_front/
 
 #### Mise à jour liste statique
 

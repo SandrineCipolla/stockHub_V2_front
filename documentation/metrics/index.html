@@ -978,14 +978,13 @@
 
         // Liste statique des fichiers disponibles (fallback si le listage de dossier ne fonctionne pas)
         const staticFileList = [
-            'lighthouse-1763634146672.json',
-            'lighthouse-raw-1763634146672.json',
-            'risk-levels-audit-1763634259430.json',
-            'daltonisme-1763648733792.json',
-            'fps-1763634225042.json',
-            'a11y-1763635763804.json',
-            'datasets-1763634247354.json',
-            'audit-complet-1763634146592.json'
+            'lighthouse-1765015324279.json',
+            'risk-levels-audit-1764935342752.json',
+            'daltonisme-1764935342607.json',
+            'fps-1764935304289.json',
+            'a11y-1764935342434.json',
+            'datasets-1764935326520.json',
+            'audit-complet-1764935224934.json'
         ];
 
         // Mapping des préfixes aux patterns de fichiers
@@ -1180,6 +1179,11 @@
                                         <li><strong>Best Practices</strong> : Sécurité HTTPS, console errors, images optimisées</li>
                                     </ul>
                                     <p class="pt-2 text-blue-400">Les scores vont de <strong>0 à 100</strong> : <strong>≥90 = Excellent</strong>, <strong>70-89 = Bon</strong>, <strong>&lt;70 = À améliorer</strong>.</p>
+                                    ${lighthouse.info?.multiRun ? `
+                                    <p class="pt-2 text-green-400">
+                                        <strong>📊 Multi-Run :</strong> Ces scores sont la <strong>médiane</strong> de ${lighthouse.info.multiRun.runs} audits successifs pour des résultats stables.
+                                    </p>
+                                    ` : ''}
                                 </div>
                             </div>
                         </div>
@@ -1223,6 +1227,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">Performance</div>
                                 <div class="text-xs text-gray-500">Vitesse de chargement</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.performance}</div>` : ''}
                             </div>
                         </div>
 
@@ -1241,6 +1246,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">Accessibilité</div>
                                 <div class="text-xs text-gray-500">Conformité a11y</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.accessibility}</div>` : ''}
                             </div>
                         </div>
 
@@ -1259,6 +1265,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">SEO</div>
                                 <div class="text-xs text-gray-500">Optimisation moteurs</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.seo}</div>` : ''}
                             </div>
                         </div>
 
@@ -1277,6 +1284,7 @@
                             <div class="mt-2">
                                 <div class="text-sm font-medium text-gray-300">Bonnes Pratiques</div>
                                 <div class="text-xs text-gray-500">Standards web</div>
+                                ${lighthouse.scoresRange ? `<div class="text-[10px] text-gray-600 mt-1">Range: ${lighthouse.scoresRange.bestPractices}</div>` : ''}
                             </div>
                         </div>
                     </div>
@@ -2873,8 +2881,13 @@ if (!prefersReducedMotion) {
             score += audit.lighthouse.scores.accessibility;
             totalMetrics++;
         }
-        if (audit.fps?.allPassed != null) {
-            score += audit.fps.allPassed ? 100 : 50;
+        // Score éco-conception basé sur les bonnes pratiques
+        if (audit.eco?.bestPractices) {
+            const ecoBestPractices = audit.eco.bestPractices;
+            const ecoOkCount = ecoBestPractices.filter(bp => bp.ok).length;
+            const ecoTotalCount = ecoBestPractices.length;
+            const ecoScore = ecoTotalCount > 0 ? (ecoOkCount / ecoTotalCount) * 100 : 0;
+            score += ecoScore;
             totalMetrics++;
         }
         // Utiliser statements ou lines selon disponibilité
@@ -2903,7 +2916,12 @@ if (!prefersReducedMotion) {
         const perfScore = audit.lighthouse?.scores?.performance || 0;
         const a11yScore = audit.lighthouse?.scores?.accessibility || 0;
         const qualityScore = audit.coverage?.statements || audit.coverage?.lines || 0;
-        const fpsScore = audit.fps?.allPassed ? 100 : (audit.fps?.avgOverall ? (audit.fps.avgOverall / 60) * 100 : 0);
+
+        // Score éco-conception : basé sur les bonnes pratiques (5/5 = 100%)
+        const ecoBestPractices = audit.eco?.bestPractices || [];
+        const ecoOkCount = ecoBestPractices.filter(bp => bp.ok).length;
+        const ecoTotalCount = ecoBestPractices.length;
+        const ecoScore = ecoTotalCount > 0 ? Math.round((ecoOkCount / ecoTotalCount) * 100) : 0;
 
         document.getElementById('rncp-overview').innerHTML = `
             <!-- Explication RNCP -->
@@ -2914,18 +2932,18 @@ if (!prefersReducedMotion) {
                         <div class="text-sm font-semibold text-blue-300 mb-2">C'est quoi l'audit RNCP ?</div>
                         <div class="text-xs text-gray-300 space-y-1">
                             <p>L'<strong>audit RNCP</strong> agrège tous les audits de qualité (Performance, Accessibilité, Éco-conception, Qualité du code) pour démontrer les compétences acquises dans le cadre du <strong>RNCP niveau 7</strong> (Bac+5).</p>
-                            <p class="pt-2">Cet audit vérifie la conformité du projet selon les standards professionnels : <strong>Lighthouse</strong>, <strong>WCAG</strong>, <strong>performances FPS</strong>, et <strong>couverture de tests</strong>.</p>
+                            <p class="pt-2">Cet audit vérifie la conformité du projet selon les standards professionnels : <strong>Lighthouse</strong>, <strong>WCAG</strong>, <strong>éco-conception</strong>, et <strong>couverture de tests</strong>.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Scores globaux avec gauges -->
+            <!-- Scores globaux avec gauges (alignés avec les 4 onglets RNCP) -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 ${createScoreGauge('Performance', perfScore, '⚡')}
                 ${createScoreGauge('Accessibilité', a11yScore, '♿')}
+                ${createScoreGauge('Éco-conception', ecoScore, '🌱')}
                 ${createScoreGauge('Qualité', qualityScore, '💎')}
-                ${createScoreGauge('FPS', fpsScore, '🎬')}
             </div>
 
             <!-- Score moyen -->
@@ -3194,6 +3212,26 @@ if (!prefersReducedMotion) {
                         </div>
                     </div>
 
+                    <!-- Métriques Bundle -->
+                    ${ecoData.bundle?.gzipKB ? `
+                    <div class="p-4 bg-gray-800/50 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="text-sm font-medium">📦 Taille Bundle (gzip)</div>
+                            <div class="text-xl font-bold ${ecoData.bundle.passed ? 'text-green-400' : 'text-yellow-400'}">
+                                ${ecoData.bundle.gzipKB} KB
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            ${ecoData.bundle.passed ? '✅ Taille optimale (< 600 KB)' : '⚠️ Bundle trop lourd'}
+                        </div>
+                        ${ecoData.carbon?.estimatedCO2g ? `
+                        <div class="text-xs text-gray-400 mt-2">
+                            💨 Émission CO₂ estimée : <span class="text-emerald-400">${ecoData.carbon.estimatedCO2g}g</span> par chargement
+                        </div>
+                        ` : ''}
+                    </div>
+                    ` : ''}
+
                     <!-- Requêtes HTTP -->
                     <div class="p-4 bg-gray-800/50 rounded-lg">
                         <div class="flex items-center justify-between mb-2">
@@ -3203,7 +3241,7 @@ if (!prefersReducedMotion) {
                             </div>
                         </div>
                         <div class="text-xs text-gray-400">
-                            ${requestsPassed ? '✅ Nombre de requêtes optimal' : '⚠️ Trop de requêtes'}
+                            ${requestsPassed ? '✅ Nombre de requêtes optimal (≤ 20)' : '⚠️ Trop de requêtes'}
                         </div>
                     </div>
 
@@ -3225,12 +3263,12 @@ if (!prefersReducedMotion) {
                     </div>
                     ` : ''}
 
-                    ${ecoNotes.length > 0 ? `
-                    <!-- Notes et améliorations -->
+                    ${ecoNotes.length > 0 && !ecoData.success ? `
+                    <!-- Notes et améliorations (affichées uniquement si audit échoué) -->
                     <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                        <div class="text-sm font-medium mb-2">📝 Notes</div>
+                        <div class="text-sm font-medium mb-2">📝 Points d'attention</div>
                         <div class="text-xs text-gray-300 space-y-1">
-                            ${ecoNotes.map(note => `<div>• ${note}</div>`).join('')}
+                            ${ecoNotes.filter(note => !note.includes('manifest') && !note.includes('Gzip estimé')).map(note => `<div>• ${note}</div>`).join('')}
                         </div>
                     </div>
                     ` : ''}
@@ -3241,10 +3279,10 @@ if (!prefersReducedMotion) {
                             ${ecoData.success ? '✅' : '⚠️'}
                         </div>
                         <div class="text-sm text-gray-300 mt-2">
-                            ${ecoData.success ? 'Audit éco-conception réussi' : 'Améliorations possibles'}
+                            ${ecoData.success ? 'Application éco-responsable' : 'Améliorations possibles'}
                         </div>
                         <div class="text-xs text-gray-400 mt-1">
-                            ${bestPractices.filter(p => p.ok).length}/${bestPractices.length} bonnes pratiques appliquées
+                            ${bestPractices.filter(p => p.ok).length}/${bestPractices.length} bonnes pratiques
                         </div>
                     </div>
                 </div>

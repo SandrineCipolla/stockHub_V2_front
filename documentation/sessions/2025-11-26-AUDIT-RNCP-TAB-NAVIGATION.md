@@ -1,5 +1,12 @@
 # Session du 26 Novembre 2025 - Audit RNCP Dashboard: Tab Navigation & Downloads
 
+> ⚠️ **Note historique** : Cette session documente l'état du code au 26 novembre 2025.
+> Depuis le **8 décembre 2025**, la méthodologie de calcul du score RNCP a été améliorée :
+>
+> - **Ancienne** : 3ème métrique basée sur FPS binaire (`fps.allPassed ? 100 : 50`)
+> - **Nouvelle** : 3ème métrique basée sur éco-conception `bestPractices` (pourcentage granulaire)
+> - Voir documentation mise à jour : `10-AUDIT-RNCP-DASHBOARD.md`
+
 ## 🎯 Objectif
 
 Finaliser la section "Audit RNCP" du dashboard qualité en implémentant :

@@ -1,0 +1,150 @@
+name: ✅ CI - Quality & Tests
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  quality-check:
+    name: 🔍 Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: |
+          npm ci
+          # Verify Rollup optional dependency is installed
+          if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+            echo "⚠️ Rollup optional dependency missing, reinstalling with workaround..."
+            rm -rf node_modules package-lock.json
+            npm install --include=optional
+          fi
+
+      - name: 🔎 TypeScript Check
+        run: npm run type-check
+
+      - name: 📏 ESLint Check
+        run: npm run lint
+
+      - name: 🧹 Knip (Dead Code Detection)
+        run: npx knip --config ./knip.json
+
+      - name: 🔍 Detect as const
+        run: npm run detect:as-const
+
+  test:
+    name: 🧪 Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: |
+          npm ci
+          # Verify Rollup optional dependency is installed
+          if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+            echo "⚠️ Rollup optional dependency missing, reinstalling with workaround..."
+            rm -rf node_modules package-lock.json
+            npm install --include=optional
+          fi
+
+      - name: 🧪 Run Tests
+        run: npm run test:run
+
+      - name: 📊 Upload Coverage
+        if: always()
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: |
+          npm ci
+          # Verify Rollup optional dependency is installed
+          if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+            echo "⚠️ Rollup optional dependency missing, reinstalling with workaround..."
+            rm -rf node_modules package-lock.json
+            npm install --include=optional
+          fi
+
+      - name: 🏗️ Build Project
+        run: |
+          echo "ROLLUP_SKIP_NODE_NATIVE is: $ROLLUP_SKIP_NODE_NATIVE"
+          npm run build
+        env:
+          ROLLUP_SKIP_NODE_NATIVE: "true"
+
+  summary:
+    name: 📋 CI Summary
+    runs-on: ubuntu-latest
+    needs: [quality-check, test, build]
+    if: always()
+
+    steps:
+      - name: 📋 Check Results
+        run: |
+          echo "## CI Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.quality-check.result }}" == "success" ]; then
+            echo "✅ Quality checks passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Quality checks failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.test.result }}" == "success" ]; then
+            echo "✅ Tests passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Tests failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.build.result }}" == "success" ]; then
+            echo "✅ Build successful" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Build failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: ❌ Fail if any job failed
+        if: needs.quality-check.result != 'success' || needs.test.result != 'success' || needs.build.result != 'success'
+        run: exit 1

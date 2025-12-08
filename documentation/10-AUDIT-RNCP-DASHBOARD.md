@@ -153,7 +153,7 @@ function initRncpTabs() {
 **Calcul**: Moyenne des 4 métriques principales
 
 ```javascript
-// Ligne ~2492
+// Ligne ~2876-2900
 let score = 0;
 let totalMetrics = 0;
 
@@ -169,9 +169,16 @@ if (audit.lighthouse?.scores?.accessibility != null) {
   totalMetrics++;
 }
 
-// 3. Tests FPS (binaire: 100 si passed, 50 sinon)
-if (audit.fps?.allPassed != null) {
-  score += audit.fps.allPassed ? 100 : 50;
+// 3. Éco-conception (basé sur les bonnes pratiques)
+// ⚠️ MÉTHODOLOGIE AMÉLIORÉE (Décembre 2025)
+// Ancienne méthode: FPS binaire (100 ou 50) - peu granulaire
+// Nouvelle méthode: Pourcentage de bonnes pratiques éco réussies - plus précise
+if (audit.eco?.bestPractices) {
+  const ecoBestPractices = audit.eco.bestPractices;
+  const ecoOkCount = ecoBestPractices.filter(bp => bp.ok).length;
+  const ecoTotalCount = ecoBestPractices.length;
+  const ecoScore = ecoTotalCount > 0 ? (ecoOkCount / ecoTotalCount) * 100 : 0;
+  score += ecoScore;
   totalMetrics++;
 }
 
@@ -184,6 +191,38 @@ if (coverageScore > 0) {
 
 const avgScore = totalMetrics > 0 ? score / totalMetrics : 0;
 ```
+
+#### 📊 Explication du changement de méthodologie (3ème métrique)
+
+**Pourquoi ce changement ?**
+
+| Aspect                | Ancienne méthode (FPS binaire) | Nouvelle méthode (Éco bestPractices) | Avantage                    |
+| --------------------- | ------------------------------ | ------------------------------------ | --------------------------- |
+| **Métrique**          | Tests FPS (Performance)        | Bonnes pratiques éco-conception      | ✅ Plus pertinent pour RNCP |
+| **Granularité**       | Binaire (100 ou 50)            | Pourcentage (0-100)                  | ✅ Plus précis              |
+| **Valeurs possibles** | 2 valeurs seulement            | Variable selon pratiques             | ✅ Plus informatif          |
+| **Exemple**           | 4/5 tests → 50 points          | 4/5 pratiques → 80 points            | ✅ Récompense le progrès    |
+
+**Exemple concret** :
+
+Ancien système :
+
+- 3/5 pratiques éco → `allPassed = false` → Score = **50**
+- 4/5 pratiques éco → `allPassed = false` → Score = **50** (même résultat !)
+- 5/5 pratiques éco → `allPassed = true` → Score = **100**
+
+Nouveau système :
+
+- 3/5 pratiques éco → Score = **60%** (3/5 × 100)
+- 4/5 pratiques éco → Score = **80%** (4/5 × 100)
+- 5/5 pratiques éco → Score = **100%** (5/5 × 100)
+
+**Avantages** :
+
+- ✅ Chaque bonne pratique ajoutée améliore le score
+- ✅ Plus de nuances dans l'évaluation
+- ✅ Aligné sur les critères RNCP (éco-conception)
+- ✅ Encourage l'amélioration continue
 
 **Affichage**: Badge de statut dynamique
 
@@ -1062,6 +1101,25 @@ document.querySelectorAll('.rncp-panel.active');
 ---
 
 ## Historique des modifications
+
+### v1.1 - 2025-12-08
+
+**Améliorations méthodologie** :
+
+- ✅ **Score RNCP - 3ème métrique** : Passage de FPS binaire à Éco-conception bestPractices
+  - **Avant** : `audit.fps.allPassed ? 100 : 50` (binaire, peu granulaire)
+  - **Après** : `(ecoOkCount / ecoTotalCount) * 100` (pourcentage, précis)
+  - **Raison** : Plus pertinent pour RNCP, récompense chaque bonne pratique
+  - **Impact** : Meilleure granularité (60%, 80%, 100% au lieu de 50% ou 100%)
+
+**Documentation** :
+
+- ✅ Ajout explication détaillée du changement de méthodologie
+- ✅ Tableau comparatif ancien/nouveau système
+- ✅ Exemples concrets de calcul
+- ✅ Justification des avantages
+
+---
 
 ### v1.0 - 2025-11-26
 

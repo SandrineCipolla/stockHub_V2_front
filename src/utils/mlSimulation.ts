@@ -62,7 +62,18 @@ export interface StockPrediction {
 /**
  * Configuration for ML algorithms
  */
-const ML_CONFIG = {
+const ML_CONFIG: Readonly<{
+  MIN_DATA_POINTS: number;
+  CONFIDENCE_LEVEL: number;
+  SIMULATION_HISTORY_DAYS: number;
+  LEAD_TIME_DAYS: number;
+  SAFETY_MARGIN_DAYS: number;
+  RISK_CRITICAL: number;
+  RISK_HIGH: number;
+  RISK_MEDIUM: number;
+  LOW_VARIANCE_BONUS: number;
+  HIGH_VARIANCE_PENALTY: number;
+}> = {
   // Regression parameters
   MIN_DATA_POINTS: 3, // Minimum historical points for regression
   CONFIDENCE_LEVEL: 0.95, // 95% confidence interval
@@ -80,7 +91,7 @@ const ML_CONFIG = {
   // Confidence penalties
   LOW_VARIANCE_BONUS: 10, // +10% confidence if low variance
   HIGH_VARIANCE_PENALTY: 20, // -20% confidence if high variance
-} as const;
+};
 
 /**
  * Simulates historical consumption data for a stock item
