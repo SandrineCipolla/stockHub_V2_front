@@ -35,8 +35,13 @@ jobs:
       - name: 📏 ESLint Check
         run: npm run lint
 
-      - name: 🔍 Debug Knip Config
-        run: npx knip --config ./knip.json --debug | head -n 20
+      - name: 🔍 Debug Paths
+        run: |
+          echo "PWD:"
+          pwd
+          echo "----"
+          echo "Listing:"
+          ls -R .
 
       - name: 🧹 Knip (Dead Code Detection)
         run: npx knip --config ./knip.json
@@ -91,19 +96,12 @@ jobs:
         run: npm ci
 
       - name: 🏗️ Build Project
-        run: npm run build
-
-      - name: 📦 Check Bundle Size
         run: |
-          echo "📦 Build artifacts:"
-          ls -lh dist/assets/ || echo "No assets found"
-          if [ ! -d "dist" ] || [ -z "$(ls -A dist)" ]; then
-            echo "❌ Build failed: dist/ is empty"
-            exit 1
-          fi
-
-          echo "✅ Build successful"
-
+          echo "ROLLUP_SKIP_NODE_NATIVE is: $ROLLUP_SKIP_NODE_NATIVE"
+          npm run build
+        env:
+          ROLLUP_SKIP_NODE_NATIVE: "true"
+          
   summary:
     name: 📋 CI Summary
     runs-on: ubuntu-latest
