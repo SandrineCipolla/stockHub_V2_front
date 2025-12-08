@@ -35,6 +35,14 @@ jobs:
       - name: 📏 ESLint Check
         run: npm run lint
 
+      - name: 🔍 Debug Paths
+        run: |
+          echo "PWD:"
+          pwd
+          echo "----"
+          echo "Listing:"
+          ls -R .
+
       - name: 🧹 Knip (Dead Code Detection)
         working-directory: Front_End/stockHub_V2_front
         run: npm run clean:deadcode
