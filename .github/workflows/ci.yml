@@ -27,7 +27,9 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
 
       - name: 🔎 TypeScript Check
         run: npm run type-check
@@ -64,7 +66,9 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
 
       - name: 🧪 Run Tests
         run: npm run test:run
@@ -93,7 +97,9 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
 
       - name: 🏗️ Build Project
         run: |
@@ -101,7 +107,7 @@ jobs:
           npm run build
         env:
           ROLLUP_SKIP_NODE_NATIVE: "true"
-          
+
   summary:
     name: 📋 CI Summary
     runs-on: ubuntu-latest
