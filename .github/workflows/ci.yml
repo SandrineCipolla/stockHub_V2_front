@@ -80,14 +80,13 @@ jobs:
         run: npm run test:run
 
       - name: 📊 Upload Coverage
-        if: always() && secrets.CODECOV_TOKEN != ''
+        if: always()
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage/coverage-final.json
           flags: unittests
           fail_ci_if_error: false
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     name: 🏗️ Build
