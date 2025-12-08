@@ -27,7 +27,16 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install dependencies
-        run: npm install --include=optional
+        run: npm ci
+        continue-on-error: true
+        id: npm-ci-deps
+
+      - name: 📦 Fallback - Install with workaround (if npm ci failed)
+        if: steps.npm-ci-deps.outcome == 'failure'
+        run: |
+          echo "⚠️ npm ci failed, applying workaround for optional deps bug"
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
 
       - name: 🔎 TypeScript Check
         run: npm run type-check
@@ -56,7 +65,16 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install dependencies
-        run: npm install --include=optional
+        run: npm ci
+        continue-on-error: true
+        id: npm-ci-deps
+
+      - name: 📦 Fallback - Install with workaround (if npm ci failed)
+        if: steps.npm-ci-deps.outcome == 'failure'
+        run: |
+          echo "⚠️ npm ci failed, applying workaround for optional deps bug"
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
 
       - name: 🧪 Run Tests
         run: npm run test:run
@@ -85,7 +103,16 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install dependencies
-        run: npm install --include=optional
+        run: npm ci
+        continue-on-error: true
+        id: npm-ci-deps
+
+      - name: 📦 Fallback - Install with workaround (if npm ci failed)
+        if: steps.npm-ci-deps.outcome == 'failure'
+        run: |
+          echo "⚠️ npm ci failed, applying workaround for optional deps bug"
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
 
       - name: 🏗️ Build Project
         run: npm run build
