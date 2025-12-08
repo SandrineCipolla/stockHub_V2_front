@@ -5,6 +5,7 @@
   "ignore": [
     "src/test/**",
     "coverage/**",
+    "vite.config.*",
     "dist/**",
     "documentation/**",
     "audits/**",

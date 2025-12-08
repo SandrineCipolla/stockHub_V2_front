@@ -15,7 +15,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "detect:as-const": "node scripts/detect-as-const.mjs",
-    "clean:deadcode": "knip",
+    "clean:deadcode": "knip --config knip.json",
     "clean:fix": "knip --fix",
     "clean:check": "npm run type-check && npm run lint && npm run clean:deadcode",
     "check:strict": "npm run detect:as-const && npm run lint",

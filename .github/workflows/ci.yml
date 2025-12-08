@@ -28,15 +28,6 @@ jobs:
 
       - name: 📦 Install dependencies
         run: npm ci
-        continue-on-error: true
-        id: npm-ci-deps
-
-      - name: 📦 Fallback - Install with workaround (if npm ci failed)
-        if: steps.npm-ci-deps.outcome == 'failure'
-        run: |
-          echo "⚠️ npm ci failed, applying workaround for optional deps bug"
-          rm -rf node_modules package-lock.json
-          npm install --include=optional
 
       - name: 🔎 TypeScript Check
         run: npm run type-check
@@ -45,6 +36,7 @@ jobs:
         run: npm run lint
 
       - name: 🧹 Knip (Dead Code Detection)
+        working-directory: Front_End/stockHub_V2_front
         run: npm run clean:deadcode
 
       - name: 🔍 Detect as const
@@ -66,15 +58,6 @@ jobs:
 
       - name: 📦 Install dependencies
         run: npm ci
-        continue-on-error: true
-        id: npm-ci-deps
-
-      - name: 📦 Fallback - Install with workaround (if npm ci failed)
-        if: steps.npm-ci-deps.outcome == 'failure'
-        run: |
-          echo "⚠️ npm ci failed, applying workaround for optional deps bug"
-          rm -rf node_modules package-lock.json
-          npm install --include=optional
 
       - name: 🧪 Run Tests
         run: npm run test:run
@@ -104,15 +87,6 @@ jobs:
 
       - name: 📦 Install dependencies
         run: npm ci
-        continue-on-error: true
-        id: npm-ci-deps
-
-      - name: 📦 Fallback - Install with workaround (if npm ci failed)
-        if: steps.npm-ci-deps.outcome == 'failure'
-        run: |
-          echo "⚠️ npm ci failed, applying workaround for optional deps bug"
-          rm -rf node_modules package-lock.json
-          npm install --include=optional
 
       - name: 🏗️ Build Project
         run: npm run build
@@ -120,9 +94,7 @@ jobs:
       - name: 📦 Check Bundle Size
         run: |
           echo "📦 Build artifacts:"
-          ls -lh dist/assets/ | grep -E '\.(js|css)$' || echo "No assets found"
-
-          # Vérifier que dist/ existe et contient des fichiers
+          ls -lh dist/assets/ || echo "No assets found"
           if [ ! -d "dist" ] || [ -z "$(ls -A dist)" ]; then
             echo "❌ Build failed: dist/ is empty"
             exit 1
