@@ -10,24 +10,25 @@
 
 ### Guides Essentiels
 
-| #      | Fichier                                                                | Description                                          |
-| ------ | ---------------------------------------------------------------------- | ---------------------------------------------------- |
-| **0**  | [0-INDEX.md](0-INDEX.md)                                               | 📍 Vous êtes ici - Index principal                   |
-| **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                           | 🚀 **Démarrage rapide** - Installation, premiers pas |
-| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)                 | 🎨 Guide utilisation web components React            |
-| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)           | 🔗 **Harmonisation Frontend ↔ Design System**       |
-| **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                           | 🐛 Résolution problèmes web components               |
-| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                               | 🧪 Guide tests & métriques performance               |
-| **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                               | ♿ Accessibilité WCAG AA (audit complet)             |
-| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                         | 📅 Index sessions développement (11 sessions)        |
-| **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                             | 🎓 Suivi compétences & livrables RNCP                |
-| **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)                       | 📊 **Dashboard Qualité** - Documentation complète    |
-| **10** | [10-AUDIT-RNCP-DASHBOARD.md](10-AUDIT-RNCP-DASHBOARD.md)               | 🎯 **Audit RNCP Dashboard** - Section avec tabs      |
-| **11** | [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](11-LIGHTHOUSE-DYNAMIC-AUDITS.md)     | 🔦 **Lighthouse** - Extraction dynamique audits      |
-| **12** | [12-PERFORMANCE-ANALYSIS.md](12-PERFORMANCE-ANALYSIS.md)               | ⚡ **Performance** - Analyse & optimisations         |
-| **13** | [13-METRICS-AUTOMATION-STRATEGY.md](13-METRICS-AUTOMATION-STRATEGY.md) | 🤖 **Métriques Auto** - Stratégie automatisation     |
-| **14** | [14-CI-CD-WORKFLOWS.md](14-CI-CD-WORKFLOWS.md)                         | 🔄 **CI/CD** - Workflows GitHub Actions              |
-| **15** | [15-APP-QUALITY-METRICS.md](15-APP-QUALITY-METRICS.md)                 | 🎯 **Métriques App** - État qualité & accessibilité  |
+| #      | Fichier                                                                  | Description                                            |
+| ------ | ------------------------------------------------------------------------ | ------------------------------------------------------ |
+| **0**  | [0-INDEX.md](0-INDEX.md)                                                 | 📍 Vous êtes ici - Index principal                     |
+| **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                             | 🚀 **Démarrage rapide** - Installation, premiers pas   |
+| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)                   | 🎨 Guide utilisation web components React              |
+| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)             | 🔗 **Harmonisation Frontend ↔ Design System**         |
+| **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                             | 🐛 Résolution problèmes web components                 |
+| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                                 | 🧪 Guide tests & métriques performance                 |
+| **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                                 | ♿ Accessibilité WCAG AA (audit complet)               |
+| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                           | 📅 Index sessions développement (11 sessions)          |
+| **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                               | 🎓 Suivi compétences & livrables RNCP                  |
+| **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)                         | 📊 **Dashboard Qualité** - Documentation complète      |
+| **10** | [10-AUDIT-RNCP-DASHBOARD.md](10-AUDIT-RNCP-DASHBOARD.md)                 | 🎯 **Audit RNCP Dashboard** - Section avec tabs        |
+| **11** | [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](11-LIGHTHOUSE-DYNAMIC-AUDITS.md)       | 🔦 **Lighthouse** - Extraction dynamique audits        |
+| **12** | [12-PERFORMANCE-ANALYSIS.md](12-PERFORMANCE-ANALYSIS.md)                 | ⚡ **Performance** - Analyse & optimisations           |
+| **13** | [13-METRICS-AUTOMATION-STRATEGY.md](13-METRICS-AUTOMATION-STRATEGY.md)   | 🤖 **Métriques Auto** - Stratégie automatisation       |
+| **14** | [14-CI-CD-WORKFLOWS.md](14-CI-CD-WORKFLOWS.md)                           | 🔄 **CI/CD** - Workflows GitHub Actions                |
+| **15** | [15-APP-QUALITY-METRICS.md](15-APP-QUALITY-METRICS.md)                   | 🎯 **Métriques App** - État qualité & accessibilité    |
+| **16** | [technical/16-CI-TROUBLESHOOTING.md](technical/16-CI-TROUBLESHOOTING.md) | 🛠️ **CI/CD Troubleshooting** - Résolution problèmes CI |
 
 ### Quick Links
 
@@ -96,6 +97,7 @@
 - [technical/RELEASE-AUTOMATION.md](technical/RELEASE-AUTOMATION.md) - Automatisation releases (Release Please)
 - [technical/SCRIPTS-AUDIT.md](technical/SCRIPTS-AUDIT.md) - Scripts audit (FPS, a11y, daltonisme)
 - [technical/TYPE-SAFETY-AUDIT-2025-11-18.md](technical/TYPE-SAFETY-AUDIT-2025-11-18.md) - Audit TypeScript & sécurité des types
+- [technical/16-CI-TROUBLESHOOTING.md](technical/16-CI-TROUBLESHOOTING.md) ⭐ **CI/CD Troubleshooting** - Résolution problèmes CI
 
 ---
 
@@ -120,9 +122,10 @@
 
 - [7-SESSIONS.md](7-SESSIONS.md) ⭐ **Index chronologique complet** (11 sessions documentées)
 
-### Sessions Récentes (Novembre 2025)
+### Sessions Récentes (Décembre 2025)
 
-- [sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md](sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md) ⭐ **NEW** - Lighthouse extraction dynamique audits échoués
+- [sessions/2025-12-08-COPILOT-FEEDBACK-CI-OPTIMIZATION.md](sessions/2025-12-08-COPILOT-FEEDBACK-CI-OPTIMIZATION.md) ⭐ **NEW** - Retours Copilot + Optimisation CI (-41% temps)
+- [sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md](sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md) - Lighthouse extraction dynamique audits échoués
 - [sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md](sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md) - Audit RNCP avec tabs navigation + downloads JSON
 - [sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md) - Tests datasets scalabilité
 - [sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Section Reduced Motion éducative
@@ -235,8 +238,10 @@ documentation/
 ├── 12-PERFORMANCE-ANALYSIS.md         # ⚡ Analyse performance
 ├── 13-METRICS-AUTOMATION-STRATEGY.md  # 🤖 Automatisation métriques
 ├── 14-CI-CD-WORKFLOWS.md              # 🔄 CI/CD workflows
+├── 15-APP-QUALITY-METRICS.md          # 🎯 Métriques App
 │
 ├── sessions/                           # Sessions développement
+│   ├── 2025-12-08-COPILOT-FEEDBACK-CI-OPTIMIZATION.md
 │   ├── 2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md
 │   ├── 2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md
 │   ├── 2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md
@@ -377,6 +382,6 @@ Créer une issue : https://github.com/SandrineCipolla/stockHub_V2_front/issues
 
 ---
 
-**Dernière mise à jour** : 5 Décembre 2025
-**Version Documentation** : 2.4 (Performance + CI/CD + Automatisation métriques)
+**Dernière mise à jour** : 8 Décembre 2025
+**Version Documentation** : 2.5 (Copilot Feedback + CI/CD Troubleshooting)
 **Projet** : StockHub V2 - RNCP 7
