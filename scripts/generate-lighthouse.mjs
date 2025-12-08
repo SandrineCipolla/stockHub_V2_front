@@ -14,6 +14,7 @@ const execAsync = promisify(exec);
 // Configuration
 const TEST_URL = process.argv[2] || "http://localhost:4173"; // URL configurable via CLI
 const NUM_RUNS = 3; // Nombre de runs pour stabilité
+const PAUSE_BETWEEN_RUNS = parseInt(process.env.LIGHTHOUSE_PAUSE_MS || '2000', 10); // Délai entre runs (ms)
 
 /**
  * Calcule la médiane d'un tableau de nombres
@@ -88,7 +89,7 @@ async function runLighthouseMulti() {
 
         // Pause entre runs pour stabilité
         if (i < NUM_RUNS) {
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, PAUSE_BETWEEN_RUNS));
         }
     }
 
@@ -145,13 +146,18 @@ async function runLighthouseMulti() {
     // Utiliser le dernier run pour les détails complets
     const lastRun = results[NUM_RUNS - 1];
     const raw = lastRun.raw;
-    const categories = raw.categories;
 
-    // Extraction des métriques importantes (médiane des métriques)
+    // Extraction des métriques importantes (pour affichage)
     const fcp = lastRun.metrics.fcp;
     const lcp = lastRun.metrics.lcp;
     const tbt = lastRun.metrics.tbt;
     const cls = lastRun.metrics.cls;
+
+    // Extraction des valeurs numériques pour comparaisons fiables
+    const fcpValue = raw.audits["first-contentful-paint"]?.numericValue / 1000; // ms → s
+    const lcpValue = raw.audits["largest-contentful-paint"]?.numericValue / 1000; // ms → s
+    const tbtValue = raw.audits["total-blocking-time"]?.numericValue; // déjà en ms
+    const clsValue = raw.audits["cumulative-layout-shift"]?.numericValue; // sans unité
 
     // Audits critiques (fails)
     const failingAudits = Object.entries(raw.audits)
@@ -164,14 +170,14 @@ async function runLighthouseMulti() {
         }))
         .slice(0, 10); // top 10
 
-    // Recommandations basées sur les métriques
+    // Recommandations basées sur les métriques (utilise valeurs numériques fiables)
     const recommendations = [];
     const push = (msg) => recommendations.push({ message: msg });
 
-    if (parseFloat(fcp) > 1.5) push("Améliorer la vitesse du First Contentful Paint");
-    if (parseFloat(lcp) > 2.5) push("Optimiser le Largest Contentful Paint");
-    if (parseFloat(tbt) > 100) push("Réduire le Total Blocking Time");
-    if (parseFloat(cls) > 0.1) push("Corriger les décalages de layout (CLS)");
+    if (fcpValue > 1.5) push("Améliorer la vitesse du First Contentful Paint");
+    if (lcpValue > 2.5) push("Optimiser le Largest Contentful Paint");
+    if (tbtValue > 100) push("Réduire le Total Blocking Time");
+    if (clsValue > 0.1) push("Corriger les décalages de layout (CLS)");
 
     // JSON final optimisé pour dashboard (utilise les médianes)
     const timestamp = Date.now();
