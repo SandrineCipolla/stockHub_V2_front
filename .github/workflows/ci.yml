@@ -28,22 +28,19 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          rm -rf node_modules package-lock.json
-          npm install --include=optional
+          npm ci
+          # Verify Rollup optional dependency is installed
+          if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+            echo "⚠️ Rollup optional dependency missing, reinstalling with workaround..."
+            rm -rf node_modules package-lock.json
+            npm install --include=optional
+          fi
 
       - name: 🔎 TypeScript Check
         run: npm run type-check
 
       - name: 📏 ESLint Check
         run: npm run lint
-
-      - name: 🔍 Debug Paths
-        run: |
-          echo "PWD:"
-          pwd
-          echo "----"
-          echo "Listing:"
-          ls -R .
 
       - name: 🧹 Knip (Dead Code Detection)
         run: npx knip --config ./knip.json
@@ -67,8 +64,13 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          rm -rf node_modules package-lock.json
-          npm install --include=optional
+          npm ci
+          # Verify Rollup optional dependency is installed
+          if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+            echo "⚠️ Rollup optional dependency missing, reinstalling with workaround..."
+            rm -rf node_modules package-lock.json
+            npm install --include=optional
+          fi
 
       - name: 🧪 Run Tests
         run: npm run test:run
@@ -98,8 +100,13 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          rm -rf node_modules package-lock.json
-          npm install --include=optional
+          npm ci
+          # Verify Rollup optional dependency is installed
+          if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+            echo "⚠️ Rollup optional dependency missing, reinstalling with workaround..."
+            rm -rf node_modules package-lock.json
+            npm install --include=optional
+          fi
 
       - name: 🏗️ Build Project
         run: |
