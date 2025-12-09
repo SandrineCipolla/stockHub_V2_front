@@ -16,11 +16,5 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          # Release type (node for npm packages)
-          release-type: node
-
-          # Package name (used in release titles)
-          package-name: stockhub-v2-front
-
           # Use a GitHub token with the necessary permissions
           token: ${{ secrets.GITHUB_TOKEN }}
