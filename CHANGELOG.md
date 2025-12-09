@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.3.1...v1.3.2) (2025-12-09)
+
+
+### Bug Fixes
+
+* **docs:** trigger release to validate changelog configuration ([fa7e66b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/fa7e66b50233b86bfa83f2211f42c3e184bc19a9))
+
 ## [1.3.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.3.0...v1.3.1) (2025-12-08)
 
 
