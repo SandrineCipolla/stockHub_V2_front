@@ -114,7 +114,7 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         const newStockData: CreateStockData = {
-          name: 'New Test Stock',
+          label: 'New Test Stock',
           quantity: 50,
           value: 1000,
           description: 'Test description',
@@ -127,7 +127,7 @@ describe('useStocks Hook', () => {
 
         await waitFor(() => {
           expect(createdStock).toBeDefined();
-          expect(result.current.stocks.some(s => s.name === 'New Test Stock')).toBe(true);
+          expect(result.current.stocks.some(s => s.label === 'New Test Stock')).toBe(true);
         });
       });
 
@@ -136,7 +136,7 @@ describe('useStocks Hook', () => {
 
         // Utiliser les données des fixtures pour tester les seuils
         const optimalStockData: CreateStockData = {
-          name: stockHubStockUseCases.optimalStock.name,
+          label: stockHubStockUseCases.optimalStock.label,
           quantity: stockHubStockUseCases.optimalStock.quantity,
           value: stockHubStockUseCases.optimalStock.value,
           minThreshold: 50, // 150 est entre 50 et 200 → optimal
@@ -156,7 +156,7 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         const lowStockData: CreateStockData = {
-          name: stockHubStockUseCases.lowStock.name,
+          label: stockHubStockUseCases.lowStock.label,
           quantity: stockHubStockUseCases.lowStock.quantity,
           value: stockHubStockUseCases.lowStock.value,
         };
@@ -174,7 +174,7 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         const criticalStockData: CreateStockData = {
-          name: stockHubStockUseCases.criticalStock.name,
+          label: stockHubStockUseCases.criticalStock.label,
           quantity: 3, // 3 < 10 * 0.5 = 5 → critical
           value: stockHubStockUseCases.criticalStock.value,
           minThreshold: 10,
@@ -193,13 +193,13 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         const customStock = createMockStock({
-          name: 'Factory Created Stock',
+          label: 'Factory Created Stock',
           quantity: 75,
           value: 1500,
         });
 
         const createData: CreateStockData = {
-          name: customStock.name,
+          label: customStock.label,
           quantity: customStock.quantity,
           value: customStock.value,
           description: customStock.description,
@@ -211,7 +211,7 @@ describe('useStocks Hook', () => {
         });
 
         expect(created).not.toBeNull();
-        expect(created!.name).toBe(customStock.name);
+        expect(created!.label).toBe(customStock.label);
         expect(created!.quantity).toBe(customStock.quantity);
       });
     });
@@ -221,7 +221,7 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         const foodStockData: CreateStockData = {
-          name: 'Test Food Item',
+          label: 'Test Food Item',
           quantity: 100,
           value: 200,
           category: stockCategories.food,
@@ -240,7 +240,7 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         const electronicsStockData: CreateStockData = {
-          name: 'Test Electronics Item',
+          label: 'Test Electronics Item',
           quantity: 25,
           value: 5000,
           category: stockCategories.electronics,
@@ -270,7 +270,7 @@ describe('useStocks Hook', () => {
         const firstStock = result.current.stocks[0];
         const updateData: UpdateStockData = {
           id: firstStock.id,
-          name: 'Updated Stock Name',
+          label: 'Updated Stock Name',
           quantity: firstStock.quantity + 10,
           value: firstStock.value + 100,
         };
@@ -281,7 +281,7 @@ describe('useStocks Hook', () => {
         });
 
         expect(updated).not.toBeNull();
-        expect(updated!.name).toBe('Updated Stock Name');
+        expect(updated!.label).toBe('Updated Stock Name');
         expect(updated!.quantity).toBe(firstStock.quantity + 10);
       });
 
@@ -324,7 +324,7 @@ describe('useStocks Hook', () => {
         const firstStock = result.current.stocks[0];
         const invalidUpdate: UpdateStockData = {
           id: firstStock.id,
-          name: '   ',
+          label: '   ',
         };
 
         let updated: Stock | null = null;

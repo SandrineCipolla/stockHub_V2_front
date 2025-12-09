@@ -55,9 +55,9 @@ export const useStocks = () => {
   const createStockAction = useAsyncAction(
     useCallback(
       async (stockData: CreateStockData): Promise<Stock> => {
-        if (!stockData.name.trim()) {
-          throw createFrontendError('validation', 'Le nom du stock est obligatoire', 'name', {
-            field: 'name',
+        if (!stockData.label.trim()) {
+          throw createFrontendError('validation', 'Le nom du stock est obligatoire', 'label', {
+            field: 'label',
           });
         }
 
@@ -76,9 +76,9 @@ export const useStocks = () => {
           });
         }
 
-        if (stocks?.some(stock => stock.name.toLowerCase() === stockData.name.toLowerCase())) {
-          throw createFrontendError('validation', 'Un stock avec ce nom existe déjà', 'name', {
-            field: 'name',
+        if (stocks?.some(stock => stock.label.toLowerCase() === stockData.label.toLowerCase())) {
+          throw createFrontendError('validation', 'Un stock avec ce nom existe déjà', 'label', {
+            field: 'label',
           });
         }
 
@@ -126,10 +126,15 @@ export const useStocks = () => {
           throw createFrontendError('validation', `Stock avec l'ID ${updateData.id} introuvable`);
         }
 
-        if (updateData.name && !updateData.name.trim()) {
-          throw createFrontendError('validation', 'Le nom du stock ne peut pas être vide', 'name', {
-            field: 'name',
-          });
+        if (updateData.label && !updateData.label.trim()) {
+          throw createFrontendError(
+            'validation',
+            'Le nom du stock ne peut pas être vide',
+            'label',
+            {
+              field: 'label',
+            }
+          );
         }
 
         if (updateData.quantity !== undefined && updateData.quantity < 0) {
@@ -226,7 +231,7 @@ export const useStocks = () => {
     return stocks.filter(stock => {
       if (filters.query) {
         const query = filters.query.toLowerCase();
-        if (!stock.name.toLowerCase().includes(query)) {
+        if (!stock.label.toLowerCase().includes(query)) {
           return false;
         }
       }

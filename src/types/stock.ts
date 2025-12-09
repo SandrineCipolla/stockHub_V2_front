@@ -51,7 +51,7 @@ export type StockUnit =
 
 export interface Stock {
   id: number | string;
-  name: string;
+  label: string;
   quantity: number;
   unit?: StockUnit; // Unité de mesure (défaut: 'piece')
   value: number;
@@ -76,7 +76,7 @@ export interface SearchFilters {
   category?: string[];
   minValue?: number;
   maxValue?: number;
-  sortBy?: 'name' | 'quantity' | 'value' | 'lastUpdate';
+  sortBy?: 'label' | 'quantity' | 'value' | 'lastUpdate';
   sortOrder?: 'asc' | 'desc';
 }
 
@@ -92,7 +92,7 @@ export interface StockStats {
 }
 
 export interface CreateStockData {
-  name: string;
+  label: string;
   quantity: number;
   unit?: StockUnit;
   value: number;

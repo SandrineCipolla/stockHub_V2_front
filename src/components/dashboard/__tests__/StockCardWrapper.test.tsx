@@ -27,7 +27,7 @@ vi.mock('@/utils/containerManager', () => ({
 // Mock stock data
 const mockStock: Stock = {
   id: 1,
-  name: 'Test Product',
+  label: 'Test Product',
   category: 'Electronics',
   quantity: 100,
   value: 1500,
@@ -41,7 +41,7 @@ const mockStock: Stock = {
 const mockPercentageStock: Stock = {
   ...mockStock,
   id: '2',
-  name: 'Paint Product',
+  label: 'Paint Product',
   unit: 'percentage',
   quantity: 75,
   status: 'optimal',
@@ -303,7 +303,7 @@ describe('StockCardWrapper', () => {
       let card = container.querySelector('sh-stock-card');
       expect(card?.getAttribute('name')).toBe('Test Product');
 
-      const updatedStock = { ...mockStock, name: 'Updated Product' };
+      const updatedStock = { ...mockStock, label: 'Updated Product' };
       rerender(<StockCardWrapper stock={updatedStock} />);
 
       card = container.querySelector('sh-stock-card');

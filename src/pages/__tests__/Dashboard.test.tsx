@@ -227,10 +227,10 @@ describe('Dashboard Component', () => {
         });
 
         const searchInput = screen.getByPlaceholderText('Rechercher un produit...');
-        await user.type(searchInput, stockHubStockUseCases.optimalStock.name);
+        await user.type(searchInput, stockHubStockUseCases.optimalStock.label);
 
         expect(mockUpdateFilters).toHaveBeenLastCalledWith({
-          query: stockHubStockUseCases.optimalStock.name,
+          query: stockHubStockUseCases.optimalStock.label,
         });
       });
 
@@ -255,9 +255,9 @@ describe('Dashboard Component', () => {
 
         // Tester avec différents stocks des fixtures
         const stockNames = [
-          stockHubStockUseCases.lowStock.name,
-          stockHubStockUseCases.criticalStock.name,
-          stockHubStockUseCases.highValueStock.name,
+          stockHubStockUseCases.lowStock.label,
+          stockHubStockUseCases.criticalStock.label,
+          stockHubStockUseCases.highValueStock.label,
         ];
 
         for (const stockName of stockNames) {

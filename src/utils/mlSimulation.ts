@@ -394,7 +394,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
 
   // Debug: Log regression for critical/low stocks
   if (stock.status === 'critical' || stock.status === 'low') {
-    console.log(`📊 ${stock.name}:`, {
+    console.log(`📊 ${stock.label}:`, {
       status: stock.status,
       quantity: stock.quantity,
       slope: regression.slope.toFixed(2),
@@ -445,7 +445,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
   // Step 8: Return complete prediction
   return {
     stockId: stock.id,
-    stockName: stock.name,
+    stockName: stock.label,
     currentQuantity: stock.quantity,
     daysUntilRupture,
     dateOfRupture,

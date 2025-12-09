@@ -9,7 +9,7 @@ export const stockData: Stock[] = [
   {
     id: 1,
 
-    name: 'Acrylique Bleu Cobalt',
+    label: 'Acrylique Bleu Cobalt',
     quantity: 65,
     unit: 'percentage',
     containerCapacity: 100, // Tube de 100ml
@@ -24,7 +24,7 @@ export const stockData: Stock[] = [
   },
   {
     id: 2,
-    name: 'Acrylique Rouge Vermillon',
+    label: 'Acrylique Rouge Vermillon',
     quantity: 15,
     unit: 'percentage',
     containerCapacity: 100, // Tube de 100ml
@@ -39,7 +39,7 @@ export const stockData: Stock[] = [
   },
   {
     id: 3,
-    name: 'Acrylique Blanc Titane',
+    label: 'Acrylique Blanc Titane',
     quantity: 90,
     unit: 'percentage',
     containerCapacity: 100, // Tube de 100ml
@@ -54,7 +54,7 @@ export const stockData: Stock[] = [
   },
   {
     id: 4,
-    name: 'Acrylique Jaune Cadmium',
+    label: 'Acrylique Jaune Cadmium',
     quantity: 5,
     unit: 'percentage',
     containerCapacity: 100, // Tube de 100ml
@@ -69,7 +69,7 @@ export const stockData: Stock[] = [
   },
   {
     id: 5,
-    name: 'Vernis Acrylique Mat',
+    label: 'Vernis Acrylique Mat',
     quantity: 150,
     unit: 'ml',
     value: 15,
@@ -82,7 +82,7 @@ export const stockData: Stock[] = [
   },
   {
     id: 6,
-    name: 'Médium Gel',
+    label: 'Médium Gel',
     quantity: 1.2,
     unit: 'liter',
     value: 28,
@@ -95,7 +95,7 @@ export const stockData: Stock[] = [
   },
   {
     id: 7,
-    name: 'Pinceaux Synthétiques',
+    label: 'Pinceaux Synthétiques',
     quantity: 8,
     unit: 'piece',
     value: 45,
