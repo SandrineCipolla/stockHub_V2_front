@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Commit message validation for Conventional Commits
+# Format: type(scope?): description
+# Types: feat, fix, chore, docs, style, refactor, test, build, ci, perf
+
+commit_msg=$(cat "$1")
+
+# Regex pour Conventional Commits
+# ^(feat|fix|chore|docs|style|refactor|test|build|ci|perf)(\(.+\))?!?: .+
+conventional_commit_regex='^(feat|fix|chore|docs|style|refactor|test|build|ci|perf)(\(.+\))?!?: .+'
+
+# Vérifier si le message respecte le format
+if ! echo "$commit_msg" | grep -Eq "$conventional_commit_regex"; then
+  echo "❌ ERREUR: Message de commit invalide!"
+  echo ""
+  echo "Le message doit suivre le format Conventional Commits:"
+  echo "  type(scope?): description"
+  echo ""
+  echo "Types autorisés:"
+  echo "  feat:     Nouvelle fonctionnalité"
+  echo "  fix:      Correction de bug"
+  echo "  chore:    Tâche technique"
+  echo "  docs:     Documentation"
+  echo "  style:    Formatage"
+  echo "  refactor: Refactoring"
+  echo "  test:     Tests"
+  echo "  build:    Build"
+  echo "  ci:       CI/CD"
+  echo "  perf:     Performance"
+  echo ""
+  echo "Exemples valides:"
+  echo "  feat(auth): add login page"
+  echo "  fix: correct button hover state"
+  echo "  chore: update dependencies"
+  echo "  docs(readme): update installation steps"
+  echo ""
+  echo "Votre message: $commit_msg"
+  exit 1
+fi
+
+echo "✅ Message de commit valide"
