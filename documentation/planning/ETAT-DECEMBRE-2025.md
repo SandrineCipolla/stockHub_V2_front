@@ -90,7 +90,7 @@
   - **Fix** : Upgrade vers v0.3.4+
   - **Priorité** : 🟢 BASSE
 
-**Action immédiate** : Correction en cours sur branche `chore/fix-vulnerabilities-and-update-roadmap`
+**Action immédiate** : ✅ **CORRIGÉ** - 0 vulnérabilité détectée après mise à jour (09/12/2025)
 
 ---
 
@@ -98,12 +98,12 @@
 
 ### 🔴 Priorité Haute (2-3h)
 
-#### 1. ✅ Vulnérabilités NPM (1h) - EN COURS
+#### 1. ✅ Vulnérabilités NPM (1h) - COMPLÉTÉ
 
 - [x] Audit npm complet
-- [ ] Mise à jour `happy-dom` → v20.0.11
-- [ ] Mise à jour `vite`, `glob`, `js-yaml`, `@eslint/plugin-kit`
-- [ ] Vérification `npm run ci:check` (tests + build)
+- [x] Mise à jour `happy-dom` → v20.0.11
+- [x] Mise à jour `vite`, `glob`, `js-yaml`, `@eslint/plugin-kit`
+- [x] Vérification `npm run ci:check` (tests + build)
 - [ ] Commit + Push
 
 #### 2. Issue #23 - Type Safety (1-2h)
@@ -235,7 +235,7 @@
 - [x] Analyser documentation planning
 - [x] Créer branche `chore/fix-vulnerabilities-and-update-roadmap`
 - [x] Mettre à jour roadmap
-- [ ] Corriger vulnérabilités npm (1h)
+- [x] Corriger vulnérabilités npm (1h)
 
 **Mardi 10/12** :
 
