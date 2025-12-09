@@ -18,3 +18,7 @@
 
 # Verbose output (uncomment for debugging)
 # -v
+
+# Test only CI workflow by default (avoid GitHub Pages workflows that fail locally)
+# Override with: act push --workflows .github/workflows/OTHER.yml
+--workflows .github/workflows/ci.yml
