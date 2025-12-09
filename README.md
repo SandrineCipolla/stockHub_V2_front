@@ -16,30 +16,72 @@
 
 StockHub V2 est une application web moderne de gestion de stocks développée avec React et TypeScript. Elle offre une interface utilisateur intuitive, un design system cohérent et des fonctionnalités avancées d'intelligence artificielle pour l'analyse des stocks.
 
-## 🔗 **[Voir la démo live](https://stock-hub-v2-front.vercel.app/)** | 📁 **[Repository GitHub](https://github.com/SandrineCipolla/stockHub_V2_front)**
+## 🔗 **[Voir la démo live](https://stock-hub-v2-front.vercel.app/)** | 📁 **[Repository GitHub](https://github.com/SandrineCipolla/stockHub_V2_front)** | 📖 **[Storybook Design System](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)**
+
+---
+
+## 🎉 Nouveautés Majeures (Oct-Nov 2025)
+
+### ✨ Design System Externe (Novembre 2025)
+
+- 🎨 **18 Web Components Lit** déployés dans un [repository séparé](https://github.com/SandrineCipolla/stockhub_design_system)
+- 📖 **Storybook en ligne** avec documentation interactive complète
+- 📦 **Package npm** `@stockhub/design-system` v1.3.1 publié
+
+### 🤖 IA Business Intelligence (Octobre 2025)
+
+- 💡 **SmartSuggestions** : Recommandations intelligentes basées sur l'historique
+- 📊 **Prédictions ML** : Alertes de rupture de stock avec niveau de confiance
+- 🎯 **Niveau de risque** : Critical, Low, Optimal avec codes couleur
+
+### 🎭 Mode Loisirs/Créatif (Octobre 2025)
+
+- 📏 **7 unités flexibles** : %, ml, m, tubes, portions, pelotes, feuilles
+- 🎨 **Gestion containers** : Tubes de peinture avec sessions d'utilisation
+- 🧵 **Contexte créatif** : Adapté pour couture, peinture, cuisine, cellier
+
+### ✨ Animations & UX (Octobre 2025)
+
+- 🎬 **Framer Motion** : Animations fluides 60 FPS garantis
+- 🌊 **Transitions** : Entrance, hover, exit animations
+- ♿ **Reduced Motion** : Support `prefers-reduced-motion`
+
+### 🛡️ Qualité & Sécurité (Décembre 2025)
+
+- 🔒 **0 vulnérabilité npm** (corrigé 09/12/2025)
+- ✅ **464 tests** (60.67% coverage, composants 90-98%)
+- 🎯 **WCAG AA 100%** conforme (auditée novembre 2025)
+- ⚡ **Lighthouse 99/100** performance
+
+> 📊 **[État complet du projet Décembre 2025](./documentation/planning/ETAT-DECEMBRE-2025.md)** - Vision d'ensemble et roadmap
+
+---
 
 ### ✨ Fonctionnalités principales
 
-- 📊 **Dashboard interactif** avec métriques en temps réel
-- 🎨 **Design System** complet avec tokens standardisés
+- 📊 **Dashboard interactif** avec métriques en temps réel et animations fluides (60 FPS)
+- 🎨 **Design System externe** - 18 Web Components Lit avec Storybook déployé
+- 🤖 **IA Business Intelligence** - SmartSuggestions et prédictions de rupture de stock
+- 🎭 **Mode Loisirs/Créatif** - 7 unités flexibles (%, ml, m, tubes, portions, etc.)
 - 🌙 **Mode sombre/clair** avec transition fluide
 - 📱 **Design responsive** Mobile First
-- ♿ **Accessibilité RGAA** conforme
-- 🎯 **TypeScript strict** pour la robustesse
+- ♿ **Accessibilité WCAG AA 100%** conforme et auditée
+- 🎯 **TypeScript strict** pour la robustesse (0 erreur)
 - 🔍 **Recherche avancée** et filtres
 - 📈 **Visualisations** et rapports
-- 🤖 **IA intégrée** pour l'optimisation des stocks
+- ✨ **Animations Framer Motion** pour une UX fluide
 
 ## 🛠️ Stack Technique
 
 ### Core Technologies
 
 - **Frontend**: React 19.1.0 + TypeScript 5.8.3
-- **Build Tool**: Vite 6.3.5
+- **Build Tool**: Vite 6.4.1
 - **Styling**: TailwindCSS 3.4.1
+- **Animations**: Framer Motion 12.23.24
 - **Icons**: Lucide React 0.517.0
-- **Routing**: React Router DOM 7.6.2
-- **Design System**: Custom Design System Package
+- **Routing**: React Router DOM 7.9.5
+- **Design System**: [@stockhub/design-system](https://github.com/SandrineCipolla/stockhub_design_system) v1.3.1 (18 Web Components Lit)
 
 ### Development Tools
 
@@ -53,14 +95,17 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 - **Build Tools**: TSX 4.20.3 pour les scripts
 - **SEO**: Vite Plugin Sitemap 0.8.2
 
-### Design System
+### Design System Externe
 
-- **Tokens**: Variables CSS personnalisées
-- **Components**: Web Components réutilisables (Lit Element)
-- **Theming**: Support thème sombre/clair
-- **Accessibility**: Attributs ARIA et navigation clavier
+**Repository séparé** : [@stockhub/design-system](https://github.com/SandrineCipolla/stockhub_design_system) v1.3.1
 
-> 📚 **[Guide d'utilisation des Web Components](./documentation/WEB_COMPONENTS_GUIDE.md)** - Patterns recommandés et exemples
+- **18 Web Components Lit** (5 atoms, 7 molecules, 6 organisms)
+- **Storybook déployé** : [Documentation interactive](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
+- **Tokens CSS** : Variables standardisées (colors, spacing, typography)
+- **Theming** : Support mode sombre/clair
+- **Accessibility** : ARIA, navigation clavier, WCAG AA conforme
+
+> 📚 **[Guide d'intégration Web Components](./documentation/2-WEB-COMPONENTS-GUIDE.md)** - Patterns React + Web Components
 
 ## 🚀 Installation & Démarrage
 
@@ -223,7 +268,7 @@ Exécuté automatiquement à chaque `git commit`:
 
 Exécuté automatiquement à chaque `git push`:
 
-- ✅ **Tests**: Tous les tests unitaires (436 tests)
+- ✅ **Tests**: Tous les tests unitaires (464 tests)
 - ✅ **Knip**: Détection du code mort
 - ✅ **Build**: Vérification que le build passe
 - 🎯 **Objectif**: Code testé, propre et buildable
@@ -289,45 +334,50 @@ docker run -p 80:80 stockhub-v2
 
 ## 🎨 Design System
 
-### Tokens de Design
+### 18 Web Components Disponibles
 
-```css
-:root {
-  /* Couleurs */
-  --color-primary-500: #8b5cf6;
-  --color-primary-600: #7c3aed;
-  --color-primary-700: #6d28d9;
+**Atoms (5)** :
 
-  /* Espacements */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 0.75rem;
-  --spacing-lg: 1rem;
+- `<sh-badge>` - Badges colorés
+- `<sh-icon>` - Icônes Lucide
+- `<sh-input>` - Champs de saisie
+- `<sh-logo>` - Logo StockHub
+- `<sh-text>` - Texte typographique
 
-  /* Typographie */
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-}
-```
+**Molecules (7)** :
 
-### Composants
+- `<sh-button>` - Boutons avec variantes (primary, secondary, ghost)
+- `<sh-card>` - Cartes conteneurs avec hover effects
+- `<sh-metric-card>` - Cartes métriques dashboard
+- `<sh-quantity-input>` - Input numérique +/-
+- `<sh-search-input>` - Barre de recherche
+- `<sh-stat-card>` - Cartes statistiques
+- `<sh-status-badge>` - Badges de statut stock
 
-- **Button**: Variantes primary, secondary, ghost
-- **Card**: Composant conteneur avec hover effects
-- **Badge**: États success, warning, danger
-- **Input**: Champs de saisie avec validation
-- **Modal**: Overlays et dialogues
+**Organisms (6)** :
+
+- `<sh-header>` - En-tête application
+- `<sh-footer>` - Pied de page
+- `<sh-page-header>` - En-tête de page
+- `<sh-ia-alert-banner>` - Bannière alertes IA
+- `<sh-stock-card>` - Carte produit
+- `<sh-stock-prediction-card>` - Prédictions ML
+
+> 📖 **[Documentation Storybook complète](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)** avec exemples interactifs
 
 ## ♿ Accessibilité
 
-L'application respecte les standards RGAA :
+L'application est **100% conforme WCAG 2.1 Level AA** (auditée novembre 2025) :
 
-- ✅ Navigation clavier complète
-- ✅ Contrastes conformes (ratio 4.5:1 minimum)
-- ✅ Attributs ARIA appropriés
+- ✅ Navigation clavier complète et focus visible
+- ✅ Contrastes validés (ratio 3.19:1 à 8.76:1)
+- ✅ Attributs ARIA appropriés sur tous les composants
 - ✅ Structure HTML sémantique
-- ✅ Focus visible et cohérent
+- ✅ Tests daltonisme (protanopie, deutéranopie, tritanopie, achromatopsie)
+- ✅ Support `prefers-reduced-motion` pour les animations
+- ✅ Screen readers testés (NVDA, JAWS)
+
+> 📋 **[Rapport audit accessibilité complet](./documentation/6-ACCESSIBILITY.md)**
 
 ## 🧪 Tests & Qualité
 
@@ -335,10 +385,12 @@ L'application respecte les standards RGAA :
 
 #### Tests Unitaires
 
-- **Tests**: 436 tests passing (33 skipped pour E2E)
+- **Tests**: 464 tests passing (33 skipped pour E2E futures)
 - **Coverage Global**: 60.67%
 - **Coverage Composants**: 90-98%
+- **Coverage Wrappers**: 234 tests wrappers Web Components
 - **Framework**: Vitest 3.2.4 + Testing Library
+- **Temps d'exécution**: ~13s
 
 #### Code Quality
 
@@ -387,9 +439,11 @@ npm run clean:deadcode
 
 ### Documentation Interne
 
-- **[Guide Web Components](./documentation/WEB_COMPONENTS_GUIDE.md)** - Intégration du Design System
-- **[Dashboard Qualité](./documentation/9-DASHBOARD-QUALITY.md)** - Documentation complète du dashboard interactif (métriques, visualisations, badges)
-- **[Audit RNCP Dashboard](./documentation/10-AUDIT-RNCP-DASHBOARD.md)** - Section audit global RNCP
+- **[📊 État du Projet Décembre 2025](./documentation/planning/ETAT-DECEMBRE-2025.md)** ⭐ - **Vue d'ensemble complète** (accomplissements, métriques, roadmap)
+- **[Index Documentation](./documentation/0-INDEX.md)** - Table des matières complète
+- **[Guide Web Components](./documentation/2-WEB-COMPONENTS-GUIDE.md)** - Intégration du Design System
+- **[Dashboard Qualité](./documentation/9-DASHBOARD-QUALITY.md)** - Documentation dashboard interactif
+- **[Accessibilité](./documentation/6-ACCESSIBILITY.md)** - Audit WCAG AA complet
 - **[CLAUDE.md](./CLAUDE.md)** - Instructions de développement et conventions
 
 ### Documentation Externe
