@@ -238,27 +238,27 @@ function getUsageAdaptedMessage(
 
   // Pour unités créatives, privilégier sessions restantes
   if (unit === 'percentage' && sessionsRemaining !== null) {
-    return `Il reste ${formattedQuantity} de ${stock.name}. Estimation : ~${sessionsRemaining} session${sessionsRemaining > 1 ? 's' : ''} créative${sessionsRemaining > 1 ? 's' : ''} avant d'être vide.`;
+    return `Il reste ${formattedQuantity} de ${stock.label}. Estimation : ~${sessionsRemaining} session${sessionsRemaining > 1 ? 's' : ''} créative${sessionsRemaining > 1 ? 's' : ''} avant d'être vide.`;
   }
 
   if (unit === 'meter' && sessionsRemaining !== null) {
     if (sessionsRemaining === 0) {
-      return `Il reste ${formattedQuantity} de ${stock.name}. Insuffisant pour la plupart des projets couture (besoin d'environ 1.5-2m par projet).`;
+      return `Il reste ${formattedQuantity} de ${stock.label}. Insuffisant pour la plupart des projets couture (besoin d'environ 1.5-2m par projet).`;
     }
-    return `Il reste ${formattedQuantity} de ${stock.name}. Suffisant pour ${sessionsRemaining} projet${sessionsRemaining > 1 ? 's' : ''} de couture environ.`;
+    return `Il reste ${formattedQuantity} de ${stock.label}. Suffisant pour ${sessionsRemaining} projet${sessionsRemaining > 1 ? 's' : ''} de couture environ.`;
   }
 
   if ((unit === 'ml' || unit === 'liter') && sessionsRemaining !== null) {
-    return `Il reste ${formattedQuantity} de ${stock.name}. Estimation : ~${sessionsRemaining} utilisation${sessionsRemaining > 1 ? 's' : ''} restante${sessionsRemaining > 1 ? 's' : ''}.`;
+    return `Il reste ${formattedQuantity} de ${stock.label}. Estimation : ~${sessionsRemaining} utilisation${sessionsRemaining > 1 ? 's' : ''} restante${sessionsRemaining > 1 ? 's' : ''}.`;
   }
 
   // Pour unités standard (g, kg, pièces), utiliser message classique avec jours
   if (daysUntilRupture !== null) {
-    return `Stock ${stock.name} (${formattedQuantity}) sera épuisé dans ${daysUntilRupture} jour${daysUntilRupture > 1 ? 's' : ''} selon l'analyse des tendances.`;
+    return `Stock ${stock.label} (${formattedQuantity}) sera épuisé dans ${daysUntilRupture} jour${daysUntilRupture > 1 ? 's' : ''} selon l'analyse des tendances.`;
   }
 
   // Fallback générique
-  return `Stock ${stock.name} nécessite votre attention (${formattedQuantity} restant${unit === 'piece' && stock.quantity > 1 ? 's' : ''}).`;
+  return `Stock ${stock.label} nécessite votre attention (${formattedQuantity} restant${unit === 'piece' && stock.quantity > 1 ? 's' : ''}).`;
 }
 
 /**
@@ -326,7 +326,7 @@ function generateRuptureRiskSuggestion(
   return {
     id: `rupture-${stock.id}`,
     stockId: stock.id,
-    stockName: stock.name,
+    stockName: stock.label,
     type: 'rupture-risk',
     priority,
     confidence: Math.round(confidence),
@@ -358,12 +358,12 @@ function generateOverstockSuggestion(stock: Stock, trend: ConsumptionTrend): AIS
   return {
     id: `overstock-${stock.id}`,
     stockId: stock.id,
-    stockName: stock.name,
+    stockName: stock.label,
     type: 'overstock',
     priority: excessRatio > 2.5 ? 'high' : 'medium',
     confidence: Math.round(trend.confidence),
     title: `📦 Surstock détecté`,
-    message: `Stock ${stock.name} (${formattedQuantity}) dépasse le seuil optimal (${formattedMaxThreshold}) de ${Math.round((excessRatio - 1) * 100)}%.`,
+    message: `Stock ${stock.label} (${formattedQuantity}) dépasse le seuil optimal (${formattedMaxThreshold}) de ${Math.round((excessRatio - 1) * 100)}%.`,
     action: `Réduire les commandes ou promouvoir le produit`,
     impact: `Économie estimée : ${savingsEstimate}€/mois en coûts de stockage`,
     savingsEstimate,
@@ -388,13 +388,13 @@ function generateReorderSuggestion(
   const unit = stock.unit ?? 'piece';
 
   // Message principal avec contexte de sessions si applicable
-  let message = `Stock ${stock.name} (${formattedCurrentQuantity}) nécessite un réapprovisionnement optimal de ${formattedRecommendedQuantity}.`;
+  let message = `Stock ${stock.label} (${formattedCurrentQuantity}) nécessite un réapprovisionnement optimal de ${formattedRecommendedQuantity}.`;
 
   if (
     sessionsRemaining !== null &&
     (unit === 'percentage' || unit === 'meter' || unit === 'ml' || unit === 'liter')
   ) {
-    message = `Stock ${stock.name} (${formattedCurrentQuantity}, ~${sessionsRemaining} utilisation${sessionsRemaining > 1 ? 's' : ''} restante${sessionsRemaining > 1 ? 's' : ''}) nécessite un réapprovisionnement.`;
+    message = `Stock ${stock.label} (${formattedCurrentQuantity}, ~${sessionsRemaining} utilisation${sessionsRemaining > 1 ? 's' : ''} restante${sessionsRemaining > 1 ? 's' : ''}) nécessite un réapprovisionnement.`;
   }
 
   // Action adaptée
@@ -403,7 +403,7 @@ function generateReorderSuggestion(
   return {
     id: `reorder-${stock.id}`,
     stockId: stock.id,
-    stockName: stock.name,
+    stockName: stock.label,
     type: isUrgent ? 'reorder-now' : 'reorder-soon',
     priority: isUrgent ? 'high' : 'medium',
     confidence: Math.round(trend.confidence),
@@ -436,7 +436,7 @@ function generateOptimizeSuggestion(stock: Stock, trend: ConsumptionTrend): AISu
   return {
     id: `optimize-${stock.id}`,
     stockId: stock.id,
-    stockName: stock.name,
+    stockName: stock.label,
     type: 'optimize-stock',
     priority: 'low',
     confidence: Math.round(trend.confidence * 0.9), // Moins certain pour optimisation

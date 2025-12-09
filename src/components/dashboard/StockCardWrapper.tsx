@@ -92,7 +92,7 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
   return React.createElement('sh-stock-card', {
     ref: cardRef,
     id: `stock-card-${localStock.id}`,
-    name: localStock.name,
+    name: localStock.label,
     category: localStock.category || '',
     'last-update': `Mis à jour il y a ${localStock.lastUpdate}`,
     percentage: localStock.unit === 'percentage' ? localStock.quantity.toString() : undefined,

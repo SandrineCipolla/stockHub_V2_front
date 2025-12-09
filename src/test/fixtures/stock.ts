@@ -46,7 +46,7 @@ export const productNames: Record<string, string> = {
 export const stockHubStockUseCases: Record<string, Stock> = {
   optimalStock: {
     id: 1,
-    name: productNames.apple,
+    label: productNames.apple,
     quantity: 150,
     value: 225.5,
     status: OPTIMAL,
@@ -60,7 +60,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   lowStock: {
     id: 2,
-    name: productNames.laptop,
+    label: productNames.laptop,
     quantity: 8,
     value: 7200.0,
     status: LOW,
@@ -74,7 +74,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   criticalStock: {
     id: 3,
-    name: productNames.printer,
+    label: productNames.printer,
     quantity: 2,
     value: 450.0,
     status: CRITICAL,
@@ -88,7 +88,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   outOfStockItem: {
     id: 9,
-    name: 'Toner Imprimante',
+    label: 'Toner Imprimante',
     quantity: 0,
     value: 0,
     status: OUT_OF_STOCK,
@@ -102,7 +102,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   overstockedItem: {
     id: 10,
-    name: 'Ramettes Papier A4',
+    label: 'Ramettes Papier A4',
     quantity: 250,
     value: 3750.0,
     status: OVERSTOCKED,
@@ -116,7 +116,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   highValueStock: {
     id: 4,
-    name: productNames.table,
+    label: productNames.table,
     quantity: 25,
     value: 12500.0,
     status: OPTIMAL,
@@ -130,7 +130,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   minimalStock: {
     id: 5,
-    name: productNames.chair,
+    label: productNames.chair,
     quantity: 100,
     value: 4500.0,
     status: OPTIMAL,
@@ -140,7 +140,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   stockWithoutThresholds: {
     id: 6,
-    name: productNames.phone,
+    label: productNames.phone,
     quantity: 30,
     value: 9000.0,
     status: OPTIMAL,
@@ -152,7 +152,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   recentlyUpdatedStock: {
     id: 7,
-    name: 'Stylos Bille',
+    label: 'Stylos Bille',
     quantity: 500,
     value: 150.0,
     status: OPTIMAL,
@@ -166,7 +166,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
   },
   criticalLowQuantity: {
     id: 8,
-    name: 'Câble HDMI',
+    label: 'Câble HDMI',
     quantity: 1,
     value: 15.0,
     status: CRITICAL,
@@ -237,7 +237,7 @@ export const stocksByCategory: Record<string, Stock[]> = {
  */
 export const createMockStock = (overrides: Partial<Stock> = {}): Stock => ({
   id: 999,
-  name: 'Stock de Test',
+  label: 'Stock de Test',
   quantity: 50,
   value: 100.0,
   status: OPTIMAL,

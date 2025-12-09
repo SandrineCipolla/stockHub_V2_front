@@ -78,7 +78,7 @@ describe('StockGrid Component', () => {
         // Check for sh-stock-card web component (Shadow DOM prevents text access)
         const stockCard = container.querySelector('sh-stock-card');
         expect(stockCard).toBeInTheDocument();
-        expect(stockCard?.getAttribute('name')).toBe(stocks[0].name);
+        expect(stockCard?.getAttribute('name')).toBe(stocks[0].label);
       });
 
       it('should render StockCardWrapper with web component', () => {
@@ -252,7 +252,7 @@ describe('StockGrid Component', () => {
 
         // Verify each stock card has the correct name attribute
         stocks.forEach((stock, index) => {
-          expect(stockCards[index]?.getAttribute('name')).toBe(stock.name);
+          expect(stockCards[index]?.getAttribute('name')).toBe(stock.label);
         });
       });
     });
@@ -292,7 +292,7 @@ describe('StockGrid Component', () => {
     describe('when rendering large inventory', () => {
       it('should handle 50 stocks efficiently', () => {
         const stocks = Array.from({ length: 50 }, (_, i) =>
-          createMockStock({ id: i + 1, name: `Stock ${i + 1}` })
+          createMockStock({ id: i + 1, label: `Stock ${i + 1}` })
         );
         const { container } = render(<StockGrid stocks={stocks} />);
 
