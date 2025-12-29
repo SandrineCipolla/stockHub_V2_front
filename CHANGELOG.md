@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.5.0...v1.5.1) (2025-12-29)
+
+
+### 📚 Documentation
+
+* add Frontend V2 Backend integration to planning (Issue [#57](https://github.com/SandrineCipolla/stockHub_V2_front/issues/57)) ([53bbd22](https://github.com/SandrineCipolla/stockHub_V2_front/commit/53bbd2271f8e6df5c48fddf39f77700bffa03e61))
+
 ## [1.5.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.4.0...v1.5.0) (2025-12-10)
 
 
