@@ -170,23 +170,105 @@
 
 ---
 
-## ⏸️ Roadmap V3 - Janvier 2025+ (22h)
+## 🚀 Priorité Immédiate - Connexion Backend (Issue #57)
+
+### **Issue #57: Connect Frontend V2 to Backend API with Azure AD B2C** (5-6h) - 🔴 HAUTE PRIORITÉ
+
+**Statut**: ⏳ EN COURS
+**Timeline**: **Fin Déc 2025 / Début Jan 2026**
+**Issue GitHub**: https://github.com/SandrineCipolla/stockHub_V2_front/issues/57
+
+**Pourquoi maintenant ?**
+
+1. Backend prêt à 100% (API v2, Auth, Tests E2E)
+2. Guide technique complet déjà écrit (`stockhub_back/docs/technical/frontend-v2-integration.md`)
+3. PRs backend #72 et #73 en review (temps "mort" à optimiser)
+4. **Débloque Issue #44 Autorisation (3-4 mois)** avec tests visuels
+5. Permet démos à l'encadrant avec app complète
+
+**Plan détaillé (9 étapes):**
+
+1. **Installation dépendances** (15min)
+   - `npm install @azure/msal-browser @azure/msal-react`
+
+2. **Configuration `.env`** (15min)
+   - Variables Azure AD B2C (clientId, authority, scopes)
+   - ⚠️ Ajouter `.env` à `.gitignore`
+
+3. **Configuration MSAL** (30min)
+   - Créer `src/config/authConfig.ts`
+   - Policies Azure AD B2C (signUpSignIn, forgotPassword, editProfile)
+   - Protected resources & scopes
+
+4. **ConfigManager** (30min)
+   - Créer `src/services/api/ConfigManager.ts`
+   - Gestion token (localStorage)
+   - Méthodes: `getFetchConfig()`, `postFetchConfig()`, etc.
+
+5. **API Utils** (15min)
+   - Créer `src/services/api/utils.ts`
+   - Helper `getApiConfig(method, version, body)`
+
+6. **API Client Stocks** (1h)
+   - Créer `src/services/api/stocksAPI.ts`
+   - `fetchStocksList()`, `fetchStockById()`, `createStock()`, `updateStock()`, `deleteStock()`
+
+7. **MSAL Init** (30min)
+   - Modifier `src/main.tsx`
+   - Initialiser `PublicClientApplication`
+   - Wrapper `<MsalProvider>`
+
+8. **Token Capture** (30min)
+   - Modifier `src/App.tsx`
+   - Créer `ProtectedComponent`
+   - Capturer token lors de LOGIN_SUCCESS
+
+9. **Tests & Validation** (1h)
+   - Tester login Azure AD B2C
+   - Tester GET /api/v2/stocks
+   - Tester CRUD complet
+   - Documentation session
+
+**Checklist:**
+
+- [ ] Installer `@azure/msal-browser` et `@azure/msal-react`
+- [ ] Créer fichier `.env` avec variables Azure AD B2C
+- [ ] Créer `src/config/authConfig.ts`
+- [ ] Créer `src/services/api/ConfigManager.ts`
+- [ ] Créer `src/services/api/utils.ts`
+- [ ] Créer `src/services/api/stocksAPI.ts`
+- [ ] Modifier `src/main.tsx` pour MSAL init
+- [ ] Modifier `src/App.tsx` pour token capture
+- [ ] Tester login + CRUD complet
+- [ ] Mettre à jour `CLAUDE.md` avec endpoints API
+- [ ] Créer session doc
+
+**Résultat attendu:**
+
+- ✅ Frontend V2 connecté au Backend
+- ✅ Authentification Azure AD B2C fonctionnelle
+- ✅ CRUD complet stocks via API réels
+- ✅ Tests visuels possibles
+- ✅ Démos à l'encadrant réalisables
+
+---
+
+## ⏸️ Roadmap V3 - Janvier-Février 2026+ (22h)
 
 ### MUST HAVE (10h)
 
-1. **Setup Backend + React Query** (3h)
-   - Installation `@tanstack/react-query`
-   - Services API (`client.ts`, `stockService.ts`)
-   - Hooks React Query (`useStocksQuery`, `useStockMutation`)
-   - Connexion API backend
-
-2. **Architecture Catégories** (7h) - Option B
+1. **Architecture Catégories** (7h) - Option B
    - Renommer `StockCard` → `StockItemCard`
    - Créer `CategoryCard.tsx`
    - Créer `CategoryDetailsPage.tsx`
    - Créer `utils/categoryAggregator.ts`
    - Dashboard : 3-5 CategoryCard au lieu de 18 StockItemCard
    - Routing `/category/:categoryId`
+
+2. **React Query Integration** (3h) - Après connexion Backend
+   - Installation `@tanstack/react-query` (si nécessaire)
+   - Hooks React Query (`useStocksQuery`, `useStockMutation`)
+   - Cache management optimisé
 
 ### SHOULD HAVE (9h)
 
