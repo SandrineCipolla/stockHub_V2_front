@@ -43,7 +43,6 @@ describe('useStocks Hook', () => {
 
     // Setup default mocks for StocksAPI - use dashboardStocks for realistic data
     vi.mocked(StocksAPI.StocksAPI.fetchStocksList).mockResolvedValue([...dashboardStocks]);
-    vi.mocked(StocksAPI.StocksAPI.fetchStockById).mockResolvedValue(null);
 
     vi.mocked(StocksAPI.StocksAPI.createStock).mockImplementation(async (data: any) => {
       const status = calculateStatus(data.quantity, data.minThreshold, data.maxThreshold);
