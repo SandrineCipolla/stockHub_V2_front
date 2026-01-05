@@ -5,19 +5,76 @@ import { useStocks } from '@/hooks/useStocks';
 import { Stock } from '@/types/index.ts';
 import {
   createMockStock,
+  dashboardStocks,
   stockCategories,
   stockHubStockUseCases,
   stockStatuses,
 } from '@/test/fixtures/stock';
 import { createLocalStorageMock } from '@/test/fixtures/localStorage';
+import * as StocksAPI from '@/services/api/stocksAPI';
+
+// Mock StocksAPI module
+vi.mock('@/services/api/stocksAPI');
 
 const localStorageMock = createLocalStorageMock();
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+// Helper function to calculate stock status based on quantity and thresholds
+const calculateStatus = (
+  quantity: number,
+  minThreshold?: number,
+  maxThreshold?: number
+): string => {
+  if (quantity === 0) return 'outOfStock';
+  if (minThreshold !== undefined) {
+    const criticalThreshold = minThreshold * 0.5;
+    if (quantity <= criticalThreshold) return 'critical';
+    if (quantity <= minThreshold) return 'low';
+  }
+  if (maxThreshold !== undefined && quantity > maxThreshold) return 'overstocked';
+  return 'optimal';
+};
 
 describe('useStocks Hook', () => {
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllTimers();
+    vi.clearAllMocks();
+
+    // Setup default mocks for StocksAPI - use dashboardStocks for realistic data
+    vi.mocked(StocksAPI.StocksAPI.fetchStocksList).mockResolvedValue([...dashboardStocks]);
+    vi.mocked(StocksAPI.StocksAPI.fetchStockById).mockResolvedValue(null);
+
+    vi.mocked(StocksAPI.StocksAPI.createStock).mockImplementation(async (data: any) => {
+      const status = calculateStatus(data.quantity, data.minThreshold, data.maxThreshold);
+      return {
+        ...data,
+        id: Math.floor(Math.random() * 10000),
+        status,
+        lastUpdate: new Date().toISOString(),
+        category: data.category || 'electronics',
+        unit: data.unit || 'piece',
+      };
+    });
+
+    vi.mocked(StocksAPI.StocksAPI.updateStock).mockImplementation(async (data: any) => {
+      const existingStock = dashboardStocks.find((s: any) => s.id === data.id);
+      const updatedStock = { ...(existingStock || {}), ...data };
+
+      // Recalculate status if quantity changed
+      if (data.quantity !== undefined) {
+        updatedStock.status = calculateStatus(
+          data.quantity,
+          data.minThreshold ?? updatedStock.minThreshold,
+          data.maxThreshold ?? updatedStock.maxThreshold
+        );
+      }
+
+      updatedStock.lastUpdate = new Date().toISOString();
+      return updatedStock;
+    });
+
+    vi.mocked(StocksAPI.StocksAPI.deleteStock).mockResolvedValue(undefined);
   });
 
   describe('Initial state', () => {
@@ -159,6 +216,8 @@ describe('useStocks Hook', () => {
           label: stockHubStockUseCases.lowStock.label,
           quantity: stockHubStockUseCases.lowStock.quantity,
           value: stockHubStockUseCases.lowStock.value,
+          minThreshold: stockHubStockUseCases.lowStock.minThreshold,
+          maxThreshold: stockHubStockUseCases.lowStock.maxThreshold,
         };
 
         let created: Stock | null = null;
