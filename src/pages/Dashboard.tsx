@@ -129,7 +129,7 @@ export const Dashboard: React.FC = () => {
       if (currentStock) {
         await updateStock({
           id: stockId,
-          quantity: currentStock.quantity + 10,
+          quantity: (currentStock.quantity ?? 0) + 10,
         });
       }
     },

@@ -1,5 +1,6 @@
 # Session d'Intégration Backend - StockHub V2 Frontend
 
+tj
 **Date**: 2025-12-30
 **Branche**: `feat/backend-integration`
 **Objectif**: Intégrer le frontend avec le backend StockHub et Azure AD B2C

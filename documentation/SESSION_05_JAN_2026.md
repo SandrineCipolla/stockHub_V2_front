@@ -336,7 +336,55 @@ return React.createElement('sh-stock-card', {
 
 ---
 
+## ⚠️ Limitations Backend Découvertes
+
+Lors des tests CRUD, nous avons découvert que le backend **n'implémente pas** certains endpoints pour la gestion des stocks :
+
+### ❌ Endpoints Manquants
+
+**PUT /api/v2/stocks/:id** ou **PATCH /api/v2/stocks/:id**
+
+- Status: **404 Not Found**
+- Impact: Impossible de modifier les propriétés d'un stock (label, description, category)
+- Use case manquant: Renommer un stock, changer sa description, modifier sa catégorie
+
+**DELETE /api/v2/stocks/:id**
+
+- Status: **Non implémenté**
+- Impact: Impossible de supprimer un stock
+- Use case manquant: Archiver/supprimer un stock obsolète
+
+### ✅ Endpoints Disponibles
+
+**Routes fonctionnelles** :
+
+- `GET /api/v2/stocks` - Liste tous les stocks ✅ **TESTÉ**
+- `GET /api/v2/stocks/:stockId` - Détails d'un stock
+- `GET /api/v2/stocks/:stockId/items` - Items d'un stock
+- `POST /api/v2/stocks` - Créer un nouveau stock
+- `POST /api/v2/stocks/:stockId/items` - Ajouter un item à un stock
+- `PATCH /api/v2/stocks/:stockId/items/:itemId` - Modifier quantité d'un item
+
+### 📋 Actions Requises
+
+**Backend** (nouvelle issue à créer) :
+
+1. Implémenter `PATCH /api/v2/stocks/:id` pour modifier label/description/category
+2. Implémenter `DELETE /api/v2/stocks/:id` pour supprimer un stock (avec cascade items?)
+3. Ajouter command handlers: UpdateStockCommandHandler, DeleteStockCommandHandler
+4. Tests E2E pour ces endpoints
+
+**Frontend** (actuel) :
+
+- ✅ Client API prêt (méthodes updateStock/deleteStock existent)
+- ✅ UI prête (boutons Edit/Delete dans StockCard)
+- ⏳ En attente implémentation backend
+
+**Référence** : `stockhub_back/src/api/routes/StockRoutesV2.ts` (lignes 49-86)
+
+---
+
 **Auteur**: Claude Code (avec Sandrine Cipolla)
 **Date**: 5 janvier 2026
-**Durée**: ~2h30
-**Statut**: ✅ Affichage fonctionnel, décision modèle de données en attente
+**Durée**: ~3h
+**Statut**: ✅ GET stocks fonctionne, PATCH/DELETE manquants côté backend
