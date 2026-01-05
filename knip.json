@@ -24,7 +24,7 @@
   "ignoreDependencies": ["lighthouse"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": false,
-  "ignoreBinaries": [],
+  "ignoreBinaries": ["powershell"],
   "workspaces": {
     ".": {
       "entry": "src/main.tsx"
