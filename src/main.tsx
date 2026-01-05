@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { EventType, PublicClientApplication } from '@azure/msal-browser';
+import { MsalProvider } from '@azure/msal-react';
+import { msalConfig, b2cPolicies, loginRequest } from './config/authConfig';
 import App from './App';
 import './styles/index.css';
 
@@ -15,8 +18,74 @@ setTimeout(() => {
   });
 }, 100); // Délai de 100ms pour laisser React charger d'abord
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Initialisation MSAL
+const msalInstance = new PublicClientApplication(msalConfig);
+
+// Fonction d'initialisation asynchrone
+async function initializeMsal() {
+  try {
+    console.log('🔄 Initialisation de MSAL...');
+    await msalInstance.initialize();
+    console.log('✅ MSAL initialisé avec succès');
+
+    // Auto-sélection du premier compte si disponible
+    if (!msalInstance.getActiveAccount() && msalInstance.getAllAccounts().length > 0) {
+      msalInstance.setActiveAccount(msalInstance.getAllAccounts()[0]);
+    }
+
+    // Event listener pour gérer l'authentification
+    msalInstance.addEventCallback(event => {
+      console.debug('MSAL Event received:', event.eventType);
+
+      // Cas: utilisateur a cliqué sur "Forgot password"
+      if (event.eventType === EventType.LOGIN_FAILURE && event.error) {
+        const error = event.error;
+        const message =
+          ('errorMessage' in error ? error.errorMessage : '') ||
+          ('message' in error ? error.message : '') ||
+          '';
+
+        if (message.includes('AADB2C90118')) {
+          console.warn('Forgot Password triggered → redirecting to password reset flow');
+
+          msalInstance.loginRedirect({
+            authority: b2cPolicies.authorities.forgotPassword.authority,
+            scopes: loginRequest.scopes,
+          });
+          return;
+        }
+
+        console.error('Login failure:', event.error);
+      }
+
+      // Authentification réussie → setActiveAccount
+      if (
+        (event.eventType === EventType.LOGIN_SUCCESS ||
+          event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
+          event.eventType === EventType.SSO_SILENT_SUCCESS) &&
+        event.payload
+      ) {
+        const payload = event.payload;
+
+        // Type guard: vérifier que payload a la propriété account
+        if ('account' in payload && payload.account) {
+          msalInstance.setActiveAccount(payload.account);
+        }
+      }
+    });
+
+    // Monter l'application React après initialisation MSAL
+    ReactDOM.createRoot(document.getElementById('root')!).render(
+      <React.StrictMode>
+        <MsalProvider instance={msalInstance}>
+          <App />
+        </MsalProvider>
+      </React.StrictMode>
+    );
+  } catch (error) {
+    console.error("❌ Erreur lors de l'initialisation de MSAL:", error);
+  }
+}
+
+// Lancer l'initialisation
+initializeMsal();

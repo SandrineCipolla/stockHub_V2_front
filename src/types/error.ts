@@ -11,6 +11,7 @@ export type FrontendErrorType =
   | 'permission'
   | 'file_upload'
   | 'export'
+  | 'network'
   | 'unknown';
 
 /**
