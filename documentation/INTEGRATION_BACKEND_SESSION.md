@@ -399,6 +399,104 @@ Fetching stocks list from: http://localhost:3006/api/v2/stocks
 
 ---
 
+## Limitations Actuelles de l'API Backend
+
+### Propriétés Stock Non Implémentées
+
+**Date de découverte**: 2026-01-07
+**Impact**: Moyen - Limitation fonctionnelle mais contournable
+
+Le backend actuel ne gère que les propriétés de base au niveau Stock:
+
+- ✅ `label` (string) - Nom du stock
+- ✅ `description` (string) - Description
+- ✅ `category` (string) - Catégorie
+- ✅ `items` (array) - Liste des items (via GET uniquement)
+
+**Propriétés NON supportées** (présentes dans `CreateStockData` frontend mais ignorées):
+
+- ❌ `quantity` (number) - Quantité totale du stock
+- ❌ `value` (number) - Valeur totale du stock
+- ❌ `unit` (string) - Unité de mesure
+- ❌ `supplier` (string) - Fournisseur
+- ❌ `minThreshold` (number) - Seuil minimum
+- ❌ `maxThreshold` (number) - Seuil maximum
+- ❌ `sku` (string) - Référence SKU
+
+### Architecture Actuelle
+
+```
+Stock (conteneur)
+├── label: "Frigo Bureau"
+├── description: "..."
+├── category: "alimentation"
+└── items[] (éléments stockés)
+    ├── Item 1: Yaourt (quantity: 10, value: 5€)
+    ├── Item 2: Lait (quantity: 2, value: 3€)
+    └── Item 3: Fromage (quantity: 5, value: 8€)
+```
+
+**Calculs dérivés** (à implémenter si nécessaire):
+
+- Quantité totale Stock = Somme des quantités des items (mais sans signification car unités différentes)
+- Valeur totale Stock = Somme des (quantity × prix unitaire) de chaque item
+
+### Workaround Implémenté (2026-01-07)
+
+**Fichier**: `src/services/api/stocksAPI.ts`
+
+```typescript
+// Dans createStock()
+const stockData = {
+  label: stock.label,
+  description: stock.description || '',
+  category: stock.category || 'alimentation',
+  // quantity, value, etc. sont ignorés
+};
+```
+
+### Pour Ajouter des Items à un Stock
+
+Utiliser l'endpoint séparé:
+
+```typescript
+POST /api/v2/stocks/:stockId/items
+{
+  "label": "Yaourt nature",
+  "quantity": 10,
+  "description": "Yaourt 0% matière grasse",
+  "minimumStock": 5
+}
+```
+
+### Actions Futures Possibles
+
+1. **Option A**: Accepter que Stock = conteneur simple
+   - Les propriétés quantity/value n'ont pas de sens au niveau Stock
+   - Elles sont gérées au niveau Item
+   - Simplifier le type `CreateStockData` frontend
+
+2. **Option B**: Ajouter quantity/value calculés côté backend
+   - Modifier l'entité Stock backend pour inclure des propriétés calculées
+   - GET /stocks retourne la somme des items
+   - Modification du schéma Prisma nécessaire
+
+3. **Option C**: Ajouter quantity/value stockés (pas calculés)
+   - Pour certains cas d'usage (inventaire global sans détail)
+   - Modification du schéma Prisma + migrations
+   - Risque de désynchronisation avec les items
+
+**Recommandation**: Option A (simplifier frontend)
+
+### Issues à Créer
+
+- [ ] Documenter l'architecture Stock/Items dans le backend
+- [ ] Décider si quantity/value globaux sont nécessaires
+- [ ] Simplifier le type `CreateStockData` frontend si Option A choisie
+- [ ] Ajouter des propriétés calculées si Option B choisie
+
+---
+
 ## Prochaines Étapes
 
 ### Si l'intégration fonctionne :
