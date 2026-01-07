@@ -75,7 +75,7 @@ export class StocksAPI {
   static async updateStock(stockData: UpdateStockData): Promise<Stock> {
     try {
       const { id, ...updates } = stockData;
-      const { apiUrl, config } = await getApiConfig('PUT', 2, updates);
+      const { apiUrl, config } = await getApiConfig('PATCH', 2, updates);
       const response = await fetch(`${apiUrl}/stocks/${id}`, config);
 
       if (!response.ok) {

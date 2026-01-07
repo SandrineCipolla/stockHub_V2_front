@@ -89,6 +89,22 @@ class ConfigManager {
   }
 
   /**
+   * Configuration pour PATCH requests (partial updates)
+   */
+  static async patchFetchConfig(body: Record<string, unknown>): Promise<RequestInit> {
+    const token = await getToken();
+    return {
+      method: 'PATCH',
+      headers: {
+        [AUTHORIZATION]: `Bearer ${token}`,
+        [CONTENT_TYPE]: APPLICATION_JSON,
+      },
+      credentials: 'include',
+      body: JSON.stringify(body),
+    };
+  }
+
+  /**
    * Configuration pour DELETE requests
    */
   static async deleteFetchConfig(body?: Record<string, unknown>): Promise<RequestInit> {
