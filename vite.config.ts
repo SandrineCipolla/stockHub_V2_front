@@ -10,7 +10,13 @@ export default defineConfig(({ mode }) => {
   const base = env.VITE_BASE_PATH || '/';
   return {
     base,
-    plugins: [react()],
+    plugins: [react()], // mkcert() nécessite mkcert installé système
+    server: {
+      port: 5173,
+      strictPort: true, // Erreur si le port est occupé au lieu de changer
+      host: true,
+      // Le plugin mkcert() génère automatiquement les certificats
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),

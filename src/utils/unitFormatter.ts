@@ -90,6 +90,11 @@ export const UNIT_CONFIG: Record<StockUnit, UnitConfig> = {
  * ```
  */
 export function formatQuantityWithUnit(quantity: number, unit: StockUnit = 'piece'): string {
+  // Gérer les valeurs undefined/null
+  if (quantity === undefined || quantity === null || isNaN(quantity)) {
+    return '-';
+  }
+
   const config = UNIT_CONFIG[unit];
 
   // Arrondir selon le nombre de décimales configuré

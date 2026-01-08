@@ -1,22 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CreateStockData, SearchFilters, Stock, UpdateStockData } from '@/types';
-import { calculateStockStatus } from '@/types/stock'; // 🆕 AJOUTÉ
 import { createFrontendError, useAsyncAction, useLocalStorageState } from './useFrontendState';
 import { stockData } from '@/data/stockData.ts';
-import { STOCK_MAX_THRESHOLD_DEFAULT, STOCK_MIN_THRESHOLD_DEFAULT } from '@/constants/stock';
+import { StocksAPI } from '@/services/api/stocksAPI';
 
 export type { CreateStockData, UpdateStockData };
-
-/**
- * Génère un ID temporaire unique pour les nouveaux stocks.
- * Ces IDs temporaires commencent par 'temp-' et seront remplacés
- * par l'ID réel de la base de données lors de la sauvegarde.
- *
- * @returns Un ID temporaire unique sous forme de string
- */
-const generateTemporaryId = (): string => {
-  return `temp-${crypto.randomUUID()}`;
-};
 
 // ===== HOOK PRINCIPAL POUR GESTION DES STOCKS =====
 export const useStocks = () => {
@@ -41,20 +29,35 @@ export const useStocks = () => {
 
   const loadStocksAction = useAsyncAction(
     useCallback(async (): Promise<Stock[]> => {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      try {
+        // Appel au backend via StocksAPI
+        console.log('🔄 Chargement des stocks depuis le backend...');
+        const stocksFromBackend = await StocksAPI.fetchStocksList();
+        console.log('✅ Stocks chargés depuis le backend:', stocksFromBackend);
 
-      if (!stocks || stocks.length === 0) {
-        throw new Error('Aucun stock trouvé');
+        // Mise à jour du localStorage avec les données du backend
+        setStocks(stocksFromBackend);
+
+        return stocksFromBackend;
+      } catch (error) {
+        console.error('❌ Erreur lors du chargement depuis le backend:', error);
+
+        // Fallback sur les données du localStorage si l'API échoue
+        if (stocks && stocks.length > 0) {
+          console.warn('⚠️ Utilisation des données du cache localStorage');
+          return stocks;
+        }
+
+        throw createFrontendError('network', 'Impossible de charger les stocks depuis le serveur');
       }
-
-      return stocks;
-    }, [stocks]),
+    }, [setStocks, stocks]),
     { simulateDelay: 0 }
   );
 
   const createStockAction = useAsyncAction(
     useCallback(
       async (stockData: CreateStockData): Promise<Stock> => {
+        // Validations frontend
         if (!stockData.label.trim()) {
           throw createFrontendError('validation', 'Le nom du stock est obligatoire', 'label', {
             field: 'label',
@@ -76,33 +79,21 @@ export const useStocks = () => {
           });
         }
 
-        if (stocks?.some(stock => stock.label.toLowerCase() === stockData.label.toLowerCase())) {
-          throw createFrontendError('validation', 'Un stock avec ce nom existe déjà', 'label', {
-            field: 'label',
-          });
+        try {
+          // Appel au backend via StocksAPI
+          console.log('🔄 Création du stock sur le backend...', stockData);
+          const newStock = await StocksAPI.createStock(stockData);
+          console.log('✅ Stock créé sur le backend:', newStock);
+
+          // Mise à jour du localStorage avec le nouveau stock
+          const updatedStocks = [...(stocks || []), newStock];
+          setStocks(updatedStocks);
+
+          return newStock;
+        } catch (error) {
+          console.error('❌ Erreur lors de la création sur le backend:', error);
+          throw createFrontendError('network', 'Impossible de créer le stock sur le serveur');
         }
-
-        const status = calculateStockStatus(
-          stockData.quantity,
-          stockData.minThreshold || STOCK_MIN_THRESHOLD_DEFAULT,
-          stockData.maxThreshold || STOCK_MAX_THRESHOLD_DEFAULT
-        );
-
-        // Utilisation d'un UUID temporaire pour éviter les conflits
-        // Cet ID sera remplacé par l'ID réel de la BD lors de la sauvegarde côté serveur
-        const newStock: Stock = {
-          id: generateTemporaryId(),
-          ...stockData,
-          status,
-          lastUpdate: 'maintenant',
-        };
-
-        await new Promise(resolve => setTimeout(resolve, 600));
-
-        const updatedStocks = [...(stocks || []), newStock];
-        setStocks(updatedStocks);
-
-        return newStock;
       },
       [stocks, setStocks]
     ),
@@ -126,6 +117,7 @@ export const useStocks = () => {
           throw createFrontendError('validation', `Stock avec l'ID ${updateData.id} introuvable`);
         }
 
+        // Validations frontend
         if (updateData.label && !updateData.label.trim()) {
           throw createFrontendError(
             'validation',
@@ -146,29 +138,26 @@ export const useStocks = () => {
           );
         }
 
-        const newQuantity = updateData.quantity ?? existingStock.quantity;
-        const newMinThreshold =
-          updateData.minThreshold ?? existingStock.minThreshold ?? STOCK_MIN_THRESHOLD_DEFAULT;
-        const newMaxThreshold =
-          updateData.maxThreshold ?? existingStock.maxThreshold ?? STOCK_MAX_THRESHOLD_DEFAULT;
+        try {
+          // Appel au backend via StocksAPI
+          console.log('🔄 Mise à jour du stock sur le backend...', updateData);
+          const updatedStock = await StocksAPI.updateStock(updateData);
+          console.log('✅ Stock mis à jour sur le backend:', updatedStock);
 
-        const newStatus = calculateStockStatus(newQuantity, newMinThreshold, newMaxThreshold);
+          // Mise à jour du localStorage
+          const updatedStocks = stocks.map(stock =>
+            stock.id === updateData.id ? updatedStock : stock
+          );
+          setStocks(updatedStocks);
 
-        const updatedStock: Stock = {
-          ...existingStock,
-          ...updateData,
-          status: newStatus,
-          lastUpdate: 'maintenant',
-        };
-
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        const updatedStocks = stocks.map(stock =>
-          stock.id === updateData.id ? updatedStock : stock
-        );
-        setStocks(updatedStocks);
-
-        return updatedStock;
+          return updatedStock;
+        } catch (error) {
+          console.error('❌ Erreur lors de la mise à jour sur le backend:', error);
+          throw createFrontendError(
+            'network',
+            'Impossible de mettre à jour le stock sur le serveur'
+          );
+        }
       },
       [stocks, setStocks]
     ),
@@ -187,10 +176,19 @@ export const useStocks = () => {
           throw createFrontendError('validation', `Stock avec l'ID ${stockId} introuvable`);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 400));
+        try {
+          // Appel au backend via StocksAPI
+          console.log('🔄 Suppression du stock sur le backend...', stockId);
+          await StocksAPI.deleteStock(stockId);
+          console.log('✅ Stock supprimé sur le backend');
 
-        const updatedStocks = stocks.filter(stock => stock.id !== stockId);
-        setStocks(updatedStocks);
+          // Mise à jour du localStorage
+          const updatedStocks = stocks.filter(stock => stock.id !== stockId);
+          setStocks(updatedStocks);
+        } catch (error) {
+          console.error('❌ Erreur lors de la suppression sur le backend:', error);
+          throw createFrontendError('network', 'Impossible de supprimer le stock sur le serveur');
+        }
       },
       [stocks, setStocks]
     ),
