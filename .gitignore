@@ -37,3 +37,10 @@ documentation/metrics/data/*.json
 # Claude Code configuration (personal)
 CLAUDE.md
 CLAUDE.local.md
+
+# Local dev files
+.env
+kill-vite.ps1
+localhost.cert
+localhost.key
+nul
