@@ -196,6 +196,8 @@ jobs:
         run: |
           npm install -g @axe-core/cli serve
           npm install -g wait-on
+          # Synchroniser Chrome et ChromeDriver pour éviter le mismatch de versions
+          npx browser-driver-manager install chrome
 
       - name: 🚀 Serve + Run axe
         run: |
@@ -207,5 +209,31 @@ jobs:
           # || true : ne pas faire échouer le workflow en phase expé
         # Pour activer le blocage strict plus tard, retirer "|| true"
         continue-on-error: true
+
+  # ─────────────────────────────────────────────────────────────────────
+  # JOB 3 : TruffleHog - Scan de secrets dans le repo
+  # Référentiel : Ce2.2.4 (sécurité)
+  # ─────────────────────────────────────────────────────────────────────
+  trufflehog-security:
+    name: 🔐 TruffleHog - Secret Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout (full history pour scan complet)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # fetch-depth: 0 = historique complet nécessaire pour TruffleHog
+
+      - name: 🔐 TruffleHog OSS Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: main
+          head: HEAD
+          extra_args: --only-verified
+          # --only-verified : ne remonte que les secrets vérifiés (moins de faux positifs)
+        continue-on-error: true
+        # Passer à false en production pour bloquer les PR avec secrets
 
 
