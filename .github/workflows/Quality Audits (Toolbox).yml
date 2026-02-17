@@ -68,6 +68,144 @@ jobs:
         continue-on-error: true
 
       - name: 🔍 Vite bundle visualizer (rapport HTML)
-        run: npx vite-bundle-visualizer --open false 2>/dev/null || echo "vite-bundle-visualizer non disponible, utiliser source-map-explorer"
+        run: |
+          mkdir -p bundle-report
+           # Capturer stdout pour extraire "Generated at /tmp/..."
+           OUTPUT=$(npx vite-bundle-visualizer --open false 2>&1)
+          echo "$OUTPUT"
+          STATS_PATH=$(echo "$OUTPUT" | grep "Generated at" | awk '{print $NF}')
+          echo "Chemin détecté : $STATS_PATH"
+          if [ -n "$STATS_PATH" ] && [ -f "$STATS_PATH" ]; then
+            cp "$STATS_PATH" bundle-report/stats.html
+            echo "✅ stats.html copié"
+          else
+             echo "⚠️ Copie échouée"
+          fi
         continue-on-error: true
+
+      - name: 📤 Upload bundle report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bundle-size-report
+          path: bundle-report/stats.html
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────────────
+  # JOB 2 : Lighthouse CI (Performance + Accessibilité + SEO + Best Practices)
+  # Référentiel : Ce2.3.3 (performance), Ce2.3.5 (accessibilité)
+  # Couvre aussi le "Lighthouse SEO" mentionné dans la boîte à outils
+  # ─────────────────────────────────────────────────────────────────────
+  lighthouse-ci:
+    name: 🏠 Lighthouse CI (Perf + A11y + SEO)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: |
+          npm ci
+          if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+            echo "⚠️ Rollup optional dependency missing, reinstalling..."
+            rm -rf node_modules package-lock.json
+            npm install --include=optional
+          fi
+
+      - name: 🏗️ Build
+        run: npm run build
+        env:
+          ROLLUP_SKIP_NODE_NATIVE: "true"
+          VITE_API_SERVER_URL: "https://mock-api.example.com"
+          VITE_REDIRECT_URI: "https://mock.example.com"
+          VITE_API_V1: "/v1"
+          VITE_API_V2: "/v2"
+
+      - name: 🔧 Install LHCI
+        run: npm install -g @lhci/cli
+
+      - name: 🚀 Serve dist locally
+        run: |
+          npm install -g serve
+          serve -s dist -p 3000 &
+          # Attendre que le serveur soit prêt
+          npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: 🏠 Run Lighthouse CI
+        run: |
+          lhci autorun \
+            --collect.url=http://localhost:3000 \
+            --collect.numberOfRuns=1 \
+            --assert.assertions.categories:performance=warn \
+            --assert.assertions.categories:accessibility=warn \
+            --assert.assertions.categories:seo=warn \
+            --assert.assertions.categories:best-practices=warn \
+            --upload.target=temporary-public-storage
+        # Note : --upload.target=temporary-public-storage envoie les résultats
+        # sur le stockage public temporaire LHCI (gratuit, 7 jours de rétention)
+        # Alternative : utiliser un lhci-server auto-hébergé pour historique
+        continue-on-error: true
+        # continue-on-error: true car c'est une phase d'expérimentation
+        # Passer à false quand les seuils sont stabilisés
+
+    # ─────────────────────────────────────────────────────────────────────
+    # JOB 3 : axe-core - Tests accessibilité automatisés
+    # Référentiel : Ce2.3.5
+    # Rappel boîte à outils : valide ~25-30% d'un audit, reste = analyse humaine
+    # ─────────────────────────────────────────────────────────────────────
+    axe-accessibility:
+      name: ♿ axe-core Accessibility
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: 📥 Checkout
+          uses: actions/checkout@v4
+
+        - name: 🔧 Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20
+            cache: 'npm'
+
+        - name: 📦 Install dependencies
+          run: |
+            npm ci
+            if ! npm list @rollup/rollup-linux-x64-gnu > /dev/null 2>&1; then
+              echo "⚠️ Rollup optional dependency missing, reinstalling..."
+              rm -rf node_modules package-lock.json
+              npm install --include=optional
+            fi
+
+        - name: 🏗️ Build
+          run: npm run build
+          env:
+            ROLLUP_SKIP_NODE_NATIVE: "true"
+            VITE_API_SERVER_URL: "https://mock-api.example.com"
+            VITE_REDIRECT_URI: "https://mock.example.com"
+            VITE_API_V1: "/v1"
+            VITE_API_V2: "/v2"
+
+        - name: 🔧 Install axe-core CLI + serveur local
+          run: |
+            npm install -g @axe-core/cli serve
+            npm install -g wait-on
+
+        - name: 🚀 Serve + Run axe
+          run: |
+            serve -s dist -p 3001 &
+            npx wait-on http://localhost:3001 --timeout 30000
+            echo "Lancement audit axe-core..."
+            axe http://localhost:3001 --exit || true
+            # --exit : code de sortie != 0 si violations trouvées
+            # || true : ne pas faire échouer le workflow en phase expé
+          # Pour activer le blocage strict plus tard, retirer "|| true"
+          continue-on-error: true
+
 
