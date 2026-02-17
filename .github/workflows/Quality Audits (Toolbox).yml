@@ -8,7 +8,7 @@ on:
   pull_request:
     branches: ["main"]
   push:
-    branches: ["feature/**"]
+    branches: ["feature/**", "fix/**"]
   workflow_dispatch:
 
 permissions:
@@ -211,7 +211,7 @@ jobs:
         continue-on-error: true
 
   # ─────────────────────────────────────────────────────────────────────
-  # JOB 3 : TruffleHog - Scan de secrets dans le repo
+  # JOB 4 : TruffleHog - Scan de secrets dans le repo
   # Référentiel : Ce2.2.4 (sécurité)
   # ─────────────────────────────────────────────────────────────────────
   trufflehog-security:
@@ -225,6 +225,9 @@ jobs:
           fetch-depth: 0
           # fetch-depth: 0 = historique complet nécessaire pour TruffleHog
 
+      - name: 🔍 Fetch main pour comparaison
+        run: git fetch origin main:main || echo "⚠️ Impossible de fetcher main, scan complet du repo"
+
       - name: 🔐 TruffleHog OSS Scan
         uses: trufflesecurity/trufflehog@main
         with:
@@ -235,5 +238,65 @@ jobs:
           # --only-verified : ne remonte que les secrets vérifiés (moins de faux positifs)
         continue-on-error: true
         # Passer à false en production pour bloquer les PR avec secrets
+
+  # ─────────────────────────────────────────────────────────────────────
+  # SUMMARY : Résumé des audits expérimentaux
+  # ─────────────────────────────────────────────────────────────────────
+  toolbox-summary:
+    name: 📋 Toolbox Summary
+    runs-on: ubuntu-latest
+    needs: [lighthouse-ci, axe-accessibility, trufflehog-security, bundle-size]
+    if: always()
+
+    steps:
+      - name: 📋 Résumé des audits
+        run: |
+          echo "## 🧪 Toolbox Experiments - Résultats" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Outil | Référentiel RNCP | Résultat |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|------------------|---------|" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.lighthouse-ci.result }}" == "success" ]; then
+            echo "| 🏠 Lighthouse CI (Perf+A11y+SEO) | Ce2.3.3, Ce2.3.5 | ✅ |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🏠 Lighthouse CI (Perf+A11y+SEO) | Ce2.3.3, Ce2.3.5 | ⚠️ Voir rapport |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.axe-accessibility.result }}" == "success" ]; then
+            echo "| ♿ axe-core | Ce2.3.5 | ✅ |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| ♿ axe-core | Ce2.3.5 | ⚠️ Violations détectées |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.trufflehog-security.result }}" == "success" ]; then
+            echo "| 🔐 TruffleHog | Ce2.2.4 | ✅ Aucun secret détecté |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔐 TruffleHog | Ce2.2.4 | ❌ Secrets détectés - Action requise |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.bundle-size.result }}" == "success" ]; then
+            echo "| 📦 Bundle Size | Ce2.3.3 | ✅ Rapport généré |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 📦 Bundle Size | Ce2.3.3 | ⚠️ Voir logs |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Notes" >> $GITHUB_STEP_SUMMARY
+          echo "- Ce workflow est **expérimental** (\`continue-on-error: true\`)" >> $GITHUB_STEP_SUMMARY
+          echo "- Kastor (kastor.green) = audit manuel uniquement, non automatisable" >> $GITHUB_STEP_SUMMARY
+          echo "- bundlephobia = outil web uniquement, remplacé par size-limit/vite-bundle-visualizer" >> $GITHUB_STEP_SUMMARY
+          echo "- Lighthouse SEO = inclus dans Lighthouse CI (pas d'outil séparé nécessaire)" >> $GITHUB_STEP_SUMMARY
+          echo "- axe-core valide ~25-30% d'un audit a11y (reste = analyse humaine RGAA)" >> $GITHUB_STEP_SUMMARY
+
+
+
+
+
+
+
+
+
+
+
 
 
