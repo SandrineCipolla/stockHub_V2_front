@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.5.2](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.5.1...v1.5.2) (2026-02-18)
+
+
+### 🧪 Tests
+
+* add timing tolerance for async action delay in useFrontendState tests ([#72](https://github.com/SandrineCipolla/stockHub_V2_front/issues/72)) ([135db3c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/135db3c731a0f4d7baabc410eb8a7e116da99e31))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump lodash-es ([#71](https://github.com/SandrineCipolla/stockHub_V2_front/issues/71)) ([49c82bc](https://github.com/SandrineCipolla/stockHub_V2_front/commit/49c82bc5e39f97513c93923404131c04460b5f64))
+* **deps:** bump react-router ([#70](https://github.com/SandrineCipolla/stockHub_V2_front/issues/70)) ([ee0bea8](https://github.com/SandrineCipolla/stockHub_V2_front/commit/ee0bea8d1c2dd58bba5ba5a22cc6206a189a48a3))
+
+
+### 👷 CI/CD
+
+* add Quality Audits (Toolbox) workflow ([#68](https://github.com/SandrineCipolla/stockHub_V2_front/issues/68)) ([55376ab](https://github.com/SandrineCipolla/stockHub_V2_front/commit/55376abc4680656eae118690ea31294900e64937))
+
 ## [1.5.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.5.0...v1.5.1) (2025-12-29)
 
 
