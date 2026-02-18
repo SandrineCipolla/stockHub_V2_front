@@ -9,7 +9,7 @@ import { StockGrid } from '@/components/dashboard/StockGrid';
 import { AIAlertBannerWrapper as AISummaryWidget } from '@/components/ai/AIAlertBannerWrapper';
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
 import { SearchInputWrapper } from '@/components/common/SearchInputWrapper';
-import { Card } from '@/components/common/Card';
+import { CardWrapper } from '@/components/common/CardWrapper';
 
 import { useStocks } from '@/hooks/useStocks';
 import { useDataExport } from '@/hooks/useFrontendState';
@@ -154,7 +154,7 @@ export const Dashboard: React.FC = () => {
       <div
         className={`min-h-screen ${themeClasses.background} ${themeClasses.text} flex items-center justify-center`}
       >
-        <Card className="max-w-md">
+        <CardWrapper className="max-w-md">
           <h2 className="text-xl font-bold text-red-500 mb-4">Erreur</h2>
           <div className="space-y-2 mb-4">
             {errors.load && (
@@ -187,7 +187,7 @@ export const Dashboard: React.FC = () => {
               Réessayer
             </Button>
           </div>
-        </Card>
+        </CardWrapper>
       </div>
     );
   }
