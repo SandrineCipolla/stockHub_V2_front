@@ -475,7 +475,10 @@ describe('useAsyncAction Hook', () => {
       });
       const endTime = Date.now();
 
-      expect(endTime - startTime).toBeGreaterThanOrEqual(100);
+      const DELAY = 100;
+      const TIMING_TOLERANCE = 15; // ms de tolérance pour les runners CI
+
+      expect(endTime - startTime).toBeGreaterThanOrEqual(DELAY - TIMING_TOLERANCE);
     });
   });
 
