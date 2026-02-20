@@ -78,7 +78,7 @@ describe('StockGrid Component', () => {
         // Check for sh-stock-card web component (Shadow DOM prevents text access)
         const stockCard = container.querySelector('sh-stock-card');
         expect(stockCard).toBeInTheDocument();
-        expect(stockCard?.getAttribute('name')).toBe(stocks[0].label);
+        expect(stockCard?.getAttribute('name')).toBe(stocks[0]!.label);
       });
 
       it('should render StockCardWrapper with web component', () => {

@@ -505,7 +505,7 @@ describe('useAsyncAction Hook', () => {
       });
 
       expect(onError).toHaveBeenCalled();
-      expect(onError.mock.calls[0][0].message).toBe('Failed');
+      expect(onError.mock.calls[0]![0].message).toBe('Failed');
     });
 
     it('should handle non-Error exceptions', async () => {

@@ -151,7 +151,7 @@ export const Dashboard: React.FC = () => {
   // Affichage d'erreur globale
   if (hasAnyError) {
     return (
-      <div
+      <main
         className={`min-h-screen ${themeClasses.background} ${themeClasses.text} flex items-center justify-center`}
       >
         <CardWrapper className="max-w-md">
@@ -188,7 +188,7 @@ export const Dashboard: React.FC = () => {
             </Button>
           </div>
         </CardWrapper>
-      </div>
+      </main>
     );
   }
 
@@ -369,7 +369,7 @@ export const Dashboard: React.FC = () => {
 
         {/* État vide accessible */}
         {!isAnyLoading && stocks.length === 0 && (
-          <div className="text-center py-12" role="region" aria-live="polite">
+          <section className="text-center py-12" role="region" aria-live="polite">
             <div className="w-16 h-16 mx-auto mb-4 opacity-50">📦</div>
             <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
             <p className={themeClasses.textMuted}>
@@ -394,7 +394,7 @@ export const Dashboard: React.FC = () => {
                 </Button>
               )}
             </div>
-          </div>
+          </section>
         )}
       </main>
 
