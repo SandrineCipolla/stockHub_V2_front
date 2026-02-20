@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/components/providers/ThemeProvider.tsx';
 import './styles/index.css';
 
@@ -13,20 +13,21 @@ const Analytics = lazy(() =>
 
 // Composant de chargement accessible
 const LoadingFallback = () => (
-  <div
-    className="min-h-screen flex items-center justify-center bg-slate-900"
-    role="status"
-    aria-live="polite"
-    aria-label="Chargement de la page en cours"
-  >
-    <div className="flex flex-col items-center gap-4">
+  <main id="main-content" className="min-h-screen flex items-center justify-center bg-slate-900">
+    <h1 className="sr-only">StockHub V2 — Chargement en cours</h1>
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label="Chargement de la page en cours"
+      className="flex flex-col items-center gap-4"
+    >
       <div
         className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"
         aria-hidden="true"
       />
       <p className="text-gray-300 text-sm">Chargement...</p>
     </div>
-  </div>
+  </main>
 );
 
 function App() {
