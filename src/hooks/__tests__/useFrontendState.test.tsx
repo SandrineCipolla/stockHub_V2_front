@@ -578,7 +578,7 @@ describe('useLocalStorageState Hook', () => {
     it('should handle localStorage errors', () => {
       const { result } = renderHook(() => useLocalStorageState('test-key', 'value'));
 
-      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      vi.spyOn(localStorage, 'setItem').mockImplementation(() => {
         throw new Error('Storage full');
       });
 
@@ -614,7 +614,7 @@ describe('useLocalStorageState Hook', () => {
     it('should handle localStorage errors on remove', () => {
       const { result } = renderHook(() => useLocalStorageState('test-key', 'value'));
 
-      vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+      vi.spyOn(localStorage, 'removeItem').mockImplementation(() => {
         throw new Error('Cannot remove');
       });
 
