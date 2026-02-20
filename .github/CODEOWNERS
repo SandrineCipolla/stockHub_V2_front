@@ -1,0 +1,47 @@
+# CODEOWNERS — StockHub V2 Frontend
+# Les reviews sont automatiquement demandées selon les fichiers modifiés.
+# Documentation : https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# ---------------------------------------------------------------
+# Par défaut : Sandrine est owner de tout le repo
+# ---------------------------------------------------------------
+* @SandrineCipolla
+
+# ---------------------------------------------------------------
+# Review mentor obligatoire — Architecture & logique métier
+# ---------------------------------------------------------------
+
+# Hooks personnalisés (logique réutilisable)
+/src/hooks/ @SandrineCipolla @macreiben-dev
+
+# Services & appels API (intégration backend)
+/src/services/ @SandrineCipolla @macreiben-dev
+
+# Types TypeScript (contrats de données)
+/src/types/ @SandrineCipolla @macreiben-dev
+
+# Contextes React (state global)
+/src/contexts/ @SandrineCipolla @macreiben-dev
+
+# ---------------------------------------------------------------
+# Review mentor obligatoire — Infrastructure critique
+# ---------------------------------------------------------------
+
+# Workflows CI/CD
+/.github/workflows/ @SandrineCipolla @macreiben-dev
+
+# Configuration Vite, TypeScript, ESLint
+/vite.config.ts @SandrineCipolla @macreiben-dev
+/tsconfig.json @SandrineCipolla @macreiben-dev
+/tsconfig.app.json @SandrineCipolla @macreiben-dev
+/.eslintrc* @SandrineCipolla @macreiben-dev
+/eslint.config* @SandrineCipolla @macreiben-dev
+
+# ---------------------------------------------------------------
+# Sandrine seule — UI, pages, composants visuels
+# (itérations rapides, pas besoin de bloquer sur review)
+# ---------------------------------------------------------------
+
+/src/components/ @SandrineCipolla
+/src/pages/ @SandrineCipolla
+/src/data/ @SandrineCipolla
