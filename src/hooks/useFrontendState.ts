@@ -331,7 +331,7 @@ export const useDataExport = () => {
         await new Promise(resolve => setTimeout(resolve, 800));
 
         // Créer CSV
-        const headers = Object.keys(data[0]);
+        const headers = Object.keys(data[0]!);
         const csvContent = [
           headers.join(','),
           ...data.map(row =>

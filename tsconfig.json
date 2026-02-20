@@ -15,21 +15,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": [
-    "src/**/*",
-    "src/types/**/*.d.ts",
-    "node_modules/vitest/globals.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.md"
-  ],
+  "include": ["src/**/*", "src/types/**/*.d.ts", "node_modules/vitest/globals.d.ts"],
+  "exclude": ["node_modules", "dist", "**/*.md"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

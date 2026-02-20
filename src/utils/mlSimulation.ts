@@ -200,14 +200,14 @@ export function performLinearRegression(dataPoints: DataPoint[]): LinearRegressi
   }
 
   // Convert timestamps to days (x-axis)
-  const baseTimestamp = dataPoints[0].timestamp;
+  const baseTimestamp = dataPoints[0]!.timestamp;
   const x = dataPoints.map(p => (p.timestamp - baseTimestamp) / (24 * 60 * 60 * 1000));
   const y = dataPoints.map(p => p.quantity);
 
   // Calculate sums for least squares method
   const sumX = x.reduce((sum, val) => sum + val, 0);
   const sumY = y.reduce((sum, val) => sum + val, 0);
-  const sumXY = x.reduce((sum, val, i) => sum + val * y[i], 0);
+  const sumXY = x.reduce((sum, val, i) => sum + val * y[i]!, 0);
   const sumX2 = x.reduce((sum, val) => sum + val * val, 0);
 
   // Calculate slope (m) and intercept (b)
@@ -221,7 +221,7 @@ export function performLinearRegression(dataPoints: DataPoint[]): LinearRegressi
   const yMean = sumY / n;
   const ssTot = y.reduce((sum, val) => sum + Math.pow(val - yMean, 2), 0);
   const ssRes = y.reduce((sum, val, i) => {
-    const predicted = slope * x[i] + intercept;
+    const predicted = slope * x[i]! + intercept;
     return sum + Math.pow(val - predicted, 2);
   }, 0);
 
