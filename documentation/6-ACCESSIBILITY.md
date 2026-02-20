@@ -363,7 +363,64 @@ Les 2-4 points restants pour atteindre 100/100 peuvent provenir d'autres critèr
 
 ---
 
+---
+
+## Navigation et Structure Accessible
+
+### Skip Link
+
+Un lien d'évitement est implémenté dans `App.tsx` permettant aux utilisateurs de clavier/lecteur d'écran de sauter directement au contenu principal :
+
+```tsx
+<a href="#main-content" className="sr-only focus:not-sr-only ...">
+  Aller au contenu principal
+</a>
+```
+
+- Invisible par défaut (`.sr-only`)
+- Apparaît au focus clavier (`focus:not-sr-only`)
+- Pointe vers `<main id="main-content">` dans chaque page
+
+### Hiérarchie des Headings
+
+Chaque page respecte une hiérarchie stricte h1 → h2 → h3 sans saut de niveau :
+
+**Dashboard** : h1 (Tableau de Bord) → h2 (Métriques, Suggestions, Recherche, Stocks) → h3 (Liste stocks, État vide)
+
+**Analytics** : h1 (Analyses IA) → h2 (Prédictions filtrées) → h3 (État vide, Info ML)
+
+Les headings de structure sont en `.sr-only` et liés aux sections via `aria-labelledby`.
+
+### Zones Dynamiques (aria-live)
+
+- `aria-live="polite"` sur le loading fallback (App.tsx)
+- `aria-live="polite"` sur l'état de chargement des stocks (Dashboard.tsx)
+- `aria-live="polite"` sur les états vides avec `role="status"` (Dashboard.tsx, Analytics.tsx)
+
+### Focus Rings
+
+Indicateurs de focus personnalisés avec contraste suffisant :
+
+- **Skip link** : `focus:ring-2 focus:ring-white` (blanc sur fond violet)
+- **Breadcrumb** : `focus:ring-2 focus:ring-purple-500`
+- **Web Components** : focus rings gérés par le Design System
+
+### Attributs ARIA
+
+| Attribut              | Usage                                   | Fichiers                       |
+| --------------------- | --------------------------------------- | ------------------------------ |
+| `aria-label`          | Boutons, toolbar, filtres, search       | Dashboard, Analytics, StatCard |
+| `aria-labelledby`     | Sections (metrics, suggestions, stocks) | Dashboard, StockGrid           |
+| `aria-describedby`    | Bouton export                           | Dashboard                      |
+| `aria-hidden="true"`  | Icônes décoratives, spinners            | NavSection, App, Dashboard     |
+| `aria-current="page"` | Breadcrumb page active                  | NavSection                     |
+| `role="toolbar"`      | Barre d'actions                         | Dashboard                      |
+| `role="search"`       | Zone de recherche                       | Dashboard                      |
+| `role="status"`       | États vides, chargement                 | Dashboard, Analytics           |
+
+---
+
 **Date de création** : 17 Novembre 2025
-**Dernière mise à jour** : 17 Novembre 2025
+**Dernière mise à jour** : 20 Février 2026
 **Auteure** : Sandrine Cipolla
 **Statut** : ✅ **AUDIT COMPLÉTÉ - CONFORME**
