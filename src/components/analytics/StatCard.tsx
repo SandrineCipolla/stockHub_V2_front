@@ -14,6 +14,8 @@ export interface StatCardProps {
   onClick?: () => void;
   /** Classes CSS additionnelles */
   className?: string;
+  /** Label d'accessibilité pour lecteurs d'écran */
+  'aria-label'?: string;
 }
 
 /**
@@ -28,6 +30,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   selected = false,
   onClick,
   className = '',
+  'aria-label': ariaLabel,
 }) => {
   const { theme } = useTheme();
   const cardRef = useRef<HTMLElement>(null);
@@ -63,6 +66,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     value: value.toString(),
     'risk-level': riskLevel,
     'data-theme': theme,
+    'aria-label': ariaLabel,
     className: className,
   });
 };

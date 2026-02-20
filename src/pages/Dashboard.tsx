@@ -369,7 +369,7 @@ export const Dashboard: React.FC = () => {
 
         {/* État vide accessible */}
         {!isAnyLoading && stocks.length === 0 && (
-          <section className="text-center py-12" role="region" aria-live="polite">
+          <section className="text-center py-12" role="status" aria-live="polite">
             <div className="w-16 h-16 mx-auto mb-4 opacity-50">📦</div>
             <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
             <p className={themeClasses.textMuted}>
