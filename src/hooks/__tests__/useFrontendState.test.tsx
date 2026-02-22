@@ -7,6 +7,7 @@ import {
   useFrontendState,
   useLocalStorageState,
 } from '@/hooks/useFrontendState';
+import * as loggerModule from '@/utils/logger';
 
 const originalCreateElement = document.createElement.bind(document);
 
@@ -541,15 +542,15 @@ describe('useLocalStorageState Hook', () => {
     });
 
     it('should handle JSON parse errors gracefully', () => {
-      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const loggerWarnSpy = vi.spyOn(loggerModule.logger, 'warn').mockImplementation(() => {});
       localStorage.setItem('test-key', 'invalid json');
 
       const { result } = renderHook(() => useLocalStorageState('test-key', 'default'));
 
       expect(result.current.value).toBe('default');
-      expect(consoleWarnSpy).toHaveBeenCalled();
+      expect(loggerWarnSpy).toHaveBeenCalled();
 
-      consoleWarnSpy.mockRestore();
+      loggerWarnSpy.mockRestore();
     });
   });
 

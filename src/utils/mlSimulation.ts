@@ -12,6 +12,7 @@
  */
 
 import type { Stock } from '@/types/stock';
+import { logger } from '@/utils/logger';
 
 /**
  * Historical data point for time-series analysis
@@ -394,7 +395,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
 
   // Debug: Log regression for critical/low stocks
   if (stock.status === 'critical' || stock.status === 'low') {
-    console.log(`📊 ${stock.label}:`, {
+    logger.debug(`${stock.label}:`, {
       status: stock.status,
       quantity: stock.quantity,
       slope: regression.slope.toFixed(2),
@@ -408,7 +409,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
 
   // Debug: Log prediction result
   if (stock.status === 'critical' || stock.status === 'low') {
-    console.log(`  → daysUntilRupture: ${daysUntilRupture}`);
+    logger.debug(`  → daysUntilRupture: ${daysUntilRupture}`);
   }
 
   // Step 4: Calculate confidence intervals
@@ -478,7 +479,7 @@ export function predictStockRuptures(stocks: Stock[]): StockPrediction[] {
         return predictStockRupture(stock);
       } catch (error) {
         // If prediction fails (e.g., insufficient data), return a safe default
-        console.warn(`Failed to predict stock ${stock.id}:`, error);
+        logger.warn(`Failed to predict stock ${stock.id}:`, error);
         return null;
       }
     })
