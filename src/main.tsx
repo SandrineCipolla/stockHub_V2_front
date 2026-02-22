@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles/index.css';
+import { logger } from '@/utils/logger';
 
 // Importer UNIQUEMENT les CSS tokens (variables CSS) - Critique pour le rendu
 import '@stockhub/design-system/dist/tokens/design-tokens.css';
@@ -11,7 +12,7 @@ import '@stockhub/design-system/dist/tokens/design-tokens.css';
 setTimeout(() => {
   // @ts-expect-error - Le Design System n'a pas de fichier .d.ts, mais fonctionne en runtime
   import('@stockhub/design-system').catch(err => {
-    console.error('❌ Erreur lors du chargement du Design System:', err);
+    logger.error('Erreur lors du chargement du Design System:', err);
   });
 }, 100); // Délai de 100ms pour laisser React charger d'abord
 

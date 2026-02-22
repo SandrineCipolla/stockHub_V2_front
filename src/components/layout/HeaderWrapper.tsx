@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from '@/hooks/useTheme';
+import { logger } from '@/utils/logger';
 import type { HeaderProps } from '@/types';
 
 /**
@@ -13,7 +14,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   const { theme, toggleTheme } = useTheme();
 
   const handleNotifications = () => {
-    console.log('🔔 Notifications clicked');
+    logger.debug('Notifications clicked');
     // TODO: Ouvrir le panneau de notifications
   };
 
@@ -22,7 +23,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   };
 
   const handleLogout = () => {
-    console.log('👋 Logout clicked');
+    logger.debug('Logout clicked');
     // TODO: Implémenter la logique de logout
   };
 

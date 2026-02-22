@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CreateStockData, SearchFilters, Stock, UpdateStockData } from '@/types';
-import { calculateStockStatus } from '@/types/stock'; // 🆕 AJOUTÉ
+import { calculateStockStatus } from '@/types/stock';
 import { createFrontendError, useAsyncAction, useLocalStorageState } from './useFrontendState';
 import { stockData } from '@/data/stockData.ts';
+import { logger } from '@/utils/logger';
 import { STOCK_MAX_THRESHOLD_DEFAULT, STOCK_MIN_THRESHOLD_DEFAULT } from '@/constants/stock';
 
 export type { CreateStockData, UpdateStockData };
@@ -108,7 +109,7 @@ export const useStocks = () => {
     ),
     {
       onSuccess: () => {
-        console.log('✅ Stock créé avec succès');
+        logger.info('Stock créé avec succès');
       },
       simulateDelay: 0,
     }

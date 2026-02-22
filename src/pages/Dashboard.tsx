@@ -15,6 +15,7 @@ import { useStocks } from '@/hooks/useStocks';
 import { useDataExport } from '@/hooks/useFrontendState';
 import { useTheme } from '@/hooks/useTheme.ts';
 import { generateAISuggestions } from '@/utils/aiPredictions';
+import { logger } from '@/utils/logger';
 
 export const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -68,7 +69,7 @@ export const Dashboard: React.FC = () => {
           setIsLoaded(true);
         }
       } catch (error) {
-        console.error('Erreur lors du chargement:', error);
+        logger.error('Erreur lors du chargement:', error);
       }
     };
 
@@ -99,7 +100,7 @@ export const Dashboard: React.FC = () => {
 
     const success = await exportToCsv(stocksForExport, 'stocks-export.csv');
     if (success) {
-      console.log('Export réussi');
+      logger.info('Export réussi');
     }
   }, [stocks, exportToCsv]);
 
@@ -112,7 +113,7 @@ export const Dashboard: React.FC = () => {
     });
 
     if (result) {
-      console.log('Stock créé:', result);
+      logger.info('Stock créé:', result);
     }
   }, [createStock]);
 
@@ -138,7 +139,7 @@ export const Dashboard: React.FC = () => {
 
   const handleViewStock = useCallback(
     (stockId: number | string): void => {
-      console.log('Voir détails:', getStockById(stockId));
+      logger.debug('Voir détails:', getStockById(stockId));
     },
     [getStockById]
   );
@@ -234,7 +235,7 @@ export const Dashboard: React.FC = () => {
               variant="secondary"
               icon={Search}
               aria-label="Ouvrir la page de recherche avancée de stocks"
-              onClick={() => console.log('🔍 Recherche avancée')}
+              onClick={() => logger.debug('Recherche avancée')}
             >
               <span className="hidden md:hidden lg:inline">Recherche Avancée</span>
             </Button>

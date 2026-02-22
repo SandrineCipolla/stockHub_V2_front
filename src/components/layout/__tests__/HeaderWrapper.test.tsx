@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import { HeaderWrapper } from '../HeaderWrapper';
+import * as loggerModule from '@/utils/logger';
 
 // Mock useTheme
 const mockToggleTheme = vi.fn();
@@ -11,8 +12,8 @@ vi.mock('@/hooks/useTheme', () => ({
   }),
 }));
 
-// Mock console.log to avoid noise in tests
-const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+// Spy on logger.debug (replaces console.log spying)
+const loggerDebugSpy = vi.spyOn(loggerModule.logger, 'debug').mockImplementation(() => {});
 
 describe('HeaderWrapper', () => {
   beforeEach(() => {
@@ -131,7 +132,7 @@ describe('HeaderWrapper', () => {
       const event = new Event('sh-notification-click', { bubbles: true });
       header?.dispatchEvent(event);
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('🔔 Notifications clicked');
+      expect(loggerDebugSpy).toHaveBeenCalledWith('Notifications clicked');
     });
 
     it('should not crash on multiple notification clicks', () => {
@@ -146,7 +147,7 @@ describe('HeaderWrapper', () => {
         header?.dispatchEvent(event2);
       }).not.toThrow();
 
-      expect(consoleLogSpy).toHaveBeenCalledTimes(2);
+      expect(loggerDebugSpy).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -158,7 +159,7 @@ describe('HeaderWrapper', () => {
       const event = new Event('sh-logout-click', { bubbles: true });
       header?.dispatchEvent(event);
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('👋 Logout clicked');
+      expect(loggerDebugSpy).toHaveBeenCalledWith('Logout clicked');
     });
 
     it('should not crash on multiple logout clicks', () => {
@@ -188,9 +189,9 @@ describe('HeaderWrapper', () => {
       header?.dispatchEvent(themeEvent);
       header?.dispatchEvent(logoutEvent);
 
-      expect(consoleLogSpy).toHaveBeenCalledWith('🔔 Notifications clicked');
+      expect(loggerDebugSpy).toHaveBeenCalledWith('Notifications clicked');
       expect(mockToggleTheme).toHaveBeenCalledTimes(1);
-      expect(consoleLogSpy).toHaveBeenCalledWith('👋 Logout clicked');
+      expect(loggerDebugSpy).toHaveBeenCalledWith('Logout clicked');
     });
   });
 
