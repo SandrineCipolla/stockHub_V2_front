@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.6.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.5.2...v1.6.0) (2026-02-22)
+
+
+### ✨ Features
+
+* add CODEOWNERS file and pull request template for improved collaboration ([4820ff9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/4820ff9619f21b0e631ec9a68ee91e5bfd8252fa))
+* add issue templates for bug reports, technical tasks, and user stories ([0a3f8d9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/0a3f8d972fd39e632cbbbfe6ba33824665f79408))
+* add Open Graph, Twitter Card and canonical link for SEO ([#77](https://github.com/SandrineCipolla/stockHub_V2_front/issues/77)) ([aab61d6](https://github.com/SandrineCipolla/stockHub_V2_front/commit/aab61d61606bdb661dee9018c42dcb8663acaac6))
+* add templates for bug reports and user stories to enhance issue creation process ([1e8878a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/1e8878aabfbddd9f7751966ff830940a64596916))
+* enable noUncheckedIndexedAccess and improve semantic HTML ([#78](https://github.com/SandrineCipolla/stockHub_V2_front/issues/78)) ([e170ad2](https://github.com/SandrineCipolla/stockHub_V2_front/commit/e170ad2a8aa5ac992240472d523e423365d4d9c8))
+
+
+### 🐛 Bug Fixes
+
+* **a11y:** improve accessibility labels and roles ([#81](https://github.com/SandrineCipolla/stockHub_V2_front/issues/81)) ([8c40b83](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8c40b831671b8cede362164ed6e72ba3b5b61164))
+* enhance accessibility of loading fallback component ([#73](https://github.com/SandrineCipolla/stockHub_V2_front/issues/73)) ([f293bad](https://github.com/SandrineCipolla/stockHub_V2_front/commit/f293bad478b83b6df0adf5e31196c8ce24306de7))
+* **styles:** replace hardcoded rgba values with DS tokens and remove duplicates ([#75](https://github.com/SandrineCipolla/stockHub_V2_front/issues/75)) ([5e1543a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/5e1543a9f53011b05fe53c7d4c5ce0808295c454))
+
+
+### 🧪 Tests
+
+* enhance Dashboard tests with improved mocking and coverage ([#85](https://github.com/SandrineCipolla/stockHub_V2_front/issues/85)) ([5cb46d7](https://github.com/SandrineCipolla/stockHub_V2_front/commit/5cb46d734a5227598ec6b46645728d3d4e48a876))
+
+
+### 🔧 Chores
+
+* **logger:** add logger utility and replace all console.log in source ([#86](https://github.com/SandrineCipolla/stockHub_V2_front/issues/86)) ([d17c78f](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d17c78fb1a039601754f1b0faf9b06225e8ff2e7)), closes [#84](https://github.com/SandrineCipolla/stockHub_V2_front/issues/84)
+* remove redundant dependencies ([#79](https://github.com/SandrineCipolla/stockHub_V2_front/issues/79)) ([7c4db31](https://github.com/SandrineCipolla/stockHub_V2_front/commit/7c4db3175049487334b801da4d613509d2637da9))
+
 ## [1.5.2](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.5.1...v1.5.2) (2026-02-18)
 
 
