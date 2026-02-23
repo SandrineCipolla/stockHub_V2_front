@@ -3,6 +3,7 @@ import { TrendingDown, CheckCircle, Filter, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
+import { FooterWrapper } from '@/components/layout/FooterWrapper';
 import { NavSection } from '@/components/layout/NavSection';
 import { StockPrediction } from '@/components/ai/StockPrediction';
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
@@ -191,6 +192,8 @@ export const Analytics: React.FC = () => {
           </div>
         </CardWrapper>
       </main>
+
+      <FooterWrapper />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { BarChart3, Download, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
+import { FooterWrapper } from '@/components/layout/FooterWrapper';
 import { NavSection } from '@/components/layout/NavSection';
 import { MetricCardWrapper } from '@/components/dashboard/MetricCardWrapper';
 import { StockGrid } from '@/components/dashboard/StockGrid';
@@ -399,7 +400,7 @@ export const Dashboard: React.FC = () => {
         )}
       </main>
 
-      <sh-footer app-name="STOCK HUB" year="2025" data-theme="dark" />
+      <FooterWrapper />
     </div>
   );
 };
