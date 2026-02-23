@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.6.0...v1.7.0) (2026-02-23)
+
+
+### ✨ Features
+
+* **css:** add [@container](https://github.com/container) queries and :has() for StockGrid ([#89](https://github.com/SandrineCipolla/stockHub_V2_front/issues/89)) ([203bd6c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/203bd6c626add0f2f894978993586b74239055a7)), closes [#76](https://github.com/SandrineCipolla/stockHub_V2_front/issues/76)
+* **rgpd:** cookie consent banner, privacy page and footer link ([#83](https://github.com/SandrineCipolla/stockHub_V2_front/issues/83)) ([#87](https://github.com/SandrineCipolla/stockHub_V2_front/issues/87)) ([aa7bc61](https://github.com/SandrineCipolla/stockHub_V2_front/commit/aa7bc61539e191953675dc3c924833cf846e6e52))
+
 ## [1.6.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.5.2...v1.6.0) (2026-02-22)
 
 
