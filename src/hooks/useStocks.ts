@@ -144,13 +144,39 @@ export const useStocks = () => {
           const updatedStock = await StocksAPI.updateStock(updateData);
           console.log('✅ Stock mis à jour sur le backend:', updatedStock);
 
-          // Mise à jour du localStorage
+          // Calcul du nouveau statut côté frontend (le backend ne retourne pas les champs
+          // quantity/value/status correctement dans la version actuelle)
+          const newQuantity = updateData.quantity ?? existingStock.quantity;
+          const minThreshold = updateData.minThreshold ?? existingStock.minThreshold;
+          const maxThreshold = updateData.maxThreshold ?? existingStock.maxThreshold;
+          let newStatus = existingStock.status;
+          if (updateData.quantity !== undefined) {
+            if (newQuantity === 0) {
+              newStatus = 'outOfStock';
+            } else if (minThreshold !== undefined) {
+              if (newQuantity <= minThreshold * 0.5) newStatus = 'critical';
+              else if (newQuantity <= minThreshold) newStatus = 'low';
+              else if (maxThreshold !== undefined && newQuantity > maxThreshold)
+                newStatus = 'overstocked';
+              else newStatus = 'optimal';
+            } else {
+              newStatus = 'optimal';
+            }
+          }
+
+          // Fusion : conserver les champs locaux non retournés correctement par le backend
+          const mergedStock: Stock = {
+            ...existingStock,
+            ...updateData,
+            status: newStatus,
+            lastUpdate: updatedStock.lastUpdate,
+          };
           const updatedStocks = stocks.map(stock =>
-            stock.id === updateData.id ? updatedStock : stock
+            stock.id === updateData.id ? mergedStock : stock
           );
           setStocks(updatedStocks);
 
-          return updatedStock;
+          return mergedStock;
         } catch (error) {
           console.error('❌ Erreur lors de la mise à jour sur le backend:', error);
           throw createFrontendError(
@@ -176,16 +202,19 @@ export const useStocks = () => {
           throw createFrontendError('validation', `Stock avec l'ID ${stockId} introuvable`);
         }
 
+        // Mise à jour optimiste : suppression immédiate de l'UI avant l'appel API
+        const previousStocks = [...stocks];
+        const updatedStocks = stocks.filter(stock => stock.id !== stockId);
+        setStocks(updatedStocks);
+
         try {
           // Appel au backend via StocksAPI
           console.log('🔄 Suppression du stock sur le backend...', stockId);
           await StocksAPI.deleteStock(stockId);
           console.log('✅ Stock supprimé sur le backend');
-
-          // Mise à jour du localStorage
-          const updatedStocks = stocks.filter(stock => stock.id !== stockId);
-          setStocks(updatedStocks);
         } catch (error) {
+          // Rollback : restaurer la liste si l'API échoue
+          setStocks(previousStocks);
           console.error('❌ Erreur lors de la suppression sur le backend:', error);
           throw createFrontendError('network', 'Impossible de supprimer le stock sur le serveur');
         }
