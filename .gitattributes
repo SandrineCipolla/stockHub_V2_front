@@ -1,0 +1,15 @@
+# Normalize line endings to LF in the repository
+# Git will convert CRLF → LF on commit and LF → LF on checkout (no conversion)
+* text=auto eol=lf
+
+# Explicitly binary files — no line ending conversion
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.svg   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
