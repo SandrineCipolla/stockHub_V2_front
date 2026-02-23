@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/components/providers/ThemeProvider.tsx';
+import { CookieBanner } from '@/components/common/CookieBanner';
 import './styles/index.css';
 
 // Lazy loading des pages pour améliorer les performances initiales
@@ -9,6 +10,9 @@ const Dashboard = lazy(() =>
 );
 const Analytics = lazy(() =>
   import('@/pages/Analytics.tsx').then(module => ({ default: module.Analytics }))
+);
+const Privacy = lazy(() =>
+  import('@/pages/Privacy.tsx').then(module => ({ default: module.Privacy }))
 );
 
 // Composant de chargement accessible
@@ -42,10 +46,13 @@ function App() {
           Aller au contenu principal
         </a>
 
+        <CookieBanner />
+
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
