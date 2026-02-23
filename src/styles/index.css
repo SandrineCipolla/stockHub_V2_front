@@ -75,6 +75,60 @@ body {
   }
 }
 
+/* =================================================================
+   CSS MODERNE — Container Queries & :has()
+   Compatibilité : Chrome 105+ · Firefox 110/121+ · Safari 15.4/16+ ✅
+   ================================================================= */
+
+/* --- @container : StockGrid ---
+   @container utilisé ici plutôt que @media car StockGrid est réutilisé
+   dans des contextes de largeurs variables (dashboard, sidebar, modal futur).
+   Les breakpoints viewport (lg:, xl: Tailwind) ne reflètent pas la largeur
+   réelle du conteneur quand celui-ci est embarqué dans une colonne étroite. */
+
+.stock-grid-container {
+  container-type: inline-size;
+  container-name: stock-list;
+}
+
+.stock-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem; /* équivalent Tailwind gap-6 */
+}
+
+@container stock-list (min-width: 560px) {
+  .stock-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container stock-list (min-width: 900px) {
+  .stock-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- :has() : Mise en évidence visuelle des stocks en alerte ---
+   :has() utilisé pour styler le conteneur parent en fonction du statut
+   de ses enfants (Web Components sh-stock-card), sans JavaScript.
+   Le CSS détecte l'attribut [status] posé sur l'élément custom et
+   applique un outline discret au niveau de la grille.
+   Avantage vs JS : zéro re-render React, déclaratif, toujours synchrone. */
+
+.stock-grid-container:has(sh-stock-card[status='critical']),
+.stock-grid-container:has(sh-stock-card[status='out-of-stock']) {
+  outline: 1px solid rgb(239 68 68 / 0.3);
+  outline-offset: 6px;
+  border-radius: 0.75rem;
+}
+
+.stock-grid-container:has(sh-stock-card[status='low']) {
+  outline: 1px solid rgb(234 179 8 / 0.3);
+  outline-offset: 6px;
+  border-radius: 0.75rem;
+}
+
 /* Scrollbar personnalisé — utilise les tokens du Design System */
 ::-webkit-scrollbar {
   width: 6px;
