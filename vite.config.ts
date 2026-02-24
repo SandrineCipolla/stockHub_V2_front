@@ -21,13 +21,20 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, 'src'),
       },
+      // Garantit une seule instance React dans tous les chunks (évite "unstable_now" error)
+      dedupe: ['react', 'react-dom', 'react/jsx-runtime'],
     },
     build: {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            // Séparer les vendors critiques (chargés en priorité)
-            if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            // React + scheduler + MSAL React dans le même chunk (MSAL dépend des hooks React)
+            if (
+              id.includes('node_modules/react') ||
+              id.includes('node_modules/react-dom') ||
+              id.includes('node_modules/scheduler') ||
+              id.includes('@azure/msal')
+            ) {
               return 'react-vendor';
             }
 
