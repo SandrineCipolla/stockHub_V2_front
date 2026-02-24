@@ -87,10 +87,11 @@ describe('useStocks Hook', () => {
         });
       });
 
-      it('should have loading state initially', () => {
+      it('should have no loading state initially', () => {
         const { result } = renderHook(() => useStocks());
 
-        expect(result.current.isLoading.storage).toBe(true);
+        expect(result.current.isLoading.load).toBe(false);
+        expect(result.current.isAnyLoading).toBe(false);
       });
 
       it('should calculate initial stats', async () => {

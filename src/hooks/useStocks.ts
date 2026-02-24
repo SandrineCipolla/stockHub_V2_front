@@ -1,27 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { CreateStockData, SearchFilters, Stock, UpdateStockData } from '@/types';
-import { createFrontendError, useAsyncAction, useLocalStorageState } from './useFrontendState';
+import { createFrontendError, useAsyncAction } from './useFrontendState';
 import { StocksAPI } from '@/services/api/stocksAPI';
 
 export type { CreateStockData, UpdateStockData };
 
 // ===== HOOK PRINCIPAL POUR GESTION DES STOCKS =====
 export const useStocks = () => {
-  // Persistance dans localStorage avec gestion d'erreurs
-  const {
-    value: stocks,
-    setValue: setStocks,
-    error: storageError,
-  } = useLocalStorageState<Stock[]>('stocks', []);
-
-  const [storageLoading, setStorageLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setStorageLoading(false);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const [stocks, setStocks] = useState<Stock[]>([]);
   const [filters, setFilters] = useState<SearchFilters>({});
 
   // ===== ACTIONS AVEC GESTION D'ERREURS =====
@@ -34,7 +20,6 @@ export const useStocks = () => {
         const stocksFromBackend = await StocksAPI.fetchStocksList();
         console.log('✅ Stocks chargés depuis le backend:', stocksFromBackend);
 
-        // Mise à jour du localStorage avec les données du backend
         setStocks(stocksFromBackend);
 
         return stocksFromBackend;
@@ -43,53 +28,48 @@ export const useStocks = () => {
 
         throw createFrontendError('network', 'Impossible de charger les stocks depuis le serveur');
       }
-    }, [setStocks, stocks]),
+    }, []),
     { simulateDelay: 0 }
   );
 
   const createStockAction = useAsyncAction(
-    useCallback(
-      async (stockData: CreateStockData): Promise<Stock> => {
-        // Validations frontend
-        if (!stockData.label.trim()) {
-          throw createFrontendError('validation', 'Le nom du stock est obligatoire', 'label', {
-            field: 'label',
-          });
-        }
+    useCallback(async (stockData: CreateStockData): Promise<Stock> => {
+      // Validations frontend
+      if (!stockData.label.trim()) {
+        throw createFrontendError('validation', 'Le nom du stock est obligatoire', 'label', {
+          field: 'label',
+        });
+      }
 
-        if (stockData.quantity < 0) {
-          throw createFrontendError(
-            'validation',
-            'La quantité ne peut pas être négative',
-            'quantity',
-            { field: 'quantity' }
-          );
-        }
+      if (stockData.quantity < 0) {
+        throw createFrontendError(
+          'validation',
+          'La quantité ne peut pas être négative',
+          'quantity',
+          { field: 'quantity' }
+        );
+      }
 
-        if (stockData.value < 0) {
-          throw createFrontendError('validation', 'La valeur ne peut pas être négative', 'value', {
-            field: 'value',
-          });
-        }
+      if (stockData.value < 0) {
+        throw createFrontendError('validation', 'La valeur ne peut pas être négative', 'value', {
+          field: 'value',
+        });
+      }
 
-        try {
-          // Appel au backend via StocksAPI
-          console.log('🔄 Création du stock sur le backend...', stockData);
-          const newStock = await StocksAPI.createStock(stockData);
-          console.log('✅ Stock créé sur le backend:', newStock);
+      try {
+        // Appel au backend via StocksAPI
+        console.log('🔄 Création du stock sur le backend...', stockData);
+        const newStock = await StocksAPI.createStock(stockData);
+        console.log('✅ Stock créé sur le backend:', newStock);
 
-          // Mise à jour du localStorage avec le nouveau stock
-          const updatedStocks = [...(stocks || []), newStock];
-          setStocks(updatedStocks);
+        setStocks(prev => [...prev, newStock]);
 
-          return newStock;
-        } catch (error) {
-          console.error('❌ Erreur lors de la création sur le backend:', error);
-          throw createFrontendError('network', 'Impossible de créer le stock sur le serveur');
-        }
-      },
-      [stocks, setStocks]
-    ),
+        return newStock;
+      } catch (error) {
+        console.error('❌ Erreur lors de la création sur le backend:', error);
+        throw createFrontendError('network', 'Impossible de créer le stock sur le serveur');
+      }
+    }, []),
     {
       onSuccess: () => {
         console.log('✅ Stock créé avec succès');
@@ -101,10 +81,6 @@ export const useStocks = () => {
   const updateStockAction = useAsyncAction(
     useCallback(
       async (updateData: UpdateStockData): Promise<Stock> => {
-        if (!stocks) {
-          throw createFrontendError('unknown', 'Liste des stocks non disponible');
-        }
-
         const existingStock = stocks.find(s => s.id === updateData.id);
         if (!existingStock) {
           throw createFrontendError('validation', `Stock avec l'ID ${updateData.id} introuvable`);
@@ -164,10 +140,7 @@ export const useStocks = () => {
             status: newStatus,
             lastUpdate: updatedStock.lastUpdate,
           };
-          const updatedStocks = stocks.map(stock =>
-            stock.id === updateData.id ? mergedStock : stock
-          );
-          setStocks(updatedStocks);
+          setStocks(prev => prev.map(stock => (stock.id === updateData.id ? mergedStock : stock)));
 
           return mergedStock;
         } catch (error) {
@@ -178,7 +151,7 @@ export const useStocks = () => {
           );
         }
       },
-      [stocks, setStocks]
+      [stocks]
     ),
     { simulateDelay: 0 }
   );
@@ -186,10 +159,6 @@ export const useStocks = () => {
   const deleteStockAction = useAsyncAction(
     useCallback(
       async (stockId: number | string): Promise<void> => {
-        if (!stocks) {
-          throw createFrontendError('unknown', 'Liste des stocks non disponible');
-        }
-
         const stockExists = stocks.some(s => s.id === stockId);
         if (!stockExists) {
           throw createFrontendError('validation', `Stock avec l'ID ${stockId} introuvable`);
@@ -197,8 +166,7 @@ export const useStocks = () => {
 
         // Mise à jour optimiste : suppression immédiate de l'UI avant l'appel API
         const previousStocks = [...stocks];
-        const updatedStocks = stocks.filter(stock => stock.id !== stockId);
-        setStocks(updatedStocks);
+        setStocks(prev => prev.filter(stock => stock.id !== stockId));
 
         try {
           // Appel au backend via StocksAPI
@@ -212,7 +180,7 @@ export const useStocks = () => {
           throw createFrontendError('network', 'Impossible de supprimer le stock sur le serveur');
         }
       },
-      [stocks, setStocks]
+      [stocks]
     ),
     { simulateDelay: 0 }
   );
@@ -220,10 +188,6 @@ export const useStocks = () => {
   const deleteMultipleStocksAction = useAsyncAction(
     useCallback(
       async (stockIds: (number | string)[]): Promise<void> => {
-        if (!stocks) {
-          throw createFrontendError('unknown', 'Liste des stocks non disponible');
-        }
-
         if (stockIds.length === 0) {
           throw createFrontendError('validation', 'Aucun stock sélectionné');
         }
@@ -235,10 +199,9 @@ export const useStocks = () => {
 
         await new Promise(resolve => setTimeout(resolve, 800));
 
-        const updatedStocks = stocks.filter(stock => !stockIds.includes(stock.id));
-        setStocks(updatedStocks);
+        setStocks(prev => prev.filter(stock => !stockIds.includes(stock.id)));
       },
-      [stocks, setStocks]
+      [stocks]
     ),
     { simulateDelay: 0 }
   );
@@ -246,8 +209,6 @@ export const useStocks = () => {
   // ===== COMPUTED VALUES =====
 
   const filteredStocks = useMemo(() => {
-    if (!stocks) return [];
-
     return stocks.filter(stock => {
       if (filters.query) {
         const query = filters.query.toLowerCase();
@@ -270,8 +231,6 @@ export const useStocks = () => {
   }, [stocks, filters]);
 
   const stats = useMemo(() => {
-    if (!stocks) return null;
-
     return {
       total: stocks.length,
       optimal: stocks.filter(s => s.status === 'optimal').length,
@@ -285,11 +244,11 @@ export const useStocks = () => {
     };
   }, [stocks]);
 
-  // ===== FONCTIONS UTILITAIRES=====
+  // ===== FONCTIONS UTILITAIRES =====
 
   const getStockById = useCallback(
     (id: number | string): Stock | undefined => {
-      return stocks?.find(stock => stock.id === id);
+      return stocks.find(stock => stock.id === id);
     },
     [stocks]
   );
@@ -325,7 +284,7 @@ export const useStocks = () => {
   return {
     // Données
     stocks: filteredStocks,
-    allStocks: stocks || [],
+    allStocks: stocks,
     stats,
     filters,
 
@@ -341,7 +300,6 @@ export const useStocks = () => {
       update: updateStockAction.isLoading,
       delete: deleteStockAction.isLoading,
       deleteMultiple: deleteMultipleStocksAction.isLoading,
-      storage: storageLoading,
     },
 
     errors: {
@@ -350,7 +308,6 @@ export const useStocks = () => {
       update: updateStockAction.error,
       delete: deleteStockAction.error,
       deleteMultiple: deleteMultipleStocksAction.error,
-      storage: storageError,
     },
 
     hasAnyError: !!(
@@ -358,8 +315,7 @@ export const useStocks = () => {
       createStockAction.error ||
       updateStockAction.error ||
       deleteStockAction.error ||
-      deleteMultipleStocksAction.error ||
-      storageError
+      deleteMultipleStocksAction.error
     ),
 
     isAnyLoading:
@@ -367,8 +323,7 @@ export const useStocks = () => {
       createStockAction.isLoading ||
       updateStockAction.isLoading ||
       deleteStockAction.isLoading ||
-      deleteMultipleStocksAction.isLoading ||
-      storageLoading,
+      deleteMultipleStocksAction.isLoading,
 
     getStockById,
     updateFilters,
