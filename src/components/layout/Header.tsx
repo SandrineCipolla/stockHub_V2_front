@@ -1,7 +1,8 @@
 import React from 'react';
-import { Bell, Moon, Sun, User } from 'lucide-react';
+import { Bell, Moon, Sun, LogOut } from 'lucide-react';
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
 import { useTheme } from '@/hooks/useTheme.ts';
+import { useMsal } from '@azure/msal-react';
 import type { HeaderProps } from '@/types';
 
 export const Header: React.FC<HeaderProps> = ({
@@ -10,6 +11,11 @@ export const Header: React.FC<HeaderProps> = ({
   notificationCount = 3,
 }) => {
   const { theme, toggleTheme } = useTheme();
+  const { instance } = useMsal();
+
+  const handleLogout = () => {
+    instance.logoutRedirect().catch(console.error);
+  };
 
   const themeClasses = {
     header: theme === 'dark' ? 'bg-slate-900/90 border-white/10' : 'bg-white/95 border-gray-200',
@@ -101,7 +107,8 @@ export const Header: React.FC<HeaderProps> = ({
               <Button
                 variant="primary"
                 size="sm"
-                icon={User}
+                icon={LogOut}
+                onClick={handleLogout}
                 className="px-2 sm:px-3"
                 aria-label="Se déconnecter de l'application StockHub"
               >
