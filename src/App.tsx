@@ -1,7 +1,7 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useMsal } from '@azure/msal-react';
-import { EventType } from '@azure/msal-browser';
+import { useMsal, useIsAuthenticated } from '@azure/msal-react';
+import { loginRequest } from '@/config/authConfig';
 import { ThemeProvider } from '@/components/providers/ThemeProvider.tsx';
 import './styles/index.css';
 
@@ -31,67 +31,35 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Composant protégé qui capture le token d'authentification
+// Écran de connexion affiché si l'utilisateur n'est pas authentifié
+const LoginScreen = ({ onLogin }: { onLogin: () => void }) => (
+  <div className="min-h-screen flex items-center justify-center bg-slate-900" role="main">
+    <div className="flex flex-col items-center gap-6">
+      <h1 className="text-2xl font-bold text-white">StockHub</h1>
+      <p className="text-gray-400 text-sm">Connectez-vous pour accéder à votre tableau de bord</p>
+      <button
+        onClick={onLogin}
+        className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+      >
+        Se connecter
+      </button>
+    </div>
+  </div>
+);
+
 function ProtectedComponent() {
   const { instance } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
 
-  useEffect(() => {
-    const acquireAccessToken = async () => {
-      const account = instance.getActiveAccount();
-      if (!account) {
-        console.log('❌ Aucun compte actif pour acquérir le token');
-        return;
-      }
-
-      try {
-        // Importer loginRequest depuis authConfig
-        const { loginRequest } = await import('@/config/authConfig');
-
-        console.log("🔄 Acquisition du Access Token pour l'API avec scopes:", loginRequest.scopes);
-
-        // Acquérir silencieusement un Access token avec les scopes API
-        const response = await instance.acquireTokenSilent({
-          ...loginRequest,
-          account: account,
-        });
-
-        console.log('✅ Access Token acquis:', response.accessToken ? 'OUI' : 'NON');
-        console.log('🔑 Token type:', response.tokenType);
-        console.log('📋 Scopes:', response.scopes);
-
-        // Stocker le Access Token pour l'API
-        localStorage.setItem('authToken', response.accessToken);
-        console.log('✅ Access Token stocké dans localStorage');
-      } catch (error) {
-        console.error("❌ Erreur lors de l'acquisition du Access Token:", error);
-      }
-    };
-
-    const callbackId = instance.addEventCallback(event => {
-      if (event.eventType === EventType.LOGIN_SUCCESS && event.payload) {
-        const payload = event.payload;
-
-        // Type guard: vérifier que payload a account
-        if ('account' in payload && payload.account) {
-          console.log('✅ Login réussi, acquisition du Access Token...');
-          // Après un login réussi, acquérir le Access Token pour l'API
-          acquireAccessToken();
-        }
-      }
-    });
-
-    // Acquérir le token au chargement si l'utilisateur est déjà connecté
-    if (instance.getActiveAccount()) {
-      console.log('🔄 Utilisateur déjà connecté, acquisition du Access Token...');
-      acquireAccessToken();
-    }
-
-    return () => {
-      if (callbackId) {
-        instance.removeEventCallback(callbackId);
-      }
-    };
-  }, [instance]);
+  if (!isAuthenticated) {
+    return (
+      <LoginScreen
+        onLogin={() => {
+          instance.loginRedirect(loginRequest).catch(console.error);
+        }}
+      />
+    );
+  }
 
   return (
     <BrowserRouter>
