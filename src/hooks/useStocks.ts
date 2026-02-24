@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CreateStockData, SearchFilters, Stock, UpdateStockData } from '@/types';
 import { createFrontendError, useAsyncAction, useLocalStorageState } from './useFrontendState';
-import { stockData } from '@/data/stockData.ts';
 import { StocksAPI } from '@/services/api/stocksAPI';
 
 export type { CreateStockData, UpdateStockData };
@@ -13,7 +12,7 @@ export const useStocks = () => {
     value: stocks,
     setValue: setStocks,
     error: storageError,
-  } = useLocalStorageState<Stock[]>('stocks', stockData);
+  } = useLocalStorageState<Stock[]>('stocks', []);
 
   const [storageLoading, setStorageLoading] = useState(true);
   useEffect(() => {
@@ -41,12 +40,6 @@ export const useStocks = () => {
         return stocksFromBackend;
       } catch (error) {
         console.error('❌ Erreur lors du chargement depuis le backend:', error);
-
-        // Fallback sur les données du localStorage si l'API échoue
-        if (stocks && stocks.length > 0) {
-          console.warn('⚠️ Utilisation des données du cache localStorage');
-          return stocks;
-        }
 
         throw createFrontendError('network', 'Impossible de charger les stocks depuis le serveur');
       }

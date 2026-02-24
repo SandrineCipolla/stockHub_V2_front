@@ -111,6 +111,10 @@ describe('useStocks Hook', () => {
       it('should handle fixture stock data correctly', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
           // Vérifier que les stocks fixtures sont bien présents
@@ -321,6 +325,10 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         // Attendre que les stocks soient chargés
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -346,6 +354,10 @@ describe('useStocks Hook', () => {
       it('should preserve local fields not returned by backend', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -367,6 +379,10 @@ describe('useStocks Hook', () => {
 
       it('should recalculate status after update', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -397,6 +413,10 @@ describe('useStocks Hook', () => {
       it('should reject empty name', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -419,6 +439,10 @@ describe('useStocks Hook', () => {
       it('should reject negative quantity', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -440,6 +464,10 @@ describe('useStocks Hook', () => {
 
       it('should update to outOfStock status when quantity is 0', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -467,6 +495,10 @@ describe('useStocks Hook', () => {
       it('should remove stock from list', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -490,6 +522,10 @@ describe('useStocks Hook', () => {
         vi.mocked(StocksAPI.StocksAPI.deleteStock).mockRejectedValue(new Error('Network error'));
 
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -515,6 +551,10 @@ describe('useStocks Hook', () => {
       it('should handle error for non-existent stock', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -535,6 +575,10 @@ describe('useStocks Hook', () => {
       it('should calculate correct stats for optimal stocks', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -552,6 +596,10 @@ describe('useStocks Hook', () => {
 
       it('should handle all fixture status types', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -577,6 +625,10 @@ describe('useStocks Hook', () => {
       it('should filter stocks by category correctly', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -601,6 +653,10 @@ describe('useStocks Hook', () => {
       it('should return stock by id', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -615,6 +671,10 @@ describe('useStocks Hook', () => {
       it('should return undefined for non-existent id', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -627,6 +687,10 @@ describe('useStocks Hook', () => {
     describe('resetFilters', () => {
       it('should reset all filters', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -655,6 +719,10 @@ describe('useStocks Hook', () => {
       it('should delete multiple stocks', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(1);
         });
@@ -674,6 +742,10 @@ describe('useStocks Hook', () => {
       it('should handle empty array', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -691,6 +763,10 @@ describe('useStocks Hook', () => {
     describe('resetErrors', () => {
       it('should reset specific error', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
