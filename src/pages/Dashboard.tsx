@@ -131,9 +131,10 @@ export const Dashboard: React.FC = () => {
           id: stockId,
           quantity: (currentStock.quantity ?? 0) + 10,
         });
+        await loadStocks();
       }
     },
-    [getStockById, updateStock]
+    [getStockById, updateStock, loadStocks]
   );
 
   const handleViewStock = useCallback(

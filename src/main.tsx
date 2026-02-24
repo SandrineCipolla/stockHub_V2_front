@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { EventType, PublicClientApplication } from '@azure/msal-browser';
+import { EventType } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
-import { msalConfig, b2cPolicies, loginRequest } from './config/authConfig';
+import { b2cPolicies, loginRequest } from './config/authConfig';
+import { msalInstance } from './config/msalInstance';
 import App from './App';
 import './styles/index.css';
 
@@ -17,9 +18,6 @@ setTimeout(() => {
     console.error('❌ Erreur lors du chargement du Design System:', err);
   });
 }, 100); // Délai de 100ms pour laisser React charger d'abord
-
-// Initialisation MSAL
-const msalInstance = new PublicClientApplication(msalConfig);
 
 // Fonction d'initialisation asynchrone
 async function initializeMsal() {

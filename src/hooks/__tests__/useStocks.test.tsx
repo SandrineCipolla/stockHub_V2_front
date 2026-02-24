@@ -343,6 +343,28 @@ describe('useStocks Hook', () => {
         expect(updated!.quantity).toBe(firstStock.quantity + 10);
       });
 
+      it('should preserve local fields not returned by backend', async () => {
+        const { result } = renderHook(() => useStocks());
+
+        await waitFor(() => {
+          expect(result.current.stocks.length).toBeGreaterThan(0);
+        });
+
+        const firstStock = result.current.stocks[0];
+        const originalValue = firstStock.value;
+        const newQuantity = firstStock.quantity + 5;
+
+        await act(async () => {
+          await result.current.updateStock({ id: firstStock.id, quantity: newQuantity });
+        });
+
+        await waitFor(() => {
+          const updated = result.current.stocks.find(s => s.id === firstStock.id);
+          expect(updated?.quantity).toBe(newQuantity);
+          expect(updated?.value).toBe(originalValue);
+        });
+      });
+
       it('should recalculate status after update', async () => {
         const { result } = renderHook(() => useStocks());
 
@@ -460,6 +482,32 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBe(initialCount - 1);
           expect(result.current.stocks.find(s => s.id === firstStock.id)).toBeUndefined();
         });
+      });
+    });
+
+    describe('when deleteStock API fails', () => {
+      it('should rollback optimistic delete on API error', async () => {
+        vi.mocked(StocksAPI.StocksAPI.deleteStock).mockRejectedValue(new Error('Network error'));
+
+        const { result } = renderHook(() => useStocks());
+
+        await waitFor(() => {
+          expect(result.current.stocks.length).toBeGreaterThan(0);
+        });
+
+        const initialCount = result.current.stocks.length;
+        const firstStock = result.current.stocks[0];
+
+        await act(async () => {
+          await result.current.deleteStock(firstStock.id);
+        });
+
+        await waitFor(() => {
+          expect(result.current.stocks.length).toBe(initialCount);
+          expect(result.current.stocks.find(s => s.id === firstStock.id)).toBeDefined();
+        });
+
+        expect(result.current.errors.delete).toBeDefined();
       });
     });
 
