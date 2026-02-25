@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { useTheme } from '@/hooks/useTheme';
 import { loginRequest } from '@/config/authConfig';
@@ -48,26 +48,21 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   const handleLogout = useCallback(() => {
     console.log('👋 Logout clicked');
     clearLocalStorage();
-    instance.logoutRedirect({
-      postLogoutRedirectUri: '/',
-    });
+    instance.logoutRedirect({ postLogoutRedirectUri: '/' })?.catch(console.error);
   }, [instance]);
 
-  // Listener sh-logout-click sur document pour les tests JSDOM :
-  // JSDOM n'a pas de vrai shadow DOM, les tests dispatche sh-logout-click directement.
-  useEffect(() => {
-    document.addEventListener('sh-logout-click', handleLogout);
-    return () => {
-      document.removeEventListener('sh-logout-click', handleLogout);
-    };
-  }, [handleLogout]);
+  // Ref toujours à jour vers la dernière version de handleLogout.
+  // Permet d'utiliser des deps [] dans useEffect (listener ajouté une seule fois,
+  // jamais supprimé/ré-ajouté lors des re-renders MSAL) tout en appelant
+  // toujours la version fraîche de la fonction.
+  const handleLogoutRef = useRef(handleLogout);
+  handleLogoutRef.current = handleLogout;
 
-  // onClick React sur sh-header pour la production :
-  // Le click natif depuis le shadow DOM (composed:true) remonte jusqu'au root React.
-  // composedPath() inclut SH-BUTTON même depuis le handler React.
-  const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      const isLogout = e.nativeEvent
+  useEffect(() => {
+    const onLogout = () => handleLogoutRef.current();
+
+    const onButtonClick = (e: Event) => {
+      const isLogoutButton = e
         .composedPath()
         .some(
           node =>
@@ -75,10 +70,17 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
             node.tagName === 'SH-BUTTON' &&
             node.getAttribute('icon-before') === 'LogOut'
         );
-      if (isLogout) handleLogout();
-    },
-    [handleLogout]
-  );
+      if (isLogoutButton) handleLogoutRef.current();
+    };
+
+    document.addEventListener('sh-logout-click', onLogout);
+    document.addEventListener('sh-button-click', onButtonClick);
+
+    return () => {
+      document.removeEventListener('sh-logout-click', onLogout);
+      document.removeEventListener('sh-button-click', onButtonClick);
+    };
+  }, []);
 
   return React.createElement('sh-header', {
     userName,
@@ -86,7 +88,6 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     isLoggedIn, // Maintenant dynamique basé sur activeAccount
     'data-theme': theme,
     className,
-    onClick: handleClick,
     'onsh-notification-click': handleNotifications,
     'onsh-theme-toggle': handleThemeToggle,
     'onsh-login-click': handleLogin,
