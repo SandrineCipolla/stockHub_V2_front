@@ -53,13 +53,21 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     });
   }, [instance]);
 
-  // Double stratégie sur document (zéro dépendance de timing DOM) :
-  // 1. sh-logout-click  — API officielle du web component, couvre les tests JSDOM
-  // 2. sh-button-click  — fallback production via composedPath() ; les deux events sont
-  //    composed:true + bubbles:true donc remontent jusqu'à document sans querySelector
+  // Listener sh-logout-click sur document pour les tests JSDOM :
+  // JSDOM n'a pas de vrai shadow DOM, les tests dispatche sh-logout-click directement.
   useEffect(() => {
-    const onButtonClick = (e: Event) => {
-      const isLogoutButton = e
+    document.addEventListener('sh-logout-click', handleLogout);
+    return () => {
+      document.removeEventListener('sh-logout-click', handleLogout);
+    };
+  }, [handleLogout]);
+
+  // onClick React sur sh-header pour la production :
+  // Le click natif depuis le shadow DOM (composed:true) remonte jusqu'au root React.
+  // composedPath() inclut SH-BUTTON même depuis le handler React.
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      const isLogout = e.nativeEvent
         .composedPath()
         .some(
           node =>
@@ -67,17 +75,10 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
             node.tagName === 'SH-BUTTON' &&
             node.getAttribute('icon-before') === 'LogOut'
         );
-      if (isLogoutButton) handleLogout();
-    };
-
-    document.addEventListener('sh-logout-click', handleLogout);
-    document.addEventListener('sh-button-click', onButtonClick);
-
-    return () => {
-      document.removeEventListener('sh-logout-click', handleLogout);
-      document.removeEventListener('sh-button-click', onButtonClick);
-    };
-  }, [handleLogout]);
+      if (isLogout) handleLogout();
+    },
+    [handleLogout]
+  );
 
   return React.createElement('sh-header', {
     userName,
@@ -85,6 +86,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     isLoggedIn, // Maintenant dynamique basé sur activeAccount
     'data-theme': theme,
     className,
+    onClick: handleClick,
     'onsh-notification-click': handleNotifications,
     'onsh-theme-toggle': handleThemeToggle,
     'onsh-login-click': handleLogin,
