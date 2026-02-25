@@ -53,17 +53,11 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     });
   }, [instance]);
 
-  // Double stratégie pour déclencher le logout de façon fiable :
-  // 1. Host listener sur sh-logout-click (API officielle, couvre les tests)
-  // 2. Host listener sur sh-button-click via composedPath() — sh-button-click est composed:true
-  //    donc remonte jusqu'au host sans dépendre de shadowRoot (disponible même si le web
-  //    component s'upgrade après le premier render en production)
+  // Double stratégie sur document (zéro dépendance de timing DOM) :
+  // 1. sh-logout-click  — API officielle du web component, couvre les tests JSDOM
+  // 2. sh-button-click  — fallback production via composedPath() ; les deux events sont
+  //    composed:true + bubbles:true donc remontent jusqu'à document sans querySelector
   useEffect(() => {
-    const el = document.querySelector('sh-header');
-    if (!(el instanceof HTMLElement)) return;
-
-    el.addEventListener('sh-logout-click', handleLogout);
-
     const onButtonClick = (e: Event) => {
       const isLogoutButton = e
         .composedPath()
@@ -75,11 +69,13 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
         );
       if (isLogoutButton) handleLogout();
     };
-    el.addEventListener('sh-button-click', onButtonClick);
+
+    document.addEventListener('sh-logout-click', handleLogout);
+    document.addEventListener('sh-button-click', onButtonClick);
 
     return () => {
-      el.removeEventListener('sh-logout-click', handleLogout);
-      el.removeEventListener('sh-button-click', onButtonClick);
+      document.removeEventListener('sh-logout-click', handleLogout);
+      document.removeEventListener('sh-button-click', onButtonClick);
     };
   }, [handleLogout]);
 
