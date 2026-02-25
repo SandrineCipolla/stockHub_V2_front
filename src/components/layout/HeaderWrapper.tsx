@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { useTheme } from '@/hooks/useTheme';
 import { loginRequest } from '@/config/authConfig';
@@ -12,6 +12,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   userName = 'Sandrine Cipolla',
   notificationCount = 3,
 }) => {
+  const headerRef = useRef<HTMLElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { instance } = useMsal();
 
@@ -45,15 +46,35 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   };
 
   // Fonction handleLogout (identique à V1 avec ajout de authToken)
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     console.log('👋 Logout clicked');
     clearLocalStorage();
     instance.logoutRedirect({
       postLogoutRedirectUri: '/',
     });
-  };
+  }, [instance]);
+
+  // Le bouton logout est dans le shadow DOM de sh-header.
+  // sh-button-click est confirmé comme étant émis dans le shadow root.
+  // On l'écoute directement sur shadowRoot pour identifier le bouton logout
+  // via son attribut icon-before="LogOut".
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el || !el.shadowRoot) return;
+
+    const onShadowButtonClick = (e: Event) => {
+      if (!(e.target instanceof Element)) return;
+      if (e.target.tagName === 'SH-BUTTON' && e.target.getAttribute('icon-before') === 'LogOut') {
+        handleLogout();
+      }
+    };
+
+    el.shadowRoot.addEventListener('sh-button-click', onShadowButtonClick);
+    return () => el.shadowRoot?.removeEventListener('sh-button-click', onShadowButtonClick);
+  }, [handleLogout]);
 
   return React.createElement('sh-header', {
+    ref: headerRef,
     userName,
     notificationCount,
     isLoggedIn, // Maintenant dynamique basé sur activeAccount
@@ -62,6 +83,5 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     'onsh-notification-click': handleNotifications,
     'onsh-theme-toggle': handleThemeToggle,
     'onsh-login-click': handleLogin,
-    'onsh-logout-click': handleLogout,
   });
 };
