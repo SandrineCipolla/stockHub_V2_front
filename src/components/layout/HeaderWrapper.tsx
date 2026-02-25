@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { useTheme } from '@/hooks/useTheme';
 import { loginRequest } from '@/config/authConfig';
@@ -12,7 +12,6 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   userName = 'Sandrine Cipolla',
   notificationCount = 3,
 }) => {
-  const headerRef = useRef<HTMLElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { instance } = useMsal();
 
@@ -60,8 +59,8 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   //    donc remonte jusqu'au host sans dépendre de shadowRoot (disponible même si le web
   //    component s'upgrade après le premier render en production)
   useEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
+    const el = document.querySelector('sh-header');
+    if (!(el instanceof HTMLElement)) return;
 
     el.addEventListener('sh-logout-click', handleLogout);
 
@@ -85,7 +84,6 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   }, [handleLogout]);
 
   return React.createElement('sh-header', {
-    ref: headerRef,
     userName,
     notificationCount,
     isLoggedIn, // Maintenant dynamique basé sur activeAccount
