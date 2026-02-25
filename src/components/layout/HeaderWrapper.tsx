@@ -55,26 +55,32 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   }, [instance]);
 
   // Double stratégie pour déclencher le logout de façon fiable :
-  // 1. Host listener sur sh-logout-click (API officielle du web component, couvre les tests)
-  // 2. Shadow root listener sur sh-button-click (couvre le navigateur réel où sh-logout-click
-  //    n'est pas toujours reçu via la liaison de prop React 19)
+  // 1. Host listener sur sh-logout-click (API officielle, couvre les tests)
+  // 2. Host listener sur sh-button-click via composedPath() — sh-button-click est composed:true
+  //    donc remonte jusqu'au host sans dépendre de shadowRoot (disponible même si le web
+  //    component s'upgrade après le premier render en production)
   useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
 
     el.addEventListener('sh-logout-click', handleLogout);
 
-    const onShadowButtonClick = (e: Event) => {
-      if (!(e.target instanceof Element)) return;
-      if (e.target.tagName === 'SH-BUTTON' && e.target.getAttribute('icon-before') === 'LogOut') {
-        handleLogout();
-      }
+    const onButtonClick = (e: Event) => {
+      const isLogoutButton = e
+        .composedPath()
+        .some(
+          node =>
+            node instanceof Element &&
+            node.tagName === 'SH-BUTTON' &&
+            node.getAttribute('icon-before') === 'LogOut'
+        );
+      if (isLogoutButton) handleLogout();
     };
-    el.shadowRoot?.addEventListener('sh-button-click', onShadowButtonClick);
+    el.addEventListener('sh-button-click', onButtonClick);
 
     return () => {
       el.removeEventListener('sh-logout-click', handleLogout);
-      el.shadowRoot?.removeEventListener('sh-button-click', onShadowButtonClick);
+      el.removeEventListener('sh-button-click', onButtonClick);
     };
   }, [handleLogout]);
 
