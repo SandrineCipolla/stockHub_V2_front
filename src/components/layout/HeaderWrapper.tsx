@@ -54,13 +54,15 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     });
   }, [instance]);
 
-  // Le bouton logout est dans le shadow DOM de sh-header.
-  // sh-button-click est confirmé comme étant émis dans le shadow root.
-  // On l'écoute directement sur shadowRoot pour identifier le bouton logout
-  // via son attribut icon-before="LogOut".
+  // Double stratégie pour déclencher le logout de façon fiable :
+  // 1. Host listener sur sh-logout-click (API officielle du web component, couvre les tests)
+  // 2. Shadow root listener sur sh-button-click (couvre le navigateur réel où sh-logout-click
+  //    n'est pas toujours reçu via la liaison de prop React 19)
   useEffect(() => {
     const el = headerRef.current;
-    if (!el || !el.shadowRoot) return;
+    if (!el) return;
+
+    el.addEventListener('sh-logout-click', handleLogout);
 
     const onShadowButtonClick = (e: Event) => {
       if (!(e.target instanceof Element)) return;
@@ -68,9 +70,12 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
         handleLogout();
       }
     };
+    el.shadowRoot?.addEventListener('sh-button-click', onShadowButtonClick);
 
-    el.shadowRoot.addEventListener('sh-button-click', onShadowButtonClick);
-    return () => el.shadowRoot?.removeEventListener('sh-button-click', onShadowButtonClick);
+    return () => {
+      el.removeEventListener('sh-logout-click', handleLogout);
+      el.shadowRoot?.removeEventListener('sh-button-click', onShadowButtonClick);
+    };
   }, [handleLogout]);
 
   return React.createElement('sh-header', {
