@@ -34,9 +34,9 @@
   "ignoreDependencies": ["lighthouse", "@testing-library/user-event"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": false,
-  "ignoreBinaries": ["powershell", "vite-bundle-visualizer", "wait-on"],
+  "ignoreBinaries": ["powershell"],
   "vitest": {
-    "entry": []
+    "entry": ["src/**/__tests__/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"]
   },
   "workspaces": {
     ".": {
