@@ -27,7 +27,8 @@ export const msalConfig: Configuration = {
     clientId: import.meta.env.VITE_CLIENT_ID,
     authority: b2cPolicies.authorities.signUpSignIn.authority,
     knownAuthorities: [b2cPolicies.authorityDomain],
-    redirectUri: import.meta.env.VITE_REDIRECT_URI,
+    redirectUri: window.location.origin,
+    postLogoutRedirectUri: window.location.origin,
   },
   cache: {
     cacheLocation: 'localStorage',
