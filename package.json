@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:clean": "powershell -ExecutionPolicy Bypass -File ./kill-vite.ps1 && npm run dev",
+    "kill-vite": "powershell -ExecutionPolicy Bypass -File ./kill-vite.ps1",
     "preview": "vite preview",
     "build": "tsc -b && vite build",
     "build:with-sitemap": "npm run generate-sitemap && npm run build",
@@ -51,12 +53,14 @@
     "pre-commit": "npm run clean:check"
   },
   "dependencies": {
+    "@azure/msal-browser": "^4.27.0",
+    "@azure/msal-react": "^3.0.23",
     "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#v1.3.1",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.517.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-router-dom": "^7.13.0"
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-router-dom": "^7.9.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

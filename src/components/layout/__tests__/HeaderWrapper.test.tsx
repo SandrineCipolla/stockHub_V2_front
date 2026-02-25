@@ -12,6 +12,19 @@ vi.mock('@/hooks/useTheme', () => ({
   }),
 }));
 
+// Mock MSAL hooks
+const mockLoginRedirect = vi.fn();
+const mockLogoutRedirect = vi.fn();
+vi.mock('@azure/msal-react', () => ({
+  useMsal: () => ({
+    instance: {
+      loginRedirect: mockLoginRedirect,
+      logoutRedirect: mockLogoutRedirect,
+    },
+  }),
+  useIsAuthenticated: () => true, // Always return true for tests
+}));
+
 // Spy on logger.debug (replaces console.log spying)
 const loggerDebugSpy = vi.spyOn(loggerModule.logger, 'debug').mockImplementation(() => {});
 

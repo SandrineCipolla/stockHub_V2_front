@@ -96,9 +96,12 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     name: localStock.label,
     category: localStock.category || '',
     'last-update': `Mis à jour il y a ${localStock.lastUpdate}`,
-    percentage: localStock.unit === 'percentage' ? localStock.quantity.toString() : undefined,
+    percentage:
+      localStock.unit === 'percentage' && localStock.quantity !== undefined
+        ? localStock.quantity.toString()
+        : undefined,
     quantity: formatQuantityWithUnit(localStock.quantity, localStock.unit),
-    value: `€${localStock.value.toLocaleString()}`,
+    value: localStock.value !== undefined ? `€${localStock.value.toLocaleString()}` : '-',
     status: convertStatusToWebComponent(localStock.status),
     'data-theme': theme,
     className: className,

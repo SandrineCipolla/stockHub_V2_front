@@ -5,19 +5,75 @@ import { useStocks } from '@/hooks/useStocks';
 import { Stock } from '@/types/index.ts';
 import {
   createMockStock,
+  dashboardStocks,
   stockCategories,
   stockHubStockUseCases,
   stockStatuses,
 } from '@/test/fixtures/stock';
 import { createLocalStorageMock } from '@/test/fixtures/localStorage';
+import * as StocksAPI from '@/services/api/stocksAPI';
+
+// Mock StocksAPI module
+vi.mock('@/services/api/stocksAPI');
 
 const localStorageMock = createLocalStorageMock();
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
+// Helper function to calculate stock status based on quantity and thresholds
+const calculateStatus = (
+  quantity: number,
+  minThreshold?: number,
+  maxThreshold?: number
+): string => {
+  if (quantity === 0) return 'outOfStock';
+  if (minThreshold !== undefined) {
+    const criticalThreshold = minThreshold * 0.5;
+    if (quantity <= criticalThreshold) return 'critical';
+    if (quantity <= minThreshold) return 'low';
+  }
+  if (maxThreshold !== undefined && quantity > maxThreshold) return 'overstocked';
+  return 'optimal';
+};
 
 describe('useStocks Hook', () => {
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllTimers();
+    vi.clearAllMocks();
+
+    // Setup default mocks for StocksAPI - use dashboardStocks for realistic data
+    vi.mocked(StocksAPI.StocksAPI.fetchStocksList).mockResolvedValue([...dashboardStocks]);
+
+    vi.mocked(StocksAPI.StocksAPI.createStock).mockImplementation(async (data: any) => {
+      const status = calculateStatus(data.quantity, data.minThreshold, data.maxThreshold);
+      return {
+        ...data,
+        id: Math.floor(Math.random() * 10000),
+        status,
+        lastUpdate: new Date().toISOString(),
+        category: data.category || 'electronics',
+        unit: data.unit || 'piece',
+      };
+    });
+
+    vi.mocked(StocksAPI.StocksAPI.updateStock).mockImplementation(async (data: any) => {
+      const existingStock = dashboardStocks.find((s: any) => s.id === data.id);
+      const updatedStock = { ...(existingStock || {}), ...data };
+
+      // Recalculate status if quantity changed
+      if (data.quantity !== undefined) {
+        updatedStock.status = calculateStatus(
+          data.quantity,
+          data.minThreshold ?? updatedStock.minThreshold,
+          data.maxThreshold ?? updatedStock.maxThreshold
+        );
+      }
+
+      updatedStock.lastUpdate = new Date().toISOString();
+      return updatedStock;
+    });
+
+    vi.mocked(StocksAPI.StocksAPI.deleteStock).mockResolvedValue(undefined);
   });
 
   describe('Initial state', () => {
@@ -31,10 +87,11 @@ describe('useStocks Hook', () => {
         });
       });
 
-      it('should have loading state initially', () => {
+      it('should have no loading state initially', () => {
         const { result } = renderHook(() => useStocks());
 
-        expect(result.current.isLoading.storage).toBe(true);
+        expect(result.current.isLoading.load).toBe(false);
+        expect(result.current.isAnyLoading).toBe(false);
       });
 
       it('should calculate initial stats', async () => {
@@ -54,6 +111,10 @@ describe('useStocks Hook', () => {
 
       it('should handle fixture stock data correctly', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -159,6 +220,8 @@ describe('useStocks Hook', () => {
           label: stockHubStockUseCases.lowStock.label,
           quantity: stockHubStockUseCases.lowStock.quantity,
           value: stockHubStockUseCases.lowStock.value,
+          minThreshold: stockHubStockUseCases.lowStock.minThreshold,
+          maxThreshold: stockHubStockUseCases.lowStock.maxThreshold,
         };
 
         let created: Stock | null = null;
@@ -263,6 +326,10 @@ describe('useStocks Hook', () => {
         const { result } = renderHook(() => useStocks());
 
         // Attendre que les stocks soient chargés
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -285,8 +352,38 @@ describe('useStocks Hook', () => {
         expect(updated!.quantity).toBe(firstStock.quantity + 10);
       });
 
+      it('should preserve local fields not returned by backend', async () => {
+        const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
+        await waitFor(() => {
+          expect(result.current.stocks.length).toBeGreaterThan(0);
+        });
+
+        const firstStock = result.current.stocks[0]!;
+        const originalValue = firstStock.value;
+        const newQuantity = firstStock.quantity + 5;
+
+        await act(async () => {
+          await result.current.updateStock({ id: firstStock.id, quantity: newQuantity });
+        });
+
+        await waitFor(() => {
+          const updated = result.current.stocks.find(s => s.id === firstStock.id);
+          expect(updated?.quantity).toBe(newQuantity);
+          expect(updated?.value).toBe(originalValue);
+        });
+      });
+
       it('should recalculate status after update', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -317,6 +414,10 @@ describe('useStocks Hook', () => {
       it('should reject empty name', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -339,6 +440,10 @@ describe('useStocks Hook', () => {
       it('should reject negative quantity', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -360,6 +465,10 @@ describe('useStocks Hook', () => {
 
       it('should update to outOfStock status when quantity is 0', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -387,6 +496,10 @@ describe('useStocks Hook', () => {
       it('should remove stock from list', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -405,9 +518,43 @@ describe('useStocks Hook', () => {
       });
     });
 
+    describe('when deleteStock API fails', () => {
+      it('should rollback optimistic delete on API error', async () => {
+        vi.mocked(StocksAPI.StocksAPI.deleteStock).mockRejectedValue(new Error('Network error'));
+
+        const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
+        await waitFor(() => {
+          expect(result.current.stocks.length).toBeGreaterThan(0);
+        });
+
+        const initialCount = result.current.stocks.length;
+        const firstStock = result.current.stocks[0]!;
+
+        await act(async () => {
+          await result.current.deleteStock(firstStock.id);
+        });
+
+        await waitFor(() => {
+          expect(result.current.stocks.length).toBe(initialCount);
+          expect(result.current.stocks.find(s => s.id === firstStock.id)).toBeDefined();
+        });
+
+        expect(result.current.errors.delete).toBeDefined();
+      });
+    });
+
     describe('when deleting non-existent stock', () => {
       it('should handle error for non-existent stock', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -429,6 +576,10 @@ describe('useStocks Hook', () => {
       it('should calculate correct stats for optimal stocks', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -446,6 +597,10 @@ describe('useStocks Hook', () => {
 
       it('should handle all fixture status types', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -471,6 +626,10 @@ describe('useStocks Hook', () => {
       it('should filter stocks by category correctly', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -495,6 +654,10 @@ describe('useStocks Hook', () => {
       it('should return stock by id', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -509,6 +672,10 @@ describe('useStocks Hook', () => {
       it('should return undefined for non-existent id', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -521,6 +688,10 @@ describe('useStocks Hook', () => {
     describe('resetFilters', () => {
       it('should reset all filters', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
@@ -549,6 +720,10 @@ describe('useStocks Hook', () => {
       it('should delete multiple stocks', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(1);
         });
@@ -568,6 +743,10 @@ describe('useStocks Hook', () => {
       it('should handle empty array', async () => {
         const { result } = renderHook(() => useStocks());
 
+        await act(async () => {
+          await result.current.loadStocks();
+        });
+
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
@@ -585,6 +764,10 @@ describe('useStocks Hook', () => {
     describe('resetErrors', () => {
       it('should reset specific error', async () => {
         const { result } = renderHook(() => useStocks());
+
+        await act(async () => {
+          await result.current.loadStocks();
+        });
 
         await waitFor(() => {
           expect(result.current.stocks.length).toBeGreaterThan(0);

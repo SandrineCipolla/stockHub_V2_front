@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.production
+
+# SSL Certificates
+*.key
+*.crt
+*.pem
+*.cert
+localhost.cert
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -38,9 +50,7 @@ documentation/metrics/data/*.json
 CLAUDE.md
 CLAUDE.local.md
 
-# Local dev files
-.env
+# Local scripts and debug files
 kill-vite.ps1
-localhost.cert
-localhost.key
 nul
+src/debug-api.ts

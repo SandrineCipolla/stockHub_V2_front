@@ -131,11 +131,12 @@ export const Dashboard: React.FC = () => {
       if (currentStock) {
         await updateStock({
           id: stockId,
-          quantity: currentStock.quantity + 10,
+          quantity: (currentStock.quantity ?? 0) + 10,
         });
+        await loadStocks();
       }
     },
-    [getStockById, updateStock]
+    [getStockById, updateStock, loadStocks]
   );
 
   const handleViewStock = useCallback(
@@ -170,9 +171,6 @@ export const Dashboard: React.FC = () => {
             )}
             {errors.delete && (
               <p className="text-sm text-red-400">Suppression: {errors.delete.message}</p>
-            )}
-            {errors.storage && (
-              <p className="text-sm text-red-400">Stockage: {errors.storage.message}</p>
             )}
           </div>
           <div className="flex gap-2">
@@ -349,7 +347,6 @@ export const Dashboard: React.FC = () => {
                 {isLoading.create && 'Création en cours...'}
                 {isLoading.update && 'Mise à jour...'}
                 {isLoading.delete && 'Suppression...'}
-                {isLoading.storage && 'Sauvegarde...'}
               </span>
             </div>
           </div>

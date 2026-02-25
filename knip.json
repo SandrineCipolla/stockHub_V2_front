@@ -31,17 +31,16 @@
     "src/utils/unitFormatter.ts",
     "src/utils/containerManager.ts"
   ],
-"ignoreDependencies": ["lighthouse", "@testing-library/user-event"],
-    "ignoreExportsUsedInFile": true,
-    "includeEntryExports": false,
-    "ignoreBinaries": ["powershell", "vite-bundle-visualizer", "wait-on"],
-    "vitest": {
-      "entry": []
-    },
-    "workspaces": {
-      ".": {
-        "entry": "src/main.tsx"
-      }
+  "ignoreDependencies": ["lighthouse", "@testing-library/user-event"],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": false,
+  "ignoreBinaries": ["powershell"],
+  "vitest": {
+    "entry": ["src/**/__tests__/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"]
+  },
+  "workspaces": {
+    ".": {
+      "entry": "src/main.tsx"
     }
   }
-
+}
