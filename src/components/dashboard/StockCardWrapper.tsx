@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
+import { logger } from '@/utils/logger';
 import type { StockCardProps } from '@/types';
 import type { WebComponentStatus } from '@/types/web-component-events';
 import type { StockStatus, Stock } from '@/types/stock';
@@ -61,10 +62,10 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
         ...localStock,
         quantity: result.newQuantity,
       });
-      console.log(`🎨 ${result.message}`);
+      logger.info(result.message);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
-      console.error(`❌ ${errorMessage}`);
+      logger.error(errorMessage);
     }
   };
 

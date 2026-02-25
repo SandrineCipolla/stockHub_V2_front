@@ -3,6 +3,7 @@ import { TrendingDown, CheckCircle, Filter, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
+import { FooterWrapper } from '@/components/layout/FooterWrapper';
 import { NavSection } from '@/components/layout/NavSection';
 import { StockPrediction } from '@/components/ai/StockPrediction';
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
@@ -78,6 +79,7 @@ export const Analytics: React.FC = () => {
               riskLevel="default"
               selected={riskFilter === 'all'}
               onClick={() => setRiskFilter('all')}
+              aria-label="Filtrer : afficher tous les stocks"
             />
 
             <StatCard
@@ -86,6 +88,7 @@ export const Analytics: React.FC = () => {
               riskLevel="critical"
               selected={riskFilter === 'critical'}
               onClick={() => setRiskFilter('critical')}
+              aria-label="Filtrer par risque critique (3 jours ou moins)"
             />
 
             <StatCard
@@ -94,6 +97,7 @@ export const Analytics: React.FC = () => {
               riskLevel="high"
               selected={riskFilter === 'high'}
               onClick={() => setRiskFilter('high')}
+              aria-label="Filtrer par risque élevé (4 à 7 jours)"
             />
 
             <StatCard
@@ -102,6 +106,7 @@ export const Analytics: React.FC = () => {
               riskLevel="medium"
               selected={riskFilter === 'medium'}
               onClick={() => setRiskFilter('medium')}
+              aria-label="Filtrer par risque moyen (8 à 14 jours)"
             />
 
             <StatCard
@@ -110,6 +115,7 @@ export const Analytics: React.FC = () => {
               riskLevel="low"
               selected={riskFilter === 'low'}
               onClick={() => setRiskFilter('low')}
+              aria-label="Filtrer par risque faible (15 jours ou plus)"
             />
           </div>
         </div>
@@ -145,7 +151,7 @@ export const Analytics: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
+          <div className="text-center py-12" role="status" aria-live="polite">
             <CheckCircle className="w-16 h-16 mx-auto mb-4 text-emerald-500 opacity-50" />
             <h3 className="text-lg font-medium mb-2">Aucune prédiction dans cette catégorie</h3>
             <p className={themeClasses.textMuted}>
@@ -186,6 +192,8 @@ export const Analytics: React.FC = () => {
           </div>
         </CardWrapper>
       </main>
+
+      <FooterWrapper />
     </div>
   );
 };

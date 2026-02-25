@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from '@/hooks/useTheme';
+import { logger } from '@/utils/logger';
 import type { AISuggestion } from '@/utils/aiPredictions';
 
 // Type pour les alertes IA du web component
@@ -69,7 +70,7 @@ export const AIAlertBannerWrapper: React.FC<AIAlertBannerWrapperProps> = ({
   // Handler pour le clic sur un item
   const handleItemClick = (e: Event) => {
     const detail = e instanceof CustomEvent ? e.detail : null;
-    console.log('🤖 Alert item clicked:', detail);
+    logger.debug('Alert item clicked:', detail);
     // TODO: Navigation vers le stock concerné
   };
 

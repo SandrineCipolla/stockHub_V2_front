@@ -9,7 +9,7 @@ export const stockStatuses: StockStatus[] = [OPTIMAL, LOW, CRITICAL, OUT_OF_STOC
 /**
  * Catégories de stock pour les tests
  */
-export const stockCategories: Record<string, string> = {
+export const stockCategories = {
   food: 'Alimentaire',
   electronics: 'Électronique',
   clothing: 'Vêtements',
@@ -21,7 +21,7 @@ export const stockCategories: Record<string, string> = {
 /**
  * Fournisseurs pour les tests
  */
-export const stockSuppliers: Record<string, string> = {
+export const stockSuppliers = {
   supplier1: 'Fournisseur A',
   supplier2: 'Fournisseur B',
   supplier3: 'Fournisseur International',
@@ -31,7 +31,7 @@ export const stockSuppliers: Record<string, string> = {
 /**
  * Noms de produits pour les tests
  */
-export const productNames: Record<string, string> = {
+export const productNames = {
   apple: 'Pommes Golden',
   laptop: 'Ordinateur Portable HP',
   chair: 'Chaise de Bureau',
@@ -43,7 +43,7 @@ export const productNames: Record<string, string> = {
 /**
  * Cas d'usage métier StockHub : stocks avec différents statuts
  */
-export const stockHubStockUseCases: Record<string, Stock> = {
+export const stockHubStockUseCases = {
   optimalStock: {
     id: 1,
     label: productNames.apple,
@@ -178,7 +178,7 @@ export const stockHubStockUseCases: Record<string, Stock> = {
     minThreshold: 10,
     maxThreshold: 50,
   },
-};
+} satisfies Record<string, Stock>;
 
 /**
  * Collection de stocks pour tests de tableau complet

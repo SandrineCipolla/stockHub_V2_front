@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '@/config/authConfig';
 import { ThemeProvider } from '@/components/providers/ThemeProvider.tsx';
+import { CookieBanner } from '@/components/common/CookieBanner';
 import './styles/index.css';
 
 // Lazy loading des pages pour améliorer les performances initiales
@@ -12,23 +13,27 @@ const Dashboard = lazy(() =>
 const Analytics = lazy(() =>
   import('@/pages/Analytics.tsx').then(module => ({ default: module.Analytics }))
 );
+const Privacy = lazy(() =>
+  import('@/pages/Privacy.tsx').then(module => ({ default: module.Privacy }))
+);
 
 // Composant de chargement accessible
 const LoadingFallback = () => (
-  <div
-    className="min-h-screen flex items-center justify-center bg-slate-900"
-    role="status"
-    aria-live="polite"
-    aria-label="Chargement de la page en cours"
-  >
-    <div className="flex flex-col items-center gap-4">
+  <main id="main-content" className="min-h-screen flex items-center justify-center bg-slate-900">
+    <h1 className="sr-only">StockHub V2 — Chargement en cours</h1>
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label="Chargement de la page en cours"
+      className="flex flex-col items-center gap-4"
+    >
       <div
         className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"
         aria-hidden="true"
       />
       <p className="text-gray-300 text-sm">Chargement...</p>
     </div>
-  </div>
+  </main>
 );
 
 // Écran de connexion affiché si l'utilisateur n'est pas authentifié
@@ -71,10 +76,13 @@ function ProtectedComponent() {
         Aller au contenu principal
       </a>
 
+      <CookieBanner />
+
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

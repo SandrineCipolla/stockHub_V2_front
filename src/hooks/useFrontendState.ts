@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { AsyncFrontendState, FrontendError, FrontendErrorType } from '@/types';
+import { logger } from '@/utils/logger';
 
 // ===== HOOK PRINCIPAL POUR GESTION D'ÉTATS =====
 export const useFrontendState = <T>(initialData: T | null = null) => {
@@ -331,7 +332,7 @@ export const useDataExport = () => {
         await new Promise(resolve => setTimeout(resolve, 800));
 
         // Créer CSV
-        const headers = Object.keys(data[0]);
+        const headers = Object.keys(data[0]!);
         const csvContent = [
           headers.join(','),
           ...data.map(row =>
@@ -446,7 +447,7 @@ export const useLocalStorageState = <T>(key: string, initialValue: T) => {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.warn(`Erreur lors de la lecture du localStorage pour la clé "${key}":`, error);
+      logger.warn(`Erreur lors de la lecture du localStorage pour la clé "${key}":`, error);
       return initialValue;
     }
   }, [key, initialValue]);

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import { AIAlertBannerWrapper } from '../AIAlertBannerWrapper';
+import * as loggerModule from '@/utils/logger';
 import type { AISuggestion } from '@/utils/aiPredictions';
 
 // Mock useTheme
@@ -8,8 +9,8 @@ vi.mock('@/hooks/useTheme', () => ({
   useTheme: () => ({ theme: 'dark' }),
 }));
 
-// Mock console.log to avoid noise in tests
-const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+// Spy on logger.debug (replaces console.log spying)
+const loggerDebugSpy = vi.spyOn(loggerModule.logger, 'debug').mockImplementation(() => {});
 
 // Mock AI suggestions
 const criticalSuggestion: AISuggestion = {
@@ -248,9 +249,9 @@ describe('AIAlertBannerWrapper', () => {
       });
       banner?.dispatchEvent(event);
 
-      // Verify console.log was called
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        '🤖 Alert item clicked:',
+      // Verify logger.debug was called
+      expect(loggerDebugSpy).toHaveBeenCalledWith(
+        'Alert item clicked:',
         expect.objectContaining({ product: 'Test Product', index: 0 })
       );
     });

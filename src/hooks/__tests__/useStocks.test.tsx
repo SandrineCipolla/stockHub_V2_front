@@ -334,7 +334,7 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
 
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
         const updateData: UpdateStockData = {
           id: firstStock.id,
           label: 'Updated Stock Name',
@@ -363,7 +363,7 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
 
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
         const originalValue = firstStock.value;
         const newQuantity = firstStock.quantity + 5;
 
@@ -389,7 +389,7 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
 
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
 
         // Mettre à jour avec une quantité faible (low)
         const lowUpdate: UpdateStockData = {
@@ -422,7 +422,7 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
 
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
         const invalidUpdate: UpdateStockData = {
           id: firstStock.id,
           label: '   ',
@@ -448,7 +448,7 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
 
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
         const invalidUpdate: UpdateStockData = {
           id: firstStock.id,
           quantity: -5,
@@ -474,7 +474,7 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
 
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
         const zeroUpdate: UpdateStockData = {
           id: firstStock.id,
           quantity: 0,
@@ -505,7 +505,7 @@ describe('useStocks Hook', () => {
         });
 
         const initialCount = result.current.stocks.length;
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
 
         await act(async () => {
           await result.current.deleteStock(firstStock.id);
@@ -533,7 +533,7 @@ describe('useStocks Hook', () => {
         });
 
         const initialCount = result.current.stocks.length;
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
 
         await act(async () => {
           await result.current.deleteStock(firstStock.id);
@@ -662,7 +662,7 @@ describe('useStocks Hook', () => {
           expect(result.current.stocks.length).toBeGreaterThan(0);
         });
 
-        const firstStock = result.current.stocks[0];
+        const firstStock = result.current.stocks[0]!;
         const foundStock = result.current.getStockById(firstStock.id);
 
         expect(foundStock).toBeDefined();
@@ -729,7 +729,7 @@ describe('useStocks Hook', () => {
         });
 
         const initialCount = result.current.stocks.length;
-        const stocksToDelete = [result.current.stocks[0].id, result.current.stocks[1].id];
+        const stocksToDelete = [result.current.stocks[0]!.id, result.current.stocks[1]!.id];
 
         await act(async () => {
           await result.current.deleteMultipleStocks(stocksToDelete);

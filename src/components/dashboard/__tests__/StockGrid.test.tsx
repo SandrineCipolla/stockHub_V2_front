@@ -19,16 +19,22 @@ describe('StockGrid Component', () => {
         expect(section).toBeInTheDocument();
       });
 
-      it('should apply responsive grid layout classes', () => {
+      it('should apply container-query grid class on section', () => {
         const stocks = [stockHubStockUseCases.optimalStock];
         const { container } = render(<StockGrid stocks={stocks} />);
 
+        // Responsive layout géré par @container CSS (stock-grid-container → stock-grid)
+        // plutôt que par les breakpoints viewport Tailwind (lg:, xl:)
         const section = container.querySelector('section');
-        expect(section).toHaveClass('grid');
-        expect(section).toHaveClass('grid-cols-1');
-        expect(section).toHaveClass('lg:grid-cols-2');
-        expect(section).toHaveClass('xl:grid-cols-3');
-        expect(section).toHaveClass('gap-6');
+        expect(section).toHaveClass('stock-grid');
+      });
+
+      it('should render inside a container-query wrapper', () => {
+        const stocks = [stockHubStockUseCases.optimalStock];
+        const { container } = render(<StockGrid stocks={stocks} />);
+
+        const wrapper = container.querySelector('.stock-grid-container');
+        expect(wrapper).toBeInTheDocument();
       });
 
       it('should display accessible hidden heading with count', () => {
@@ -78,7 +84,7 @@ describe('StockGrid Component', () => {
         // Check for sh-stock-card web component (Shadow DOM prevents text access)
         const stockCard = container.querySelector('sh-stock-card');
         expect(stockCard).toBeInTheDocument();
-        expect(stockCard?.getAttribute('name')).toBe(stocks[0].label);
+        expect(stockCard?.getAttribute('name')).toBe(stocks[0]!.label);
       });
 
       it('should render StockCardWrapper with web component', () => {

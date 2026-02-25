@@ -1,6 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { Dashboard } from '@/pages/Dashboard';
 import * as useStocksModule from '@/hooks/useStocks';
@@ -15,6 +14,14 @@ import {
 
 vi.mock('@/hooks/useTheme', () => ({
   useTheme: () => createMockUseTheme(),
+}));
+
+vi.mock('@/hooks/useStocks', () => ({
+  useStocks: vi.fn(() => createMockUseStocks()),
+}));
+
+vi.mock('@/hooks/useFrontendState', () => ({
+  useDataExport: vi.fn(() => createMockUseDataExport()),
 }));
 
 vi.mock('@/components/layout/NavSection', () => ({
@@ -40,11 +47,6 @@ describe('Dashboard Component', () => {
   describe('Initial render', () => {
     describe('when dashboard loads successfully', () => {
       it('should render all main sections', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
         const { container } = await act(async () => {
           return renderDashboard();
         });
@@ -59,11 +61,6 @@ describe('Dashboard Component', () => {
       });
 
       it('should display dashboard title', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
         await act(async () => {
           renderDashboard();
         });
@@ -72,11 +69,6 @@ describe('Dashboard Component', () => {
       });
 
       it('should render metrics section with fixture stats', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
         const { container } = await act(async () => {
           return renderDashboard();
         });
@@ -87,11 +79,6 @@ describe('Dashboard Component', () => {
       });
 
       it('should display search input', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
         const { container } = await act(async () => {
           return renderDashboard();
         });
@@ -102,11 +89,6 @@ describe('Dashboard Component', () => {
       });
 
       it('should display fixture stocks correctly', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
         const { container } = await act(async () => {
           return renderDashboard();
         });
@@ -119,25 +101,22 @@ describe('Dashboard Component', () => {
 
     describe('when dashboard has different stock scenarios', () => {
       it('should handle optimal stocks scenario', async () => {
-        const optimalStocksOnly = createMockUseStocks({
-          stocks: stocksByStatus.optimal,
-          allStocks: stocksByStatus.optimal,
-          stats: {
-            total: stocksByStatus.optimal.length,
-            optimal: stocksByStatus.optimal.length,
-            low: 0,
-            critical: 0,
-            byStatus: {
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
+          createMockUseStocks({
+            stocks: stocksByStatus.optimal,
+            allStocks: stocksByStatus.optimal,
+            stats: {
+              total: stocksByStatus.optimal.length,
               optimal: stocksByStatus.optimal.length,
               low: 0,
               critical: 0,
+              byStatus: {
+                optimal: stocksByStatus.optimal.length,
+                low: 0,
+                critical: 0,
+              },
             },
-          },
-        });
-
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(optimalStocksOnly);
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
+          })
         );
 
         const { container } = await act(async () => {
@@ -150,25 +129,22 @@ describe('Dashboard Component', () => {
       });
 
       it('should handle critical stocks scenario', async () => {
-        const criticalStocksOnly = createMockUseStocks({
-          stocks: stocksByStatus.critical,
-          allStocks: stocksByStatus.critical,
-          stats: {
-            total: stocksByStatus.critical.length,
-            optimal: 0,
-            low: 0,
-            critical: stocksByStatus.critical.length,
-            byStatus: {
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
+          createMockUseStocks({
+            stocks: stocksByStatus.critical,
+            allStocks: stocksByStatus.critical,
+            stats: {
+              total: stocksByStatus.critical.length,
               optimal: 0,
               low: 0,
               critical: stocksByStatus.critical.length,
+              byStatus: {
+                optimal: 0,
+                low: 0,
+                critical: stocksByStatus.critical.length,
+              },
             },
-          },
-        });
-
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(criticalStocksOnly);
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
+          })
         );
 
         const { container } = await act(async () => {
@@ -184,74 +160,79 @@ describe('Dashboard Component', () => {
 
   describe('User interactions', () => {
     describe('when user clicks Add Stock button', () => {
-      it.skip('should call createStock with fixture data', async () => {
-        const user = userEvent.setup();
+      it('should call createStock with fixture data', async () => {
         const mockCreateStock = vi.fn();
 
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
           createMockUseStocks({
             createStock: mockCreateStock,
           })
         );
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
 
-        await act(async () => {
-          renderDashboard();
+        const { container } = await act(async () => {
+          return renderDashboard();
         });
 
-        const addButton = screen.getByText('Ajouter un Stock');
-        await user.click(addButton);
+        // sh-button is a web component — find the primary variant button
+        const addButton = container.querySelector('sh-button[variant="primary"]');
+        expect(addButton).toBeInTheDocument();
+
+        await act(async () => {
+          addButton!.dispatchEvent(new CustomEvent('sh-button-click', { bubbles: true }));
+        });
 
         expect(mockCreateStock).toHaveBeenCalled();
       });
     });
 
     describe('when user searches for stocks', () => {
-      it.skip('should filter stocks based on fixture data', async () => {
-        const user = userEvent.setup();
+      it('should filter stocks based on fixture data', async () => {
         const mockUpdateFilters = vi.fn();
 
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
           createMockUseStocks({
             updateFilters: mockUpdateFilters,
           })
         );
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
 
-        await act(async () => {
-          renderDashboard();
+        const { container } = await act(async () => {
+          return renderDashboard();
         });
 
-        const searchInput = screen.getByPlaceholderText('Rechercher un produit...');
-        await user.type(searchInput, stockHubStockUseCases.optimalStock.label);
+        // sh-search-input is a web component — interact via its input event
+        const searchInput = container.querySelector('sh-search-input');
+        expect(searchInput).toBeInTheDocument();
 
-        expect(mockUpdateFilters).toHaveBeenLastCalledWith({
+        // Simulate the search change event emitted by the web component
+        await act(async () => {
+          searchInput!.dispatchEvent(
+            new CustomEvent('sh-search-change', {
+              detail: { value: stockHubStockUseCases.optimalStock.label },
+              bubbles: true,
+            })
+          );
+        });
+
+        expect(mockUpdateFilters).toHaveBeenCalledWith({
           query: stockHubStockUseCases.optimalStock.label,
         });
       });
 
-      it.skip('should search for specific fixture stock names', async () => {
-        const user = userEvent.setup();
+      it('should search for specific fixture stock names', async () => {
         const mockUpdateFilters = vi.fn();
 
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
           createMockUseStocks({
             updateFilters: mockUpdateFilters,
           })
         );
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
 
-        await act(async () => {
-          renderDashboard();
+        const { container } = await act(async () => {
+          return renderDashboard();
         });
 
-        const searchInput = screen.getByPlaceholderText('Rechercher un produit...');
+        const searchInput = container.querySelector('sh-search-input');
+        expect(searchInput).toBeInTheDocument();
 
         // Tester avec différents stocks des fixtures
         const stockNames = [
@@ -261,10 +242,16 @@ describe('Dashboard Component', () => {
         ];
 
         for (const stockName of stockNames) {
-          await user.clear(searchInput);
-          await user.type(searchInput, stockName);
+          await act(async () => {
+            searchInput!.dispatchEvent(
+              new CustomEvent('sh-search-change', {
+                detail: { value: stockName },
+                bubbles: true,
+              })
+            );
+          });
 
-          expect(mockUpdateFilters).toHaveBeenLastCalledWith({
+          expect(mockUpdateFilters).toHaveBeenCalledWith({
             query: stockName,
           });
         }
@@ -272,23 +259,26 @@ describe('Dashboard Component', () => {
     });
 
     describe('when user exports data', () => {
-      it.skip('should call exportToCsv with fixture stocks', async () => {
-        const user = userEvent.setup();
+      it('should call exportToCsv with fixture stocks', async () => {
         const mockExportToCsv = vi.fn().mockResolvedValue(true);
 
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
+        vi.mocked(useFrontendStateModule.useDataExport).mockReturnValue(
           createMockUseDataExport({
             exportToCsv: mockExportToCsv,
           })
         );
 
-        await act(async () => {
-          renderDashboard();
+        const { container } = await act(async () => {
+          return renderDashboard();
         });
 
-        const exportButton = screen.getByText('Exporter');
-        await user.click(exportButton);
+        // sh-button with export description
+        const exportButton = container.querySelector('sh-button[aria-describedby="export-help"]');
+        expect(exportButton).toBeInTheDocument();
+
+        await act(async () => {
+          exportButton!.dispatchEvent(new CustomEvent('sh-button-click', { bubbles: true }));
+        });
 
         expect(mockExportToCsv).toHaveBeenCalledWith(
           dashboardStocks.map(stock => ({ ...stock })),
@@ -300,26 +290,17 @@ describe('Dashboard Component', () => {
 
   describe('Data integration with fixtures', () => {
     describe('when using complete fixture data', () => {
-      it.skip('should display user information correctly', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
-        await act(async () => {
-          renderDashboard();
+      it('should display header component correctly', async () => {
+        const { container } = await act(async () => {
+          return renderDashboard();
         });
 
-        // Le header devrait afficher les informations utilisateur des fixtures
-        expect(screen.getByTestId('header')).toBeInTheDocument();
+        // Le header est un web component sh-header
+        const header = container.querySelector('sh-header');
+        expect(header).toBeInTheDocument();
       });
 
-      it.skip('should handle breadcrumb navigation correctly', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
+      it('should handle breadcrumb navigation correctly', async () => {
         await act(async () => {
           renderDashboard();
         });
@@ -328,12 +309,7 @@ describe('Dashboard Component', () => {
         expect(screen.getByTestId('nav-section')).toBeInTheDocument();
       });
 
-      it.skip('should display stock categories from fixtures', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(createMockUseStocks());
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
-
+      it('should display stock categories from fixtures', async () => {
         await act(async () => {
           renderDashboard();
         });
@@ -345,60 +321,57 @@ describe('Dashboard Component', () => {
     });
 
     describe('when handling different user scenarios', () => {
-      it.skip('should work with wealthy user scenario', async () => {
-        const wealthyUserStocks = createMockUseStocks({
-          stats: {
-            ...createMockUseStocks().stats,
-            totalValue: mockUserScenarios.wealthyUser.stats.portfolioValue,
-          },
-        });
-
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(wealthyUserStocks);
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
+      it('should work with wealthy user scenario', async () => {
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
+          createMockUseStocks({
+            stats: {
+              ...createMockUseStocks().stats,
+              totalValue: mockUserScenarios.wealthyUser.stats.portfolioValue,
+            },
+          })
         );
 
-        await act(async () => {
-          renderDashboard();
+        const { container } = await act(async () => {
+          return renderDashboard();
         });
 
-        expect(screen.getByText('Valeur Totale')).toBeInTheDocument();
+        // Vérifier que les metric cards sont rendues (Shadow DOM)
+        const metricCards = container.querySelectorAll('sh-metric-card');
+        expect(metricCards.length).toBeGreaterThanOrEqual(3);
       });
 
-      it.skip('should work with new user scenario', async () => {
-        const newUserStocks = createMockUseStocks({
-          stocks: [],
-          allStocks: [],
-          stats: {
-            total: 0,
-            optimal: 0,
-            low: 0,
-            critical: 0,
-            totalValue: 0,
-            averageValue: 0,
-            byStatus: { optimal: 0, low: 0, critical: 0 },
-            byCategory: {},
-          },
-        });
-
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(newUserStocks);
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
+      it('should work with new user scenario', async () => {
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
+          createMockUseStocks({
+            stocks: [],
+            allStocks: [],
+            stats: {
+              total: 0,
+              optimal: 0,
+              low: 0,
+              critical: 0,
+              totalValue: 0,
+              averageValue: 0,
+              byStatus: { optimal: 0, low: 0, critical: 0 },
+              byCategory: {},
+            },
+          })
         );
 
         await act(async () => {
           renderDashboard();
         });
 
-        expect(screen.getByLabelText('Total Produits: 0')).toBeInTheDocument();
+        // Vérifier l'état vide
+        expect(screen.getByText('Aucun stock trouvé')).toBeInTheDocument();
       });
     });
   });
 
   describe('Error handling with fixtures', () => {
     describe('when there are loading errors', () => {
-      it.skip('should handle stock loading errors', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(
+      it('should handle stock loading errors', async () => {
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
           createMockUseStocks({
             errors: {
               load: new Error('Erreur de chargement des stocks'),
@@ -410,9 +383,6 @@ describe('Dashboard Component', () => {
             },
             hasAnyError: true,
           })
-        );
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
         );
 
         await act(async () => {
@@ -427,8 +397,8 @@ describe('Dashboard Component', () => {
     });
 
     describe('when there are loading states', () => {
-      it.skip('should handle stock loading states', async () => {
-        vi.spyOn(useStocksModule, 'useStocks').mockReturnValue(
+      it('should handle stock loading states', async () => {
+        vi.mocked(useStocksModule.useStocks).mockReturnValue(
           createMockUseStocks({
             isLoading: {
               load: true,
@@ -441,16 +411,13 @@ describe('Dashboard Component', () => {
             isAnyLoading: true,
           })
         );
-        vi.spyOn(useFrontendStateModule, 'useDataExport').mockReturnValue(
-          createMockUseDataExport()
-        );
 
         await act(async () => {
           renderDashboard();
         });
 
         // Vérifier que le dashboard affiche l'état de chargement
-        expect(screen.getByTestId('nav-section')).toBeInTheDocument();
+        expect(screen.getByText('Chargement des stocks...')).toBeInTheDocument();
       });
     });
   });

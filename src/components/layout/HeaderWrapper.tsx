@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { useTheme } from '@/hooks/useTheme';
 import { loginRequest } from '@/config/authConfig';
+import { logger } from '@/utils/logger';
 import type { HeaderProps } from '@/types';
 
 /**
@@ -19,7 +20,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   const isLoggedIn = useIsAuthenticated();
 
   const handleNotifications = () => {
-    console.log('🔔 Notifications clicked');
+    logger.debug('Notifications clicked');
     // TODO: Ouvrir le panneau de notifications
   };
 
@@ -30,10 +31,10 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   // Fonction handleLogin (identique à V1)
   const handleLogin = async () => {
     try {
-      console.log('🔐 Login clicked');
+      logger.debug('Login clicked');
       await instance.loginRedirect(loginRequest);
     } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
+      logger.error('Erreur lors de la connexion:', error);
     }
   };
 
@@ -46,9 +47,11 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
 
   // Fonction handleLogout (identique à V1 avec ajout de authToken)
   const handleLogout = useCallback(() => {
-    console.log('👋 Logout clicked');
+    logger.debug('Logout clicked');
     clearLocalStorage();
-    instance.logoutRedirect({ postLogoutRedirectUri: '/' })?.catch(console.error);
+    instance.logoutRedirect({ postLogoutRedirectUri: '/' })?.catch((err: unknown) => {
+      logger.error('Erreur lors du logout:', err);
+    });
   }, [instance]);
 
   // Ref toujours à jour vers la dernière version de handleLogout.

@@ -12,6 +12,7 @@
  */
 
 import type { Stock } from '@/types/stock';
+import { logger } from '@/utils/logger';
 
 /**
  * Historical data point for time-series analysis
@@ -200,14 +201,14 @@ export function performLinearRegression(dataPoints: DataPoint[]): LinearRegressi
   }
 
   // Convert timestamps to days (x-axis)
-  const baseTimestamp = dataPoints[0].timestamp;
+  const baseTimestamp = dataPoints[0]!.timestamp;
   const x = dataPoints.map(p => (p.timestamp - baseTimestamp) / (24 * 60 * 60 * 1000));
   const y = dataPoints.map(p => p.quantity);
 
   // Calculate sums for least squares method
   const sumX = x.reduce((sum, val) => sum + val, 0);
   const sumY = y.reduce((sum, val) => sum + val, 0);
-  const sumXY = x.reduce((sum, val, i) => sum + val * y[i], 0);
+  const sumXY = x.reduce((sum, val, i) => sum + val * y[i]!, 0);
   const sumX2 = x.reduce((sum, val) => sum + val * val, 0);
 
   // Calculate slope (m) and intercept (b)
@@ -221,7 +222,7 @@ export function performLinearRegression(dataPoints: DataPoint[]): LinearRegressi
   const yMean = sumY / n;
   const ssTot = y.reduce((sum, val) => sum + Math.pow(val - yMean, 2), 0);
   const ssRes = y.reduce((sum, val, i) => {
-    const predicted = slope * x[i] + intercept;
+    const predicted = slope * x[i]! + intercept;
     return sum + Math.pow(val - predicted, 2);
   }, 0);
 
@@ -394,7 +395,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
 
   // Debug: Log regression for critical/low stocks
   if (stock.status === 'critical' || stock.status === 'low') {
-    console.log(`📊 ${stock.label}:`, {
+    logger.debug(`${stock.label}:`, {
       status: stock.status,
       quantity: stock.quantity,
       slope: regression.slope.toFixed(2),
@@ -408,7 +409,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
 
   // Debug: Log prediction result
   if (stock.status === 'critical' || stock.status === 'low') {
-    console.log(`  → daysUntilRupture: ${daysUntilRupture}`);
+    logger.debug(`  → daysUntilRupture: ${daysUntilRupture}`);
   }
 
   // Step 4: Calculate confidence intervals
@@ -478,7 +479,7 @@ export function predictStockRuptures(stocks: Stock[]): StockPrediction[] {
         return predictStockRupture(stock);
       } catch (error) {
         // If prediction fails (e.g., insufficient data), return a safe default
-        console.warn(`Failed to predict stock ${stock.id}:`, error);
+        logger.warn(`Failed to predict stock ${stock.id}:`, error);
         return null;
       }
     })

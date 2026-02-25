@@ -3,18 +3,20 @@ import { BarChart3, Download, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
+import { FooterWrapper } from '@/components/layout/FooterWrapper';
 import { NavSection } from '@/components/layout/NavSection';
 import { MetricCardWrapper } from '@/components/dashboard/MetricCardWrapper';
 import { StockGrid } from '@/components/dashboard/StockGrid';
 import { AIAlertBannerWrapper as AISummaryWidget } from '@/components/ai/AIAlertBannerWrapper';
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
 import { SearchInputWrapper } from '@/components/common/SearchInputWrapper';
-import { Card } from '@/components/common/Card';
+import { CardWrapper } from '@/components/common/CardWrapper';
 
 import { useStocks } from '@/hooks/useStocks';
 import { useDataExport } from '@/hooks/useFrontendState';
 import { useTheme } from '@/hooks/useTheme.ts';
 import { generateAISuggestions } from '@/utils/aiPredictions';
+import { logger } from '@/utils/logger';
 
 export const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -68,7 +70,7 @@ export const Dashboard: React.FC = () => {
           setIsLoaded(true);
         }
       } catch (error) {
-        console.error('Erreur lors du chargement:', error);
+        logger.error('Erreur lors du chargement:', error);
       }
     };
 
@@ -99,7 +101,7 @@ export const Dashboard: React.FC = () => {
 
     const success = await exportToCsv(stocksForExport, 'stocks-export.csv');
     if (success) {
-      console.log('Export réussi');
+      logger.info('Export réussi');
     }
   }, [stocks, exportToCsv]);
 
@@ -112,7 +114,7 @@ export const Dashboard: React.FC = () => {
     });
 
     if (result) {
-      console.log('Stock créé:', result);
+      logger.info('Stock créé:', result);
     }
   }, [createStock]);
 
@@ -139,7 +141,7 @@ export const Dashboard: React.FC = () => {
 
   const handleViewStock = useCallback(
     (stockId: number | string): void => {
-      console.log('Voir détails:', getStockById(stockId));
+      logger.debug('Voir détails:', getStockById(stockId));
     },
     [getStockById]
   );
@@ -152,10 +154,10 @@ export const Dashboard: React.FC = () => {
   // Affichage d'erreur globale
   if (hasAnyError) {
     return (
-      <div
+      <main
         className={`min-h-screen ${themeClasses.background} ${themeClasses.text} flex items-center justify-center`}
       >
-        <Card className="max-w-md">
+        <CardWrapper className="max-w-md">
           <h2 className="text-xl font-bold text-red-500 mb-4">Erreur</h2>
           <div className="space-y-2 mb-4">
             {errors.load && (
@@ -185,8 +187,8 @@ export const Dashboard: React.FC = () => {
               Réessayer
             </Button>
           </div>
-        </Card>
-      </div>
+        </CardWrapper>
+      </main>
     );
   }
 
@@ -232,7 +234,7 @@ export const Dashboard: React.FC = () => {
               variant="secondary"
               icon={Search}
               aria-label="Ouvrir la page de recherche avancée de stocks"
-              onClick={() => console.log('🔍 Recherche avancée')}
+              onClick={() => logger.debug('Recherche avancée')}
             >
               <span className="hidden md:hidden lg:inline">Recherche Avancée</span>
             </Button>
@@ -366,7 +368,7 @@ export const Dashboard: React.FC = () => {
 
         {/* État vide accessible */}
         {!isAnyLoading && stocks.length === 0 && (
-          <div className="text-center py-12" role="region" aria-live="polite">
+          <section className="text-center py-12" role="status" aria-live="polite">
             <div className="w-16 h-16 mx-auto mb-4 opacity-50">📦</div>
             <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
             <p className={themeClasses.textMuted}>
@@ -391,11 +393,11 @@ export const Dashboard: React.FC = () => {
                 </Button>
               )}
             </div>
-          </div>
+          </section>
         )}
       </main>
 
-      <sh-footer app-name="STOCK HUB" year="2025" data-theme="dark" />
+      <FooterWrapper />
     </div>
   );
 };

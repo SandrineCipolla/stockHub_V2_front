@@ -6,6 +6,7 @@ import { b2cPolicies, loginRequest } from './config/authConfig';
 import { msalInstance } from './config/msalInstance';
 import App from './App';
 import './styles/index.css';
+import { logger } from '@/utils/logger';
 
 // Importer UNIQUEMENT les CSS tokens (variables CSS) - Critique pour le rendu
 import '@stockhub/design-system/dist/tokens/design-tokens.css';
@@ -15,7 +16,7 @@ import '@stockhub/design-system/dist/tokens/design-tokens.css';
 setTimeout(() => {
   // @ts-expect-error - Le Design System n'a pas de fichier .d.ts, mais fonctionne en runtime
   import('@stockhub/design-system').catch(err => {
-    console.error('❌ Erreur lors du chargement du Design System:', err);
+    logger.error('Erreur lors du chargement du Design System:', err);
   });
 }, 100); // Délai de 100ms pour laisser React charger d'abord
 
@@ -28,7 +29,7 @@ async function initializeMsal() {
 
     // Auto-sélection du premier compte si disponible
     if (!msalInstance.getActiveAccount() && msalInstance.getAllAccounts().length > 0) {
-      msalInstance.setActiveAccount(msalInstance.getAllAccounts()[0]);
+      msalInstance.setActiveAccount(msalInstance.getAllAccounts()[0] ?? null);
     }
 
     // Event listener pour gérer l'authentification

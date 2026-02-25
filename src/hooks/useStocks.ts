@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import type { CreateStockData, SearchFilters, Stock, UpdateStockData } from '@/types';
 import { createFrontendError, useAsyncAction } from './useFrontendState';
 import { StocksAPI } from '@/services/api/stocksAPI';
+import { logger } from '@/utils/logger';
 
 export type { CreateStockData, UpdateStockData };
 
@@ -16,15 +17,15 @@ export const useStocks = () => {
     useCallback(async (): Promise<Stock[]> => {
       try {
         // Appel au backend via StocksAPI
-        console.log('🔄 Chargement des stocks depuis le backend...');
+        logger.debug('Chargement des stocks depuis le backend...');
         const stocksFromBackend = await StocksAPI.fetchStocksList();
-        console.log('✅ Stocks chargés depuis le backend:', stocksFromBackend);
+        logger.debug('Stocks chargés depuis le backend:', stocksFromBackend);
 
         setStocks(stocksFromBackend);
 
         return stocksFromBackend;
       } catch (error) {
-        console.error('❌ Erreur lors du chargement depuis le backend:', error);
+        logger.error('Erreur lors du chargement depuis le backend:', error);
 
         throw createFrontendError('network', 'Impossible de charger les stocks depuis le serveur');
       }
@@ -58,21 +59,21 @@ export const useStocks = () => {
 
       try {
         // Appel au backend via StocksAPI
-        console.log('🔄 Création du stock sur le backend...', stockData);
+        logger.debug('Création du stock sur le backend...', stockData);
         const newStock = await StocksAPI.createStock(stockData);
-        console.log('✅ Stock créé sur le backend:', newStock);
+        logger.debug('Stock créé sur le backend:', newStock);
 
         setStocks(prev => [...prev, newStock]);
 
         return newStock;
       } catch (error) {
-        console.error('❌ Erreur lors de la création sur le backend:', error);
+        logger.error('Erreur lors de la création sur le backend:', error);
         throw createFrontendError('network', 'Impossible de créer le stock sur le serveur');
       }
     }, []),
     {
       onSuccess: () => {
-        console.log('✅ Stock créé avec succès');
+        logger.info('Stock créé avec succès');
       },
       simulateDelay: 0,
     }
@@ -109,9 +110,9 @@ export const useStocks = () => {
 
         try {
           // Appel au backend via StocksAPI
-          console.log('🔄 Mise à jour du stock sur le backend...', updateData);
+          logger.debug('Mise à jour du stock sur le backend...', updateData);
           const updatedStock = await StocksAPI.updateStock(updateData);
-          console.log('✅ Stock mis à jour sur le backend:', updatedStock);
+          logger.debug('Stock mis à jour sur le backend:', updatedStock);
 
           // Calcul du nouveau statut côté frontend (le backend ne retourne pas les champs
           // quantity/value/status correctement dans la version actuelle)
@@ -144,7 +145,7 @@ export const useStocks = () => {
 
           return mergedStock;
         } catch (error) {
-          console.error('❌ Erreur lors de la mise à jour sur le backend:', error);
+          logger.error('Erreur lors de la mise à jour sur le backend:', error);
           throw createFrontendError(
             'network',
             'Impossible de mettre à jour le stock sur le serveur'
@@ -170,13 +171,13 @@ export const useStocks = () => {
 
         try {
           // Appel au backend via StocksAPI
-          console.log('🔄 Suppression du stock sur le backend...', stockId);
+          logger.debug('Suppression du stock sur le backend...', stockId);
           await StocksAPI.deleteStock(stockId);
-          console.log('✅ Stock supprimé sur le backend');
+          logger.debug('Stock supprimé sur le backend');
         } catch (error) {
           // Rollback : restaurer la liste si l'API échoue
           setStocks(previousStocks);
-          console.error('❌ Erreur lors de la suppression sur le backend:', error);
+          logger.error('Erreur lors de la suppression sur le backend:', error);
           throw createFrontendError('network', 'Impossible de supprimer le stock sur le serveur');
         }
       },
