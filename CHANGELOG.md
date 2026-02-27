@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.7.0...v1.7.1) (2026-02-27)
+
+
+### 🐛 Bug Fixes
+
+* complete backend integration with PATCH/DELETE and response mapper (Issue [#57](https://github.com/SandrineCipolla/stockHub_V2_front/issues/57)) ([#65](https://github.com/SandrineCipolla/stockHub_V2_front/issues/65)) ([d36134c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d36134c48a7f95c01beac0a9c01f75f6f091bc07))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump the npm_and_yarn group across 1 directory with 2 updates ([#97](https://github.com/SandrineCipolla/stockHub_V2_front/issues/97)) ([d51be10](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d51be10f36670c2bd4204e75940fb29789309f42))
+* **deps:** bump the npm_and_yarn group across 1 directory with 3 updates ([#96](https://github.com/SandrineCipolla/stockHub_V2_front/issues/96)) ([592d6cd](https://github.com/SandrineCipolla/stockHub_V2_front/commit/592d6cd34d2f35cc077cfbe63af7183fab464642))
+
 ## [1.7.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.6.0...v1.7.0) (2026-02-23)
 
 ### ✨ Features
