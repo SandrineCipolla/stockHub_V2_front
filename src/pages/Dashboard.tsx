@@ -141,9 +141,9 @@ export const Dashboard: React.FC = () => {
 
   const handleViewStock = useCallback(
     (stockId: number | string): void => {
-      logger.debug('Voir détails:', getStockById(stockId));
+      navigate(`/stocks/${stockId}`);
     },
-    [getStockById]
+    [navigate]
   );
 
   const handleResetFilters = useCallback(() => {
