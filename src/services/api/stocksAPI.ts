@@ -1,35 +1,63 @@
 import { getApiConfig } from './utils';
-import type { Stock, CreateStockData, UpdateStockData } from '../../types/stock';
+import type { Stock, CreateStockData, UpdateStockData, StockStatus } from '../../types/stock';
+
+/**
+ * Interface pour les items tels que retournés en inline dans la réponse backend
+ */
+interface BackendItem {
+  id: number;
+  quantity: number;
+  minimumStock: number;
+}
 
 /**
  * Interface pour les données Stock telles que retournées par le backend
- * Le backend retourne uniquement: id, label, description, category
+ * Le backend retourne: id, label, description, category
+ * Les items inline (items?) ne sont pas encore inclus dans GET /stocks — limitation N+1 connue.
+ * Quand le backend inclura les items, la quantité et le statut seront calculés dynamiquement.
  */
 interface BackendStock {
   id: number;
   label: string;
   description?: string;
   category: string;
-  items?: unknown[];
+  items?: BackendItem[];
 }
 
 /**
- * Transforme les données backend (partielles) en format frontend (complet)
- * Ajoute les propriétés obligatoires manquantes avec des valeurs par défaut
- *
- * NOTE: quantity et value sont mis à 0 car le backend ne les fournit pas encore.
- * Ces valeurs devraient être calculées à partir des items dans une future version.
+ * Calcule la quantité totale et le statut d'un stock à partir de ses items.
+ * Si les items ne sont pas inclus dans la réponse (N+1 limitation), retourne les valeurs par défaut.
+ */
+function computeQuantityAndStatus(items?: BackendItem[]): {
+  quantity: number;
+  status: StockStatus;
+} {
+  if (!items || items.length === 0) {
+    return { quantity: 0, status: 'optimal' };
+  }
+  const quantity = items.reduce((sum, item) => sum + item.quantity, 0);
+  const hasLowStock = items.some(item => item.quantity <= item.minimumStock);
+  const status: StockStatus = hasLowStock ? 'low' : 'optimal';
+  return { quantity, status };
+}
+
+/**
+ * Transforme les données backend en format frontend.
+ * quantity et status sont calculés depuis les items inline si disponibles.
+ * Limitation connue : GET /stocks ne retourne pas encore les items en ligne (N+1).
+ * La page détail /stocks/:id charge les items séparément via GET /stocks/:id/items.
  */
 function mapBackendStockToFrontend(backendStock: BackendStock): Stock {
+  const { quantity, status } = computeQuantityAndStatus(backendStock.items);
   return {
     id: backendStock.id,
     label: backendStock.label,
     description: backendStock.description || '',
     category: backendStock.category || 'alimentation',
-    quantity: 0, // TODO: Calculer depuis items quand disponibles
-    value: 0, // TODO: Calculer depuis items quand disponibles
-    status: 'optimal', // TODO: Calculer selon logique métier
-    lastUpdate: new Date().toISOString(), // Date actuelle par défaut
+    quantity,
+    value: 0,
+    status,
+    lastUpdate: new Date().toISOString(),
     unit: 'piece',
   };
 }
