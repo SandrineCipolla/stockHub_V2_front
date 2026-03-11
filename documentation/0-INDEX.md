@@ -15,7 +15,7 @@
 | **0**  | [0-INDEX.md](0-INDEX.md)                                                 | 📍 Vous êtes ici - Index principal                     |
 | **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                             | 🚀 **Démarrage rapide** - Installation, premiers pas   |
 | **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)                   | 🎨 Guide utilisation web components React              |
-| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)             | 🔗 **Harmonisation Frontend ↔ Design System**         |
+| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)             | 🔗 **Harmonisation Frontend ↔ Design System**          |
 | **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                             | 🐛 Résolution problèmes web components                 |
 | **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                                 | 🧪 Guide tests & métriques performance                 |
 | **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                                 | ♿ Accessibilité WCAG AA (audit complet)               |
@@ -95,6 +95,7 @@
 - [technical/LOGGER-GUIDE.md](technical/LOGGER-GUIDE.md) - Système de logging
 - [technical/MAINTENANCE-AUTO.md](technical/MAINTENANCE-AUTO.md) - Scripts et automatisation
 - [technical/RELEASE-AUTOMATION.md](technical/RELEASE-AUTOMATION.md) - Automatisation releases (Release Please)
+- [technical/DEPLOYMENT-ARCHITECTURE.md](technical/DEPLOYMENT-ARCHITECTURE.md) ⭐ **Déploiement** - Architecture staging Vercel + prod Azure
 - [technical/SCRIPTS-AUDIT.md](technical/SCRIPTS-AUDIT.md) - Scripts audit (FPS, a11y, daltonisme)
 - [technical/TYPE-SAFETY-AUDIT-2025-11-18.md](technical/TYPE-SAFETY-AUDIT-2025-11-18.md) - Audit TypeScript & sécurité des types
 - [technical/16-CI-TROUBLESHOOTING.md](technical/16-CI-TROUBLESHOOTING.md) ⭐ **CI/CD Troubleshooting** - Résolution problèmes CI
@@ -302,16 +303,16 @@ documentation/
 
 ### Par Besoin
 
-| Besoin                        | Document                                                     |
-| ----------------------------- | ------------------------------------------------------------ |
-| **Installer le projet**       | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                 |
-| **Utiliser web components**   | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)       |
+| Besoin                       | Document                                                     |
+| ---------------------------- | ------------------------------------------------------------ |
+| **Installer le projet**      | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                 |
+| **Utiliser web components**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)       |
 | **Comprendre Frontend ↔ DS** | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md) |
-| **Problème technique**        | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 |
-| **Écrire des tests**          | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                     |
-| **Accessibilité**             | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     |
-| **Sessions développement**    | [7-SESSIONS.md](7-SESSIONS.md)                               |
-| **Suivi RNCP**                | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   |
+| **Problème technique**       | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 |
+| **Écrire des tests**         | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                     |
+| **Accessibilité**            | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     |
+| **Sessions développement**   | [7-SESSIONS.md](7-SESSIONS.md)                               |
+| **Suivi RNCP**               | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   |
 
 ### Par Sujet
 
@@ -382,6 +383,6 @@ Créer une issue : https://github.com/SandrineCipolla/stockHub_V2_front/issues
 
 ---
 
-**Dernière mise à jour** : 8 Décembre 2025
-**Version Documentation** : 2.5 (Copilot Feedback + CI/CD Troubleshooting)
+**Dernière mise à jour** : 11 Mars 2026
+**Version Documentation** : 2.6 (Deployment Architecture staging Vercel + prod Azure)
 **Projet** : StockHub V2 - RNCP 7
