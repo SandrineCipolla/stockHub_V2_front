@@ -99,7 +99,6 @@
 - [technical/SCRIPTS-AUDIT.md](technical/SCRIPTS-AUDIT.md) - Scripts audit (FPS, a11y, daltonisme)
 - [technical/TYPE-SAFETY-AUDIT-2025-11-18.md](technical/TYPE-SAFETY-AUDIT-2025-11-18.md) - Audit TypeScript & sécurité des types
 - [technical/16-CI-TROUBLESHOOTING.md](technical/16-CI-TROUBLESHOOTING.md) ⭐ **CI/CD Troubleshooting** - Résolution problèmes CI
-  | **17** | [technical/DEPLOYMENT-ARCHITECTURE.md](technical/DEPLOYMENT-ARCHITECTURE.md) | 🚀 **Déploiement** - Architecture staging Vercel + prod Azure |
 
 ---
 
