@@ -107,6 +107,30 @@ export interface UpdateStockData extends Partial<CreateStockData> {
   id: number | string;
 }
 
+/**
+ * Item appartenant à un stock
+ * Correspond à la réponse de GET /api/v2/stocks/:stockId/items
+ */
+export interface StockItem {
+  id: number;
+  label: string;
+  description?: string;
+  quantity: number;
+  minimumStock: number;
+  stockId: number;
+}
+
+export interface CreateItemData {
+  label: string;
+  quantity: number;
+  description?: string;
+  minimumStock?: number;
+}
+
+export interface UpdateItemData {
+  quantity: number;
+}
+
 export interface StockEvent {
   readonly id: string;
   stockId: number | string;

@@ -198,9 +198,22 @@ export const useStocks = () => {
           throw createFrontendError('validation', `Stocks introuvables: ${missingIds.join(', ')}`);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 800));
+        const results = await Promise.allSettled(stockIds.map(id => StocksAPI.deleteStock(id)));
 
-        setStocks(prev => prev.filter(stock => !stockIds.includes(stock.id)));
+        const failed = results.filter(r => r.status === 'rejected');
+        const deletedIds = stockIds.filter((_, i) => results[i]?.status === 'fulfilled');
+
+        if (deletedIds.length > 0) {
+          setStocks(prev => prev.filter(stock => !deletedIds.includes(stock.id)));
+        }
+
+        if (failed.length > 0) {
+          logger.error(`${failed.length} suppression(s) échouée(s) sur ${stockIds.length}`);
+          throw createFrontendError(
+            'network',
+            `${failed.length} suppression(s) ont échoué sur ${stockIds.length}`
+          );
+        }
       },
       [stocks]
     ),

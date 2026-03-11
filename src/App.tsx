@@ -16,6 +16,9 @@ const Analytics = lazy(() =>
 const Privacy = lazy(() =>
   import('@/pages/Privacy.tsx').then(module => ({ default: module.Privacy }))
 );
+const StockDetailPage = lazy(() =>
+  import('@/pages/StockDetailPage.tsx').then(module => ({ default: module.StockDetailPage }))
+);
 
 // Composant de chargement accessible
 const LoadingFallback = () => (
@@ -83,6 +86,7 @@ function ProtectedComponent() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/stocks/:stockId" element={<StockDetailPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
