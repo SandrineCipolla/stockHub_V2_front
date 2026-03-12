@@ -38,17 +38,8 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     }
   };
 
-  // Fonction de nettoyage du localStorage (identique à V1)
-  const clearLocalStorage = () => {
-    localStorage.removeItem('msal.idtoken');
-    localStorage.removeItem('msal.accesstoken');
-    localStorage.removeItem('authToken'); // Notre token custom V2
-  };
-
-  // Fonction handleLogout (identique à V1 avec ajout de authToken)
   const handleLogout = useCallback(() => {
     logger.debug('Logout clicked');
-    clearLocalStorage();
     instance.logoutRedirect({ postLogoutRedirectUri: '/' })?.catch((err: unknown) => {
       logger.error('Erreur lors du logout:', err);
     });
