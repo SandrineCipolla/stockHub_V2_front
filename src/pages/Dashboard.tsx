@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BarChart3, Download, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import type { Stock } from '@/types';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
@@ -11,6 +12,7 @@ import { AIAlertBannerWrapper as AISummaryWidget } from '@/components/ai/AIAlert
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
 import { SearchInputWrapper } from '@/components/common/SearchInputWrapper';
 import { CardWrapper } from '@/components/common/CardWrapper';
+import { StockFormModal } from '@/components/stocks/StockFormModal';
 
 import { useStocks } from '@/hooks/useStocks';
 import { useDataExport } from '@/hooks/useFrontendState';
@@ -21,6 +23,8 @@ import { logger } from '@/utils/logger';
 export const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [editingStock, setEditingStock] = useState<Stock | null>(null);
 
   const navigate = useNavigate();
   const { theme } = useTheme();
@@ -29,8 +33,6 @@ export const Dashboard: React.FC = () => {
     stocks,
     stats,
     loadStocks,
-    createStock,
-    updateStock,
     deleteStock,
     updateFilters,
     resetFilters,
@@ -105,18 +107,9 @@ export const Dashboard: React.FC = () => {
     }
   }, [stocks, exportToCsv]);
 
-  const handleCreateStock = useCallback(async (): Promise<void> => {
-    const result = await createStock({
-      label: 'Nouveau Stock',
-      quantity: 50,
-      value: 1000,
-      description: 'Stock créé depuis le dashboard',
-    });
-
-    if (result) {
-      logger.info('Stock créé:', result);
-    }
-  }, [createStock]);
+  const handleCreateStock = useCallback(() => {
+    setIsFormOpen(true);
+  }, []);
 
   const handleDeleteStock = useCallback(
     async (stockId: number | string): Promise<void> => {
@@ -126,17 +119,14 @@ export const Dashboard: React.FC = () => {
   );
 
   const handleUpdateStock = useCallback(
-    async (stockId: number | string): Promise<void> => {
-      const currentStock = getStockById(stockId);
-      if (currentStock) {
-        await updateStock({
-          id: stockId,
-          quantity: (currentStock.quantity ?? 0) + 10,
-        });
-        await loadStocks();
+    (stockId: number | string) => {
+      const stock = getStockById(stockId);
+      if (stock) {
+        setEditingStock(stock);
+        setIsFormOpen(true);
       }
     },
-    [getStockById, updateStock, loadStocks]
+    [getStockById]
   );
 
   const handleViewStock = useCallback(
@@ -215,7 +205,6 @@ export const Dashboard: React.FC = () => {
               variant="primary"
               icon={Plus}
               onClick={handleCreateStock}
-              loading={isLoading.create}
               aria-label="Ajouter un nouveau stock à l'inventaire"
               className="w-auto max-w-[150px]"
             >
@@ -344,8 +333,6 @@ export const Dashboard: React.FC = () => {
               />
               <span className={themeClasses.textMuted}>
                 {isLoading.load && 'Chargement des stocks...'}
-                {isLoading.create && 'Création en cours...'}
-                {isLoading.update && 'Mise à jour...'}
                 {isLoading.delete && 'Suppression...'}
               </span>
             </div>
@@ -381,7 +368,6 @@ export const Dashboard: React.FC = () => {
                 variant="primary"
                 icon={Plus}
                 onClick={handleCreateStock}
-                loading={isLoading.create}
                 className="lg:hidden"
                 aria-label="Ajouter un stock"
               >
@@ -398,6 +384,21 @@ export const Dashboard: React.FC = () => {
       </main>
 
       <FooterWrapper />
+
+      {isFormOpen && (
+        <StockFormModal
+          mode={editingStock ? 'edit' : 'create'}
+          stock={editingStock ?? undefined}
+          onSuccess={() => {
+            void loadStocks();
+            setEditingStock(null);
+          }}
+          onClose={() => {
+            setIsFormOpen(false);
+            setEditingStock(null);
+          }}
+        />
+      )}
     </div>
   );
 };

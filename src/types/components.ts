@@ -72,3 +72,17 @@ export interface StockGridProps {
   className?: string;
   aiSuggestions?: AISuggestion[];
 }
+
+export type StockFormMode = 'create' | 'edit';
+
+export interface StockFormModalProps {
+  mode: StockFormMode;
+  stock?: {
+    id: number | string;
+    label: string;
+    description?: string;
+    category?: string;
+  };
+  onSuccess: () => void;
+  onClose: () => void;
+}
