@@ -181,3 +181,42 @@ export const calculateStockStatus = (
   // Priorité 5 : Normal (entre min et max)
   return OPTIMAL;
 };
+
+// ==========================================
+// Stock Detail types (#99)
+// ==========================================
+
+export type ItemStatus = 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked';
+
+export interface StockDetailItem {
+  id: number;
+  label: string;
+  description?: string;
+  quantity: number;
+  minimumStock?: number;
+  status: ItemStatus;
+}
+
+export interface StockDetail {
+  id: number;
+  label: string;
+  description: string;
+  category?: string;
+  totalItems: number;
+  totalQuantity: number;
+  criticalItemsCount: number;
+  items: StockDetailItem[];
+}
+
+export type RiskLevel = 'critical' | 'high' | 'medium' | 'low';
+
+export interface StockPrediction {
+  stockName: string;
+  stockId: string;
+  riskLevel: RiskLevel;
+  daysUntilRupture: number | null;
+  confidence: number;
+  dailyConsumptionRate: number;
+  currentQuantity: number;
+  recommendedReorderQuantity: number;
+}
