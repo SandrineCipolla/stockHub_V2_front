@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.8.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.7.1...v1.8.0) (2026-03-12)
+
+
+### ✨ Features
+
+* **ci:** add Azure SWA deployment workflow for V2 prod ([#105](https://github.com/SandrineCipolla/stockHub_V2_front/issues/105)) ([fa1f1a0](https://github.com/SandrineCipolla/stockHub_V2_front/commit/fa1f1a07144a086d91813c571f32957cdee02b4d))
+* **connexion:** connect items API and stock detail page (Ce2.4 [#2](https://github.com/SandrineCipolla/stockHub_V2_front/issues/2)) ([#103](https://github.com/SandrineCipolla/stockHub_V2_front/issues/103)) ([9420350](https://github.com/SandrineCipolla/stockHub_V2_front/commit/94203505f9fd299b0cab71cbfb2b92355556850d))
+* **staging:** configure Vercel Preview environment for staging ([#102](https://github.com/SandrineCipolla/stockHub_V2_front/issues/102)) ([835c0f0](https://github.com/SandrineCipolla/stockHub_V2_front/commit/835c0f049064ec0717c69ec618ee69b4954b0ae7))
+
+
+### 🐛 Bug Fixes
+
+* **auth:** migrate MSAL cache to sessionStorage and remove dead localStorage cleanup ([#106](https://github.com/SandrineCipolla/stockHub_V2_front/issues/106)) ([1a807f9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/1a807f9f9a8f39a996ae3200a7026039e65fe06e))
+
 ## [1.7.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.7.0...v1.7.1) (2026-02-27)
 
 
