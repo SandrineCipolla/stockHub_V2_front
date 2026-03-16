@@ -29,7 +29,9 @@
     "src/constants/stockConfig.ts",
     "src/utils/aiPredictions.ts",
     "src/utils/unitFormatter.ts",
-    "src/utils/containerManager.ts"
+    "src/utils/containerManager.ts",
+    "src/hooks/useItems.ts",
+    "src/services/api/itemsAPI.ts"
   ],
   "ignoreDependencies": ["lighthouse", "@testing-library/user-event"],
   "ignoreExportsUsedInFile": true,
