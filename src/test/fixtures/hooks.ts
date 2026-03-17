@@ -86,3 +86,48 @@ export const createMockUseTheme = (theme: 'dark' | 'light' = 'dark') => ({
   toggleTheme: vi.fn(),
   setTheme: vi.fn(),
 });
+
+import type { StockDetail } from '@/types';
+
+/**
+ * Factory function for StockDetail test fixtures
+ */
+export const createMockStockDetail = (overrides: Partial<StockDetail> = {}): StockDetail => ({
+  id: 1,
+  label: 'Stock Alimentaire Test',
+  description: 'Stock de test pour la page détail',
+  category: 'alimentation',
+  totalItems: 2,
+  totalQuantity: 8,
+  criticalItemsCount: 1,
+  items: [
+    {
+      id: 1,
+      label: 'Tomates',
+      description: 'Légumes frais',
+      quantity: 3,
+      minimumStock: 5,
+      status: 'critical',
+    },
+    {
+      id: 2,
+      label: 'Carottes',
+      description: 'Légumes',
+      quantity: 5,
+      minimumStock: 3,
+      status: 'optimal',
+    },
+  ],
+  ...overrides,
+});
+
+/**
+ * Mock pour le hook useStockDetail
+ */
+export const createMockUseStockDetail = (overrides = {}) => ({
+  stock: createMockStockDetail(),
+  isLoading: false,
+  error: null,
+  refetch: vi.fn().mockResolvedValue(undefined),
+  ...overrides,
+});

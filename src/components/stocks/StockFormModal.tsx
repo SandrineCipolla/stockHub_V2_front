@@ -3,6 +3,12 @@ import type { StockFormModalProps } from '@/types';
 import { ButtonWrapper } from '@/components/common/ButtonWrapper';
 import { StocksAPI } from '@/services/api/stocksAPI';
 
+const STOCK_CATEGORIES = [
+  { value: 'alimentation', label: 'Alimentation' },
+  { value: 'hygiene', label: 'Hygiène' },
+  { value: 'artistique', label: 'Artistique' },
+] as const;
+
 export const StockFormModal: React.FC<StockFormModalProps> = ({
   mode,
   stock,
@@ -30,8 +36,16 @@ export const StockFormModal: React.FC<StockFormModalProps> = ({
   }, [onClose]);
 
   const handleSubmit = async () => {
-    if (!label.trim()) {
-      setError('Le nom du stock est requis.');
+    if (label.trim().length < 3) {
+      setError('Le nom du stock doit contenir au moins 3 caractères.');
+      return;
+    }
+    if (!description.trim()) {
+      setError('La description est requise.');
+      return;
+    }
+    if (!category.trim()) {
+      setError('La catégorie est requise.');
       return;
     }
     setError(null);
@@ -108,7 +122,7 @@ export const StockFormModal: React.FC<StockFormModalProps> = ({
               htmlFor="stock-description"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
-              Description
+              Description <span aria-hidden="true">*</span>
             </label>
             <input
               id="stock-description"
@@ -116,6 +130,9 @@ export const StockFormModal: React.FC<StockFormModalProps> = ({
               value={description}
               onChange={e => setDescription(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+              aria-required="true"
+              aria-invalid={error && !description.trim() ? 'true' : undefined}
+              aria-describedby={error && !description.trim() ? 'stock-form-error' : undefined}
             />
           </div>
 
@@ -124,15 +141,24 @@ export const StockFormModal: React.FC<StockFormModalProps> = ({
               htmlFor="stock-category"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
-              Catégorie
+              Catégorie <span aria-hidden="true">*</span>
             </label>
-            <input
+            <select
               id="stock-category"
-              type="text"
               value={category}
               onChange={e => setCategory(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
+              aria-required="true"
+              aria-invalid={error && !category.trim() ? 'true' : undefined}
+              aria-describedby={error && !category.trim() ? 'stock-form-error' : undefined}
+            >
+              <option value="">-- Choisir une catégorie --</option>
+              {STOCK_CATEGORIES.map(cat => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           {error && (

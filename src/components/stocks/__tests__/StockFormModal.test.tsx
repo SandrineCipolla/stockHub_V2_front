@@ -22,7 +22,7 @@ const editStock = {
   id: 1,
   label: 'Stock Test',
   description: 'Description test',
-  category: 'alimentaire',
+  category: 'alimentation',
 };
 
 describe('StockFormModal', () => {
@@ -36,8 +36,8 @@ describe('StockFormModal', () => {
 
       expect(screen.getByRole('heading', { name: 'Nouveau stock' })).toBeInTheDocument();
       expect(screen.getByLabelText(/Nom du stock/)).toHaveValue('');
-      expect(screen.getByLabelText('Description')).toHaveValue('');
-      expect(screen.getByLabelText('Catégorie')).toHaveValue('');
+      expect(screen.getByLabelText(/Description/)).toHaveValue('');
+      expect(screen.getByLabelText(/Catégorie/)).toHaveValue('');
     });
 
     it('should show error when label is empty on submit', async () => {
@@ -49,7 +49,44 @@ describe('StockFormModal', () => {
       submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
 
       await waitFor(() => {
-        expect(screen.getByRole('alert')).toHaveTextContent('Le nom du stock est requis.');
+        expect(screen.getByRole('alert')).toHaveTextContent(
+          'Le nom du stock doit contenir au moins 3 caractères.'
+        );
+      });
+      expect(StocksAPI.createStock).not.toHaveBeenCalled();
+    });
+
+    it('should show error when description is empty on submit', async () => {
+      const { container } = render(
+        <StockFormModal mode="create" onSuccess={mockOnSuccess} onClose={mockOnClose} />
+      );
+
+      fireEvent.change(screen.getByLabelText(/Nom du stock/), { target: { value: 'Test stock' } });
+
+      const submitButton = container.querySelector('sh-button[variant="primary"]');
+      submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
+
+      await waitFor(() => {
+        expect(screen.getByRole('alert')).toHaveTextContent('La description est requise.');
+      });
+      expect(StocksAPI.createStock).not.toHaveBeenCalled();
+    });
+
+    it('should show error when category is empty on submit', async () => {
+      const { container } = render(
+        <StockFormModal mode="create" onSuccess={mockOnSuccess} onClose={mockOnClose} />
+      );
+
+      fireEvent.change(screen.getByLabelText(/Nom du stock/), { target: { value: 'Test stock' } });
+      fireEvent.change(screen.getByLabelText(/Description/), {
+        target: { value: 'Une description' },
+      });
+
+      const submitButton = container.querySelector('sh-button[variant="primary"]');
+      submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
+
+      await waitFor(() => {
+        expect(screen.getByRole('alert')).toHaveTextContent('La catégorie est requise.');
       });
       expect(StocksAPI.createStock).not.toHaveBeenCalled();
     });
@@ -63,10 +100,10 @@ describe('StockFormModal', () => {
       fireEvent.change(screen.getByLabelText(/Nom du stock/), {
         target: { value: 'Mon Nouveau Stock' },
       });
-      fireEvent.change(screen.getByLabelText('Description'), {
+      fireEvent.change(screen.getByLabelText(/Description/), {
         target: { value: 'Une description' },
       });
-      fireEvent.change(screen.getByLabelText('Catégorie'), { target: { value: 'alimentation' } });
+      fireEvent.change(screen.getByLabelText(/Catégorie/), { target: { value: 'alimentation' } });
 
       const submitButton = container.querySelector('sh-button[variant="primary"]');
       submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
@@ -107,7 +144,11 @@ describe('StockFormModal', () => {
         <StockFormModal mode="create" onSuccess={mockOnSuccess} onClose={mockOnClose} />
       );
 
-      fireEvent.change(screen.getByLabelText(/Nom du stock/), { target: { value: 'Test' } });
+      fireEvent.change(screen.getByLabelText(/Nom du stock/), { target: { value: 'Test stock' } });
+      fireEvent.change(screen.getByLabelText(/Description/), {
+        target: { value: 'Une description' },
+      });
+      fireEvent.change(screen.getByLabelText(/Catégorie/), { target: { value: 'alimentation' } });
 
       const submitButton = container.querySelector('sh-button[variant="primary"]');
       submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
@@ -126,7 +167,11 @@ describe('StockFormModal', () => {
         <StockFormModal mode="create" onSuccess={mockOnSuccess} onClose={mockOnClose} />
       );
 
-      fireEvent.change(screen.getByLabelText(/Nom du stock/), { target: { value: 'Test' } });
+      fireEvent.change(screen.getByLabelText(/Nom du stock/), { target: { value: 'Test stock' } });
+      fireEvent.change(screen.getByLabelText(/Description/), {
+        target: { value: 'Une description' },
+      });
+      fireEvent.change(screen.getByLabelText(/Catégorie/), { target: { value: 'alimentation' } });
 
       const submitButton = container.querySelector('sh-button[variant="primary"]');
       submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
@@ -151,8 +196,8 @@ describe('StockFormModal', () => {
 
       expect(screen.getByRole('heading', { name: 'Modifier le stock' })).toBeInTheDocument();
       expect(screen.getByLabelText(/Nom du stock/)).toHaveValue('Stock Test');
-      expect(screen.getByLabelText('Description')).toHaveValue('Description test');
-      expect(screen.getByLabelText('Catégorie')).toHaveValue('alimentaire');
+      expect(screen.getByLabelText(/Description/)).toHaveValue('Description test');
+      expect(screen.getByLabelText(/Catégorie/)).toHaveValue('alimentation');
     });
 
     it('should call updateStock with stock id on valid submit', async () => {
@@ -174,7 +219,7 @@ describe('StockFormModal', () => {
           id: 1,
           label: 'Stock Test',
           description: 'Description test',
-          category: 'alimentaire',
+          category: 'alimentation',
         });
         expect(mockOnSuccess).toHaveBeenCalledTimes(1);
       });

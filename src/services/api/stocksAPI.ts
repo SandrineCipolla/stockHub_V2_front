@@ -1,5 +1,11 @@
 import { getApiConfig } from './utils';
-import type { Stock, CreateStockData, UpdateStockData, StockStatus } from '../../types/stock';
+import type {
+  Stock,
+  CreateStockData,
+  UpdateStockData,
+  StockStatus,
+  StockDetail,
+} from '../../types/stock';
 
 /**
  * Interface pour les items tels que retournés en inline dans la réponse backend
@@ -8,6 +14,26 @@ interface BackendItem {
   id: number;
   quantity: number;
   minimumStock: number;
+}
+
+interface BackendStockDetailItem {
+  id: number;
+  label: string;
+  description?: string;
+  quantity: number;
+  minimumStock?: number;
+  status: 'optimal' | 'low' | 'critical' | 'out-of-stock' | 'overstocked';
+}
+
+interface BackendStockDetailResponse {
+  id: number;
+  label: string;
+  description?: string;
+  category?: string;
+  totalItems: number;
+  totalQuantity: number;
+  criticalItemsCount: number;
+  items: BackendStockDetailItem[];
 }
 
 /**
@@ -110,6 +136,37 @@ export class StocksAPI {
       return mapBackendStockToFrontend(backendData);
     } catch (error) {
       console.error(`Error fetching stock ${id}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Récupère le détail complet d'un stock avec ses items et leurs statuts
+   * Appelle GET /api/v2/stocks/:id (backend #75/#93)
+   * Retourne les agrégats (totalItems, totalQuantity, criticalItemsCount) et les items avec status
+   */
+  static async fetchStockDetail(id: string | number): Promise<StockDetail> {
+    try {
+      const { apiUrl, config } = await getApiConfig('GET', 2);
+      const response = await fetch(`${apiUrl}/stocks/${id}`, config);
+
+      if (!response.ok) {
+        throw new Error(`HTTP response with status ${response.status}`);
+      }
+
+      const data: BackendStockDetailResponse = await response.json();
+      return {
+        id: data.id,
+        label: data.label,
+        description: data.description ?? '',
+        category: data.category,
+        totalItems: data.totalItems,
+        totalQuantity: data.totalQuantity,
+        criticalItemsCount: data.criticalItemsCount,
+        items: data.items,
+      };
+    } catch (error) {
+      console.error(`Error fetching stock detail ${id}:`, error);
       throw error;
     }
   }
