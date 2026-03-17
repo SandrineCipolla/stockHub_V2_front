@@ -160,15 +160,7 @@ describe('Dashboard Component', () => {
 
   describe('User interactions', () => {
     describe('when user clicks Add Stock button', () => {
-      it('should call createStock with fixture data', async () => {
-        const mockCreateStock = vi.fn();
-
-        vi.mocked(useStocksModule.useStocks).mockReturnValue(
-          createMockUseStocks({
-            createStock: mockCreateStock,
-          })
-        );
-
+      it('should open the stock form modal', async () => {
         const { container } = await act(async () => {
           return renderDashboard();
         });
@@ -181,7 +173,10 @@ describe('Dashboard Component', () => {
           addButton!.dispatchEvent(new CustomEvent('sh-button-click', { bubbles: true }));
         });
 
-        expect(mockCreateStock).toHaveBeenCalled();
+        // Modal should be open with the create form
+        const dialog = container.querySelector('[role="dialog"]');
+        expect(dialog).toBeInTheDocument();
+        expect(dialog).toHaveAttribute('aria-modal', 'true');
       });
     });
 
