@@ -42,6 +42,31 @@ describe('ItemFormModal', () => {
       expect(screen.getByLabelText(/Nom/)).toHaveValue('');
       expect(screen.getByLabelText(/Description/)).toHaveValue('');
       expect(screen.getByLabelText(/Stock minimum/)).toHaveValue(1);
+      expect(screen.getByLabelText(/Quantité initiale/)).toHaveValue(0);
+    });
+
+    it('should pass quantity to addItem on submit', async () => {
+      vi.mocked(ItemsAPI.addItem).mockResolvedValueOnce({
+        id: 99,
+        label: 'Mon item',
+        quantity: 5,
+        minimumStock: 1,
+        stockId: 1,
+      });
+
+      const { container } = render(
+        <ItemFormModal mode="create" stockId={1} onSuccess={mockOnSuccess} onClose={mockOnClose} />
+      );
+
+      fireEvent.change(screen.getByLabelText(/Nom/), { target: { value: 'Mon item' } });
+      fireEvent.change(screen.getByLabelText(/Quantité initiale/), { target: { value: '5' } });
+
+      const submitButton = container.querySelector('sh-button[variant="primary"]');
+      submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
+
+      await waitFor(() => {
+        expect(ItemsAPI.addItem).toHaveBeenCalledWith(1, expect.objectContaining({ quantity: 5 }));
+      });
     });
 
     it('should show error when label is empty on submit', async () => {
@@ -144,6 +169,20 @@ describe('ItemFormModal', () => {
   });
 
   describe('when mode is edit', () => {
+    it('should not show quantity field in edit mode', () => {
+      render(
+        <ItemFormModal
+          mode="edit"
+          stockId={1}
+          item={editItem}
+          onSuccess={mockOnSuccess}
+          onClose={mockOnClose}
+        />
+      );
+
+      expect(screen.queryByLabelText(/Quantité initiale/)).not.toBeInTheDocument();
+    });
+
     it('should render with pre-filled fields and "Modifier l\'item" title', () => {
       render(
         <ItemFormModal
