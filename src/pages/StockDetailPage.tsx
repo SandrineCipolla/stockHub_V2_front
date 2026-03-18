@@ -24,8 +24,7 @@ type FilterStatus = 'all' | 'optimal' | 'low' | 'critical' | 'outOfStock';
 const getItemStatus = (item: StockDetailItem): 'optimal' | 'low' | 'critical' | 'outOfStock' => {
   const min = item.minimumStock ?? 1;
   if (item.quantity === 0) return 'outOfStock';
-  if (item.quantity <= min * 0.5) return 'critical';
-  if (item.quantity <= min) return 'low';
+  if (item.quantity < min) return 'critical';
   return 'optimal';
 };
 
