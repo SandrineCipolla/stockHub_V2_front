@@ -28,6 +28,36 @@ vi.mock('@/components/layout/NavSection', () => ({
   ),
 }));
 
+vi.mock('@/hooks/useItems', () => ({
+  useItems: () => ({
+    updateItem: vi.fn().mockResolvedValue(undefined),
+    deleteItem: vi.fn().mockResolvedValue(undefined),
+    isLoading: { load: false, add: false, update: false, delete: false },
+    errors: { load: null, add: null, update: null, delete: null },
+    resetErrors: { load: vi.fn(), add: vi.fn(), update: vi.fn(), delete: vi.fn() },
+  }),
+}));
+
+vi.mock('@/components/items/ItemFormModal', () => ({
+  ItemFormModal: ({
+    onClose,
+    onSuccess,
+  }: {
+    mode: string;
+    onClose: () => void;
+    onSuccess: () => void;
+  }) => (
+    <div data-testid="item-form-modal">
+      <button data-testid="item-modal-close" onClick={onClose}>
+        Fermer
+      </button>
+      <button data-testid="item-modal-success" onClick={onSuccess}>
+        Succès
+      </button>
+    </div>
+  ),
+}));
+
 vi.mock('@/components/stocks/StockFormModal', () => ({
   StockFormModal: ({
     onClose,
@@ -132,15 +162,13 @@ describe('StockDetailPage', () => {
       expect(metricCards.length).toBeGreaterThanOrEqual(3);
     });
 
-    it('should display items list with sh-stock-item-card', async () => {
-      const { container } = await act(async () => renderPage());
+    it('should display items in a table with correct labels', async () => {
+      await act(async () => renderPage());
 
-      const itemCards = container.querySelectorAll('sh-stock-item-card');
-      expect(itemCards).toHaveLength(2);
-      expect(itemCards[0]?.getAttribute('name')).toBe('Tomates');
-      expect(itemCards[0]?.getAttribute('status')).toBe('critical');
-      expect(itemCards[1]?.getAttribute('name')).toBe('Carottes');
-      expect(itemCards[1]?.getAttribute('status')).toBe('optimal');
+      const table = screen.getByRole('table', { name: /liste des items/i });
+      expect(table).toBeInTheDocument();
+      expect(screen.getByText('Tomates')).toBeInTheDocument();
+      expect(screen.getByText('Carottes')).toBeInTheDocument();
     });
 
     it('should show empty state when stock has no items', async () => {
