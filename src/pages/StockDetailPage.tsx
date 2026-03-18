@@ -75,6 +75,9 @@ export const StockDetailPage: React.FC = () => {
   const [editingItem, setEditingItem] = useState<StockDetailItem | null>(null);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [predictionsOpen, setPredictionsOpen] = useState(false);
+  const [editingQuantityId, setEditingQuantityId] = useState<number | null>(null);
+  const [inlineQuantityValue, setInlineQuantityValue] = useState<number>(0);
 
   const themeClasses = {
     background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -228,27 +231,40 @@ export const StockDetailPage: React.FC = () => {
 
         {/* Prédictions IA */}
         {predictions.length > 0 && (
-          <section className="mb-10" aria-labelledby="predictions-heading">
-            <h2 id="predictions-heading" className="text-2xl font-bold mb-4">
-              Alertes intelligentes
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {predictions.map(pred =>
-                React.createElement('sh-stock-prediction-card', {
-                  key: pred.stockId,
-                  'stock-name': pred.stockName,
-                  'stock-id': pred.stockId,
-                  'risk-level': pred.riskLevel,
-                  'days-until-rupture': pred.daysUntilRupture ?? undefined,
-                  confidence: pred.confidence,
-                  'daily-consumption-rate': pred.dailyConsumptionRate,
-                  'current-quantity': pred.currentQuantity,
-                  'recommended-reorder-quantity': pred.recommendedReorderQuantity,
-                  'show-details': true,
-                  'data-theme': theme,
-                })
-              )}
-            </div>
+          <section className="mb-10">
+            <button
+              onClick={() => setPredictionsOpen(prev => !prev)}
+              className="flex items-center gap-2 w-full text-left mb-4"
+              aria-expanded={predictionsOpen}
+              aria-controls="predictions-section"
+            >
+              <h2 className="text-2xl font-bold">Alertes intelligentes ({predictions.length})</h2>
+              <span
+                className={`transition-transform duration-200 ${predictionsOpen ? 'rotate-180' : ''}`}
+                aria-hidden="true"
+              >
+                ▼
+              </span>
+            </button>
+            {predictionsOpen && (
+              <div id="predictions-section" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {predictions.map(pred =>
+                  React.createElement('sh-stock-prediction-card', {
+                    key: pred.stockId,
+                    'stock-name': pred.stockName,
+                    'stock-id': pred.stockId,
+                    'risk-level': pred.riskLevel,
+                    'days-until-rupture': pred.daysUntilRupture ?? undefined,
+                    confidence: pred.confidence,
+                    'daily-consumption-rate': pred.dailyConsumptionRate,
+                    'current-quantity': pred.currentQuantity,
+                    'recommended-reorder-quantity': pred.recommendedReorderQuantity,
+                    'show-details': true,
+                    'data-theme': theme,
+                  })
+                )}
+              </div>
+            )}
           </section>
         )}
 
@@ -354,9 +370,39 @@ export const StockDetailPage: React.FC = () => {
                               >
                                 −
                               </button>
-                              <span className="w-8 text-center font-bold tabular-nums">
-                                {item.quantity}
-                              </span>
+                              {editingQuantityId === item.id ? (
+                                <input
+                                  type="number"
+                                  min={0}
+                                  value={inlineQuantityValue}
+                                  autoFocus
+                                  onChange={e => setInlineQuantityValue(Number(e.target.value))}
+                                  onBlur={() => {
+                                    if (!isNaN(inlineQuantityValue) && inlineQuantityValue >= 0) {
+                                      void updateItem(item.id, { quantity: inlineQuantityValue });
+                                      void refetch();
+                                    }
+                                    setEditingQuantityId(null);
+                                  }}
+                                  onKeyDown={e => {
+                                    if (e.key === 'Enter') e.currentTarget.blur();
+                                    if (e.key === 'Escape') setEditingQuantityId(null);
+                                  }}
+                                  className="w-16 text-center px-1 py-0.5 border border-purple-500 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none"
+                                  aria-label={`Quantité de ${item.label}`}
+                                />
+                              ) : (
+                                <span
+                                  className="font-bold cursor-pointer hover:text-purple-400 transition-colors min-w-[24px] text-center tabular-nums"
+                                  title="Cliquer pour éditer"
+                                  onClick={() => {
+                                    setEditingQuantityId(item.id);
+                                    setInlineQuantityValue(item.quantity);
+                                  }}
+                                >
+                                  {item.quantity}
+                                </span>
+                              )}
                               <button
                                 onClick={() => handleUpdateQuantity(item, +1)}
                                 disabled={itemsLoading.update}
