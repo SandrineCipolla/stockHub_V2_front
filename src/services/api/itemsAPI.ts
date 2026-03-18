@@ -52,9 +52,13 @@ export class ItemsAPI {
     itemId: number | string,
     updates: UpdateItemData
   ): Promise<StockItem> {
-    const { apiUrl, config } = await getApiConfig('PATCH', 2, {
-      quantity: updates.quantity,
-    });
+    const body: Record<string, unknown> = {};
+    if (updates.quantity !== undefined) body.quantity = updates.quantity;
+    if (updates.label !== undefined) body.label = updates.label;
+    if (updates.description !== undefined) body.description = updates.description;
+    if (updates.minimumStock !== undefined) body.minimumStock = updates.minimumStock;
+
+    const { apiUrl, config } = await getApiConfig('PATCH', 2, body);
     const response = await fetch(`${apiUrl}/stocks/${stockId}/items/${itemId}`, config);
 
     if (!response.ok) {
