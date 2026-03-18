@@ -21,6 +21,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
   const [label, setLabel] = useState(item?.label ?? '');
   const [description, setDescription] = useState(item?.description ?? '');
   const [minimumStock, setMinimumStock] = useState(String(item?.minimumStock ?? 1));
+  const [quantity, setQuantity] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -56,7 +57,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
           label: label.trim(),
           description,
           minimumStock: minStock,
-          quantity: 0,
+          quantity,
         });
       } else {
         await ItemsAPI.updateItem(stockId, item!.id, {
@@ -147,6 +148,25 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
+
+          {mode === 'create' && (
+            <div>
+              <label
+                htmlFor="item-quantity"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              >
+                Quantité initiale
+              </label>
+              <input
+                id="item-quantity"
+                type="number"
+                min={0}
+                value={quantity}
+                onChange={e => setQuantity(Number(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+          )}
 
           {error && (
             <p id="item-form-error" role="alert" className="text-sm text-red-500">
