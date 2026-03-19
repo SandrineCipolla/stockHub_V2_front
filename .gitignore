@@ -54,7 +54,6 @@ documentation/propositionIA/propositionIA.tsx
 documentation/metrics/data/*.json
 
 # Claude Code configuration (personal)
-CLAUDE.md
 CLAUDE.local.md
 
 # Local scripts and debug files
