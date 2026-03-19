@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.9.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.8.0...v1.9.0) (2026-03-19)
+
+
+### ✨ Features
+
+* **items:** paginated table with filter chips, ItemFormModal, and UpdateItemData extension ([#113](https://github.com/SandrineCipolla/stockHub_V2_front/issues/113)) ([ca15c15](https://github.com/SandrineCipolla/stockHub_V2_front/commit/ca15c15d8240a3802e740da39b6c5afda5322009))
+* **stocks:** add StockFormModal component with create and edit modes ([#98](https://github.com/SandrineCipolla/stockHub_V2_front/issues/98)) ([#107](https://github.com/SandrineCipolla/stockHub_V2_front/issues/107)) ([98d67c7](https://github.com/SandrineCipolla/stockHub_V2_front/commit/98d67c7ac1a997f51160fb1c7272d273d3d66196))
+* **stocks:** StockDetailPage with AI predictions — closes [#99](https://github.com/SandrineCipolla/stockHub_V2_front/issues/99) ([#108](https://github.com/SandrineCipolla/stockHub_V2_front/issues/108)) ([092cfcd](https://github.com/SandrineCipolla/stockHub_V2_front/commit/092cfcd9c209cc373ce0d65d1c7272751a1e89d1))
+
+
+### 📚 Documentation
+
+* **claude:** add workflow documentation and track CLAUDE.md ([#114](https://github.com/SandrineCipolla/stockHub_V2_front/issues/114)) ([792b6e4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/792b6e45096644f1a16d9cde113f0e70ef638733))
+
 ## [1.8.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.7.1...v1.8.0) (2026-03-12)
 
 
