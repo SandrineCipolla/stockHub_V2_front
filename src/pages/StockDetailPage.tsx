@@ -25,6 +25,7 @@ const getItemStatus = (item: StockDetailItem): 'optimal' | 'low' | 'critical' | 
   const min = item.minimumStock ?? 1;
   if (item.quantity === 0) return 'outOfStock';
   if (item.quantity < min) return 'critical';
+  if (item.quantity === min) return 'low';
   return 'optimal';
 };
 
