@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { StockDetailPage } from '@/pages/StockDetailPage';
@@ -25,6 +25,36 @@ vi.mock('@/utils/stockPredictions', () => ({
 vi.mock('@/components/layout/NavSection', () => ({
   NavSection: ({ children }: { children: React.ReactNode }) => (
     <nav data-testid="nav-section">{children}</nav>
+  ),
+}));
+
+vi.mock('@/hooks/useItems', () => ({
+  useItems: () => ({
+    updateItem: vi.fn().mockResolvedValue(undefined),
+    deleteItem: vi.fn().mockResolvedValue(undefined),
+    isLoading: { load: false, add: false, update: false, delete: false },
+    errors: { load: null, add: null, update: null, delete: null },
+    resetErrors: { load: vi.fn(), add: vi.fn(), update: vi.fn(), delete: vi.fn() },
+  }),
+}));
+
+vi.mock('@/components/items/ItemFormModal', () => ({
+  ItemFormModal: ({
+    onClose,
+    onSuccess,
+  }: {
+    mode: string;
+    onClose: () => void;
+    onSuccess: () => void;
+  }) => (
+    <div data-testid="item-form-modal">
+      <button data-testid="item-modal-close" onClick={onClose}>
+        Fermer
+      </button>
+      <button data-testid="item-modal-success" onClick={onSuccess}>
+        Succès
+      </button>
+    </div>
   ),
 }));
 
@@ -132,15 +162,13 @@ describe('StockDetailPage', () => {
       expect(metricCards.length).toBeGreaterThanOrEqual(3);
     });
 
-    it('should display items list with sh-stock-item-card', async () => {
-      const { container } = await act(async () => renderPage());
+    it('should display items in a table with correct labels', async () => {
+      await act(async () => renderPage());
 
-      const itemCards = container.querySelectorAll('sh-stock-item-card');
-      expect(itemCards).toHaveLength(2);
-      expect(itemCards[0]?.getAttribute('name')).toBe('Tomates');
-      expect(itemCards[0]?.getAttribute('status')).toBe('critical');
-      expect(itemCards[1]?.getAttribute('name')).toBe('Carottes');
-      expect(itemCards[1]?.getAttribute('status')).toBe('optimal');
+      const table = screen.getByRole('table', { name: /liste des items/i });
+      expect(table).toBeInTheDocument();
+      expect(screen.getByText('Tomates')).toBeInTheDocument();
+      expect(screen.getByText('Carottes')).toBeInTheDocument();
     });
 
     it('should show empty state when stock has no items', async () => {
@@ -157,7 +185,7 @@ describe('StockDetailPage', () => {
       expect(screen.getByText("Ce stock ne contient pas encore d'items.")).toBeInTheDocument();
     });
 
-    it('should display prediction cards for critical and low items', async () => {
+    it('should show predictions header collapsed by default', async () => {
       const mockPredictions = [
         {
           stockName: 'Tomates',
@@ -174,19 +202,43 @@ describe('StockDetailPage', () => {
 
       const { container } = await act(async () => renderPage());
 
+      expect(screen.getByText('Alertes intelligentes (1)')).toBeInTheDocument();
+      const predCards = container.querySelectorAll('sh-stock-prediction-card');
+      expect(predCards).toHaveLength(0);
+    });
+
+    it('should expand predictions section on header click', async () => {
+      const mockPredictions = [
+        {
+          stockName: 'Tomates',
+          stockId: '1',
+          riskLevel: 'high' as const,
+          daysUntilRupture: 3,
+          confidence: 92,
+          dailyConsumptionRate: 1,
+          currentQuantity: 3,
+          recommendedReorderQuantity: 15,
+        },
+      ];
+      vi.mocked(stockPredictionsModule.computePredictions).mockReturnValue(mockPredictions);
+
+      const { container } = await act(async () => renderPage());
+
+      const toggleButton = screen.getByRole('button', { name: /alertes intelligentes/i });
+      await act(async () => {
+        fireEvent.click(toggleButton);
+      });
+
       const predCards = container.querySelectorAll('sh-stock-prediction-card');
       expect(predCards).toHaveLength(1);
-      expect(predCards[0]?.getAttribute('stock-name')).toBe('Tomates');
-      expect(predCards[0]?.getAttribute('risk-level')).toBe('high');
     });
 
     it('should not display prediction section when all items are optimal', async () => {
       vi.mocked(stockPredictionsModule.computePredictions).mockReturnValue([]);
 
-      const { container } = await act(async () => renderPage());
+      await act(async () => renderPage());
 
-      const predCards = container.querySelectorAll('sh-stock-prediction-card');
-      expect(predCards).toHaveLength(0);
+      expect(screen.queryByText(/Alertes intelligentes/)).not.toBeInTheDocument();
     });
   });
 
@@ -220,6 +272,37 @@ describe('StockDetailPage', () => {
       });
 
       expect(mockRefetch).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('inline quantity editing', () => {
+    it('should show input when clicking on quantity value', async () => {
+      await act(async () => renderPage());
+
+      const quantitySpans = screen.getAllByTitle('Cliquer pour éditer');
+      await act(async () => {
+        fireEvent.click(quantitySpans[0]!);
+      });
+
+      expect(screen.getByRole('spinbutton', { name: /quantité de tomates/i })).toBeInTheDocument();
+    });
+
+    it('should hide input on Escape key', async () => {
+      await act(async () => renderPage());
+
+      const quantitySpans = screen.getAllByTitle('Cliquer pour éditer');
+      await act(async () => {
+        fireEvent.click(quantitySpans[0]!);
+      });
+
+      const input = screen.getByRole('spinbutton', { name: /quantité de tomates/i });
+      await act(async () => {
+        fireEvent.keyDown(input, { key: 'Escape' });
+      });
+
+      expect(
+        screen.queryByRole('spinbutton', { name: /quantité de tomates/i })
+      ).not.toBeInTheDocument();
     });
   });
 

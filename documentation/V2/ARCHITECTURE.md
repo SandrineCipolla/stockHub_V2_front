@@ -14,26 +14,26 @@ graph TB
         State[State Management]
         Hooks[Custom Hooks]
     end
-    
+
     subgraph "Service Layer"
         API[API Services]
         Utils[Utilities]
         Types[TypeScript Types]
     end
-    
+
     subgraph "Build & Dev"
         Vite[Vite Build Tool]
         TS[TypeScript Compiler]
         ESLint[ESLint Linter]
         TW[TailwindCSS]
     end
-    
+
     subgraph "External"
         DS[Design System Package]
         Icons[Lucide React]
         Backend[Future Backend API]
     end
-    
+
     UI --> Router
     UI --> State
     UI --> Hooks
@@ -41,7 +41,7 @@ graph TB
     API --> Backend
     UI --> DS
     UI --> Icons
-    
+
     Vite --> TS
     Vite --> TW
     TS --> Types
@@ -51,33 +51,45 @@ graph TB
 
 ```
 src/
-├── components/                 # Composants réutilisables
-│   ├── common/                    # Composants UI de base
-│   │   ├── Button/
-│   │   ├── Card/
-│   │   ├── Badge/
-│   │   └── Input/
-│   ├── layout/                # Composants de mise en page
-│   │   ├── Header/
-│   │   ├── NavSectiion/
-│   │   ├── Footer/
-│   └── dashboard/              # Composants métier
-│       ├── MetricCard/
-│       ├── StockGrid/
-│       ├── StockCard/
+├── components/
+│   ├── common/                # Wrappers React autour des Web Components
+│   │   ├── ButtonWrapper.tsx
+│   │   ├── CardWrapper.tsx
+│   │   ├── SearchInputWrapper.tsx
+│   │   └── CookieBanner.tsx
+│   ├── layout/                # Mise en page
+│   │   ├── HeaderWrapper.tsx
+│   │   ├── FooterWrapper.tsx
+│   │   └── NavSection.tsx
+│   ├── dashboard/             # Composants tableau de bord
+│   │   ├── MetricCardWrapper.tsx
+│   │   └── StockCardWrapper.tsx
+│   ├── stocks/                # Gestion des stocks
+│   │   └── StockFormModal.tsx   # Modale create/edit stock
+│   ├── items/                 # Gestion des items d'un stock
+│   │   └── ItemFormModal.tsx    # Modale create/edit item
+│   └── ai/                    # Composants IA
+│       └── AIAlertBannerWrapper.tsx
 ├── hooks/                     # Hooks personnalisés
-│   ├── useTheme.ts
-│   ├── useFrontendState.ts
-│   └── useStock.ts
-├── types/                     # Types TypeScript globaux
-│   ├── index.ts
-├── styles/                    # Styles globaux et tokens
-│   ├── globals.css
-│   ├── tokens.css
-│   └── components.css
-├── pages/                     # Pages de l'application
-│   ├── Dashboard/
-└── utils/                     # Utilitaires globaux
+│   ├── useTheme.ts            # Thème clair/sombre
+│   ├── useFrontendState.ts    # Gestion état async (useAsyncAction)
+│   ├── useStocks.ts           # CRUD stocks (dashboard)
+│   ├── useStockDetail.ts      # Chargement détail d'un stock + items
+│   └── useItems.ts            # CRUD items d'un stock
+├── services/
+│   └── api/
+│       ├── stocksAPI.ts       # Endpoints /api/v2/stocks
+│       ├── itemsAPI.ts        # Endpoints /api/v2/stocks/:id/items
+│       └── utils.ts           # getApiConfig (auth token, headers)
+├── types/
+│   ├── index.ts               # Réexports
+│   └── stock.ts               # Stock, StockItem, StockDetail, StockDetailItem, UpdateItemData...
+├── pages/
+│   ├── DashboardPage.tsx      # Liste des stocks
+│   └── StockDetailPage.tsx    # Détail d'un stock + gestion items
+└── utils/
+    ├── stockPredictions.ts    # Algorithme prédictions ML
+    └── logger.ts
 ```
 
 ## 🔧 Architecture des composants
@@ -90,16 +102,16 @@ graph TD
     Layout --> Header[Header]
     Layout --> NavSection[NavSection]
     Layout --> Footer[Footer]
-    
+
     Main --> Dashboard[Dashboard Page]
     Dashboard --> StockCards[Stock Cards Grid]
     Dashboard --> Metrics[Metrics Cards]
-    
+
     StockCards --> StockCard[Stock Card]
     StockCard --> Card[UI Card]
     StockCard --> Badge[UI Badge]
     StockCard --> Button[UI Button]
-    
+
     Metrics --> MetricCard[Metric Card]
     MetricCard --> Card
     MetricCard --> Icon[Lucide Icon]
@@ -108,41 +120,43 @@ graph TD
 ### Pattern de composants adoptés
 
 #### 1. **Atomic Design Pattern**
+
 ```typescript
 // Atoms (composants de base)
-Button, Input, Badge, Icon
+(Button, Input, Badge, Icon);
 
 // Molecules (combinaisons d'atoms)
-SearchBar, MetricCard, StockCardActions
+(SearchBar, MetricCard, StockCardActions);
 
 // Organisms (sections complexes)
-Header, StockGrid, Dashboard
+(Header, StockGrid, Dashboard);
 
 // Templates (layouts)
-Layout, PageTemplate
+(Layout, PageTemplate);
 
 // Pages (instances complètes)
-DashboardPage, StockManagementPage
+(DashboardPage, StockManagementPage);
 ```
 
 #### 2. **Compound Components Pattern**
+
 ```tsx
 // Exemple : Card composé
 <Card>
-    <Card.Header>
-        <Card.Title>Stock Item</Card.Title>
-        <Card.Badge variant="success">Optimal</Card.Badge>
-    </Card.Header>
-    <Card.Content>
-        <Card.Metrics>
-            <Card.Metric label="Quantity" value="156" />
-            <Card.Metric label="Value" value="€2,450" />
-        </Card.Metrics>
-    </Card.Content>
-    <Card.Actions>
-        <Button variant="ghost">View</Button>
-        <Button variant="ghost">Edit</Button>
-    </Card.Actions>
+  <Card.Header>
+    <Card.Title>Stock Item</Card.Title>
+    <Card.Badge variant="success">Optimal</Card.Badge>
+  </Card.Header>
+  <Card.Content>
+    <Card.Metrics>
+      <Card.Metric label="Quantity" value="156" />
+      <Card.Metric label="Value" value="€2,450" />
+    </Card.Metrics>
+  </Card.Content>
+  <Card.Actions>
+    <Button variant="ghost">View</Button>
+    <Button variant="ghost">Edit</Button>
+  </Card.Actions>
 </Card>
 ```
 
@@ -157,24 +171,24 @@ graph TB
         Semantic[Semantic Tokens]
         Component[Component Tokens]
     end
-    
+
     subgraph "Primitive Tokens"
         Colors[Colors<br/>purple-500: #8B5CF6]
         Spacing[Spacing<br/>space-4: 1rem]
         Typography[Typography<br/>text-base: 1rem]
     end
-    
+
     subgraph "Semantic Tokens"
         Primary[Primary<br/>primary: purple-500]
         Success[Success<br/>success: emerald-500]
         Danger[Danger<br/>danger: red-500]
     end
-    
+
     subgraph "Component Tokens"
         ButtonPrimary[Button Primary<br/>bg: primary, text: white]
         CardBg[Card Background<br/>bg: white/5, border: white/10]
     end
-    
+
     Primitive --> Semantic
     Semantic --> Component
 ```
@@ -211,23 +225,24 @@ graph LR
         useReducer[useReducer]
         useRef[useRef]
     end
-    
+
     subgraph "Custom Hooks"
         useTheme[useTheme]
-        useStockData[useStockData]
-        useLocalStorage[useLocalStorage]
+        useStocks[useStocks]
+        useStockDetail[useStockDetail]
+        useItems[useItems]
     end
-    
+
     subgraph "Context"
         ThemeContext[Theme Context]
         UserContext[User Context]
     end
-    
+
     subgraph "External State"
         LocalStorage[Local Storage]
         API[API Calls]
     end
-    
+
     useState --> useTheme
     useReducer --> useStockData
     useTheme --> ThemeContext
@@ -235,30 +250,34 @@ graph LR
     useStockData --> API
 ```
 
-### Pattern de hooks personnalisés
+### Hooks disponibles
 
-```typescript
-// Hook de gestion des stocks
-const useStockData = () => {
-  const [stocks, setStocks] = useState<Stock[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+| Hook                 | Rôle                                                           |
+| -------------------- | -------------------------------------------------------------- |
+| `useTheme`           | Thème clair/sombre via ThemeContext                            |
+| `useFrontendState`   | Primitives async (`useAsyncAction`) — état loading/error/data  |
+| `useStocks`          | CRUD stocks pour le dashboard (list, create, update, delete)   |
+| `useStockDetail(id)` | Chargement d'un stock avec ses items agrégés (GET /stocks/:id) |
+| `useItems(stockId)`  | CRUD items d'un stock (add, update, delete, load)              |
 
-  const fetchStocks = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await stockService.getAll();
-      setStocks(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+### Pattern `useAsyncAction`
 
-  return { stocks, loading, error, fetchStocks };
-};
-```
+Tous les appels API passent par `useAsyncAction` (défini dans `useFrontendState.ts`) qui expose `{ execute, isLoading, error, reset }` de façon cohérente.
+
+### Gestion des items — `StockDetailPage`
+
+La page `StockDetailPage` combine `useStockDetail` (pour les données) et `useItems` (pour les mutations) :
+
+- **Table paginée** : 20 items par page, navigation Précédent/Suivant
+- **Filter chips** : Tous / Rupture / Critique / Stock bas / OK — filtre `filteredItems` via `useMemo`
+- **Statut calculé côté client** via `getItemStatus(item)` :
+  - `quantity === 0` → `outOfStock`
+  - `quantity < minimumStock` → `critical`
+  - `quantity === minimumStock` → `low`
+  - `quantity > minimumStock` → `optimal`
+- **Edition inline** : clic sur la quantité → `<input>` ; blur/Entrée → `updateItem` ; Escape → annule
+- **ItemFormModal** : create (avec quantité initiale) ou edit (sans quantité)
+- **Prédictions IA** : section accordéon repliée par défaut (`predictionsOpen` state)
 
 ## 🚀 Architecture de build et déploiement
 
@@ -272,24 +291,24 @@ graph LR
         TypeCheck[Type Check]
         DevServer[Vite Dev Server]
     end
-    
+
     subgraph "Build Process"
         TSCompile[TypeScript Compilation]
         Bundling[Vite Bundling]
         TailwindPurge[TailwindCSS Purge]
         Sitemap[Sitemap Generation]
     end
-    
+
     subgraph "Production"
         StaticAssets[Static Assets]
         Vercel[Vercel Deployment]
         CDN[CDN Distribution]
     end
-    
+
     Code --> ESLint
     ESLint --> TypeCheck
     TypeCheck --> DevServer
-    
+
     Code --> TSCompile
     TSCompile --> Bundling
     Bundling --> TailwindPurge
@@ -303,78 +322,84 @@ graph LR
 
 ```ts
 // vite.config.ts
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
-    plugins: [react()],
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, './src'),
-        },
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
-})
+  },
+});
 ```
+
 ### Script de génération SEO automatisé
 
 ```ts
 // scripts/generate-sitemap.ts
 interface SitemapRoute {
-    loc: string
-    lastmod: string
-    changefreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
-    priority: number
+  loc: string;
+  lastmod: string;
+  changefreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  priority: number;
 }
 
-const baseUrl = 'https://stockhub-v2.vercel.app'
+const baseUrl = 'https://stockhub-v2.vercel.app';
 
 const routes: SitemapRoute[] = [
-    { 
-        loc: '/', 
-        lastmod: new Date().toISOString().split('T')[0],
-        changefreq: 'weekly', 
-        priority: 1.0 
-    },
-    { 
-        loc: '/dashboard', 
-        lastmod: new Date().toISOString().split('T')[0],
-        changefreq: 'daily', 
-        priority: 0.9 
-    },
-    { 
-        loc: '/stocks', 
-        lastmod: new Date().toISOString().split('T')[0],
-        changefreq: 'daily', 
-        priority: 0.8 
-    },
-    { 
-        loc: '/analytics', 
-        lastmod: new Date().toISOString().split('T')[0],
-        changefreq: 'weekly', 
-        priority: 0.7 
-    },
-    { 
-        loc: '/settings', 
-        lastmod: new Date().toISOString().split('T')[0],
-        changefreq: 'monthly', 
-        priority: 0.5 
-    }
-]
+  {
+    loc: '/',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'weekly',
+    priority: 1.0,
+  },
+  {
+    loc: '/dashboard',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'daily',
+    priority: 0.9,
+  },
+  {
+    loc: '/stocks',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'daily',
+    priority: 0.8,
+  },
+  {
+    loc: '/analytics',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'weekly',
+    priority: 0.7,
+  },
+  {
+    loc: '/settings',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'monthly',
+    priority: 0.5,
+  },
+];
 
 // Fonctions de génération automatique de sitemap.xml et robots.txt
 function generateSitemap(): string {
-    return `<?xml version="1.0" encoding="UTF-8"?>
+  return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes.map(route => `  <url>
+${routes
+  .map(
+    route => `  <url>
     <loc>${baseUrl}${route.loc}</loc>
     <lastmod>${route.lastmod}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>
-  </url>`).join('\n')}
-</urlset>`
+  </url>`
+  )
+  .join('\n')}
+</urlset>`;
 }
 ```
+
 ## 🔒 Architecture de sécurité et performance
 
 ### SEO et génération automatique
@@ -390,6 +415,7 @@ npm run build
 ```
 
 **Fichiers générés automatiquement :**
+
 ```
 public/
 ├── sitemap.xml               # Plan du site pour moteurs de recherche
@@ -397,6 +423,7 @@ public/
 ```
 
 **Routes configurées dans le sitemap :**
+
 - `/` - Page d'accueil (priorité 1.0, weekly)
 - `/dashboard` - Tableau de bord (priorité 0.9, daily)
 - `/stocks` - Gestion stocks (priorité 0.8, daily)
@@ -418,7 +445,7 @@ const cspDirectives = {
   'default-src': ["'self'"],
   'script-src': ["'self'", "'unsafe-inline'"],
   'style-src': ["'self'", "'unsafe-inline'"],
-  'img-src': ["'self'", "data:", "https:"],
+  'img-src': ["'self'", 'data:', 'https:'],
 };
 ```
 
@@ -429,13 +456,13 @@ const cspDirectives = {
 ```mermaid
 pyramid
     title Test Strategy
-    
+
     section E2E Tests
         Cypress : 5%
-    
+
     section Integration Tests
         React Testing Library : 15%
-    
+
     section Unit Tests
         Jest + Vitest : 80%
 ```
@@ -453,21 +480,25 @@ pyramid
 ```scss
 // Breakpoints système
 $breakpoints: (
-  'sm': 640px,   // Mobile large
-  'md': 768px,   // Tablet
-  'lg': 1024px,  // Desktop
-  'xl': 1280px,  // Large desktop
-  '2xl': 1536px  // Extra large
+  'sm': 640px,
+  // Mobile large
+  'md': 768px,
+  // Tablet
+  'lg': 1024px,
+  // Desktop
+  'xl': 1280px,
+  // Large desktop
+  '2xl': 1536px, // Extra large
 );
 
 // Grid responsive
 .stock-grid {
   @apply grid grid-cols-1;
-  
+
   @screen md {
     @apply grid-cols-2;
   }
-  
+
   @screen xl {
     @apply grid-cols-3;
   }
@@ -536,22 +567,27 @@ abstract class BaseService {
 ### Choix techniques majeurs
 
 #### 1. **React 19 + TypeScript**
+
 - **Justification** : Écosystème mature, performances optimisées, typage strict
 - **Avantages** : Developer Experience, maintenabilité, détection d'erreurs
 
 #### 2. **Vite comme build tool**
+
 - **Justification** : Build ultra-rapide, HMR instantané, configuration minimale
 - **Avantages** : Productivité développeur, optimisations automatiques
 
 #### 3. **TailwindCSS**
+
 - **Justification** : Utility-first, design system intégré, purge automatique
 - **Avantages** : Cohérence visuelle, performance CSS, développement rapide
 
 #### 4. **Architecture modulaire**
+
 - **Justification** : Séparation des responsabilités, réutilisabilité, testabilité
 - **Avantages** : Maintenance facilitée, évolutivité, collaboration en équipe
 
 #### 5. **Design System Package externe**
+
 - **Justification** : Réutilisabilité cross-projets, versioning indépendant
 - **Avantages** : Cohérence multi-applications, updates centralisées
 

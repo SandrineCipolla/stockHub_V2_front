@@ -128,7 +128,10 @@ export interface CreateItemData {
 }
 
 export interface UpdateItemData {
-  quantity: number;
+  quantity?: number;
+  label?: string;
+  description?: string;
+  minimumStock?: number;
 }
 
 export interface StockEvent {

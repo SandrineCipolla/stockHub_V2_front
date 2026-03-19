@@ -66,13 +66,19 @@ export const useItems = (stockId: number | string) => {
         itemId: number | string;
         updates: UpdateItemData;
       }): Promise<StockItem> => {
-        if (updates.quantity < 0) {
+        if (updates.quantity !== undefined && updates.quantity < 0) {
           throw createFrontendError(
             'validation',
             'La quantité ne peut pas être négative',
             'quantity',
             { field: 'quantity' }
           );
+        }
+
+        if (updates.label !== undefined && !updates.label.trim()) {
+          throw createFrontendError('validation', "Le nom de l'item est obligatoire", 'label', {
+            field: 'label',
+          });
         }
 
         try {

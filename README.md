@@ -20,6 +20,23 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ---
 
+## 🎉 Nouveautés Majeures (Mars 2026)
+
+### 📦 Gestion des Items (Mars 2026)
+
+- **StockDetailPage** : Vue détaillée d'un stock avec table paginée (20 items/page) et filter chips par statut (Tous, Rupture, Critique, Stock bas, OK)
+- **ItemFormModal** : Modale create/edit pour les items (label, description, stock minimum, quantité initiale)
+- **Edition inline** : Modification de quantité directement dans la table (clic sur la valeur → input éditable)
+- **Logique de statut items** :
+  - `quantity > minimumStock` → OK
+  - `quantity === minimumStock` → Stock bas (à la limite)
+  - `0 < quantity < minimumStock` → Critique
+  - `quantity === 0` → Rupture
+- **Prédictions IA repliables** : Section "Alertes intelligentes" accordéon, repliée par défaut
+- **StockFormModal** : Modale create/edit pour les stocks avec validation backend (catégorie, description, label min 3 caractères)
+
+---
+
 ## 🎉 Nouveautés Majeures (Oct-Nov 2025)
 
 ### ✨ Design System Externe (Novembre 2025)
@@ -49,7 +66,7 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 ### 🛡️ Qualité & Sécurité (Décembre 2025)
 
 - 🔒 **0 vulnérabilité npm** (corrigé 09/12/2025)
-- ✅ **464 tests** (60.67% coverage, composants 90-98%)
+- ✅ **422+ tests** (coverage composants 90-98%)
 - 🎯 **WCAG AA 100%** conforme (auditée novembre 2025)
 - ⚡ **Lighthouse 99/100** performance
 
@@ -268,7 +285,7 @@ Exécuté automatiquement à chaque `git commit`:
 
 Exécuté automatiquement à chaque `git push`:
 
-- ✅ **Tests**: Tous les tests unitaires (464 tests)
+- ✅ **Tests**: Tous les tests unitaires (422+ tests)
 - ✅ **Knip**: Détection du code mort
 - ✅ **Build**: Vérification que le build passe
 - 🎯 **Objectif**: Code testé, propre et buildable
@@ -385,12 +402,11 @@ L'application est **100% conforme WCAG 2.1 Level AA** (auditée novembre 2025) :
 
 #### Tests Unitaires
 
-- **Tests**: 464 tests passing (33 skipped pour E2E futures)
-- **Coverage Global**: 60.67%
+- **Tests**: 422+ tests passing (22 skipped pour E2E futures)
 - **Coverage Composants**: 90-98%
 - **Coverage Wrappers**: 234 tests wrappers Web Components
 - **Framework**: Vitest 3.2.4 + Testing Library
-- **Temps d'exécution**: ~13s
+- **Temps d'exécution**: ~11s
 
 #### Code Quality
 
