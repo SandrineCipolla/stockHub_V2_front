@@ -67,11 +67,7 @@ describe('useItems', () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.loadItems();
-        } catch {
-          // expected
-        }
+        await result.current.loadItems();
       });
 
       await waitFor(() => {
@@ -102,15 +98,11 @@ describe('useItems', () => {
       expect(ItemsAPI.addItem).toHaveBeenCalledWith(42, itemData);
     });
 
-    it('should throw validation error when label is empty', async () => {
+    it('should set errors.add and not call API when label is empty', async () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.addItem({ label: '   ', quantity: 1 });
-        } catch {
-          // expected
-        }
+        await result.current.addItem({ label: '   ', quantity: 1 });
       });
 
       await waitFor(() => {
@@ -119,15 +111,11 @@ describe('useItems', () => {
       });
     });
 
-    it('should throw validation error when quantity is negative', async () => {
+    it('should set errors.add and not call API when quantity is negative', async () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.addItem({ label: 'Farine', quantity: -1 });
-        } catch {
-          // expected
-        }
+        await result.current.addItem({ label: 'Farine', quantity: -1 });
       });
 
       await waitFor(() => {
@@ -151,11 +139,7 @@ describe('useItems', () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.addItem({ label: 'Farine', quantity: 1 });
-        } catch {
-          // expected
-        }
+        await result.current.addItem({ label: 'Farine', quantity: 1 });
       });
 
       await waitFor(() => {
@@ -175,15 +159,11 @@ describe('useItems', () => {
       expect(ItemsAPI.updateItem).toHaveBeenCalledWith(42, 1, { quantity: 8 });
     });
 
-    it('should throw validation error when quantity is negative', async () => {
+    it('should set errors.update when quantity is negative', async () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.updateItem(1, { quantity: -5 });
-        } catch {
-          // expected
-        }
+        await result.current.updateItem(1, { quantity: -5 });
       });
 
       await waitFor(() => {
@@ -191,7 +171,7 @@ describe('useItems', () => {
       });
     });
 
-    it('should not throw quantity error when quantity is undefined (label-only update)', async () => {
+    it('should not set errors when quantity is undefined (label-only update)', async () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
@@ -202,15 +182,11 @@ describe('useItems', () => {
       expect(ItemsAPI.updateItem).toHaveBeenCalled();
     });
 
-    it('should throw validation error when label is empty string', async () => {
+    it('should set errors.update when label is empty string', async () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.updateItem(1, { label: '' });
-        } catch {
-          // expected
-        }
+        await result.current.updateItem(1, { label: '' });
       });
 
       await waitFor(() => {
@@ -218,7 +194,7 @@ describe('useItems', () => {
       });
     });
 
-    it('should not throw label error when label is undefined (quantity-only update)', async () => {
+    it('should not set errors when label is undefined (quantity-only update)', async () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
@@ -234,11 +210,7 @@ describe('useItems', () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.updateItem(1, { quantity: 5 });
-        } catch {
-          // expected
-        }
+        await result.current.updateItem(1, { quantity: 5 });
       });
 
       await waitFor(() => {
@@ -263,11 +235,7 @@ describe('useItems', () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.deleteItem(1);
-        } catch {
-          // expected
-        }
+        await result.current.deleteItem(1);
       });
 
       await waitFor(() => {
@@ -282,11 +250,7 @@ describe('useItems', () => {
       const { result } = renderHook(() => useItems(42));
 
       await act(async () => {
-        try {
-          await result.current.addItem({ label: 'Farine', quantity: 1 });
-        } catch {
-          // expected
-        }
+        await result.current.addItem({ label: 'Farine', quantity: 1 });
       });
 
       await waitFor(() => {
