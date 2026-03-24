@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -6,6 +7,16 @@ import { createLocalStorageMock } from '@/test/fixtures/localStorage';
 
 vi.mock('@/hooks/useTheme', () => ({
   useTheme: () => ({ theme: 'dark' }),
+}));
+
+vi.mock('@/components/common/ButtonWrapper', () => ({
+  ButtonWrapper: ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  }) => <button onClick={onClick}>{children}</button>,
 }));
 
 const localStorageMock = createLocalStorageMock();
