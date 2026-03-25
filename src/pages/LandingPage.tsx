@@ -167,7 +167,7 @@ export const LandingPage: React.FC = () => {
                 <span className="block text-3xl font-bold text-purple-600 dark:text-purple-400 tracking-tight">
                   {stat.value}
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-500 mt-0.5 block">
+                <span className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 block">
                   {stat.label}
                 </span>
               </div>
@@ -179,7 +179,7 @@ export const LandingPage: React.FC = () => {
         <section id="features" className="px-6 py-20" aria-labelledby="features-title">
           <div className="max-w-5xl mx-auto">
             <div className="mb-12">
-              <p className="text-xs font-semibold uppercase tracking-widest text-purple-600 dark:text-purple-500 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-purple-700 dark:text-purple-400 mb-3">
                 Fonctionnalités
               </p>
               <h2 id="features-title" className="text-4xl font-bold tracking-tight mb-3">
@@ -205,6 +205,7 @@ export const LandingPage: React.FC = () => {
                       name: feature.icon,
                       size: 'md',
                       color: feature.color,
+                      'data-theme': theme,
                     })}
                   </div>
                   <h3 className="text-base font-semibold mb-2">{feature.title}</h3>
@@ -224,7 +225,7 @@ export const LandingPage: React.FC = () => {
         >
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-purple-600 dark:text-purple-500 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-purple-700 dark:text-purple-400 mb-3">
                 Prédictions IA
               </p>
               <h2 id="demo-title" className="text-3xl font-bold tracking-tight mb-4">
@@ -260,7 +261,7 @@ export const LandingPage: React.FC = () => {
         <section className="px-6 py-16 text-center" aria-labelledby="stack-title">
           <p
             id="stack-title"
-            className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-7"
+            className="text-xs font-semibold uppercase tracking-widest text-slate-600 dark:text-slate-400 mb-7"
           >
             Stack technique
           </p>
