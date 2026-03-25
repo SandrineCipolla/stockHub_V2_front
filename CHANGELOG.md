@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.9.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.8.0...v1.9.0) (2026-03-25)
+
+
+### ✨ Features
+
+* **items:** paginated table with filter chips, ItemFormModal, and UpdateItemData extension ([#113](https://github.com/SandrineCipolla/stockHub_V2_front/issues/113)) ([ca15c15](https://github.com/SandrineCipolla/stockHub_V2_front/commit/ca15c15d8240a3802e740da39b6c5afda5322009))
+* **landing:** add public landing page — closes [#92](https://github.com/SandrineCipolla/stockHub_V2_front/issues/92) ([#123](https://github.com/SandrineCipolla/stockHub_V2_front/issues/123)) ([a6ef57f](https://github.com/SandrineCipolla/stockHub_V2_front/commit/a6ef57fbdd9fe11aeae249ecc2730963c6fb1dd1))
+* **seo:** add JSON-LD schema, fix meta tags, update sitemap, add llms.txt — closes [#120](https://github.com/SandrineCipolla/stockHub_V2_front/issues/120) ([#124](https://github.com/SandrineCipolla/stockHub_V2_front/issues/124)) ([320a239](https://github.com/SandrineCipolla/stockHub_V2_front/commit/320a2392c291e448f84594c4c9f8d64f2f307ea9))
+* **stocks:** add StockFormModal component with create and edit modes ([#98](https://github.com/SandrineCipolla/stockHub_V2_front/issues/98)) ([#107](https://github.com/SandrineCipolla/stockHub_V2_front/issues/107)) ([98d67c7](https://github.com/SandrineCipolla/stockHub_V2_front/commit/98d67c7ac1a997f51160fb1c7272d273d3d66196))
+* **stocks:** StockDetailPage with AI predictions — closes [#99](https://github.com/SandrineCipolla/stockHub_V2_front/issues/99) ([#108](https://github.com/SandrineCipolla/stockHub_V2_front/issues/108)) ([092cfcd](https://github.com/SandrineCipolla/stockHub_V2_front/commit/092cfcd9c209cc373ce0d65d1c7272751a1e89d1))
+
+
+### 📚 Documentation
+
+* **claude:** add workflow documentation and track CLAUDE.md ([#114](https://github.com/SandrineCipolla/stockHub_V2_front/issues/114)) ([792b6e4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/792b6e45096644f1a16d9cde113f0e70ef638733))
+
+
+### 🧪 Tests
+
+* **coverage:** add tests for useItems, useStockDetail, itemsAPI and stocksAPI ([#116](https://github.com/SandrineCipolla/stockHub_V2_front/issues/116)) ([36b4ba8](https://github.com/SandrineCipolla/stockHub_V2_front/commit/36b4ba84a48cee5b2b9763e147ef7020d4224793))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump flatted ([#117](https://github.com/SandrineCipolla/stockHub_V2_front/issues/117)) ([7a915bb](https://github.com/SandrineCipolla/stockHub_V2_front/commit/7a915bbd578add6b919c129cebd6cd79693f5c39))
+
 ## [1.8.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.7.1...v1.8.0) (2026-03-12)
 
 
