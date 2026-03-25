@@ -84,7 +84,7 @@ const FEATURES: {
     bgColor: 'bg-green-500/10',
     title: 'Catégories dédiées',
     description:
-      'Organisez vos stocks par domaine — alimentation, hygiène, matériel créatif — chacun avec ses propres articles et métriques.',
+      'Organisez vos stocks par domaine, chacun avec ses propres articles, métriques et alertes.',
   },
   {
     icon: 'Download',
@@ -107,7 +107,7 @@ const TECH_STACK = [
 ];
 
 const HERO_STATS = [
-  { value: '3', label: 'Catégories de stocks' },
+  { value: '100%', label: 'Catégories personnalisables' },
   { value: 'IA', label: 'Prédictions de rupture' },
   { value: 'CSV', label: 'Export de données' },
   { value: 'RGPD', label: 'Données hébergées en France' },
@@ -126,25 +126,25 @@ export const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-50">
-      <HeaderWrapper />
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50">
+      <HeaderWrapper isLoggedIn={false} />
 
       <main id="main-content">
         {/* HERO */}
         <section className="text-center px-6 py-24 max-w-4xl mx-auto" aria-labelledby="hero-title">
-          <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/30 text-purple-300 text-sm font-medium px-4 py-1.5 rounded-full mb-7">
+          <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/30 text-purple-600 dark:text-purple-300 text-sm font-medium px-4 py-1.5 rounded-full mb-7">
             <span className="w-1.5 h-1.5 rounded-full bg-purple-500" aria-hidden="true" />
             Alimenté par l'IA — Prédit les ruptures avant qu'elles arrivent
           </div>
 
           <h1
             id="hero-title"
-            className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-5 bg-gradient-to-br from-slate-50 to-purple-300 bg-clip-text text-transparent"
+            className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-5 bg-gradient-to-br from-slate-900 dark:from-slate-50 to-purple-600 dark:to-purple-300 bg-clip-text text-transparent"
           >
             Gérez vos stocks familiaux, intelligemment
           </h1>
 
-          <p className="text-lg text-slate-300 max-w-xl mx-auto mb-9 leading-relaxed">
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto mb-9 leading-relaxed">
             StockHub centralise vos inventaires, anticipe les ruptures et vous alerte au bon moment.
             Fini les produits périmés ou les placards vides.
           </p>
@@ -164,10 +164,12 @@ export const LandingPage: React.FC = () => {
           >
             {HERO_STATS.map(stat => (
               <div key={stat.value} className="text-center">
-                <span className="block text-3xl font-bold text-purple-400 tracking-tight">
+                <span className="block text-3xl font-bold text-purple-600 dark:text-purple-400 tracking-tight">
                   {stat.value}
                 </span>
-                <span className="text-xs text-slate-500 mt-0.5 block">{stat.label}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-500 mt-0.5 block">
+                  {stat.label}
+                </span>
               </div>
             ))}
           </div>
@@ -177,15 +179,15 @@ export const LandingPage: React.FC = () => {
         <section id="features" className="px-6 py-20" aria-labelledby="features-title">
           <div className="max-w-5xl mx-auto">
             <div className="mb-12">
-              <p className="text-xs font-semibold uppercase tracking-widest text-purple-500 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-purple-600 dark:text-purple-500 mb-3">
                 Fonctionnalités
               </p>
               <h2 id="features-title" className="text-4xl font-bold tracking-tight mb-3">
                 Tout ce dont vous avez besoin
               </h2>
-              <p className="text-slate-300 text-base max-w-lg leading-relaxed">
-                De la gestion quotidienne aux alertes intelligentes — StockHub V2 couvre l'ensemble
-                du cycle de vie de vos stocks.
+              <p className="text-slate-600 dark:text-slate-300 text-base max-w-lg leading-relaxed">
+                De la gestion quotidienne aux alertes intelligentes — StockHub couvre l'ensemble du
+                cycle de vie de vos stocks.
               </p>
             </div>
 
@@ -193,7 +195,7 @@ export const LandingPage: React.FC = () => {
               {FEATURES.map(feature => (
                 <li
                   key={feature.title}
-                  className="bg-slate-800 border border-purple-500/20 rounded-xl p-7 hover:bg-slate-700/50 hover:border-purple-500/50 hover:-translate-y-0.5 transition-all duration-200"
+                  className="bg-gray-50 dark:bg-slate-800 border border-purple-500/20 rounded-xl p-7 hover:bg-gray-100 dark:hover:bg-slate-700/50 hover:border-purple-500/50 hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <div
                     className={`w-11 h-11 rounded-lg flex items-center justify-center mb-4 ${feature.bgColor}`}
@@ -206,7 +208,9 @@ export const LandingPage: React.FC = () => {
                     })}
                   </div>
                   <h3 className="text-base font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-slate-300 leading-relaxed">{feature.description}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {feature.description}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -215,18 +219,18 @@ export const LandingPage: React.FC = () => {
 
         {/* DEMO */}
         <section
-          className="px-6 py-20 bg-slate-800 border-y border-purple-500/20"
+          className="px-6 py-20 bg-gray-100 dark:bg-slate-800 border-y border-purple-500/20"
           aria-labelledby="demo-title"
         >
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-purple-500 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-purple-600 dark:text-purple-500 mb-3">
                 Prédictions IA
               </p>
               <h2 id="demo-title" className="text-3xl font-bold tracking-tight mb-4">
                 Anticipez les ruptures avant qu'elles arrivent
               </h2>
-              <p className="text-slate-300 leading-relaxed mb-6">
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
                 Le moteur d'analyse calcule en temps réel les délais estimés avant rupture pour
                 chaque article, avec un niveau de confiance associé. Vous savez exactement quoi
                 réapprovisionner et quand.
@@ -260,10 +264,10 @@ export const LandingPage: React.FC = () => {
           >
             Stack technique
           </p>
-          <ul className="flex items-center justify-center gap-2.5 flex-wrap" role="list">
+          <ul className="flex items-center justify-center gap-x-3 gap-y-4 flex-wrap" role="list">
             {TECH_STACK.map(tech => (
               <li key={tech}>
-                <span className="bg-slate-800 border border-purple-500/20 rounded-full px-4 py-2 text-sm text-slate-300 hover:border-purple-500/50 hover:text-slate-50 transition-colors cursor-default">
+                <span className="bg-gray-100 dark:bg-slate-800 border border-purple-500/20 rounded-full px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:border-purple-500/50 hover:text-slate-900 dark:hover:text-slate-50 transition-colors cursor-default">
                   {tech}
                 </span>
               </li>
@@ -280,7 +284,7 @@ export const LandingPage: React.FC = () => {
             Prêt à reprendre le contrôle de vos stocks ?
           </h2>
           <p className="text-white/75 text-lg mb-9 max-w-md mx-auto">
-            Connectez-vous et découvrez StockHub V2 avec des données de démonstration déjà en place.
+            Connectez-vous et découvrez StockHub avec des données de démonstration déjà en place.
           </p>
           <ButtonWrapper variant="primary" onClick={handleLogin}>
             Accéder à l'application

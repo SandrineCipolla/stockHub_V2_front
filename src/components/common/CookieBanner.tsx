@@ -6,18 +6,18 @@ import { ButtonWrapper } from '@/components/common/ButtonWrapper';
 const CONSENT_KEY = 'stockhub_consent';
 
 export const CookieBanner: React.FC = () => {
-  const [visible, setVisible] = useState(() => !localStorage.getItem(CONSENT_KEY));
+  const [visible, setVisible] = useState(() => !sessionStorage.getItem(CONSENT_KEY));
   const { theme } = useTheme();
 
   if (!visible) return null;
 
   const handleAccept = () => {
-    localStorage.setItem(CONSENT_KEY, 'accepted');
+    sessionStorage.setItem(CONSENT_KEY, 'accepted');
     setVisible(false);
   };
 
   const handleRefuse = () => {
-    localStorage.setItem(CONSENT_KEY, 'refused');
+    sessionStorage.setItem(CONSENT_KEY, 'refused');
     setVisible(false);
   };
 
