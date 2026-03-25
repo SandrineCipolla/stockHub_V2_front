@@ -141,7 +141,7 @@ export const LandingPage: React.FC = () => {
 
           <h1
             id="hero-title"
-            className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-5 pb-1 bg-gradient-to-br from-slate-900 dark:from-slate-50 to-purple-600 dark:to-purple-300 bg-clip-text text-transparent"
+            className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-5 pb-3 bg-gradient-to-br from-slate-900 dark:from-slate-50 to-purple-600 dark:to-purple-300 bg-clip-text text-transparent"
           >
             Gérez vos stocks familiaux, intelligemment
           </h1>
