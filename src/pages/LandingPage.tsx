@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useMsal } from '@azure/msal-react';
+import { LayoutDashboard, Activity, AlertTriangle, Package, Layers, Download } from 'lucide-react';
 import { loginRequest } from '@/config/authConfig';
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
@@ -7,6 +8,7 @@ import { ButtonWrapper } from '@/components/common/ButtonWrapper';
 import { StockPrediction } from '@/components/ai/StockPrediction';
 import { useTheme } from '@/hooks/useTheme';
 import type { StockPrediction as StockPredictionData } from '@/utils/mlSimulation';
+import type { LucideIcon } from 'lucide-react';
 
 const DEMO_PREDICTIONS: StockPredictionData[] = [
   {
@@ -40,55 +42,55 @@ const DEMO_PREDICTIONS: StockPredictionData[] = [
 ];
 
 const FEATURES: {
-  icon: string;
-  color: 'primary' | 'success' | 'warning';
+  Icon: LucideIcon;
+  iconClass: string;
   bgColor: string;
   title: string;
   description: string;
 }[] = [
   {
-    icon: 'LayoutDashboard',
-    color: 'primary',
+    Icon: LayoutDashboard,
+    iconClass: 'text-purple-600 dark:text-purple-400',
     bgColor: 'bg-purple-500/10',
     title: 'Tableau de bord temps réel',
     description:
       "Visualisez l'état de tous vos stocks en un coup d'œil : métriques clés, articles en sous-stock, alertes actives — tout sur une seule page.",
   },
   {
-    icon: 'Activity',
-    color: 'success',
+    Icon: Activity,
+    iconClass: 'text-green-600 dark:text-green-400',
     bgColor: 'bg-green-500/10',
     title: 'Prédictions IA de rupture',
     description:
       "L'analyse prédictive calcule automatiquement les délais avant rupture pour chaque article à risque, classés par niveau de confiance.",
   },
   {
-    icon: 'AlertTriangle',
-    color: 'warning',
+    Icon: AlertTriangle,
+    iconClass: 'text-amber-600 dark:text-amber-400',
     bgColor: 'bg-amber-500/10',
     title: 'Alertes de réapprovisionnement',
     description:
       'Recevez des recommandations automatiques classées par urgence : articles critiques, en stock bas, ou approchant du seuil minimum.',
   },
   {
-    icon: 'Package',
-    color: 'primary',
+    Icon: Package,
+    iconClass: 'text-purple-600 dark:text-purple-400',
     bgColor: 'bg-purple-500/10',
     title: 'Gestion article par article',
     description:
       'Suivez chaque article avec son statut visuel (OK / Stock bas / Critique / Rupture), sa quantité et son seuil minimum personnalisable.',
   },
   {
-    icon: 'Layers',
-    color: 'success',
+    Icon: Layers,
+    iconClass: 'text-green-600 dark:text-green-400',
     bgColor: 'bg-green-500/10',
     title: 'Catégories dédiées',
     description:
       'Organisez vos stocks par domaine, chacun avec ses propres articles, métriques et alertes.',
   },
   {
-    icon: 'Download',
-    color: 'warning',
+    Icon: Download,
+    iconClass: 'text-amber-600 dark:text-amber-400',
     bgColor: 'bg-amber-500/10',
     title: 'Export CSV',
     description:
@@ -192,25 +194,20 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" role="list">
-              {FEATURES.map(feature => (
+              {FEATURES.map(({ Icon, iconClass, bgColor, title, description }) => (
                 <li
-                  key={feature.title}
+                  key={title}
                   className="bg-gray-50 dark:bg-slate-800 border border-purple-500/20 rounded-xl p-7 hover:bg-gray-100 dark:hover:bg-slate-700/50 hover:border-purple-500/50 hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <div
-                    className={`w-11 h-11 rounded-lg flex items-center justify-center mb-4 ${feature.bgColor}`}
+                    className={`w-11 h-11 rounded-lg flex items-center justify-center mb-4 ${bgColor}`}
                     aria-hidden="true"
                   >
-                    {React.createElement('sh-icon', {
-                      name: feature.icon,
-                      size: 'md',
-                      color: feature.color,
-                      'data-theme': theme,
-                    })}
+                    <Icon size={20} className={iconClass} />
                   </div>
-                  <h3 className="text-base font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="text-base font-semibold mb-2">{title}</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                    {feature.description}
+                    {description}
                   </p>
                 </li>
               ))}
