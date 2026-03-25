@@ -1,0 +1,39 @@
+# StockHub
+
+> Application web de gestion de stocks familiaux avec intelligence artificielle.
+
+## Qu'est-ce que StockHub ?
+
+StockHub est une application web gratuite qui permet aux particuliers de gérer leurs inventaires domestiques (alimentation, hygiène, matériel divers). Elle intègre un moteur de prédiction IA qui calcule automatiquement les délais avant rupture de chaque article et génère des alertes de réapprovisionnement classées par urgence.
+
+## Pour qui ?
+
+Particuliers souhaitant éviter les ruptures de stock à domicile et mieux organiser leurs achats.
+
+## Ce que StockHub fait
+
+- Centralise les inventaires par catégories personnalisables
+- Prédit les ruptures de stock grâce à l'IA (niveau de confiance, délai estimé, fourchette pessimiste/optimiste)
+- Génère des alertes automatiques de réapprovisionnement classées par urgence (critique, élevé, moyen, faible)
+- Affiche un tableau de bord temps réel avec métriques clés
+- Permet l'export CSV de l'inventaire complet
+- Respecte le RGPD — données hébergées en France
+
+## Ce que StockHub ne fait pas
+
+- Pas de connexion aux systèmes de caisse ou ERP
+- Pas d'application mobile native (web uniquement)
+- Pas de gestion multi-utilisateurs (compte individuel)
+
+## Stack technique
+
+React 19, TypeScript, Node.js 22, Prisma ORM, Azure AD B2C, Design System Lit, architecture DDD/CQRS.
+
+## Accès
+
+- Application : https://brave-field-03611eb03.5.azurestaticapps.net
+- Authentification requise pour accéder au dashboard (Azure AD B2C)
+
+## Auteur
+
+Sandrine Cipolla — projet RNCP niveau 7 (équivalent Bac+5 ingénierie logicielle).
