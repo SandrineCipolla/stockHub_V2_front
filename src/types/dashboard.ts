@@ -56,6 +56,7 @@ export interface HeaderProps {
   className?: string;
   userName?: string;
   notificationCount?: number;
+  isLoggedIn?: boolean;
 }
 
 export interface FooterProps {

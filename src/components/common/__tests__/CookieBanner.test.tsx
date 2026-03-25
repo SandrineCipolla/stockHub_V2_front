@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -8,12 +9,22 @@ vi.mock('@/hooks/useTheme', () => ({
   useTheme: () => ({ theme: 'dark' }),
 }));
 
-const localStorageMock = createLocalStorageMock();
+vi.mock('@/components/common/ButtonWrapper', () => ({
+  ButtonWrapper: ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  }) => <button onClick={onClick}>{children}</button>,
+}));
+
+const sessionStorageMock = createLocalStorageMock();
 
 beforeEach(() => {
-  localStorageMock.clear();
-  Object.defineProperty(window, 'localStorage', {
-    value: localStorageMock,
+  sessionStorageMock.clear();
+  Object.defineProperty(window, 'sessionStorage', {
+    value: sessionStorageMock,
     writable: true,
   });
   vi.clearAllMocks();
@@ -33,13 +44,13 @@ describe('CookieBanner', () => {
   });
 
   it("ne s'affiche pas quand stockhub_consent = 'accepted'", () => {
-    localStorageMock.setItem('stockhub_consent', 'accepted');
+    sessionStorageMock.setItem('stockhub_consent', 'accepted');
     renderBanner();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it("ne s'affiche pas quand stockhub_consent = 'refused'", () => {
-    localStorageMock.setItem('stockhub_consent', 'refused');
+    sessionStorageMock.setItem('stockhub_consent', 'refused');
     renderBanner();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
@@ -47,14 +58,14 @@ describe('CookieBanner', () => {
   it("stocke 'accepted' et disparaît au clic sur Accepter", () => {
     renderBanner();
     fireEvent.click(screen.getByText('Accepter'));
-    expect(localStorageMock.getItem('stockhub_consent')).toBe('accepted');
+    expect(sessionStorageMock.getItem('stockhub_consent')).toBe('accepted');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it("stocke 'refused' et disparaît au clic sur Refuser", () => {
     renderBanner();
     fireEvent.click(screen.getByText('Refuser'));
-    expect(localStorageMock.getItem('stockhub_consent')).toBe('refused');
+    expect(sessionStorageMock.getItem('stockhub_consent')).toBe('refused');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 

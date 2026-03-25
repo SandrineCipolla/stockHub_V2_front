@@ -21,6 +21,7 @@ vi.mock('@azure/msal-react', () => ({
       loginRedirect: mockLoginRedirect,
       logoutRedirect: mockLogoutRedirect,
     },
+    inProgress: 'none',
   }),
   useIsAuthenticated: () => true, // Always return true for tests
 }));
@@ -74,9 +75,9 @@ describe('HeaderWrapper', () => {
     it('should always set isLoggedIn to true', () => {
       const { container } = render(<HeaderWrapper />);
       const header = container.querySelector('sh-header');
-      // Boolean true doesn't always create 'true' string in React.createElement
-      // Check attribute exists or is truthy
-      expect(header?.hasAttribute('isloggedin')).toBe(true);
+      // isLoggedIn est défini comme propriété JS via ref (pas attribut HTML),
+      // car Lit a isLoggedIn = true par défaut et React ne set pas les bool false.
+      expect((header as unknown as Record<string, unknown>)?.isLoggedIn).toBe(true);
     });
 
     it('should apply className correctly', () => {
@@ -270,7 +271,7 @@ describe('HeaderWrapper', () => {
 
       expect(header?.getAttribute('username')).toBe('Sandrine Cipolla');
       expect(header?.getAttribute('notificationcount')).toBe('5');
-      expect(header?.hasAttribute('isloggedin')).toBe(true);
+      expect((header as unknown as Record<string, unknown>)?.isLoggedIn).toBe(true);
       expect(header?.getAttribute('data-theme')).toBe('dark');
       expect(header?.classList.contains('app-header')).toBe(true);
     });

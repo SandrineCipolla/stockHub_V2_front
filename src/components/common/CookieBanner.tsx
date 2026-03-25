@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
+import { ButtonWrapper } from '@/components/common/ButtonWrapper';
 
 const CONSENT_KEY = 'stockhub_consent';
 
 export const CookieBanner: React.FC = () => {
-  const [visible, setVisible] = useState(() => !localStorage.getItem(CONSENT_KEY));
+  const [visible, setVisible] = useState(() => !sessionStorage.getItem(CONSENT_KEY));
   const { theme } = useTheme();
 
   if (!visible) return null;
 
   const handleAccept = () => {
-    localStorage.setItem(CONSENT_KEY, 'accepted');
+    sessionStorage.setItem(CONSENT_KEY, 'accepted');
     setVisible(false);
   };
 
   const handleRefuse = () => {
-    localStorage.setItem(CONSENT_KEY, 'refused');
+    sessionStorage.setItem(CONSENT_KEY, 'refused');
     setVisible(false);
   };
 
@@ -48,22 +49,12 @@ export const CookieBanner: React.FC = () => {
         </p>
 
         <div className="flex gap-3 flex-shrink-0">
-          <button
-            onClick={handleRefuse}
-            className={`rounded px-4 py-2 text-sm font-medium border focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-              theme === 'dark'
-                ? 'border-slate-600 text-gray-300 hover:bg-slate-700'
-                : 'border-gray-300 text-gray-600 hover:bg-gray-100'
-            }`}
-          >
+          <ButtonWrapper variant="ghost" size="sm" onClick={handleRefuse}>
             Refuser
-          </button>
-          <button
-            onClick={handleAccept}
-            className="rounded px-4 py-2 text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
-          >
+          </ButtonWrapper>
+          <ButtonWrapper variant="primary" size="sm" onClick={handleAccept}>
             Accepter
-          </button>
+          </ButtonWrapper>
         </div>
       </div>
     </div>

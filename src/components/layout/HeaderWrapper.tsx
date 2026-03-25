@@ -12,12 +12,16 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   className = '',
   userName = 'Sandrine Cipolla',
   notificationCount = 3,
+  isLoggedIn: isLoggedInProp,
 }) => {
   const { theme, toggleTheme } = useTheme();
-  const { instance } = useMsal();
+  const { instance, inProgress } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
 
-  // Déterminer si l'utilisateur est connecté (hook React safe)
-  const isLoggedIn = useIsAuthenticated();
+  // Si isLoggedIn est passé en prop (ex: LandingPage force false), on l'utilise directement.
+  // Sinon on lit l'état MSAL, en ignorant les transitions de redirect.
+  const isLoggedIn =
+    isLoggedInProp !== undefined ? isLoggedInProp : isAuthenticated && inProgress === 'none';
 
   const handleNotifications = () => {
     logger.debug('Notifications clicked');
@@ -52,6 +56,18 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   const handleLogoutRef = useRef(handleLogout);
   handleLogoutRef.current = handleLogout;
 
+  // Ref pour forcer la propriété JS isLoggedIn sur le web component Lit.
+  // React 19 supprime l'attribut quand la valeur est false au lieu de définir
+  // la propriété à false, ce qui laisse Lit utiliser son défaut (true).
+  // L'assignation impérative contourne ce comportement.
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (headerRef.current) {
+      Reflect.set(headerRef.current, 'isLoggedIn', isLoggedIn);
+    }
+  }, [isLoggedIn]);
+
   useEffect(() => {
     const onLogout = () => handleLogoutRef.current();
 
@@ -77,13 +93,14 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   }, []);
 
   return React.createElement('sh-header', {
+    ref: headerRef,
     userName,
     notificationCount,
-    isLoggedIn, // Maintenant dynamique basé sur activeAccount
     'data-theme': theme,
     className,
     'onsh-notification-click': handleNotifications,
     'onsh-theme-toggle': handleThemeToggle,
     'onsh-login-click': handleLogin,
+    'onsh-logout-click': handleLogout,
   });
 };
