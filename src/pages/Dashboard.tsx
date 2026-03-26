@@ -205,7 +205,7 @@ export const Dashboard: React.FC = () => {
               variant="primary"
               icon={Plus}
               onClick={handleCreateStock}
-              aria-label="Ajouter un nouveau stock à l'inventaire"
+              aria-label="Ajouter un Stock à l'inventaire"
               className="w-auto max-w-[150px]"
             >
               <span className="hidden md:hidden lg:inline">Ajouter un Stock</span>
@@ -213,7 +213,7 @@ export const Dashboard: React.FC = () => {
             <Button
               variant="secondary"
               icon={BarChart3}
-              aria-label="Voir les analyses IA et prédictions ML"
+              aria-label="Analyses IA et prédictions ML"
               onClick={() => navigate('/analytics')}
               className="w-auto max-w-[150px]"
             >
@@ -222,7 +222,7 @@ export const Dashboard: React.FC = () => {
             <Button
               variant="secondary"
               icon={Search}
-              aria-label="Ouvrir la page de recherche avancée de stocks"
+              aria-label="Recherche Avancée de stocks"
               onClick={() => logger.debug('Recherche avancée')}
             >
               <span className="hidden md:hidden lg:inline">Recherche Avancée</span>
