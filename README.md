@@ -8,7 +8,7 @@
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](/)
 [![Deployment](https://img.shields.io/badge/Deployment-Active-brightgreen)](/)
 [![Accessibility](https://img.shields.io/badge/Accessibility-RGAA-blue)](/)
-[![SEO Score](https://img.shields.io/badge/Lighthouse_SEO-90+-green)](/)
+[![SEO Score](https://img.shields.io/badge/Lighthouse_SEO-100-green)](/)
 
 > **Plateforme moderne de gestion de stocks intelligente** - Interface web responsive et accessible pour la gestion complète des inventaires avec design system intégré.
 
@@ -16,11 +16,19 @@
 
 StockHub V2 est une application web moderne de gestion de stocks développée avec React et TypeScript. Elle offre une interface utilisateur intuitive, un design system cohérent et des fonctionnalités avancées d'intelligence artificielle pour l'analyse des stocks.
 
-## 🔗 **[Voir la démo live](https://stock-hub-v2-front.vercel.app/)** | 📁 **[Repository GitHub](https://github.com/SandrineCipolla/stockHub_V2_front)** | 📖 **[Storybook Design System](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)**
+## 🔗 **[Voir la démo live](https://brave-field-03611eb03.5.azurestaticapps.net)** | 📁 **[Repository GitHub](https://github.com/SandrineCipolla/stockHub_V2_front)** | 📖 **[Storybook Design System](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)**
 
 ---
 
 ## 🎉 Nouveautés Majeures (Mars 2026)
+
+### 🌐 Landing Page & SEO/GEO (Mars 2026)
+
+- **LandingPage** : Page publique avec hero, features, démo IA, tech stack et CTA — accessible sans authentification
+- **SEO** : JSON-LD `SoftwareApplication`, OG tags, canonical, meta description optimisée
+- **GEO** : fichier `llms.txt` pour les crawlers IA (convention LLMs.txt)
+- **Sitemap** : URLs corrigées vers la production Azure
+- **Score Lighthouse SEO** : 100/100
 
 ### 📦 Gestion des Items (Mars 2026)
 
@@ -66,9 +74,9 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 ### 🛡️ Qualité & Sécurité (Décembre 2025)
 
 - 🔒 **0 vulnérabilité npm** (corrigé 09/12/2025)
-- ✅ **422+ tests** (coverage composants 90-98%)
-- 🎯 **WCAG AA 100%** conforme (auditée novembre 2025)
-- ⚡ **Lighthouse 99/100** performance
+- ✅ **485 tests** (coverage composants 90-98%)
+- ♿ **Accessibilité Lighthouse 94/100** (en cours d'amélioration, fixes DS en cours)
+- ⚡ **Lighthouse 93/100** performance, **100/100** SEO
 
 > 📊 **[État complet du projet Décembre 2025](./documentation/planning/ETAT-DECEMBRE-2025.md)** - Vision d'ensemble et roadmap
 
@@ -82,7 +90,7 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 - 🎭 **Mode Loisirs/Créatif** - 7 unités flexibles (%, ml, m, tubes, portions, etc.)
 - 🌙 **Mode sombre/clair** avec transition fluide
 - 📱 **Design responsive** Mobile First
-- ♿ **Accessibilité WCAG AA 100%** conforme et auditée
+- ♿ **Accessibilité Lighthouse 94/100** (corrections DS en cours)
 - 🎯 **TypeScript strict** pour la robustesse (0 erreur)
 - 🔍 **Recherche avancée** et filtres
 - 📈 **Visualisations** et rapports
@@ -98,7 +106,7 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 - **Animations**: Framer Motion 12.23.24
 - **Icons**: Lucide React 0.517.0
 - **Routing**: React Router DOM 7.9.5
-- **Design System**: [@stockhub/design-system](https://github.com/SandrineCipolla/stockhub_design_system) v1.3.1 (18 Web Components Lit)
+- **Design System**: [@stockhub/design-system](https://github.com/SandrineCipolla/stockhub_design_system) v1.3.2 (18 Web Components Lit)
 
 ### Development Tools
 
@@ -114,7 +122,7 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ### Design System Externe
 
-**Repository séparé** : [@stockhub/design-system](https://github.com/SandrineCipolla/stockhub_design_system) v1.3.1
+**Repository séparé** : [@stockhub/design-system](https://github.com/SandrineCipolla/stockhub_design_system) v1.3.2
 
 - **18 Web Components Lit** (5 atoms, 7 molecules, 6 organisms)
 - **Storybook déployé** : [Documentation interactive](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
@@ -189,8 +197,10 @@ yarn preview
 stockHub_V2_front/
 ├── public/                 # Assets statiques
 │   ├── vite.svg
-│   └── sitemap.xml
-│   └── robots.txt
+│   ├── sitemap.xml
+│   ├── robots.txt
+│   ├── llms.txt            # GEO — crawlers IA
+│   └── og-image.png        # Image Open Graph
 ├── src/                    # Code source
 │   ├── components/        # Composants réutilisables
 │   ├── contexts/
