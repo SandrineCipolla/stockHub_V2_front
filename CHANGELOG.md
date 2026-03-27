@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.9.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.9.0...v1.9.1) (2026-03-27)
+
+
+### 🐛 Bug Fixes
+
+* **a11y:** bump DS to v1.3.2, fix label-content-name-mismatch in Dashboard — closes [#125](https://github.com/SandrineCipolla/stockHub_V2_front/issues/125) ([#127](https://github.com/SandrineCipolla/stockHub_V2_front/issues/127)) ([1d41e60](https://github.com/SandrineCipolla/stockHub_V2_front/commit/1d41e6075757d8580678a2c383f58e4c9a71ad9a))
+
+
+### 📚 Documentation
+
+* **readme:** update landing page, SEO, DS v1.3.2, tests 485, a11y 94 ([7221458](https://github.com/SandrineCipolla/stockHub_V2_front/commit/72214581e9c6c8eb86e7c5a7d0a9a101c95ab709))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump happy-dom ([#129](https://github.com/SandrineCipolla/stockHub_V2_front/issues/129)) ([eca649a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/eca649aecf6e95266cfead4adde38b2aacb679f1))
+* **deps-dev:** bump picomatch ([#126](https://github.com/SandrineCipolla/stockHub_V2_front/issues/126)) ([f3a7d69](https://github.com/SandrineCipolla/stockHub_V2_front/commit/f3a7d695bb28c35516aeb48a3d800874ca32803f))
+
 ## [1.9.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.8.0...v1.9.0) (2026-03-25)
 
 
