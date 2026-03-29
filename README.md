@@ -22,6 +22,15 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ## 🎉 Nouveautés Majeures (Mars 2026)
 
+### 🔮 Prédictions & Historique Backend (Mars 2026)
+
+- **`predictionsAPI.ts`** : client API pour `GET /items/:id/prediction` (daysUntilEmpty, trend, avgDailyConsumption) et `GET /items/:id/history` (entrées CONSUMPTION / RESTOCK / ADJUSTMENT)
+- **`usePredictions(stockId, itemId)`** : hook réutilisable suivant le pattern `useAsyncAction`
+- **StockDetailPage** : charge automatiquement les prédictions backend pour les items à risque (critical / low / out-of-stock) — remplace la simulation 10%/j par `avgDailyConsumption` réel
+- **Fallback gracieux** : si le backend est indisponible, la simulation est conservée et un message discret "Données insuffisantes — estimation approximative" est affiché
+- **`computePredictions`** : accepte un `predictionMap` par itemId ; utilise `recommendedRestock` réel du backend
+- **`generateAISuggestions`** : accepte un `consumptionMap` optionnel — remplace la simulation 5%/j par les données réelles quand disponibles
+
 ### 🌐 Landing Page & SEO/GEO (Mars 2026)
 
 - **LandingPage** : Page publique avec hero, features, démo IA, tech stack et CTA — accessible sans authentification
@@ -74,7 +83,7 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 ### 🛡️ Qualité & Sécurité (Décembre 2025)
 
 - 🔒 **0 vulnérabilité npm** (corrigé 09/12/2025)
-- ✅ **485 tests** (coverage composants 90-98%)
+- ✅ **526 tests** (coverage composants 90-98%)
 - ♿ **Accessibilité Lighthouse 94/100** (en cours d'amélioration, fixes DS en cours)
 - ⚡ **Lighthouse 93/100** performance, **100/100** SEO
 
