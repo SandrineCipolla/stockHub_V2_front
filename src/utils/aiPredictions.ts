@@ -98,7 +98,7 @@ const AI_CONFIG: Readonly<{
  * console.log(`Daily average: ${trend.dailyAverage} units`);
  * ```
  */
-function analyzeConsumptionTrend(stock: Stock): ConsumptionTrend {
+function analyzeConsumptionTrend(stock: Stock, avgDailyConsumption?: number): ConsumptionTrend {
   // Utiliser les seuils avec valeurs par défaut
   const minThreshold = stock.minThreshold ?? 10;
   const maxThreshold = stock.maxThreshold ?? 100;
@@ -107,11 +107,11 @@ function analyzeConsumptionTrend(stock: Stock): ConsumptionTrend {
   const optimalMidpoint = (minThreshold + maxThreshold) / 2;
   const deviation = Math.abs(stock.quantity - optimalMidpoint);
 
-  // Estimation de la consommation moyenne quotidienne (simulation)
-  // Plus la quantité est basse, plus la consommation estimée est élevée
-  const baseConsumption = maxThreshold * 0.05; // 5% du max par jour
+  // Consommation journalière : données réelles du backend si disponibles, sinon simulation 5%/j
+  const baseConsumption = maxThreshold * 0.05;
   const adjustmentFactor = stock.quantity < optimalMidpoint ? 1.5 : 0.7;
-  const dailyAverage = baseConsumption * adjustmentFactor;
+  const dailyAverage =
+    avgDailyConsumption !== undefined ? avgDailyConsumption : baseConsumption * adjustmentFactor;
 
   // Détection de tendance (simulation basée sur position relative)
   const relativePosition = stock.quantity / maxThreshold;
@@ -459,11 +459,18 @@ function generateOptimizeSuggestion(stock: Stock, trend: ConsumptionTrend): AISu
  * const topSuggestions = suggestions.slice(0, 5);
  * ```
  */
-export function generateAISuggestions(stocks: Stock[]): AISuggestion[] {
+/**
+ * @param consumptionMap - Taux de consommation journalière réels par stockId (optionnel).
+ *   Si fourni, remplace le taux simulé à 5%/j pour les stocks concernés.
+ */
+export function generateAISuggestions(
+  stocks: Stock[],
+  consumptionMap?: Record<string | number, number>
+): AISuggestion[] {
   const suggestions: AISuggestion[] = [];
 
   for (const stock of stocks) {
-    const trend = analyzeConsumptionTrend(stock);
+    const trend = analyzeConsumptionTrend(stock, consumptionMap?.[stock.id]);
 
     // Vérifier confiance minimale
     if (trend.confidence < AI_CONFIG.MIN_CONFIDENCE) {
@@ -520,7 +527,11 @@ export function generateAISuggestions(stocks: Stock[]): AISuggestion[] {
  * @param limit - Maximum number of suggestions (default: 5)
  * @returns Top AI suggestions
  */
-export function getTopAISuggestions(stocks: Stock[], limit = 5): AISuggestion[] {
-  const allSuggestions = generateAISuggestions(stocks);
+export function getTopAISuggestions(
+  stocks: Stock[],
+  limit = 5,
+  consumptionMap?: Record<string | number, number>
+): AISuggestion[] {
+  const allSuggestions = generateAISuggestions(stocks, consumptionMap);
   return allSuggestions.slice(0, limit);
 }

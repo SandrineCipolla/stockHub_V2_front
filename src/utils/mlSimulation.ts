@@ -17,7 +17,7 @@ import { logger } from '@/utils/logger';
 /**
  * Historical data point for time-series analysis
  */
-interface DataPoint {
+export interface DataPoint {
   timestamp: number; // Unix timestamp (ms)
   quantity: number;
 }
@@ -58,6 +58,9 @@ export interface StockPrediction {
   // Recommendations
   recommendedReorderDate: Date | null;
   recommendedReorderQuantity: number;
+
+  /** true si l'historique a été simulé faute de données réelles suffisantes */
+  simulatedFallback?: boolean;
 }
 
 /**
@@ -386,9 +389,12 @@ function calculateReorderDate(ruptureDate: Date | null): Date | null {
  * console.log(`Reorder ${prediction.recommendedReorderQuantity} units by ${prediction.recommendedReorderDate}`);
  * ```
  */
-export function predictStockRupture(stock: Stock): StockPrediction {
-  // Step 1: Simulate historical data (in production, use real historical data)
-  const historicalData = simulateHistoricalData(stock);
+export function predictStockRupture(stock: Stock, realDataPoints?: DataPoint[]): StockPrediction {
+  // Step 1: Use real historical data if available and sufficient, otherwise simulate
+  const hasRealData =
+    realDataPoints !== undefined && realDataPoints.length >= ML_CONFIG.MIN_DATA_POINTS;
+  const historicalData = hasRealData ? realDataPoints : simulateHistoricalData(stock);
+  const simulatedFallback = !hasRealData;
 
   // Step 2: Perform linear regression
   const regression = performLinearRegression(historicalData);
@@ -457,6 +463,7 @@ export function predictStockRupture(stock: Stock): StockPrediction {
     riskLevel,
     recommendedReorderDate,
     recommendedReorderQuantity,
+    simulatedFallback,
   };
 }
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit, Pencil, Plus, Trash2 } from 'lucide-react';
 
@@ -15,6 +15,8 @@ import { useStockDetail } from '@/hooks/useStockDetail';
 import { useItems } from '@/hooks/useItems';
 import { useTheme } from '@/hooks/useTheme';
 import { computePredictions } from '@/utils/stockPredictions';
+import { PredictionsAPI } from '@/services/api/predictionsAPI';
+import type { ItemPrediction } from '@/services/api/predictionsAPI';
 import type { StockDetailItem } from '@/types';
 
 const ITEMS_PER_PAGE = 20;
@@ -76,6 +78,7 @@ export const StockDetailPage: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [predictionsOpen, setPredictionsOpen] = useState(false);
+  const [apiPredictions, setApiPredictions] = useState<Record<number, ItemPrediction>>({});
   const [editingQuantityId, setEditingQuantityId] = useState<number | null>(null);
   const [inlineQuantityValue, setInlineQuantityValue] = useState<number>(0);
 
@@ -117,6 +120,35 @@ export const StockDetailPage: React.FC = () => {
       { optimal: 0, low: 0, critical: 0, outOfStock: 0 }
     );
   }, [stock]);
+
+  useEffect(() => {
+    if (!stock) return;
+
+    const atRiskItems = stock.items.filter(
+      item => item.status === 'critical' || item.status === 'low' || item.status === 'out-of-stock'
+    );
+
+    if (atRiskItems.length === 0) return;
+
+    void Promise.all(
+      atRiskItems.map(async item => {
+        try {
+          const pred = await PredictionsAPI.fetchItemPrediction(numericId, item.id);
+          return { id: item.id, pred };
+        } catch {
+          return null;
+        }
+      })
+    ).then(results => {
+      const map: Record<number, ItemPrediction> = {};
+      for (const result of results) {
+        if (result !== null) {
+          map[result.id] = result.pred;
+        }
+      }
+      setApiPredictions(map);
+    });
+  }, [stock, numericId]);
 
   const handleUpdateQuantity = async (item: StockDetailItem, delta: number) => {
     const newQty = Math.max(0, item.quantity + delta);
@@ -166,7 +198,8 @@ export const StockDetailPage: React.FC = () => {
     );
   }
 
-  const predictions = computePredictions(stock.items);
+  const predictions = computePredictions(stock.items, apiPredictions);
+  const hasSimulatedFallback = predictions.some(p => p.simulatedFallback);
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
@@ -247,21 +280,28 @@ export const StockDetailPage: React.FC = () => {
               </span>
             </button>
             {predictionsOpen && (
-              <div id="predictions-section" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {predictions.map(pred =>
-                  React.createElement('sh-stock-prediction-card', {
-                    key: pred.stockId,
-                    'stock-name': pred.stockName,
-                    'stock-id': pred.stockId,
-                    'risk-level': pred.riskLevel,
-                    'days-until-rupture': pred.daysUntilRupture ?? undefined,
-                    confidence: pred.confidence,
-                    'daily-consumption-rate': pred.dailyConsumptionRate,
-                    'current-quantity': pred.currentQuantity,
-                    'recommended-reorder-quantity': pred.recommendedReorderQuantity,
-                    'show-details': true,
-                    'data-theme': theme,
-                  })
+              <div id="predictions-section">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {predictions.map(pred =>
+                    React.createElement('sh-stock-prediction-card', {
+                      key: pred.stockId,
+                      'stock-name': pred.stockName,
+                      'stock-id': pred.stockId,
+                      'risk-level': pred.riskLevel,
+                      'days-until-rupture': pred.daysUntilRupture ?? undefined,
+                      confidence: pred.confidence,
+                      'daily-consumption-rate': pred.dailyConsumptionRate,
+                      'current-quantity': pred.currentQuantity,
+                      'recommended-reorder-quantity': pred.recommendedReorderQuantity,
+                      'show-details': true,
+                      'data-theme': theme,
+                    })
+                  )}
+                </div>
+                {hasSimulatedFallback && (
+                  <p className={`mt-3 text-xs ${themeClasses.textMuted}`}>
+                    Données insuffisantes — estimation approximative
+                  </p>
                 )}
               </div>
             )}

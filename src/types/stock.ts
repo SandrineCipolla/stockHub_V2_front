@@ -222,4 +222,6 @@ export interface StockPrediction {
   dailyConsumptionRate: number;
   currentQuantity: number;
   recommendedReorderQuantity: number;
+  /** true si la prédiction est basée sur une simulation faute de données réelles */
+  simulatedFallback?: boolean;
 }
