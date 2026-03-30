@@ -1,4 +1,5 @@
 import React from 'react';
+import { Sparkles, TrendingDown } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import { logger } from '@/utils/logger';
 import type { AISuggestion } from '@/utils/aiPredictions';
@@ -12,6 +13,7 @@ interface IaAlert {
 
 export interface AIAlertBannerWrapperProps {
   suggestions: AISuggestion[];
+  isLoading?: boolean;
   className?: string;
 }
 
@@ -37,14 +39,29 @@ const getDominantSeverity = (suggestions: AISuggestion[]): 'critical' | 'warning
 };
 
 /**
- * Wrapper React pour le web component sh-ia-alert-banner
- * Transforme les AISuggestion en format compatible IaAlert
+ * Wrapper React pour le web component sh-ia-alert-banner.
+ * Affiche un badge "IA" (Sparkles) pour les suggestions LLM
+ * et "Calcul" (TrendingDown) pour les suggestions déterministes.
+ * Gère un état de chargement (skeleton) et un message de source en pied.
  */
 export const AIAlertBannerWrapper: React.FC<AIAlertBannerWrapperProps> = ({
   suggestions,
+  isLoading = false,
   className = '',
 }) => {
   const { theme } = useTheme();
+
+  // Skeleton pendant le chargement LLM (plus long qu'un calcul local)
+  if (isLoading) {
+    return (
+      <div
+        className="animate-pulse rounded-lg bg-slate-200 dark:bg-slate-700 h-16"
+        aria-label="Chargement des suggestions IA..."
+        role="status"
+        data-testid="suggestions-loading"
+      />
+    );
+  }
 
   // Si aucune suggestion, ne rien afficher
   if (suggestions.length === 0) {
@@ -74,14 +91,51 @@ export const AIAlertBannerWrapper: React.FC<AIAlertBannerWrapperProps> = ({
     // TODO: Navigation vers le stock concerné
   };
 
-  return React.createElement('sh-ia-alert-banner', {
-    count: suggestions.length,
-    severity: dominantSeverity,
-    message,
-    alerts: alerts,
-    expanded: false, // Repliée par défaut
-    'data-theme': theme,
-    className,
-    'onsh-ia-alert-item-click': handleItemClick,
-  });
+  // Distinction source : llm vs déterministe
+  const llmCount = suggestions.filter(s => s.source === 'llm').length;
+  const deterministicCount = suggestions.filter(s => s.source === 'deterministic').length;
+  const hasLLM = llmCount > 0;
+
+  return (
+    <div className={className}>
+      {/* Badges source */}
+      <div className="flex items-center gap-2 mb-2 text-xs">
+        {hasLLM && (
+          <span
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 dark:bg-violet-900 dark:text-violet-300 font-medium"
+            data-testid="badge-llm"
+          >
+            <Sparkles size={11} aria-hidden="true" />
+            IA ({llmCount})
+          </span>
+        )}
+        {deterministicCount > 0 && (
+          <span
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 font-medium"
+            data-testid="badge-deterministic"
+          >
+            <TrendingDown size={11} aria-hidden="true" />
+            Calcul ({deterministicCount})
+          </span>
+        )}
+      </div>
+
+      {React.createElement('sh-ia-alert-banner', {
+        count: suggestions.length,
+        severity: dominantSeverity,
+        message,
+        alerts: alerts,
+        expanded: false,
+        'data-theme': theme,
+        'onsh-ia-alert-item-click': handleItemClick,
+      })}
+
+      {/* Message de source en pied */}
+      <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500" data-testid="source-footer">
+        {hasLLM
+          ? 'Propulsé par IA \u2022 Mistral via OpenRouter'
+          : 'Suggestions basées sur vos données'}
+      </p>
+    </div>
+  );
 };

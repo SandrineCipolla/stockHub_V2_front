@@ -97,12 +97,12 @@ describe('AIAlertBannerWrapper', () => {
       expect(banner?.getAttribute('count')).toBe('3');
     });
 
-    it('should apply className correctly', () => {
+    it('should apply className to the wrapper div', () => {
       const { container } = render(
         <AIAlertBannerWrapper suggestions={[criticalSuggestion]} className="custom-banner" />
       );
-      const banner = container.querySelector('sh-ia-alert-banner');
-      expect(banner?.classList.contains('custom-banner')).toBe(true);
+      // className is applied to the outer wrapper div, not the web component
+      expect(container.firstElementChild?.classList.contains('custom-banner')).toBe(true);
     });
 
     it('should set expanded to false by default', () => {
@@ -325,6 +325,101 @@ describe('AIAlertBannerWrapper', () => {
       const banner = container.querySelector('sh-ia-alert-banner');
 
       expect(banner?.getAttribute('severity')).toBe('warning');
+    });
+  });
+
+  describe('isLoading state', () => {
+    it('should render a loading skeleton when isLoading is true', () => {
+      const { getByTestId, queryByRole } = render(
+        <AIAlertBannerWrapper suggestions={[]} isLoading={true} />
+      );
+      expect(getByTestId('suggestions-loading')).toBeInTheDocument();
+      expect(queryByRole('status')).toBeInTheDocument();
+    });
+
+    it('should not render the web component when isLoading is true', () => {
+      const { container } = render(
+        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} isLoading={true} />
+      );
+      expect(container.querySelector('sh-ia-alert-banner')).not.toBeInTheDocument();
+    });
+
+    it('should render normally when isLoading is false', () => {
+      const { container } = render(
+        <AIAlertBannerWrapper suggestions={[criticalSuggestion]} isLoading={false} />
+      );
+      expect(container.querySelector('sh-ia-alert-banner')).toBeInTheDocument();
+    });
+  });
+
+  describe('source badges', () => {
+    it('should show LLM badge when at least one suggestion has source llm', () => {
+      const llmSuggestion: AISuggestion = {
+        ...criticalSuggestion,
+        source: 'llm',
+      };
+      const { getByTestId } = render(<AIAlertBannerWrapper suggestions={[llmSuggestion]} />);
+      expect(getByTestId('badge-llm')).toBeInTheDocument();
+    });
+
+    it('should show deterministic badge when suggestion has source deterministic', () => {
+      const deterministicSuggestion: AISuggestion = {
+        ...highSuggestion,
+        source: 'deterministic',
+      };
+      const { getByTestId } = render(
+        <AIAlertBannerWrapper suggestions={[deterministicSuggestion]} />
+      );
+      expect(getByTestId('badge-deterministic')).toBeInTheDocument();
+    });
+
+    it('should show both badges for mixed sources', () => {
+      const mixed: AISuggestion[] = [
+        { ...criticalSuggestion, source: 'llm' },
+        { ...highSuggestion, source: 'deterministic' },
+      ];
+      const { getByTestId } = render(<AIAlertBannerWrapper suggestions={mixed} />);
+      expect(getByTestId('badge-llm')).toBeInTheDocument();
+      expect(getByTestId('badge-deterministic')).toBeInTheDocument();
+    });
+
+    it('should not show LLM badge when no llm suggestions', () => {
+      const deterministicSuggestion: AISuggestion = {
+        ...criticalSuggestion,
+        source: 'deterministic',
+      };
+      const { queryByTestId } = render(
+        <AIAlertBannerWrapper suggestions={[deterministicSuggestion]} />
+      );
+      expect(queryByTestId('badge-llm')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('source footer', () => {
+    it('should show LLM footer message when llm suggestions present', () => {
+      const llmSuggestion: AISuggestion = { ...criticalSuggestion, source: 'llm' };
+      const { getByTestId } = render(<AIAlertBannerWrapper suggestions={[llmSuggestion]} />);
+      expect(getByTestId('source-footer').textContent).toContain('Mistral via OpenRouter');
+    });
+
+    it('should show deterministic footer when all suggestions are deterministic', () => {
+      const deterministicSuggestion: AISuggestion = {
+        ...criticalSuggestion,
+        source: 'deterministic',
+      };
+      const { getByTestId } = render(
+        <AIAlertBannerWrapper suggestions={[deterministicSuggestion]} />
+      );
+      expect(getByTestId('source-footer').textContent).toContain(
+        'Suggestions basées sur vos données'
+      );
+    });
+
+    it('should show deterministic footer when source is undefined', () => {
+      const { getByTestId } = render(<AIAlertBannerWrapper suggestions={[criticalSuggestion]} />);
+      expect(getByTestId('source-footer').textContent).toContain(
+        'Suggestions basées sur vos données'
+      );
     });
   });
 });

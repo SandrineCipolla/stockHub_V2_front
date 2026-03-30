@@ -14,9 +14,12 @@ import { ItemFormModal } from '@/components/items/ItemFormModal';
 import { useStockDetail } from '@/hooks/useStockDetail';
 import { useItems } from '@/hooks/useItems';
 import { useTheme } from '@/hooks/useTheme';
+import { useSuggestions } from '@/hooks/useSuggestions';
+import { AIAlertBannerWrapper } from '@/components/ai/AIAlertBannerWrapper';
 import { computePredictions } from '@/utils/stockPredictions';
 import { PredictionsAPI } from '@/services/api/predictionsAPI';
-import type { ItemPrediction } from '@/services/api/predictionsAPI';
+import type { ItemPrediction, BackendSuggestion } from '@/services/api/predictionsAPI';
+import type { AISuggestion } from '@/utils/aiPredictions';
 import type { StockDetailItem } from '@/types';
 
 const ITEMS_PER_PAGE = 20;
@@ -71,6 +74,7 @@ export const StockDetailPage: React.FC = () => {
   const numericId = Number(stockId);
   const { stock, isLoading, error, refetch } = useStockDetail(numericId);
   const { updateItem, deleteItem, isLoading: itemsLoading } = useItems(numericId);
+  const { loadSuggestions, isLoading: isSuggestionsLoading } = useSuggestions(numericId);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -79,6 +83,7 @@ export const StockDetailPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [predictionsOpen, setPredictionsOpen] = useState(false);
   const [apiPredictions, setApiPredictions] = useState<Record<number, ItemPrediction>>({});
+  const [backendSuggestions, setBackendSuggestions] = useState<BackendSuggestion[]>([]);
   const [editingQuantityId, setEditingQuantityId] = useState<number | null>(null);
   const [inlineQuantityValue, setInlineQuantityValue] = useState<number>(0);
 
@@ -150,6 +155,13 @@ export const StockDetailPage: React.FC = () => {
     });
   }, [stock, numericId]);
 
+  useEffect(() => {
+    if (!stock) return;
+    void loadSuggestions().then(result => {
+      if (result) setBackendSuggestions(result);
+    });
+  }, [stock, loadSuggestions]);
+
   const handleUpdateQuantity = async (item: StockDetailItem, delta: number) => {
     const newQty = Math.max(0, item.quantity + delta);
     await updateItem(item.id, { quantity: newQty });
@@ -200,6 +212,25 @@ export const StockDetailPage: React.FC = () => {
 
   const predictions = computePredictions(stock.items, apiPredictions);
   const hasSimulatedFallback = predictions.some(p => p.simulatedFallback);
+
+  const displaySuggestions: AISuggestion[] = backendSuggestions.map((s, i) => ({
+    id: `backend-${s.itemId}-${i}`,
+    stockId: numericId,
+    stockName: stock.label,
+    type: 'rupture-risk' as const,
+    priority:
+      s.priority === 'high'
+        ? ('high' as const)
+        : s.priority === 'medium'
+          ? ('medium' as const)
+          : ('low' as const),
+    confidence: 90,
+    title: s.title,
+    message: s.description,
+    action: '',
+    impact: '',
+    source: s.source,
+  }));
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
@@ -261,6 +292,19 @@ export const StockDetailPage: React.FC = () => {
             color={stock.criticalItemsCount > 0 ? 'warning' : 'success'}
           />
         </section>
+
+        {/* Suggestions IA backend */}
+        {(isSuggestionsLoading || displaySuggestions.length > 0) && (
+          <section className="mb-6" aria-labelledby="ai-suggestions-heading">
+            <h2 id="ai-suggestions-heading" className="sr-only">
+              Suggestions IA
+            </h2>
+            <AIAlertBannerWrapper
+              suggestions={displaySuggestions}
+              isLoading={isSuggestionsLoading}
+            />
+          </section>
+        )}
 
         {/* Prédictions IA */}
         {predictions.length > 0 && (

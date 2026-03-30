@@ -32,6 +32,19 @@ export interface ItemHistory {
 }
 
 /**
+ * AI suggestion returned by the backend.
+ * Endpoint: GET /api/v2/stocks/:stockId/suggestions
+ */
+export interface BackendSuggestion {
+  itemId: number;
+  type: 'RESTOCK' | 'OVERSTOCK' | 'TREND_ALERT' | 'EXPIRY_ALERT' | 'OPTIMIZATION';
+  priority: 'high' | 'medium' | 'low';
+  title: string;
+  description: string;
+  source: 'llm' | 'deterministic';
+}
+
+/**
  * Client API pour les prédictions et l'historique des items.
  */
 export class PredictionsAPI {
@@ -67,5 +80,17 @@ export class PredictionsAPI {
 
     const history: ItemHistory = await response.json();
     return history;
+  }
+
+  static async getStockSuggestions(stockId: number | string): Promise<BackendSuggestion[]> {
+    const { apiUrl, config } = await getApiConfig('GET', 2);
+    const response = await fetch(`${apiUrl}/stocks/${stockId}/suggestions`, config);
+
+    if (!response.ok) {
+      throw new Error(`HTTP response with status ${response.status}`);
+    }
+
+    const suggestions: BackendSuggestion[] = await response.json();
+    return suggestions;
   }
 }
