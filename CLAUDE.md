@@ -274,6 +274,22 @@ import '@stockhub/design-system';
 
 ## Gestion des Issues GitHub
 
+### Labels obligatoires
+
+Toute issue doit avoir **au minimum** ces deux labels :
+
+| Label | Valeur                                                           |
+| ----- | ---------------------------------------------------------------- |
+| Scope | `front` (toujours sur ce repo)                                   |
+| Type  | `bug`, `feature`, `improvement`, `documentation`, `tech-debt`... |
+
+Sans ces labels, les issues n'apparaissent pas correctement dans le GitHub Project board.
+
+```bash
+gh issue create --label "front,bug" ...
+gh issue edit <numero> --repo SandrineCipolla/stockHub_V2_front --add-label "front,bug"
+```
+
 ### ⚠️ Règle absolue pour la création d'issues
 
 Quand tu crées une issue via `gh issue create`, **respecte strictement ce format** et rien d'autre.
