@@ -8,7 +8,8 @@ Application React moderne de gestion de stocks intelligente avec intelligence ar
 
 - **Chemin local**: `C:\Users\sandr\Dev\RNCP7\StockHubV2\Front_End\stockhub_V2_front`
 - **URL GitHub**: https://github.com/SandrineCipolla/stockHub_V2_front
-- **Démo live**: https://stock-hub-v2-front.vercel.app/
+- **Staging**: https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app/ (branche `staging`)
+- **Production**: https://brave-field-03611eb03.5.azurestaticapps.net (Azure Static Web Apps, branche `main`)
 - **Description**: Application React StockHub V2 avec UI responsive et accessible
 - **Tech**: React 19.1.0, TypeScript 5.8.3, Vite 6.3.5, TailwindCSS 3.4.1, Lucide React 0.517.0
 - **Version**: v1.3.0
@@ -26,11 +27,36 @@ Application React moderne de gestion de stocks intelligente avec intelligence ar
 - **Chemin local**: `C:\Users\sandr\Dev\Perso\Projets\stockhub\stockhub_back`
 - **URL GitHub**: [À configurer si nécessaire]
 - **Description**: API StockHub avec prédictions ML
+- **Staging**: https://stockhub-back.onrender.com/api (Render.com)
+- **Production**: Azure App Service F1 (quota CPU 60 min/jour — démarrer via `npm run azure:start`, arrêter via `npm run azure:stop`)
 
 ### GitHub Project
 
 - **URL**: https://github.com/users/SandrineCipolla/projects/3
 - **Utilisation**: Suivre et mettre à jour les tâches après chaque modification importante
+
+## Environnements
+
+| Env            | Frontend                               | Backend                   | Base de données             |
+| -------------- | -------------------------------------- | ------------------------- | --------------------------- |
+| **Local**      | `localhost:5173`                       | `localhost:3006` (Docker) | MySQL Docker port 3308      |
+| **Staging**    | Vercel (branche `staging`)             | Render.com                | Aiven MySQL                 |
+| **Production** | Azure Static Web Apps (branche `main`) | Azure App Service F1      | Azure MySQL Flexible Server |
+
+### Branches → déploiements
+
+- `main` → Production Azure automatiquement (frontend + backend)
+- Feature/fix branches → Vercel preview automatique (URL temporaire par PR)
+- **Staging Vercel** → branche à pointer manuellement dans les settings Vercel
+
+### ⚠️ Backend Azure (F1 tier)
+
+Quota CPU limité à **60 min/jour**. Démarrer avant utilisation, arrêter après :
+
+```bash
+npm run azure:start   # dans le repo backend
+npm run azure:stop
+```
 
 ## Conventions de code
 
@@ -273,6 +299,7 @@ Alors :
 ```
 
 **Ce qui est INTERDIT dans le body d'une issue :**
+
 - ❌ Les détails d'implémentation (composants à modifier, lignes de code, etc.)
 - ❌ Les étapes techniques de développement
 - ❌ Les commandes à exécuter
@@ -304,12 +331,12 @@ Alors :
 
 ### Où mettre les notes techniques ?
 
-| Information | Où |
-|---|---|
-| Valeur utilisateur, critères d'acceptation | Issue GitHub |
-| Idées en cours de dev, questions | Commentaire sur l'issue |
-| Choix d'implémentation, composants modifiés | Description de la PR |
-| Décisions d'architecture importantes | `docs/adr/` (Architecture Decision Records) |
+| Information                                 | Où                                          |
+| ------------------------------------------- | ------------------------------------------- |
+| Valeur utilisateur, critères d'acceptation  | Issue GitHub                                |
+| Idées en cours de dev, questions            | Commentaire sur l'issue                     |
+| Choix d'implémentation, composants modifiés | Description de la PR                        |
+| Décisions d'architecture importantes        | `docs/adr/` (Architecture Decision Records) |
 
 ## Workflow de développement
 
@@ -354,13 +381,13 @@ npm run ci:check         # Pipeline complet (recommandé)
 type/issue-number-short-description
 ```
 
-| Type | Usage |
-| --- | --- |
-| `feat/` | Nouvelle fonctionnalité |
-| `fix/` | Correction de bug |
-| `chore/` | Tâche technique sans valeur métier |
-| `docs/` | Documentation uniquement |
-| `test/` | Tests uniquement |
+| Type        | Usage                                       |
+| ----------- | ------------------------------------------- |
+| `feat/`     | Nouvelle fonctionnalité                     |
+| `fix/`      | Correction de bug                           |
+| `chore/`    | Tâche technique sans valeur métier          |
+| `docs/`     | Documentation uniquement                    |
+| `test/`     | Tests uniquement                            |
 | `refactor/` | Refactoring sans changement de comportement |
 
 **Exemples corrects** : `feat/118-update-item-command`, `fix/84-msal-cache-security`, `docs/101-openapi-endpoints`
@@ -412,14 +439,15 @@ git checkout -b type/numero-description   # ex: feat/118-update-item-command
 
 Mettre à jour dans cet ordre :
 
-| Action | Quand |
-| --- | --- |
+| Action                                                    | Quand                           |
+| --------------------------------------------------------- | ------------------------------- |
 | **Wiki** — `Frontend-Guide` : nouvelles pages, composants | Nouvelle fonctionnalité visible |
-| **Wiki** — `Architecture-Globale` ou `ADR` | Décision architecturale |
-| **Wiki** — `CICD-et-Deploiement` | Changement d'infra ou pipeline |
-| **GitHub Project** — issue → Done | Systématiquement après merge |
+| **Wiki** — `Architecture-Globale` ou `ADR`                | Décision architecturale         |
+| **Wiki** — `CICD-et-Deploiement`                          | Changement d'infra ou pipeline  |
+| **GitHub Project** — issue → Done                         | Systématiquement après merge    |
 
 **Comment mettre à jour le wiki** :
+
 ```bash
 git clone https://github.com/SandrineCipolla/stockHub_V2_front.wiki.git /tmp/wiki
 # modifier les fichiers .md

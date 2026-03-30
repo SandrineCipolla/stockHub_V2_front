@@ -3,6 +3,8 @@
 
 # Dossier de travail Claude (prompts, audits, notes)
 claude/
+.claude/
+audit-results/
 
 # Logs
 logs
