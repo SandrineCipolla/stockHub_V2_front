@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useIsAuthenticated } from '@azure/msal-react';
+import { useIsAuthenticated, useMsal } from '@azure/msal-react';
+import { InteractionStatus } from '@azure/msal-browser';
 import { ThemeProvider } from '@/components/providers/ThemeProvider.tsx';
 import { CookieBanner } from '@/components/common/CookieBanner';
 import './styles/index.css';
@@ -41,9 +42,12 @@ const LoadingFallback = () => (
   </main>
 );
 
-// Protège les routes authentifiées — redirige vers / si non connecté
+// Protège les routes authentifiées — attend la fin de l'init MSAL avant de rediriger
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useIsAuthenticated();
+  const { inProgress } = useMsal();
+
+  if (inProgress !== InteractionStatus.None) return <LoadingFallback />;
   if (!isAuthenticated) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
