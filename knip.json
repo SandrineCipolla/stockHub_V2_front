@@ -28,6 +28,7 @@
     "src/types/stock.ts",
     "src/constants/stockConfig.ts",
     "src/hooks/usePredictions.ts",
+    "src/hooks/useSuggestions.ts",
     "src/services/api/predictionsAPI.ts",
     "src/utils/aiPredictions.ts",
     "src/utils/unitFormatter.ts",

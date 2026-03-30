@@ -14,7 +14,6 @@ import { ItemFormModal } from '@/components/items/ItemFormModal';
 import { useStockDetail } from '@/hooks/useStockDetail';
 import { useItems } from '@/hooks/useItems';
 import { useTheme } from '@/hooks/useTheme';
-import { useSuggestions } from '@/hooks/useSuggestions';
 import { AIAlertBannerWrapper } from '@/components/ai/AIAlertBannerWrapper';
 import { computePredictions } from '@/utils/stockPredictions';
 import { PredictionsAPI } from '@/services/api/predictionsAPI';
@@ -74,7 +73,6 @@ export const StockDetailPage: React.FC = () => {
   const numericId = Number(stockId);
   const { stock, isLoading, error, refetch } = useStockDetail(numericId);
   const { updateItem, deleteItem, isLoading: itemsLoading } = useItems(numericId);
-  const { loadSuggestions, isLoading: isSuggestionsLoading } = useSuggestions(numericId);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -84,6 +82,7 @@ export const StockDetailPage: React.FC = () => {
   const [predictionsOpen, setPredictionsOpen] = useState(false);
   const [apiPredictions, setApiPredictions] = useState<Record<number, ItemPrediction>>({});
   const [backendSuggestions, setBackendSuggestions] = useState<BackendSuggestion[]>([]);
+  const [isSuggestionsLoading, setIsSuggestionsLoading] = useState(false);
   const [editingQuantityId, setEditingQuantityId] = useState<number | null>(null);
   const [inlineQuantityValue, setInlineQuantityValue] = useState<number>(0);
 
@@ -157,10 +156,14 @@ export const StockDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (!stock) return;
-    void loadSuggestions().then(result => {
-      if (result) setBackendSuggestions(result);
-    });
-  }, [stock, loadSuggestions]);
+    setIsSuggestionsLoading(true);
+    void PredictionsAPI.getStockSuggestions(numericId)
+      .then(suggestions => setBackendSuggestions(suggestions))
+      .catch(() => {
+        // silent — fallback : pas de suggestions backend
+      })
+      .finally(() => setIsSuggestionsLoading(false));
+  }, [stock, numericId]);
 
   const handleUpdateQuantity = async (item: StockDetailItem, delta: number) => {
     const newQty = Math.max(0, item.quantity + delta);
