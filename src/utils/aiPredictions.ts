@@ -46,6 +46,8 @@ export interface AISuggestion {
   quantityRecommended?: number;
   daysUntilRupture?: number;
   savingsEstimate?: number;
+  /** Source de la suggestion : 'llm' (IA générative) ou 'deterministic' (calcul local) */
+  source?: 'llm' | 'deterministic';
 }
 
 /**
@@ -336,6 +338,7 @@ function generateRuptureRiskSuggestion(
     impact: `Évite une rupture de stock et maintient la continuité de service`,
     quantityRecommended,
     daysUntilRupture,
+    source: 'deterministic',
   };
 }
 
@@ -367,6 +370,7 @@ function generateOverstockSuggestion(stock: Stock, trend: ConsumptionTrend): AIS
     action: `Réduire les commandes ou promouvoir le produit`,
     impact: `Économie estimée : ${savingsEstimate}€/mois en coûts de stockage`,
     savingsEstimate,
+    source: 'deterministic',
   };
 }
 
@@ -413,6 +417,7 @@ function generateReorderSuggestion(
     impact: `Maintient le stock à un niveau optimal et évite les ruptures`,
     quantityRecommended,
     daysUntilRupture: daysUntilRupture ?? undefined,
+    source: 'deterministic',
   };
 }
 
@@ -444,6 +449,7 @@ function generateOptimizeSuggestion(stock: Stock, trend: ConsumptionTrend): AISu
     message: `Les seuils actuels (${formattedCurrentMin}-${formattedCurrentMax}) pourraient être ajustés à (${formattedRecommendedMin}-${formattedRecommendedMax}) selon la consommation réelle.`,
     action: `Ajuster les seuils min/max`,
     impact: `Optimise la gestion du stock et réduit les coûts de stockage`,
+    source: 'deterministic',
   };
 }
 

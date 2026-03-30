@@ -24,12 +24,13 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ### 🔮 Prédictions & Historique Backend (Mars 2026)
 
-- **`predictionsAPI.ts`** : client API pour `GET /items/:id/prediction` (daysUntilEmpty, trend, avgDailyConsumption) et `GET /items/:id/history` (entrées CONSUMPTION / RESTOCK / ADJUSTMENT)
-- **`usePredictions(stockId, itemId)`** : hook réutilisable suivant le pattern `useAsyncAction`
-- **StockDetailPage** : charge automatiquement les prédictions backend pour les items à risque (critical / low / out-of-stock) — remplace la simulation 10%/j par `avgDailyConsumption` réel
-- **Fallback gracieux** : si le backend est indisponible, la simulation est conservée et un message discret "Données insuffisantes — estimation approximative" est affiché
-- **`computePredictions`** : accepte un `predictionMap` par itemId ; utilise `recommendedRestock` réel du backend
-- **`generateAISuggestions`** : accepte un `consumptionMap` optionnel — remplace la simulation 5%/j par les données réelles quand disponibles
+- **`predictionsAPI.ts`** : client API pour `GET /items/:id/prediction`, `GET /items/:id/history` et `GET /stocks/:id/suggestions`
+- **`usePredictions(stockId, itemId)`** / **`useSuggestions(stockId)`** : hooks réutilisables suivant le pattern `useAsyncAction`
+- **StockDetailPage** : charge automatiquement les prédictions backend pour les items à risque — et les suggestions IA du stock (LLM via Mistral/OpenRouter ou calcul déterministe)
+- **Distinction LLM vs déterministe** : badge "IA" (Sparkles) pour suggestions générées par LLM, badge "Calcul" (TrendingDown) pour suggestions déterministes — footer "Propulsé par IA • Mistral via OpenRouter" ou "Suggestions basées sur vos données"
+- **Skeleton loading** : indicateur pendant l'appel LLM (peut durer 2-5s)
+- **Fallback gracieux** : si backend indisponible → simulation conservée + message discret "Données insuffisantes — estimation approximative"
+- **`generateAISuggestions`** : toutes les suggestions locales reçoivent `source: 'deterministic'` — distinction UX automatique dans le Dashboard
 
 ### 🌐 Landing Page & SEO/GEO (Mars 2026)
 
@@ -83,7 +84,7 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 ### 🛡️ Qualité & Sécurité (Décembre 2025)
 
 - 🔒 **0 vulnérabilité npm** (corrigé 09/12/2025)
-- ✅ **526 tests** (coverage composants 90-98%)
+- ✅ **546 tests** (coverage composants 90-98%)
 - ♿ **Accessibilité Lighthouse 94/100** (en cours d'amélioration, fixes DS en cours)
 - ⚡ **Lighthouse 93/100** performance, **100/100** SEO
 
@@ -304,7 +305,7 @@ Exécuté automatiquement à chaque `git commit`:
 
 Exécuté automatiquement à chaque `git push`:
 
-- ✅ **Tests**: Tous les tests unitaires (422+ tests)
+- ✅ **Tests**: Tous les tests unitaires (546 tests)
 - ✅ **Knip**: Détection du code mort
 - ✅ **Build**: Vérification que le build passe
 - 🎯 **Objectif**: Code testé, propre et buildable
@@ -421,7 +422,7 @@ L'application est **100% conforme WCAG 2.1 Level AA** (auditée novembre 2025) :
 
 #### Tests Unitaires
 
-- **Tests**: 422+ tests passing (22 skipped pour E2E futures)
+- **Tests**: 546 tests passing (22 skipped pour E2E futures)
 - **Coverage Composants**: 90-98%
 - **Coverage Wrappers**: 234 tests wrappers Web Components
 - **Framework**: Vitest 3.2.4 + Testing Library
