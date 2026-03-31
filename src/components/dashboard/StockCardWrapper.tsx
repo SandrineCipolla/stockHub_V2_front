@@ -13,7 +13,7 @@ const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus =>
     optimal: 'optimal',
     low: 'low',
     critical: 'critical',
-    outOfStock: 'out-of-stock',
+    'out-of-stock': 'out-of-stock',
     overstocked: 'overstocked',
   };
   return statusMap[status];

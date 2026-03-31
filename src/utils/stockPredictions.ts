@@ -50,13 +50,14 @@ export function computePredictions(
               ? 'medium'
               : 'low';
 
-      const confidence = item.status === 'out-of-stock' ? 99 : item.status === 'critical' ? 92 : 78;
+      const confidence =
+        item.status === 'out-of-stock' ? 100 : item.status === 'critical' ? 92 : 78;
 
       return {
         stockName: item.label,
         stockId: String(item.id),
         riskLevel,
-        daysUntilRupture: item.quantity === 0 ? null : daysUntilRupture,
+        daysUntilRupture: daysUntilRupture,
         confidence,
         dailyConsumptionRate: dailyRate,
         currentQuantity: item.quantity,

@@ -122,7 +122,7 @@ export const useStocks = () => {
           let newStatus = existingStock.status;
           if (updateData.quantity !== undefined) {
             if (newQuantity === 0) {
-              newStatus = 'outOfStock';
+              newStatus = 'out-of-stock';
             } else if (minThreshold !== undefined) {
               if (newQuantity <= minThreshold * 0.5) newStatus = 'critical';
               else if (newQuantity <= minThreshold) newStatus = 'low';
@@ -250,7 +250,7 @@ export const useStocks = () => {
       optimal: stocks.filter(s => s.status === 'optimal').length,
       low: stocks.filter(s => s.status === 'low').length,
       critical: stocks.filter(s => s.status === 'critical').length,
-      outOfStock: stocks.filter(s => s.status === 'outOfStock').length,
+      'out-of-stock': stocks.filter(s => s.status === 'out-of-stock').length,
       overstocked: stocks.filter(s => s.status === 'overstocked').length,
       totalValue: stocks.reduce((sum, stock) => sum + stock.value, 0),
       averageValue:

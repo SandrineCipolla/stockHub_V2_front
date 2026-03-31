@@ -45,7 +45,7 @@ export interface StockStatusConfig {
  * Ordre de priorité : Rupture > Critique > Attention > Normal > Surstockage
  */
 export const STOCK_STATUS_CONFIG: Record<StockStatus, StockStatusConfig> = {
-  outOfStock: {
+  'out-of-stock': {
     label: 'Out of Stock',
     icon: XCircle,
     colors: {
@@ -165,6 +165,6 @@ export const STOCK_STATUS_BG_COLORS: Record<string, string> = {
   optimal: '16 185 129', // emerald-500
   low: '245 158 11', // amber-500
   critical: '239 68 68', // red-500
-  outOfStock: '107 114 128', // gray-500
+  'out-of-stock': '107 114 128', // gray-500
   overstocked: '59 130 246', // blue-500
 };

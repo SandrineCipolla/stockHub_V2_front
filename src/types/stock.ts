@@ -10,7 +10,7 @@
 export const OPTIMAL = 'optimal';
 export const LOW = 'low';
 export const CRITICAL = 'critical';
-export const OUT_OF_STOCK = 'outOfStock';
+export const OUT_OF_STOCK = 'out-of-stock';
 export const OVERSTOCKED = 'overstocked';
 
 /**
@@ -85,7 +85,7 @@ export interface StockStats {
   optimal: number;
   low: number;
   critical: number;
-  outOfStock: number;
+  'out-of-stock': number;
   overstocked: number;
   totalValue: number;
   averageValue: number;
