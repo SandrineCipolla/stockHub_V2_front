@@ -13,7 +13,7 @@ export const createMockUseStocks = (overrides = {}) => ({
     optimal: stocksByStatus.optimal.length,
     low: stocksByStatus.low.length,
     critical: stocksByStatus.critical.length,
-    outOfStock: dashboardStocks.filter(s => s.status === 'outOfStock').length,
+    'out-of-stock': dashboardStocks.filter(s => s.status === 'out-of-stock').length,
     overstocked: dashboardStocks.filter(s => s.status === 'overstocked').length,
     totalValue: dashboardStocks.reduce((sum, stock) => sum + stock.value, 0),
     averageValue:

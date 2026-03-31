@@ -25,7 +25,7 @@ const calculateStatus = (
   minThreshold?: number,
   maxThreshold?: number
 ): string => {
-  if (quantity === 0) return 'outOfStock';
+  if (quantity === 0) return 'out-of-stock';
   if (minThreshold !== undefined) {
     const criticalThreshold = minThreshold * 0.5;
     if (quantity <= criticalThreshold) return 'critical';
@@ -486,7 +486,7 @@ describe('useStocks Hook', () => {
         });
 
         expect(updated).not.toBeNull();
-        expect(updated!.status).toBe('outOfStock');
+        expect(updated!.status).toBe('out-of-stock');
       });
     });
   });

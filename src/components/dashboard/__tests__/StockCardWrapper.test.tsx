@@ -127,7 +127,7 @@ describe('StockCardWrapper', () => {
     });
 
     it('should convert outOfStock status correctly', () => {
-      const stock = { ...mockStock, status: 'outOfStock' as const };
+      const stock = { ...mockStock, status: 'out-of-stock' as const };
       const { container } = render(<StockCardWrapper stock={stock} />);
       const card = container.querySelector('sh-stock-card');
       expect(card?.getAttribute('status')).toBe('out-of-stock');
@@ -282,7 +282,7 @@ describe('StockCardWrapper', () => {
     });
 
     it('should handle zero quantity', () => {
-      const stock = { ...mockStock, quantity: 0, status: 'outOfStock' as const };
+      const stock = { ...mockStock, quantity: 0, status: 'out-of-stock' as const };
       const { container } = render(<StockCardWrapper stock={stock} />);
       const card = container.querySelector('sh-stock-card');
       expect(card?.getAttribute('quantity')).toBe('0 unités');

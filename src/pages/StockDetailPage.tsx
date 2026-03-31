@@ -23,11 +23,11 @@ import type { StockDetailItem } from '@/types';
 
 const ITEMS_PER_PAGE = 20;
 
-type FilterStatus = 'all' | 'optimal' | 'low' | 'critical' | 'outOfStock';
+type FilterStatus = 'all' | 'optimal' | 'low' | 'critical' | 'out-of-stock';
 
-const getItemStatus = (item: StockDetailItem): 'optimal' | 'low' | 'critical' | 'outOfStock' => {
+const getItemStatus = (item: StockDetailItem): 'optimal' | 'low' | 'critical' | 'out-of-stock' => {
   const min = item.minimumStock ?? 1;
-  if (item.quantity === 0) return 'outOfStock';
+  if (item.quantity === 0) return 'out-of-stock';
   if (item.quantity < min) return 'critical';
   if (item.quantity === min) return 'low';
   return 'optimal';
@@ -37,29 +37,29 @@ const STATUS_LABELS: Record<string, string> = {
   optimal: 'OK',
   low: 'Stock bas',
   critical: 'Critique',
-  outOfStock: 'Rupture',
+  'out-of-stock': 'Rupture',
 };
 
 const STATUS_COLORS: Record<string, string> = {
   optimal: 'text-green-600',
   low: 'text-yellow-600',
   critical: 'text-orange-500',
-  outOfStock: 'text-red-600',
+  'out-of-stock': 'text-red-600',
 };
 
 const STATUS_DOT_COLORS: Record<string, string> = {
   optimal: 'bg-green-500',
   low: 'bg-yellow-500',
   critical: 'bg-orange-500',
-  outOfStock: 'bg-red-600',
+  'out-of-stock': 'bg-red-600',
 };
 
 const filterChips = (
   total: number,
-  counts: Record<'optimal' | 'low' | 'critical' | 'outOfStock', number>
+  counts: Record<'optimal' | 'low' | 'critical' | 'out-of-stock', number>
 ): { key: FilterStatus; label: string }[] => [
   { key: 'all', label: `Tous (${total})` },
-  { key: 'outOfStock', label: `Rupture (${counts.outOfStock})` },
+  { key: 'out-of-stock', label: `Rupture (${counts['out-of-stock']})` },
   { key: 'critical', label: `Critique (${counts.critical})` },
   { key: 'low', label: `Stock bas (${counts.low})` },
   { key: 'optimal', label: `OK (${counts.optimal})` },
@@ -115,13 +115,13 @@ export const StockDetailPage: React.FC = () => {
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
 
   const statusCounts = useMemo(() => {
-    if (!stock) return { optimal: 0, low: 0, critical: 0, outOfStock: 0 };
+    if (!stock) return { optimal: 0, low: 0, critical: 0, 'out-of-stock': 0 };
     return stock.items.reduce(
       (acc, item) => {
         acc[getItemStatus(item)]++;
         return acc;
       },
-      { optimal: 0, low: 0, critical: 0, outOfStock: 0 }
+      { optimal: 0, low: 0, critical: 0, 'out-of-stock': 0 }
     );
   }, [stock]);
 

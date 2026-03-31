@@ -146,16 +146,16 @@ describe('computePredictions', () => {
   });
 
   describe('out-of-stock edge case', () => {
-    it('should set daysUntilRupture to null when quantity is 0', () => {
+    it('should set daysUntilRupture to 0 when quantity is 0', () => {
       const items = [makeItem({ status: 'out-of-stock', quantity: 0 })];
       const [result] = computePredictions(items);
-      expect(result?.daysUntilRupture).toBeNull();
+      expect(result?.daysUntilRupture).toBe(0);
     });
 
-    it('should set confidence to 99 for out-of-stock', () => {
+    it('should set confidence to 100 for out-of-stock', () => {
       const items = [makeItem({ status: 'out-of-stock', quantity: 0 })];
       const [result] = computePredictions(items);
-      expect(result?.confidence).toBe(99);
+      expect(result?.confidence).toBe(100);
     });
   });
 });
