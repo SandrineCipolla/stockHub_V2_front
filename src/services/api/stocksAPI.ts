@@ -37,16 +37,18 @@ interface BackendStockDetailResponse {
 }
 
 /**
- * Interface pour les données Stock telles que retournées par le backend
- * Le backend retourne: id, label, description, category
- * Les items inline (items?) ne sont pas encore inclus dans GET /stocks — limitation N+1 connue.
- * Quand le backend inclura les items, la quantité et le statut seront calculés dynamiquement.
+ * Interface pour les données Stock telles que retournées par le backend.
+ * Le backend retourne désormais status et criticalItemsCount agrégés (back#142).
  */
 interface BackendStock {
   id: number;
   label: string;
   description?: string;
   category: string;
+  totalItems?: number;
+  totalQuantity?: number;
+  criticalItemsCount?: number;
+  status?: StockStatus;
   items?: BackendItem[];
 }
 
@@ -69,20 +71,19 @@ function computeQuantityAndStatus(items?: BackendItem[]): {
 
 /**
  * Transforme les données backend en format frontend.
- * quantity et status sont calculés depuis les items inline si disponibles.
- * Limitation connue : GET /stocks ne retourne pas encore les items en ligne (N+1).
- * La page détail /stocks/:id charge les items séparément via GET /stocks/:id/items.
+ * Utilise le status agrégé retourné par le backend (back#142).
+ * Fallback sur computeQuantityAndStatus si le backend ne retourne pas encore status.
  */
 function mapBackendStockToFrontend(backendStock: BackendStock): Stock {
-  const { quantity, status } = computeQuantityAndStatus(backendStock.items);
+  const fallback = computeQuantityAndStatus(backendStock.items);
   return {
     id: backendStock.id,
     label: backendStock.label,
     description: backendStock.description || '',
     category: backendStock.category || 'alimentation',
-    quantity,
+    quantity: backendStock.totalQuantity ?? fallback.quantity,
     value: 0,
-    status,
+    status: backendStock.status ?? fallback.status,
     lastUpdate: new Date().toISOString(),
     unit: 'piece',
   };
