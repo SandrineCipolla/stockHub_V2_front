@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.10.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.9.0...v1.10.0) (2026-03-31)
+
+
+### ✨ Features
+
+* **ai:** distinguish LLM vs deterministic suggestions — closes [#119](https://github.com/SandrineCipolla/stockHub_V2_front/issues/119) ([#131](https://github.com/SandrineCipolla/stockHub_V2_front/issues/131)) ([ac83ba4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/ac83ba44f954941e6bade41aa7bbde9d6cc71e88))
+* **predictions:** wire prediction and history endpoints — closes [#118](https://github.com/SandrineCipolla/stockHub_V2_front/issues/118) ([#130](https://github.com/SandrineCipolla/stockHub_V2_front/issues/130)) ([b9c0556](https://github.com/SandrineCipolla/stockHub_V2_front/commit/b9c055672b00b62979e9a2398561d39ac2baf1b8))
+
+
+### 🐛 Bug Fixes
+
+* **a11y:** bump DS to v1.3.2, fix label-content-name-mismatch in Dashboard — closes [#125](https://github.com/SandrineCipolla/stockHub_V2_front/issues/125) ([#127](https://github.com/SandrineCipolla/stockHub_V2_front/issues/127)) ([1d41e60](https://github.com/SandrineCipolla/stockHub_V2_front/commit/1d41e6075757d8580678a2c383f58e4c9a71ad9a))
+* **auth:** wait for MSAL init before redirecting on protected routes — closes [#132](https://github.com/SandrineCipolla/stockHub_V2_front/issues/132) ([#133](https://github.com/SandrineCipolla/stockHub_V2_front/issues/133)) ([9d6fb5f](https://github.com/SandrineCipolla/stockHub_V2_front/commit/9d6fb5f5ecf908bc9eb690460967c2fb73fa19fc))
+* **dashboard:** use backend aggregated status for stock badge — closes [#134](https://github.com/SandrineCipolla/stockHub_V2_front/issues/134) ([#135](https://github.com/SandrineCipolla/stockHub_V2_front/issues/135)) ([8d6d295](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8d6d29584726fd3b050a1715f4497d397126275b))
+* **status:** align out-of-stock status to kebab-case and fix prediction display ([#137](https://github.com/SandrineCipolla/stockHub_V2_front/issues/137)) ([3b39594](https://github.com/SandrineCipolla/stockHub_V2_front/commit/3b395948c978c7e290f3ea2fcd87444128ffa26f))
+
+
+### 📚 Documentation
+
+* add mandatory labels convention for GitHub issues ([9bf91bb](https://github.com/SandrineCipolla/stockHub_V2_front/commit/9bf91bb012c3377b7a48478e79c38fd6ba7ea4e2))
+* **readme:** update landing page, SEO, DS v1.3.2, tests 485, a11y 94 ([7221458](https://github.com/SandrineCipolla/stockHub_V2_front/commit/72214581e9c6c8eb86e7c5a7d0a9a101c95ab709))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump happy-dom ([#129](https://github.com/SandrineCipolla/stockHub_V2_front/issues/129)) ([eca649a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/eca649aecf6e95266cfead4adde38b2aacb679f1))
+* **deps-dev:** bump picomatch ([#126](https://github.com/SandrineCipolla/stockHub_V2_front/issues/126)) ([f3a7d69](https://github.com/SandrineCipolla/stockHub_V2_front/commit/f3a7d695bb28c35516aeb48a3d800874ca32803f))
+* ignore .claude/ and audit-results/, update CLAUDE.md envs and vitest threads ([32a91e9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/32a91e9049608ad097cdbb2d585e9ae8b51a95b0))
+
 ## [1.9.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.8.0...v1.9.0) (2026-03-25)
 
 
