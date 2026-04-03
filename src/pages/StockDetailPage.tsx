@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit, Pencil, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Edit, Pencil, Plus, Trash2, Users } from 'lucide-react';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
@@ -14,6 +14,11 @@ import { ItemFormModal } from '@/components/items/ItemFormModal';
 import { useStockDetail } from '@/hooks/useStockDetail';
 import { useItems } from '@/hooks/useItems';
 import { useTheme } from '@/hooks/useTheme';
+import { useCollaborators } from '@/hooks/useCollaborators';
+import { CollaboratorsModal } from '@/components/stocks/CollaboratorsModal';
+import { ContributionFormModal } from '@/components/items/ContributionFormModal';
+import { PendingContributionsSection } from '@/components/stocks/PendingContributionsSection';
+import { useContributions } from '@/hooks/useContributions';
 import { AIAlertBannerWrapper } from '@/components/ai/AIAlertBannerWrapper';
 import { computePredictions } from '@/utils/stockPredictions';
 import { PredictionsAPI } from '@/services/api/predictionsAPI';
@@ -85,6 +90,11 @@ export const StockDetailPage: React.FC = () => {
   const [isSuggestionsLoading, setIsSuggestionsLoading] = useState(false);
   const [editingQuantityId, setEditingQuantityId] = useState<number | null>(null);
   const [inlineQuantityValue, setInlineQuantityValue] = useState<number>(0);
+  const [isCollabModalOpen, setIsCollabModalOpen] = useState(false);
+  const [contributingItem, setContributingItem] = useState<StockDetailItem | null>(null);
+
+  const { collaborators, myRole, load: loadCollaborators } = useCollaborators(numericId);
+  const { submit: submitContribution } = useContributions(numericId);
 
   const themeClasses = {
     background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -124,6 +134,10 @@ export const StockDetailPage: React.FC = () => {
       { optimal: 0, low: 0, critical: 0, 'out-of-stock': 0 }
     );
   }, [stock]);
+
+  useEffect(() => {
+    void loadCollaborators();
+  }, [loadCollaborators]);
 
   useEffect(() => {
     if (!stock) return;
@@ -256,14 +270,26 @@ export const StockDetailPage: React.FC = () => {
               {stock.description ? ` — ${stock.description}` : ''}
             </p>
           </div>
-          <Button
-            variant="secondary"
-            icon={Edit}
-            onClick={() => setIsEditOpen(true)}
-            aria-label="Modifier ce stock"
-          >
-            Modifier le stock
-          </Button>
+          {myRole === 'OWNER' && (
+            <Button
+              variant="secondary"
+              icon={Users}
+              onClick={() => setIsCollabModalOpen(true)}
+              aria-label="Gérer les accès au stock"
+            >
+              Accès
+            </Button>
+          )}
+          {myRole === 'OWNER' && (
+            <Button
+              variant="secondary"
+              icon={Edit}
+              onClick={() => setIsEditOpen(true)}
+              aria-label="Modifier ce stock"
+            >
+              Modifier le stock
+            </Button>
+          )}
         </div>
       </NavSection>
 
@@ -307,6 +333,16 @@ export const StockDetailPage: React.FC = () => {
               isLoading={isSuggestionsLoading}
             />
           </section>
+        )}
+
+        {/* Contributions en attente — OWNER uniquement */}
+        {myRole === 'OWNER' && (
+          <PendingContributionsSection
+            stockId={numericId}
+            items={stock.items}
+            collaborators={collaborators}
+            onContributionReviewed={() => void refetch()}
+          />
         )}
 
         {/* Prédictions IA */}
@@ -362,14 +398,16 @@ export const StockDetailPage: React.FC = () => {
             <h2 id="items-heading" className="text-2xl font-bold">
               Items ({stock.totalItems})
             </h2>
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={() => setShowAddModal(true)}
-              aria-label="Ajouter un item"
-            >
-              Ajouter un item
-            </Button>
+            {(myRole === 'OWNER' || myRole === 'EDITOR') && (
+              <Button
+                variant="primary"
+                icon={Plus}
+                onClick={() => setShowAddModal(true)}
+                aria-label="Ajouter un item"
+              >
+                Ajouter un item
+              </Button>
+            )}
           </div>
 
           {/* Filter chips */}
@@ -414,7 +452,9 @@ export const StockDetailPage: React.FC = () => {
                       <th className="text-left px-4 py-3 font-medium">Statut</th>
                       <th className="text-center px-4 py-3 font-medium">Quantité</th>
                       <th className="text-center px-4 py-3 font-medium">Min</th>
-                      <th className="text-right px-4 py-3 font-medium">Actions</th>
+                      {(myRole === 'OWNER' || myRole === 'EDITOR') && (
+                        <th className="text-right px-4 py-3 font-medium">Actions</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -445,83 +485,98 @@ export const StockDetailPage: React.FC = () => {
                             {STATUS_LABELS[status]}
                           </td>
                           <td className="px-4 py-3">
-                            <div
-                              className="flex items-center justify-center gap-1"
-                              aria-label={`Quantité : ${item.quantity}`}
-                            >
-                              <button
-                                onClick={() => handleUpdateQuantity(item, -1)}
-                                disabled={itemsLoading.update}
-                                className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
-                                aria-label={`Diminuer la quantité de ${item.label}`}
-                              >
-                                −
-                              </button>
-                              {editingQuantityId === item.id ? (
-                                <input
-                                  type="number"
-                                  min={0}
-                                  value={inlineQuantityValue}
-                                  autoFocus
-                                  onChange={e => setInlineQuantityValue(Number(e.target.value))}
-                                  onBlur={() => {
-                                    if (!isNaN(inlineQuantityValue) && inlineQuantityValue >= 0) {
-                                      void updateItem(item.id, { quantity: inlineQuantityValue });
-                                      void refetch();
-                                    }
-                                    setEditingQuantityId(null);
-                                  }}
-                                  onKeyDown={e => {
-                                    if (e.key === 'Enter') e.currentTarget.blur();
-                                    if (e.key === 'Escape') setEditingQuantityId(null);
-                                  }}
-                                  className="w-16 text-center px-1 py-0.5 border border-purple-500 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none"
-                                  aria-label={`Quantité de ${item.label}`}
-                                />
-                              ) : (
-                                <span
-                                  className="font-bold cursor-pointer hover:text-purple-400 transition-colors min-w-[24px] text-center tabular-nums"
-                                  title="Cliquer pour éditer"
-                                  onClick={() => {
-                                    setEditingQuantityId(item.id);
-                                    setInlineQuantityValue(item.quantity);
-                                  }}
+                            {myRole === 'VIEWER_CONTRIBUTOR' ? (
+                              <div className="flex items-center justify-center">
+                                <span className="font-bold tabular-nums mr-2">{item.quantity}</span>
+                                <button
+                                  onClick={() => setContributingItem(item)}
+                                  className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
+                                  aria-label={`Signaler une modification pour ${item.label}`}
                                 >
-                                  {item.quantity}
-                                </span>
-                              )}
-                              <button
-                                onClick={() => handleUpdateQuantity(item, +1)}
-                                disabled={itemsLoading.update}
-                                className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
-                                aria-label={`Augmenter la quantité de ${item.label}`}
+                                  Signaler
+                                </button>
+                              </div>
+                            ) : (
+                              <div
+                                className="flex items-center justify-center gap-1"
+                                aria-label={`Quantité : ${item.quantity}`}
                               >
-                                +
-                              </button>
-                            </div>
+                                <button
+                                  onClick={() => handleUpdateQuantity(item, -1)}
+                                  disabled={itemsLoading.update}
+                                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
+                                  aria-label={`Diminuer la quantité de ${item.label}`}
+                                >
+                                  −
+                                </button>
+                                {editingQuantityId === item.id ? (
+                                  <input
+                                    type="number"
+                                    min={0}
+                                    value={inlineQuantityValue}
+                                    autoFocus
+                                    onChange={e => setInlineQuantityValue(Number(e.target.value))}
+                                    onBlur={() => {
+                                      if (!isNaN(inlineQuantityValue) && inlineQuantityValue >= 0) {
+                                        void updateItem(item.id, { quantity: inlineQuantityValue });
+                                        void refetch();
+                                      }
+                                      setEditingQuantityId(null);
+                                    }}
+                                    onKeyDown={e => {
+                                      if (e.key === 'Enter') e.currentTarget.blur();
+                                      if (e.key === 'Escape') setEditingQuantityId(null);
+                                    }}
+                                    className="w-16 text-center px-1 py-0.5 border border-purple-500 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none"
+                                    aria-label={`Quantité de ${item.label}`}
+                                  />
+                                ) : (
+                                  <span
+                                    className="font-bold cursor-pointer hover:text-purple-400 transition-colors min-w-[24px] text-center tabular-nums"
+                                    title="Cliquer pour éditer"
+                                    onClick={() => {
+                                      setEditingQuantityId(item.id);
+                                      setInlineQuantityValue(item.quantity);
+                                    }}
+                                  >
+                                    {item.quantity}
+                                  </span>
+                                )}
+                                <button
+                                  onClick={() => handleUpdateQuantity(item, +1)}
+                                  disabled={itemsLoading.update}
+                                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
+                                  aria-label={`Augmenter la quantité de ${item.label}`}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            )}
                           </td>
                           <td className={`px-4 py-3 text-center ${themeClasses.textMuted}`}>
                             {item.minimumStock}
                           </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button
-                                onClick={() => setEditingItem(item)}
-                                className="p-1 rounded hover:bg-purple-100 dark:hover:bg-slate-600"
-                                aria-label={`Modifier ${item.label}`}
-                              >
-                                <Pencil className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteItem(item)}
-                                disabled={itemsLoading.delete}
-                                className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 disabled:opacity-50"
-                                aria-label={`Supprimer ${item.label}`}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </td>
+                          {(myRole === 'OWNER' || myRole === 'EDITOR') && (
+                            <td className="px-4 py-3">
+                              <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                  onClick={() => setEditingItem(item)}
+                                  className="p-1 rounded hover:bg-purple-100 dark:hover:bg-slate-600"
+                                  aria-label={`Modifier ${item.label}`}
+                                >
+                                  <Pencil className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteItem(item)}
+                                  disabled={itemsLoading.delete}
+                                  className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 disabled:opacity-50"
+                                  aria-label={`Supprimer ${item.label}`}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </td>
+                          )}
                         </tr>
                       );
                     })}
@@ -561,6 +616,24 @@ export const StockDetailPage: React.FC = () => {
       </main>
 
       <FooterWrapper />
+
+      {isCollabModalOpen && (
+        <CollaboratorsModal
+          stockId={numericId}
+          stockLabel={stock.label}
+          onClose={() => setIsCollabModalOpen(false)}
+        />
+      )}
+
+      {contributingItem && (
+        <ContributionFormModal
+          itemId={contributingItem.id}
+          itemLabel={contributingItem.label}
+          currentQuantity={contributingItem.quantity}
+          onSubmit={submitContribution}
+          onClose={() => setContributingItem(null)}
+        />
+      )}
 
       {isEditOpen && (
         <StockFormModal

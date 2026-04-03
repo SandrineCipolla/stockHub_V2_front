@@ -28,6 +28,30 @@ vi.mock('@/components/layout/NavSection', () => ({
   ),
 }));
 
+vi.mock('@/hooks/useCollaborators', () => ({
+  useCollaborators: () => ({
+    collaborators: [],
+    myRole: 'OWNER',
+    isLoading: false,
+    error: null,
+    load: vi.fn().mockResolvedValue(undefined),
+    add: vi.fn().mockResolvedValue(undefined),
+    updateRole: vi.fn().mockResolvedValue(undefined),
+    remove: vi.fn().mockResolvedValue(undefined),
+  }),
+}));
+
+vi.mock('@/hooks/useContributions', () => ({
+  useContributions: () => ({
+    contributions: [],
+    isLoading: false,
+    error: null,
+    load: vi.fn().mockResolvedValue(undefined),
+    submit: vi.fn().mockResolvedValue(undefined),
+    review: vi.fn().mockResolvedValue(undefined),
+  }),
+}));
+
 vi.mock('@/hooks/useItems', () => ({
   useItems: () => ({
     updateItem: vi.fn().mockResolvedValue(undefined),
@@ -246,7 +270,7 @@ describe('StockDetailPage', () => {
     it('should open StockFormModal in edit mode', async () => {
       const { container } = await act(async () => renderPage());
 
-      const editButton = container.querySelector('sh-button[variant="secondary"]');
+      const editButton = container.querySelector('sh-button[aria-label="Modifier ce stock"]');
       await act(async () => {
         editButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
       });
@@ -262,7 +286,7 @@ describe('StockDetailPage', () => {
 
       const { container } = await act(async () => renderPage());
 
-      const editButton = container.querySelector('sh-button[variant="secondary"]');
+      const editButton = container.querySelector('sh-button[aria-label="Modifier ce stock"]');
       await act(async () => {
         editButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
       });
