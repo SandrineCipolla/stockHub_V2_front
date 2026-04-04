@@ -154,7 +154,7 @@ export const CollaboratorsModal: React.FC<Props> = ({ stockId, stockLabel, onClo
                 ref: (el: HTMLElement | null) => {
                   listRef.current = el;
                 },
-                collaborators: JSON.stringify(collaborators),
+                collaborators: collaborators,
                 'viewer-role': 'OWNER',
                 'data-theme': theme,
               })

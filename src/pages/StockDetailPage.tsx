@@ -264,7 +264,14 @@ export const StockDetailPage: React.FC = () => {
             Retour
           </Button>
           <div className="flex-1 min-w-0">
-            <h1 className="text-3xl font-bold truncate">{stock.label}</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold truncate">{stock.label}</h1>
+              {React.createElement('sh-role-badge', {
+                role: myRole,
+                size: 'sm',
+                'data-theme': theme,
+              })}
+            </div>
             <p className={themeClasses.textMuted}>
               {stock.category ?? 'Sans catégorie'}
               {stock.description ? ` — ${stock.description}` : ''}
