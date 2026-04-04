@@ -114,6 +114,52 @@ declare global {
         'data-theme'?: 'light' | 'dark';
       };
 
+      'sh-role-badge': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        role?: 'OWNER' | 'EDITOR' | 'VIEWER' | 'VIEWER_CONTRIBUTOR';
+        size?: 'sm' | 'md' | 'lg';
+        'data-theme'?: 'light' | 'dark';
+      };
+
+      'sh-role-selector': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
+        value?: 'OWNER' | 'EDITOR' | 'VIEWER' | 'VIEWER_CONTRIBUTOR';
+        exclude?: string;
+        disabled?: boolean;
+        'data-theme'?: 'light' | 'dark';
+        'onrole-change'?: (e: CustomEvent<{ role: string }>) => void;
+      };
+
+      'sh-contribution-form': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
+        'item-label'?: string;
+        'current-quantity'?: number;
+        disabled?: boolean;
+        'data-theme'?: 'light' | 'dark';
+        'oncontribution-submit'?: (e: CustomEvent<{ suggestedQuantity: number }>) => void;
+        'oncontribution-cancel'?: (e: CustomEvent) => void;
+      };
+
+      'sh-contribution-card': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
+        'contribution-id'?: string;
+        'item-label'?: string;
+        'current-quantity'?: number;
+        'suggested-quantity'?: number;
+        'author-email'?: string;
+        'created-at'?: string;
+        status?: 'PENDING' | 'APPROVED' | 'REJECTED';
+        disabled?: boolean;
+        'data-theme'?: 'light' | 'dark';
+        'oncontribution-approve'?: (e: CustomEvent<{ contributionId: string }>) => void;
+        'oncontribution-reject'?: (e: CustomEvent<{ contributionId: string }>) => void;
+      };
+
       'sh-stat-card': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
         label?: string;
         value?: string | number;
