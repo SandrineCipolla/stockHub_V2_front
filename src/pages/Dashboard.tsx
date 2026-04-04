@@ -31,6 +31,8 @@ export const Dashboard: React.FC = () => {
 
   const {
     stocks,
+    ownedStocks,
+    sharedStocks,
     stats,
     loadStocks,
     deleteStock,
@@ -305,24 +307,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </section>
 
-        {/* Section titre stocks */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Mes Stocks Récents ({stocks.length})</h2>
-          <Button
-            variant="ghost"
-            icon={Download}
-            onClick={handleExport}
-            loading={isExporting}
-            disabled={stocks.length === 0}
-            aria-describedby="export-help"
-          >
-            Exporter
-          </Button>
-          <div id="export-help" className="sr-only">
-            Exporter la liste des stocks au format CSV
-          </div>
-        </div>
-
         {/* Loading state accessible */}
         {isAnyLoading && (
           <div className="flex justify-center py-12" role="status" aria-live="polite">
@@ -339,47 +323,88 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Grid des stocks  StockGrid */}
         {!isAnyLoading && (
-          <StockGrid
-            stocks={stocks}
-            isLoaded={isLoaded}
-            onView={handleViewStock}
-            onEdit={handleUpdateStock}
-            onDelete={handleDeleteStock}
-            isUpdating={isLoading.update}
-            isDeleting={isLoading.delete}
-            aiSuggestions={allAISuggestions}
-          />
-        )}
-
-        {/* État vide accessible */}
-        {!isAnyLoading && stocks.length === 0 && (
-          <section className="text-center py-12" role="status" aria-live="polite">
-            <div className="w-16 h-16 mx-auto mb-4 opacity-50">📦</div>
-            <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
-            <p className={themeClasses.textMuted}>
-              {searchTerm
-                ? `Aucun résultat pour "${searchTerm}". Essayez un autre terme.`
-                : 'Commencez par ajouter votre premier stock.'}
-            </p>
-            <div className="mt-4 flex gap-2 justify-center">
-              <Button
-                variant="primary"
-                icon={Plus}
-                onClick={handleCreateStock}
-                className="lg:hidden"
-                aria-label="Ajouter un stock"
-              >
-                Ajouter un Stock
-              </Button>
-              {searchTerm && (
-                <Button variant="secondary" onClick={handleResetFilters}>
-                  Effacer les filtres
+          <>
+            {/* Section Mes stocks */}
+            <section aria-labelledby="owned-stocks-heading" className="mb-10">
+              <div className="flex items-center justify-between mb-6">
+                <h2 id="owned-stocks-heading" className="text-2xl font-bold">
+                  Mes stocks ({ownedStocks.length})
+                </h2>
+                <Button
+                  variant="ghost"
+                  icon={Download}
+                  onClick={handleExport}
+                  loading={isExporting}
+                  disabled={stocks.length === 0}
+                  aria-describedby="export-help"
+                >
+                  Exporter
                 </Button>
+                <div id="export-help" className="sr-only">
+                  Exporter la liste des stocks au format CSV
+                </div>
+              </div>
+
+              {ownedStocks.length > 0 ? (
+                <StockGrid
+                  stocks={ownedStocks}
+                  isLoaded={isLoaded}
+                  onView={handleViewStock}
+                  onEdit={handleUpdateStock}
+                  onDelete={handleDeleteStock}
+                  isUpdating={isLoading.update}
+                  isDeleting={isLoading.delete}
+                  aiSuggestions={allAISuggestions}
+                />
+              ) : (
+                <div className="text-center py-12" role="status" aria-live="polite">
+                  <div className="w-16 h-16 mx-auto mb-4 opacity-50">📦</div>
+                  <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
+                  <p className={themeClasses.textMuted}>
+                    {searchTerm
+                      ? `Aucun résultat pour "${searchTerm}". Essayez un autre terme.`
+                      : 'Commencez par ajouter votre premier stock.'}
+                  </p>
+                  <div className="mt-4 flex gap-2 justify-center">
+                    <Button
+                      variant="primary"
+                      icon={Plus}
+                      onClick={handleCreateStock}
+                      className="lg:hidden"
+                      aria-label="Ajouter un stock"
+                    >
+                      Ajouter un Stock
+                    </Button>
+                    {searchTerm && (
+                      <Button variant="secondary" onClick={handleResetFilters}>
+                        Effacer les filtres
+                      </Button>
+                    )}
+                  </div>
+                </div>
               )}
-            </div>
-          </section>
+            </section>
+
+            {/* Section Partagés avec moi */}
+            {sharedStocks.length > 0 && (
+              <section aria-labelledby="shared-stocks-heading" className="mb-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <h2 id="shared-stocks-heading" className="text-2xl font-bold">
+                    Partagés avec moi ({sharedStocks.length})
+                  </h2>
+                </div>
+                <StockGrid
+                  stocks={sharedStocks}
+                  isLoaded={isLoaded}
+                  onView={handleViewStock}
+                  isUpdating={false}
+                  isDeleting={false}
+                  aiSuggestions={[]}
+                />
+              </section>
+            )}
+          </>
         )}
       </main>
 

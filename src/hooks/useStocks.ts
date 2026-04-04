@@ -222,6 +222,16 @@ export const useStocks = () => {
 
   // ===== COMPUTED VALUES =====
 
+  const ownedStocks = useMemo(
+    () => stocks.filter(s => !s.viewerRole || s.viewerRole === 'OWNER'),
+    [stocks]
+  );
+
+  const sharedStocks = useMemo(
+    () => stocks.filter(s => s.viewerRole && s.viewerRole !== 'OWNER'),
+    [stocks]
+  );
+
   const filteredStocks = useMemo(() => {
     return stocks.filter(stock => {
       if (filters.query) {
@@ -299,6 +309,8 @@ export const useStocks = () => {
     // Données
     stocks: filteredStocks,
     allStocks: stocks,
+    ownedStocks,
+    sharedStocks,
     stats,
     filters,
 

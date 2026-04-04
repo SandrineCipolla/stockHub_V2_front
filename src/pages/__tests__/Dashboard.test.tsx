@@ -133,6 +133,8 @@ describe('Dashboard Component', () => {
           createMockUseStocks({
             stocks: stocksByStatus.critical,
             allStocks: stocksByStatus.critical,
+            ownedStocks: stocksByStatus.critical,
+            sharedStocks: [],
             stats: {
               total: stocksByStatus.critical.length,
               optimal: 0,
@@ -340,6 +342,8 @@ describe('Dashboard Component', () => {
           createMockUseStocks({
             stocks: [],
             allStocks: [],
+            ownedStocks: [],
+            sharedStocks: [],
             stats: {
               total: 0,
               optimal: 0,
