@@ -10,13 +10,25 @@ import type { HeaderProps } from '@/types';
  */
 export const HeaderWrapper: React.FC<HeaderProps> = ({
   className = '',
-  userName = 'Sandrine Cipolla',
+  userName,
   notificationCount = 3,
   isLoggedIn: isLoggedInProp,
 }) => {
   const { theme, toggleTheme } = useTheme();
-  const { instance, inProgress } = useMsal();
+  const { instance, accounts, inProgress } = useMsal();
   const isAuthenticated = useIsAuthenticated();
+
+  const account = instance.getActiveAccount() ?? accounts[0];
+  const emailClaim = account?.idTokenClaims?.['emails'];
+  const emailFromToken =
+    Array.isArray(emailClaim) && typeof emailClaim[0] === 'string' ? emailClaim[0] : undefined;
+  const resolvedUserName =
+    userName ??
+    account?.idTokenClaims?.name ??
+    account?.name ??
+    emailFromToken ??
+    account?.username ??
+    '';
 
   // Si isLoggedIn est passé en prop (ex: LandingPage force false), on l'utilise directement.
   // Sinon on lit l'état MSAL, en ignorant les transitions de redirect.
@@ -94,7 +106,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
 
   return React.createElement('sh-header', {
     ref: headerRef,
-    userName,
+    userName: resolvedUserName,
     notificationCount,
     'data-theme': theme,
     className,

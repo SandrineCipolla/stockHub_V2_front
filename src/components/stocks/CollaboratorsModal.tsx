@@ -50,7 +50,7 @@ export const CollaboratorsModal: React.FC<Props> = ({ stockId, stockLabel, onClo
       el.removeEventListener('collaborator-role-change', handleRoleChange);
       el.removeEventListener('collaborator-remove', handleRemove);
     };
-  }, [updateRole, remove]);
+  }, [updateRole, remove, isLoading]);
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -325,6 +325,25 @@ export const Dashboard: React.FC = () => {
 
         {!isAnyLoading && (
           <>
+            {/* Section Partagés avec moi — en premier si l'utilisateur n'a pas de stocks propres */}
+            {sharedStocks.length > 0 && ownedStocks.length === 0 && (
+              <section aria-labelledby="shared-stocks-heading-top" className="mb-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <h2 id="shared-stocks-heading-top" className="text-2xl font-bold">
+                    Partagés avec moi ({sharedStocks.length})
+                  </h2>
+                </div>
+                <StockGrid
+                  stocks={sharedStocks}
+                  isLoaded={isLoaded}
+                  onView={handleViewStock}
+                  isUpdating={false}
+                  isDeleting={false}
+                  aiSuggestions={[]}
+                />
+              </section>
+            )}
+
             {/* Section Mes stocks */}
             <section aria-labelledby="owned-stocks-heading" className="mb-10">
               <div className="flex items-center justify-between mb-6">
@@ -386,8 +405,8 @@ export const Dashboard: React.FC = () => {
               )}
             </section>
 
-            {/* Section Partagés avec moi */}
-            {sharedStocks.length > 0 && (
+            {/* Section Partagés avec moi — en bas uniquement si l'utilisateur a aussi ses propres stocks */}
+            {sharedStocks.length > 0 && ownedStocks.length > 0 && (
               <section aria-labelledby="shared-stocks-heading" className="mb-10">
                 <div className="flex items-center gap-3 mb-6">
                   <h2 id="shared-stocks-heading" className="text-2xl font-bold">
