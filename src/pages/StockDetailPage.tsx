@@ -440,16 +440,6 @@ export const StockDetailPage: React.FC = () => {
             <div className="text-center py-12" role="status">
               <div className="w-12 h-12 mx-auto mb-4 opacity-50">📦</div>
               <p className={themeClasses.textMuted}>Ce stock ne contient pas encore d'items.</p>
-              {(myRole === 'OWNER' || myRole === 'EDITOR') && (
-                <Button
-                  variant="primary"
-                  icon={Plus}
-                  onClick={() => setShowAddModal(true)}
-                  className="mt-4"
-                >
-                  Ajouter le premier item
-                </Button>
-              )}
             </div>
           ) : (
             <>
