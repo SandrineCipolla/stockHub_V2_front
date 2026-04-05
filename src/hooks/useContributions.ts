@@ -29,7 +29,8 @@ export function useContributions(stockId: number) {
 
   const review = useCallback(
     async (contributionId: number, action: 'APPROVE' | 'REJECT') => {
-      const updated = await ContributionsAPI.review(stockId, contributionId, action);
+      const normalizedAction: 'approve' | 'reject' = action === 'APPROVE' ? 'approve' : 'reject';
+      const updated = await ContributionsAPI.review(stockId, contributionId, normalizedAction);
       setContributions(prev => prev.filter(c => c.id !== updated.id));
     },
     [stockId]

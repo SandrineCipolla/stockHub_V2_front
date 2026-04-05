@@ -34,7 +34,7 @@ export const ContributionsAPI = {
   async review(
     stockId: number,
     contributionId: number,
-    action: 'APPROVE' | 'REJECT'
+    action: 'approve' | 'reject'
   ): Promise<Contribution> {
     const config = await ConfigManager.patchFetchConfig({ action });
     const res = await fetch(
