@@ -69,11 +69,18 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     }
   };
 
-  // Handler pour le bouton "Détails"
   const handleDetailsClick = () => {
     if (onView) {
       onView(stock.id);
     }
+  };
+
+  // Clic natif sur la carte — navigue sauf si le clic vient d'un bouton d'action
+  const handleCardClick = (e: React.MouseEvent) => {
+    const isActionButton = e.nativeEvent
+      .composedPath()
+      .some(el => el instanceof Element && el.tagName === 'SH-BUTTON');
+    if (!isActionButton) handleDetailsClick();
   };
 
   // Handler pour le bouton "Éditer"
@@ -106,6 +113,8 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     'data-theme': theme,
     className: className,
     'onsh-session-click': handleSessionClick,
+    onClick: handleCardClick,
+    style: { cursor: onView ? 'pointer' : undefined },
     'onsh-details-click': handleDetailsClick,
     'onsh-edit-click': handleEditClick,
     'onsh-delete-click': handleDeleteClick,

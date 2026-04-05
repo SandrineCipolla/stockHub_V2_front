@@ -301,6 +301,24 @@ export const StockDetailPage: React.FC = () => {
       </NavSection>
 
       <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8" role="main">
+        {/* Bannière lecture seule pour VIEWER */}
+        {myRole === 'VIEWER' && (
+          <div
+            className={`flex items-center gap-3 px-4 py-3 mb-6 rounded-xl border ${
+              theme === 'dark'
+                ? 'bg-slate-800/60 border-slate-700 text-slate-300'
+                : 'bg-gray-50 border-gray-200 text-gray-600'
+            }`}
+            role="status"
+          >
+            <span aria-hidden="true">👁️</span>
+            <p className="text-sm">
+              Vous avez un accès en lecture seule sur ce stock. Contactez le propriétaire pour
+              obtenir des droits de modification.
+            </p>
+          </div>
+        )}
+
         {/* Métriques agrégées */}
         <section
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10"
@@ -485,7 +503,11 @@ export const StockDetailPage: React.FC = () => {
                               {STATUS_LABELS[status]}
                             </td>
                             <td className="px-4 py-3">
-                              {myRole === 'VIEWER_CONTRIBUTOR' ? (
+                              {myRole === 'VIEWER' ? (
+                                <span className="font-bold tabular-nums flex justify-center">
+                                  {item.quantity}
+                                </span>
+                              ) : myRole === 'VIEWER_CONTRIBUTOR' ? (
                                 <div className="flex items-center justify-center">
                                   <span className="font-bold tabular-nums mr-2">
                                     {item.quantity}
