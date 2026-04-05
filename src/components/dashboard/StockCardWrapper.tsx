@@ -115,7 +115,7 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     'onsh-session-click': handleSessionClick,
     onClick: handleCardClick,
     style: { cursor: onView ? 'pointer' : undefined },
-    'onsh-details-click': handleDetailsClick,
+    'hide-details': true,
     'onsh-edit-click': handleEditClick,
     'onsh-delete-click': handleDeleteClick,
   });
