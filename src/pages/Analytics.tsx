@@ -58,21 +58,21 @@ export const Analytics: React.FC = () => {
       {/* Navigation Section */}
       <NavSection>
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Analyses IA & Prédictions</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2">Analyses IA & Prédictions</h1>
               <p className={themeClasses.textMuted}>
                 Prédictions Machine Learning basées sur régression linéaire (30 jours d'historique
                 simulé)
               </p>
             </div>
             <Button variant="ghost" icon={Home} onClick={() => navigate('/')}>
-              Retour Dashboard
+              <span className="hidden sm:inline">Retour Dashboard</span>
             </Button>
           </div>
 
           {/* Stats Summary */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 sm:gap-4">
             <StatCard
               value={stats.total}
               label="Total Stocks"
@@ -122,7 +122,7 @@ export const Analytics: React.FC = () => {
       </NavSection>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Filter Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">

@@ -194,7 +194,7 @@ export const Dashboard: React.FC = () => {
       <NavSection>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Tableau de Bord</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2">Tableau de Bord</h1>
             <p className={themeClasses.textMuted}>
               Bienvenue dans votre espace de gestion de stocks intelligent
             </p>
@@ -236,7 +236,7 @@ export const Dashboard: React.FC = () => {
       </NavSection>
 
       {/* Main Content avec id pour skip link */}
-      <main id="main-content" className="max-w-7xl mx-auto px-6 py-8" role="main">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8" role="main">
         {/* Métriques principales utilisant MetricCard */}
         <section
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
