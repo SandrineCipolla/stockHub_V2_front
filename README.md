@@ -132,9 +132,11 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 - 🎨 **Design System externe** - 18 Web Components Lit avec Storybook déployé
 - 🤖 **IA Business Intelligence** - SmartSuggestions et prédictions de rupture de stock
 - 🎭 **Mode Loisirs/Créatif** - 7 unités flexibles (%, ml, m, tubes, portions, etc.)
+- 👥 **Collaboration** - Partage de stocks avec rôles (OWNER / EDITOR / VIEWER / VIEWER_CONTRIBUTOR)
+- 🔔 **Notifications** - Compteur de contributions en attente en temps réel sur la cloche
 - 🌙 **Mode sombre/clair** avec transition fluide
 - 📱 **Design responsive** Mobile First
-- ♿ **Accessibilité Lighthouse 94/100** (corrections DS en cours)
+- ♿ **Accessibilité Lighthouse 94/100**
 - 🎯 **TypeScript strict** pour la robustesse (0 erreur)
 - 🔍 **Recherche avancée** et filtres
 - 📈 **Visualisations** et rapports
