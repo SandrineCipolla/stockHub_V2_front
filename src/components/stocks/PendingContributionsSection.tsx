@@ -39,6 +39,7 @@ export const PendingContributionsSection: React.FC<Props> = ({
     const handleReject = async (e: Event) => {
       if (!(e instanceof CustomEvent)) return;
       await review(Number(e.detail.contributionId), 'REJECT');
+      onContributionReviewed();
     };
 
     el.addEventListener('contribution-approve', handleApprove);
