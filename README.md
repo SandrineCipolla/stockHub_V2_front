@@ -20,6 +20,40 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ---
 
+## 🎉 Nouveautés Majeures (Avril 2026)
+
+### 👥 Collaboration & Rôles (Avril 2026)
+
+- **Accès collaborateurs** : les utilisateurs invités sur un stock peuvent désormais accéder à la page de détail (fix backend — requête Prisma étendue aux collaborateurs)
+- **Bannière lecture seule** : les utilisateurs avec le rôle VIEWER voient un bandeau informatif leur indiquant qu'ils n'ont pas les droits de modification
+- **Gestion des quantités selon le rôle** : VIEWER → lecture seule, VIEWER_CONTRIBUTOR → bouton "Signaler" pour soumettre une contribution, OWNER/EDITOR → +/- inline
+
+### 🔔 Notifications (Avril 2026)
+
+- **Compteur réel sur la cloche** : le badge affiche le nombre de contributions PENDING qui concernent l'utilisateur (stocks dont il est OWNER + contributions qu'il a soumises)
+- **Hook `usePendingContributionsCount`** : appel `GET /contributions/pending-count`, partagé entre Dashboard et StockDetailPage
+
+### 🔄 Contributions — Auto-refresh (Avril 2026)
+
+- **Refresh automatique** : après approbation ou rejet d'une contribution, le stock se recharge immédiatement sans action manuelle
+- **Fix approve/reject** : la normalisation de l'action en minuscules corrige un bug où "approve" était toujours traité comme "reject"
+
+### 🃏 Navigation par carte (Avril 2026)
+
+- **Stock card cliquable** : cliquer sur la carte d'un stock navigue vers le détail — le bouton "Détails" a été supprimé (design system v1.3.3, prop `hideDetails`)
+- **Design system v1.3.3** : ajout de la prop `hide-details` sur `<sh-stock-card>`
+
+### 📋 Items — Dernière mise à jour (Avril 2026)
+
+- **Colonne "Mise à jour"** : le tableau des items affiche la date/heure de la dernière modification (heure si aujourd'hui, "Hier", "Il y a X j", ou date courte)
+- **Masquée sur mobile** : colonne visible uniquement sur `sm:` et plus
+
+### 📱 Responsive (Avril 2026)
+
+- **NavSection** : padding adaptatif `px-4 sm:px-6`
+- **Analytics** : grille stats `grid-cols-3 sm:grid-cols-5`, titre responsive
+- **CollaboratorsModal** : champ email pleine largeur, select + bouton "Inviter" sur une ligne dédiée
+
 ## 🎉 Nouveautés Majeures (Mars 2026)
 
 ### 🔮 Prédictions & Historique Backend (Mars 2026)
