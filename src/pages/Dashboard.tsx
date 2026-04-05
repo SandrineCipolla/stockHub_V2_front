@@ -17,6 +17,7 @@ import { StockFormModal } from '@/components/stocks/StockFormModal';
 import { useStocks } from '@/hooks/useStocks';
 import { useDataExport } from '@/hooks/useFrontendState';
 import { useTheme } from '@/hooks/useTheme.ts';
+import { usePendingContributionsCount } from '@/hooks/usePendingContributionsCount';
 import { generateAISuggestions } from '@/utils/aiPredictions';
 import { logger } from '@/utils/logger';
 
@@ -30,6 +31,7 @@ export const Dashboard: React.FC = () => {
 
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { count: pendingCount } = usePendingContributionsCount();
 
   const {
     stocks,
@@ -188,7 +190,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper />
+      <HeaderWrapper notificationCount={pendingCount} />
 
       {/* Navigation Section */}
       <NavSection>
