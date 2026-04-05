@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.11.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.10.0...v1.11.0) (2026-04-05)
+
+
+### ✨ Features
+
+* **collaboration:** add collaborator management and contribution workflow — closes [#147](https://github.com/SandrineCipolla/stockHub_V2_front/issues/147) [#148](https://github.com/SandrineCipolla/stockHub_V2_front/issues/148) [#149](https://github.com/SandrineCipolla/stockHub_V2_front/issues/149) ([d6b2a4c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d6b2a4c235955c7f658c80538ceb42c3eba8d9b9))
+* **collaboration:** add collaborator management and contribution workflow — closes [#147](https://github.com/SandrineCipolla/stockHub_V2_front/issues/147) [#148](https://github.com/SandrineCipolla/stockHub_V2_front/issues/148) [#149](https://github.com/SandrineCipolla/stockHub_V2_front/issues/149) ([5a532ab](https://github.com/SandrineCipolla/stockHub_V2_front/commit/5a532ab437266320f6f026e4ee74aa77a8efd759))
+* **dashboard:** group stocks by role — closes [#151](https://github.com/SandrineCipolla/stockHub_V2_front/issues/151) ([4006dee](https://github.com/SandrineCipolla/stockHub_V2_front/commit/4006deeca7d68ebdc7c1c4d0e5e6d282b283b713))
+* **dashboard:** group stocks by role — Mes stocks / Partagés avec moi — closes [#151](https://github.com/SandrineCipolla/stockHub_V2_front/issues/151) ([d7547db](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d7547dbf62b11cdf2c5e7af73fc2ee37a78e92cb))
+* **dashboard:** make owned and shared stock sections collapsible ([c3da723](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c3da7232ba386f4a615fea64b751d9f10e8d7c3a))
+
+
+### 🐛 Bug Fixes
+
+* **collaboration:** pass collaborators array directly to sh-collaborator-list and add role badge in stock header ([b879bc6](https://github.com/SandrineCipolla/stockHub_V2_front/commit/b879bc6ed0f2ea8d4a2174783ba8a697277afc55))
+* **collaborators:** attach event listeners after sh-collaborator-list is mounted ([a8fd094](https://github.com/SandrineCipolla/stockHub_V2_front/commit/a8fd094d4e93c3adcdc0f43a53f7fa3d6a4ab0c6))
+* **dashboard:** show shared stocks first when user has no owned stocks ([a8fd094](https://github.com/SandrineCipolla/stockHub_V2_front/commit/a8fd094d4e93c3adcdc0f43a53f7fa3d6a4ab0c6))
+* **header:** read userName from MSAL token claims instead of hardcoded value ([a8fd094](https://github.com/SandrineCipolla/stockHub_V2_front/commit/a8fd094d4e93c3adcdc0f43a53f7fa3d6a4ab0c6))
+* **stock-detail:** hide add-first-item button for non-editors on empty stock ([85f9bb1](https://github.com/SandrineCipolla/stockHub_V2_front/commit/85f9bb1de6451f39106a12df726b217d8037b218))
+* **stock-detail:** remove duplicate add-item button from empty state ([4ae3a17](https://github.com/SandrineCipolla/stockHub_V2_front/commit/4ae3a17da1ee9ea20b5885160b1dfbdd5047a2cc))
+
 ## [1.10.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.9.0...v1.10.0) (2026-03-31)
 
 
