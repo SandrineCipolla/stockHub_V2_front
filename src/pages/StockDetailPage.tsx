@@ -19,6 +19,7 @@ import { CollaboratorsModal } from '@/components/stocks/CollaboratorsModal';
 import { ContributionFormModal } from '@/components/items/ContributionFormModal';
 import { PendingContributionsSection } from '@/components/stocks/PendingContributionsSection';
 import { useContributions } from '@/hooks/useContributions';
+import { usePendingContributionsCount } from '@/hooks/usePendingContributionsCount';
 import { AIAlertBannerWrapper } from '@/components/ai/AIAlertBannerWrapper';
 import { computePredictions } from '@/utils/stockPredictions';
 import { PredictionsAPI } from '@/services/api/predictionsAPI';
@@ -74,6 +75,7 @@ export const StockDetailPage: React.FC = () => {
   const { stockId } = useParams<{ stockId: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { count: pendingCount, refresh: refreshPendingCount } = usePendingContributionsCount();
 
   const numericId = Number(stockId);
   const { stock, isLoading, error, refetch } = useStockDetail(numericId);
@@ -251,7 +253,7 @@ export const StockDetailPage: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper />
+      <HeaderWrapper notificationCount={pendingCount} />
 
       <NavSection>
         <div className="flex flex-wrap items-start gap-3">
@@ -366,7 +368,10 @@ export const StockDetailPage: React.FC = () => {
             stockId={numericId}
             items={stock.items}
             collaborators={collaborators}
-            onContributionReviewed={() => void refetch()}
+            onContributionReviewed={() => {
+              void refetch();
+              void refreshPendingCount();
+            }}
           />
         )}
 
