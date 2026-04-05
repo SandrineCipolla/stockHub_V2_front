@@ -40,16 +40,18 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     setLocalStock(stock);
   }, [stock]);
 
-  // Assigner les propriétés complexes via JavaScript (iaCount)
+  // Assigner les propriétés complexes via JavaScript (iaCount, hideDetails)
   useEffect(() => {
-    if (cardRef.current && aiSuggestions.length > 0) {
-      customElements.whenDefined('sh-stock-card').then(() => {
-        if (cardRef.current) {
+    customElements.whenDefined('sh-stock-card').then(() => {
+      if (cardRef.current) {
+        // @ts-expect-error - propriété native du web component
+        cardRef.current.hideDetails = true;
+        if (aiSuggestions.length > 0) {
           // @ts-expect-error - propriété native du web component
           cardRef.current.iaCount = aiSuggestions.length;
         }
-      });
-    }
+      }
+    });
   }, [aiSuggestions]);
 
   // Handler pour le bouton "Enregistrer session"
@@ -115,7 +117,7 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     'onsh-session-click': handleSessionClick,
     onClick: handleCardClick,
     style: { cursor: onView ? 'pointer' : undefined },
-    'hide-details': true,
+
     'onsh-edit-click': handleEditClick,
     'onsh-delete-click': handleDeleteClick,
   });
