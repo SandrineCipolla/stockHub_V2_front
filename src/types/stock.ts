@@ -199,6 +199,7 @@ export interface StockDetailItem {
   quantity: number;
   minimumStock?: number;
   status: ItemStatus;
+  updatedAt?: string | null;
 }
 
 export interface StockDetail {

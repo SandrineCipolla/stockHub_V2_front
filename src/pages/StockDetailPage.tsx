@@ -31,6 +31,19 @@ const ITEMS_PER_PAGE = 20;
 
 type FilterStatus = 'all' | 'optimal' | 'low' | 'critical' | 'out-of-stock';
 
+const formatRelativeDate = (isoDate: string | null | undefined): string => {
+  if (!isoDate) return '—';
+  const date = new Date(isoDate);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0)
+    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  if (diffDays === 1) return 'Hier';
+  if (diffDays < 30) return `Il y a ${diffDays} j`;
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+};
+
 const getItemStatus = (item: StockDetailItem): 'optimal' | 'low' | 'critical' | 'out-of-stock' => {
   const min = item.minimumStock ?? 1;
   if (item.quantity === 0) return 'out-of-stock';
@@ -475,6 +488,9 @@ export const StockDetailPage: React.FC = () => {
                         <th className="text-left px-4 py-3 font-medium">Statut</th>
                         <th className="text-center px-4 py-3 font-medium">Quantité</th>
                         <th className="text-center px-4 py-3 font-medium">Min</th>
+                        <th className="text-center px-4 py-3 font-medium hidden sm:table-cell">
+                          Mise à jour
+                        </th>
                         {(myRole === 'OWNER' || myRole === 'EDITOR') && (
                           <th className="text-right px-4 py-3 font-medium">Actions</th>
                         )}
@@ -589,6 +605,11 @@ export const StockDetailPage: React.FC = () => {
                             </td>
                             <td className={`px-4 py-3 text-center ${themeClasses.textMuted}`}>
                               {item.minimumStock}
+                            </td>
+                            <td
+                              className={`px-4 py-3 text-center text-xs hidden sm:table-cell ${themeClasses.textMuted}`}
+                            >
+                              {formatRelativeDate(item.updatedAt)}
                             </td>
                             {(myRole === 'OWNER' || myRole === 'EDITOR') && (
                               <td className="px-4 py-3">
