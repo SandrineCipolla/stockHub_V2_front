@@ -202,12 +202,12 @@ describe('StockCardWrapper', () => {
   });
 
   describe('Event handling', () => {
-    it('should call onView when details button is clicked', () => {
+    it('should call onView when card body is clicked', () => {
       const onView = vi.fn();
       const { container } = render(<StockCardWrapper stock={mockStock} onView={onView} />);
       const card = container.querySelector('sh-stock-card');
 
-      const event = new Event('sh-details-click', { bubbles: true });
+      const event = new MouseEvent('click', { bubbles: true });
       card?.dispatchEvent(event);
 
       expect(onView).toHaveBeenCalledWith(1);
@@ -239,12 +239,12 @@ describe('StockCardWrapper', () => {
       const { container } = render(<StockCardWrapper stock={mockStock} />);
       const card = container.querySelector('sh-stock-card');
 
-      const detailsEvent = new Event('sh-details-click', { bubbles: true });
+      const clickEvent = new MouseEvent('click', { bubbles: true });
       const editEvent = new Event('sh-edit-click', { bubbles: true });
       const deleteEvent = new Event('sh-delete-click', { bubbles: true });
 
       expect(() => {
-        card?.dispatchEvent(detailsEvent);
+        card?.dispatchEvent(clickEvent);
         card?.dispatchEvent(editEvent);
         card?.dispatchEvent(deleteEvent);
       }).not.toThrow();

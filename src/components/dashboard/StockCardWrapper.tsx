@@ -40,16 +40,18 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     setLocalStock(stock);
   }, [stock]);
 
-  // Assigner les propriétés complexes via JavaScript (iaCount)
+  // Assigner les propriétés complexes via JavaScript (iaCount, hideDetails)
   useEffect(() => {
-    if (cardRef.current && aiSuggestions.length > 0) {
-      customElements.whenDefined('sh-stock-card').then(() => {
-        if (cardRef.current) {
+    customElements.whenDefined('sh-stock-card').then(() => {
+      if (cardRef.current) {
+        // @ts-expect-error - propriété native du web component
+        cardRef.current.hideDetails = true;
+        if (aiSuggestions.length > 0) {
           // @ts-expect-error - propriété native du web component
           cardRef.current.iaCount = aiSuggestions.length;
         }
-      });
-    }
+      }
+    });
   }, [aiSuggestions]);
 
   // Handler pour le bouton "Enregistrer session"
@@ -69,11 +71,18 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     }
   };
 
-  // Handler pour le bouton "Détails"
   const handleDetailsClick = () => {
     if (onView) {
       onView(stock.id);
     }
+  };
+
+  // Clic natif sur la carte — navigue sauf si le clic vient d'un bouton d'action
+  const handleCardClick = (e: React.MouseEvent) => {
+    const isActionButton = e.nativeEvent
+      .composedPath()
+      .some(el => el instanceof Element && el.tagName === 'SH-BUTTON');
+    if (!isActionButton) handleDetailsClick();
   };
 
   // Handler pour le bouton "Éditer"
@@ -106,7 +115,9 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     'data-theme': theme,
     className: className,
     'onsh-session-click': handleSessionClick,
-    'onsh-details-click': handleDetailsClick,
+    onClick: handleCardClick,
+    style: { cursor: onView ? 'pointer' : undefined },
+
     'onsh-edit-click': handleEditClick,
     'onsh-delete-click': handleDeleteClick,
   });
