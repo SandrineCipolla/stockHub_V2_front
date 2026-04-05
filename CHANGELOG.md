@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.12.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.11.0...v1.12.0) (2026-04-05)
+
+
+### ✨ Features
+
+* **items:** display last update date column in item table — closes [#157](https://github.com/SandrineCipolla/stockHub_V2_front/issues/157) ([#164](https://github.com/SandrineCipolla/stockHub_V2_front/issues/164)) ([834ae40](https://github.com/SandrineCipolla/stockHub_V2_front/commit/834ae402d80ee0f3a5f46f179a3c09ea396d73d6))
+* **notifications:** show real pending contributions count on header bell — closes [#155](https://github.com/SandrineCipolla/stockHub_V2_front/issues/155) ([#162](https://github.com/SandrineCipolla/stockHub_V2_front/issues/162)) ([855b022](https://github.com/SandrineCipolla/stockHub_V2_front/commit/855b022226f11f59a447e0b1535da8630dcf9fe4))
+* **responsive:** improve layout on mobile — closes [#156](https://github.com/SandrineCipolla/stockHub_V2_front/issues/156) ([#158](https://github.com/SandrineCipolla/stockHub_V2_front/issues/158)) ([adc7cfb](https://github.com/SandrineCipolla/stockHub_V2_front/commit/adc7cfba6ee49a37250c365d10a95f998dedab90))
+* **ux:** clickable stock card and read-only banner for VIEWER ([#161](https://github.com/SandrineCipolla/stockHub_V2_front/issues/161)) ([c51827b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c51827bcc3059fe264fa3a1bde53818eb2bbc803))
+
+
+### 🐛 Bug Fixes
+
+* **contributions:** refresh stock after approve or reject — closes [#154](https://github.com/SandrineCipolla/stockHub_V2_front/issues/154) ([#160](https://github.com/SandrineCipolla/stockHub_V2_front/issues/160)) ([0b65172](https://github.com/SandrineCipolla/stockHub_V2_front/commit/0b65172c4a8e333f032e1d1b2980e58a307085a6))
+
 ## [1.11.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.10.0...v1.11.0) (2026-04-05)
 
 
