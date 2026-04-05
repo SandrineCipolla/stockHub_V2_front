@@ -8,6 +8,8 @@ import { dashboardStocks, stocksByStatus } from './stock';
 export const createMockUseStocks = (overrides = {}) => ({
   stocks: dashboardStocks,
   allStocks: dashboardStocks,
+  ownedStocks: dashboardStocks,
+  sharedStocks: [],
   stats: {
     total: dashboardStocks.length,
     optimal: stocksByStatus.optimal.length,

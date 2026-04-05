@@ -20,10 +20,16 @@ vi.mock('@azure/msal-react', () => ({
     instance: {
       loginRedirect: mockLoginRedirect,
       logoutRedirect: mockLogoutRedirect,
+      getActiveAccount: () => ({
+        name: 'Test User',
+        username: 'test@example.com',
+        idTokenClaims: {},
+      }),
     },
+    accounts: [{ name: 'Test User', username: 'test@example.com', idTokenClaims: {} }],
     inProgress: 'none',
   }),
-  useIsAuthenticated: () => true, // Always return true for tests
+  useIsAuthenticated: () => true,
 }));
 
 // Spy on logger.debug (replaces console.log spying)
@@ -88,10 +94,10 @@ describe('HeaderWrapper', () => {
   });
 
   describe('Default props', () => {
-    it('should use default userName "Sandrine Cipolla"', () => {
+    it('should use userName from MSAL account when no prop passed', () => {
       const { container } = render(<HeaderWrapper />);
       const header = container.querySelector('sh-header');
-      expect(header?.getAttribute('username')).toBe('Sandrine Cipolla');
+      expect(header?.getAttribute('username')).toBe('Test User');
     });
 
     it('should use default notificationCount of 3', () => {

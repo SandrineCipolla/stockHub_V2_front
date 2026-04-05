@@ -63,6 +63,7 @@ export interface Stock {
   supplier?: string;
   minThreshold?: number;
   maxThreshold?: number;
+  viewerRole?: string; // Rôle de l'utilisateur courant sur ce stock (OWNER, EDITOR, VIEWER, VIEWER_CONTRIBUTOR)
 
   // Gestion des containers (tubes, bouteilles, etc.) pour unités en %
   containerCapacity?: number; // Capacité d'un container (ex: 100ml pour un tube)

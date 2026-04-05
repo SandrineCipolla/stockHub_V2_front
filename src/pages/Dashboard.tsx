@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { BarChart3, Download, Plus, Search } from 'lucide-react';
+import { BarChart3, ChevronDown, ChevronRight, Download, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { Stock } from '@/types';
 
@@ -25,12 +25,16 @@ export const Dashboard: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [editingStock, setEditingStock] = useState<Stock | null>(null);
+  const [isOwnedExpanded, setIsOwnedExpanded] = useState<boolean>(true);
+  const [isSharedExpanded, setIsSharedExpanded] = useState<boolean>(true);
 
   const navigate = useNavigate();
   const { theme } = useTheme();
 
   const {
     stocks,
+    ownedStocks,
+    sharedStocks,
     stats,
     loadStocks,
     deleteStock,
@@ -305,24 +309,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </section>
 
-        {/* Section titre stocks */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Mes Stocks Récents ({stocks.length})</h2>
-          <Button
-            variant="ghost"
-            icon={Download}
-            onClick={handleExport}
-            loading={isExporting}
-            disabled={stocks.length === 0}
-            aria-describedby="export-help"
-          >
-            Exporter
-          </Button>
-          <div id="export-help" className="sr-only">
-            Exporter la liste des stocks au format CSV
-          </div>
-        </div>
-
         {/* Loading state accessible */}
         {isAnyLoading && (
           <div className="flex justify-center py-12" role="status" aria-live="polite">
@@ -339,47 +325,166 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Grid des stocks  StockGrid */}
         {!isAnyLoading && (
-          <StockGrid
-            stocks={stocks}
-            isLoaded={isLoaded}
-            onView={handleViewStock}
-            onEdit={handleUpdateStock}
-            onDelete={handleDeleteStock}
-            isUpdating={isLoading.update}
-            isDeleting={isLoading.delete}
-            aiSuggestions={allAISuggestions}
-          />
-        )}
+          <>
+            {/* Section Partagés avec moi — en premier si pas de stocks propres */}
+            {sharedStocks.length > 0 && ownedStocks.length === 0 && (
+              <section aria-labelledby="shared-heading-top" className="mb-6">
+                <button
+                  onClick={() => setIsSharedExpanded(v => !v)}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border ${
+                    theme === 'dark'
+                      ? 'border-slate-700 hover:bg-slate-800'
+                      : 'border-gray-200 hover:bg-gray-50'
+                  } transition-colors`}
+                  aria-expanded={isSharedExpanded}
+                  aria-controls="shared-stocks-top-content"
+                >
+                  <h2 id="shared-heading-top" className="text-xl font-bold">
+                    Partagés avec moi ({sharedStocks.length})
+                  </h2>
+                  {isSharedExpanded ? (
+                    <ChevronDown className="w-5 h-5" aria-hidden="true" />
+                  ) : (
+                    <ChevronRight className="w-5 h-5" aria-hidden="true" />
+                  )}
+                </button>
+                {isSharedExpanded && (
+                  <div id="shared-stocks-top-content" className="mt-4">
+                    <StockGrid
+                      stocks={sharedStocks}
+                      isLoaded={isLoaded}
+                      onView={handleViewStock}
+                      isUpdating={false}
+                      isDeleting={false}
+                      aiSuggestions={[]}
+                    />
+                  </div>
+                )}
+              </section>
+            )}
 
-        {/* État vide accessible */}
-        {!isAnyLoading && stocks.length === 0 && (
-          <section className="text-center py-12" role="status" aria-live="polite">
-            <div className="w-16 h-16 mx-auto mb-4 opacity-50">📦</div>
-            <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
-            <p className={themeClasses.textMuted}>
-              {searchTerm
-                ? `Aucun résultat pour "${searchTerm}". Essayez un autre terme.`
-                : 'Commencez par ajouter votre premier stock.'}
-            </p>
-            <div className="mt-4 flex gap-2 justify-center">
-              <Button
-                variant="primary"
-                icon={Plus}
-                onClick={handleCreateStock}
-                className="lg:hidden"
-                aria-label="Ajouter un stock"
+            {/* Section Mes stocks */}
+            <section aria-labelledby="owned-stocks-heading" className="mb-6">
+              <button
+                onClick={() => setIsOwnedExpanded(v => !v)}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border ${
+                  theme === 'dark'
+                    ? 'border-slate-700 hover:bg-slate-800'
+                    : 'border-gray-200 hover:bg-gray-50'
+                } transition-colors`}
+                aria-expanded={isOwnedExpanded}
+                aria-controls="owned-stocks-content"
               >
-                Ajouter un Stock
-              </Button>
-              {searchTerm && (
-                <Button variant="secondary" onClick={handleResetFilters}>
-                  Effacer les filtres
-                </Button>
+                <h2 id="owned-stocks-heading" className="text-xl font-bold">
+                  Mes stocks ({ownedStocks.length})
+                </h2>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    icon={Download}
+                    onClick={e => {
+                      e.stopPropagation();
+                      void handleExport();
+                    }}
+                    loading={isExporting}
+                    disabled={stocks.length === 0}
+                    aria-describedby="export-help"
+                  >
+                    Exporter
+                  </Button>
+                  <div id="export-help" className="sr-only">
+                    Exporter la liste des stocks au format CSV
+                  </div>
+                  {isOwnedExpanded ? (
+                    <ChevronDown className="w-5 h-5" aria-hidden="true" />
+                  ) : (
+                    <ChevronRight className="w-5 h-5" aria-hidden="true" />
+                  )}
+                </div>
+              </button>
+
+              {isOwnedExpanded && (
+                <div id="owned-stocks-content" className="mt-4">
+                  {ownedStocks.length > 0 ? (
+                    <StockGrid
+                      stocks={ownedStocks}
+                      isLoaded={isLoaded}
+                      onView={handleViewStock}
+                      onEdit={handleUpdateStock}
+                      onDelete={handleDeleteStock}
+                      isUpdating={isLoading.update}
+                      isDeleting={isLoading.delete}
+                      aiSuggestions={allAISuggestions}
+                    />
+                  ) : (
+                    <div className="text-center py-12" role="status" aria-live="polite">
+                      <div className="w-16 h-16 mx-auto mb-4 opacity-50">📦</div>
+                      <h3 className="text-lg font-medium mb-2">Aucun stock trouvé</h3>
+                      <p className={themeClasses.textMuted}>
+                        {searchTerm
+                          ? `Aucun résultat pour "${searchTerm}". Essayez un autre terme.`
+                          : 'Commencez par ajouter votre premier stock.'}
+                      </p>
+                      <div className="mt-4 flex gap-2 justify-center">
+                        <Button
+                          variant="primary"
+                          icon={Plus}
+                          onClick={handleCreateStock}
+                          className="lg:hidden"
+                          aria-label="Ajouter un stock"
+                        >
+                          Ajouter un Stock
+                        </Button>
+                        {searchTerm && (
+                          <Button variant="secondary" onClick={handleResetFilters}>
+                            Effacer les filtres
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
-            </div>
-          </section>
+            </section>
+
+            {/* Section Partagés avec moi — en bas si l'utilisateur a aussi ses propres stocks */}
+            {sharedStocks.length > 0 && ownedStocks.length > 0 && (
+              <section aria-labelledby="shared-stocks-heading" className="mb-6">
+                <button
+                  onClick={() => setIsSharedExpanded(v => !v)}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border ${
+                    theme === 'dark'
+                      ? 'border-slate-700 hover:bg-slate-800'
+                      : 'border-gray-200 hover:bg-gray-50'
+                  } transition-colors`}
+                  aria-expanded={isSharedExpanded}
+                  aria-controls="shared-stocks-content"
+                >
+                  <h2 id="shared-stocks-heading" className="text-xl font-bold">
+                    Partagés avec moi ({sharedStocks.length})
+                  </h2>
+                  {isSharedExpanded ? (
+                    <ChevronDown className="w-5 h-5" aria-hidden="true" />
+                  ) : (
+                    <ChevronRight className="w-5 h-5" aria-hidden="true" />
+                  )}
+                </button>
+                {isSharedExpanded && (
+                  <div id="shared-stocks-content" className="mt-4">
+                    <StockGrid
+                      stocks={sharedStocks}
+                      isLoaded={isLoaded}
+                      onView={handleViewStock}
+                      isUpdating={false}
+                      isDeleting={false}
+                      aiSuggestions={[]}
+                    />
+                  </div>
+                )}
+              </section>
+            )}
+          </>
         )}
       </main>
 
