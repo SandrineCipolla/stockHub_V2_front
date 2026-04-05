@@ -254,18 +254,18 @@ export const StockDetailPage: React.FC = () => {
       <HeaderWrapper />
 
       <NavSection>
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-start gap-3">
           <Button
             variant="ghost"
             icon={ArrowLeft}
             onClick={() => navigate('/')}
             aria-label="Retour au tableau de bord"
           >
-            Retour
+            <span className="hidden sm:inline">Retour</span>
           </Button>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold truncate">{stock.label}</h1>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl sm:text-3xl font-bold truncate">{stock.label}</h1>
               {React.createElement('sh-role-badge', {
                 role: myRole,
                 size: 'sm',
@@ -278,29 +278,29 @@ export const StockDetailPage: React.FC = () => {
             </p>
           </div>
           {myRole === 'OWNER' && (
-            <Button
-              variant="secondary"
-              icon={Users}
-              onClick={() => setIsCollabModalOpen(true)}
-              aria-label="Gérer les accès au stock"
-            >
-              Accès
-            </Button>
-          )}
-          {myRole === 'OWNER' && (
-            <Button
-              variant="secondary"
-              icon={Edit}
-              onClick={() => setIsEditOpen(true)}
-              aria-label="Modifier ce stock"
-            >
-              Modifier le stock
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant="secondary"
+                icon={Users}
+                onClick={() => setIsCollabModalOpen(true)}
+                aria-label="Gérer les accès au stock"
+              >
+                <span className="hidden sm:inline">Accès</span>
+              </Button>
+              <Button
+                variant="secondary"
+                icon={Edit}
+                onClick={() => setIsEditOpen(true)}
+                aria-label="Modifier ce stock"
+              >
+                <span className="hidden sm:inline">Modifier</span>
+              </Button>
+            </div>
           )}
         </div>
       </NavSection>
 
-      <main id="main-content" className="max-w-7xl mx-auto px-6 py-8" role="main">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8" role="main">
         {/* Métriques agrégées */}
         <section
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10"
@@ -444,143 +444,152 @@ export const StockDetailPage: React.FC = () => {
           ) : (
             <>
               <div className={`rounded-xl border overflow-hidden ${themeClasses.table}`}>
-                <table className="w-full text-sm" aria-label="Liste des items">
-                  <thead>
-                    <tr className={themeClasses.tableHeader}>
-                      <th className="text-left px-4 py-3 font-medium">Nom / Description</th>
-                      <th className="text-left px-4 py-3 font-medium">Statut</th>
-                      <th className="text-center px-4 py-3 font-medium">Quantité</th>
-                      <th className="text-center px-4 py-3 font-medium">Min</th>
-                      {(myRole === 'OWNER' || myRole === 'EDITOR') && (
-                        <th className="text-right px-4 py-3 font-medium">Actions</th>
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedItems.map(item => {
-                      const status = getItemStatus(item);
-                      return (
-                        <tr
-                          key={item.id}
-                          className={`group border-t ${themeClasses.tableRow} transition-colors`}
-                        >
-                          <td className="px-4 py-3">
-                            <div className="flex items-center gap-2">
-                              <span
-                                className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_DOT_COLORS[status]}`}
-                                aria-hidden="true"
-                              />
-                              <div className="min-w-0">
-                                <p className="font-medium truncate">{item.label}</p>
-                                {item.description && (
-                                  <p className={`text-xs truncate ${themeClasses.textMuted}`}>
-                                    {item.description}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          </td>
-                          <td className={`px-4 py-3 font-medium ${STATUS_COLORS[status]}`}>
-                            {STATUS_LABELS[status]}
-                          </td>
-                          <td className="px-4 py-3">
-                            {myRole === 'VIEWER_CONTRIBUTOR' ? (
-                              <div className="flex items-center justify-center">
-                                <span className="font-bold tabular-nums mr-2">{item.quantity}</span>
-                                <button
-                                  onClick={() => setContributingItem(item)}
-                                  className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
-                                  aria-label={`Signaler une modification pour ${item.label}`}
-                                >
-                                  Signaler
-                                </button>
-                              </div>
-                            ) : (
-                              <div
-                                className="flex items-center justify-center gap-1"
-                                aria-label={`Quantité : ${item.quantity}`}
-                              >
-                                <button
-                                  onClick={() => handleUpdateQuantity(item, -1)}
-                                  disabled={itemsLoading.update}
-                                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
-                                  aria-label={`Diminuer la quantité de ${item.label}`}
-                                >
-                                  −
-                                </button>
-                                {editingQuantityId === item.id ? (
-                                  <input
-                                    type="number"
-                                    min={0}
-                                    value={inlineQuantityValue}
-                                    autoFocus
-                                    onChange={e => setInlineQuantityValue(Number(e.target.value))}
-                                    onBlur={() => {
-                                      if (!isNaN(inlineQuantityValue) && inlineQuantityValue >= 0) {
-                                        void updateItem(item.id, { quantity: inlineQuantityValue });
-                                        void refetch();
-                                      }
-                                      setEditingQuantityId(null);
-                                    }}
-                                    onKeyDown={e => {
-                                      if (e.key === 'Enter') e.currentTarget.blur();
-                                      if (e.key === 'Escape') setEditingQuantityId(null);
-                                    }}
-                                    className="w-16 text-center px-1 py-0.5 border border-purple-500 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none"
-                                    aria-label={`Quantité de ${item.label}`}
-                                  />
-                                ) : (
-                                  <span
-                                    className="font-bold cursor-pointer hover:text-purple-400 transition-colors min-w-[24px] text-center tabular-nums"
-                                    title="Cliquer pour éditer"
-                                    onClick={() => {
-                                      setEditingQuantityId(item.id);
-                                      setInlineQuantityValue(item.quantity);
-                                    }}
-                                  >
-                                    {item.quantity}
-                                  </span>
-                                )}
-                                <button
-                                  onClick={() => handleUpdateQuantity(item, +1)}
-                                  disabled={itemsLoading.update}
-                                  className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
-                                  aria-label={`Augmenter la quantité de ${item.label}`}
-                                >
-                                  +
-                                </button>
-                              </div>
-                            )}
-                          </td>
-                          <td className={`px-4 py-3 text-center ${themeClasses.textMuted}`}>
-                            {item.minimumStock}
-                          </td>
-                          {(myRole === 'OWNER' || myRole === 'EDITOR') && (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm" aria-label="Liste des items">
+                    <thead>
+                      <tr className={themeClasses.tableHeader}>
+                        <th className="text-left px-4 py-3 font-medium">Nom / Description</th>
+                        <th className="text-left px-4 py-3 font-medium">Statut</th>
+                        <th className="text-center px-4 py-3 font-medium">Quantité</th>
+                        <th className="text-center px-4 py-3 font-medium">Min</th>
+                        {(myRole === 'OWNER' || myRole === 'EDITOR') && (
+                          <th className="text-right px-4 py-3 font-medium">Actions</th>
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedItems.map(item => {
+                        const status = getItemStatus(item);
+                        return (
+                          <tr
+                            key={item.id}
+                            className={`group border-t ${themeClasses.tableRow} transition-colors`}
+                          >
                             <td className="px-4 py-3">
-                              <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button
-                                  onClick={() => setEditingItem(item)}
-                                  className="p-1 rounded hover:bg-purple-100 dark:hover:bg-slate-600"
-                                  aria-label={`Modifier ${item.label}`}
-                                >
-                                  <Pencil className="w-4 h-4" />
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteItem(item)}
-                                  disabled={itemsLoading.delete}
-                                  className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 disabled:opacity-50"
-                                  aria-label={`Supprimer ${item.label}`}
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_DOT_COLORS[status]}`}
+                                  aria-hidden="true"
+                                />
+                                <div className="min-w-0">
+                                  <p className="font-medium truncate">{item.label}</p>
+                                  {item.description && (
+                                    <p className={`text-xs truncate ${themeClasses.textMuted}`}>
+                                      {item.description}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
                             </td>
-                          )}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                            <td className={`px-4 py-3 font-medium ${STATUS_COLORS[status]}`}>
+                              {STATUS_LABELS[status]}
+                            </td>
+                            <td className="px-4 py-3">
+                              {myRole === 'VIEWER_CONTRIBUTOR' ? (
+                                <div className="flex items-center justify-center">
+                                  <span className="font-bold tabular-nums mr-2">
+                                    {item.quantity}
+                                  </span>
+                                  <button
+                                    onClick={() => setContributingItem(item)}
+                                    className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
+                                    aria-label={`Signaler une modification pour ${item.label}`}
+                                  >
+                                    Signaler
+                                  </button>
+                                </div>
+                              ) : (
+                                <div
+                                  className="flex items-center justify-center gap-1"
+                                  aria-label={`Quantité : ${item.quantity}`}
+                                >
+                                  <button
+                                    onClick={() => handleUpdateQuantity(item, -1)}
+                                    disabled={itemsLoading.update}
+                                    className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
+                                    aria-label={`Diminuer la quantité de ${item.label}`}
+                                  >
+                                    −
+                                  </button>
+                                  {editingQuantityId === item.id ? (
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      value={inlineQuantityValue}
+                                      autoFocus
+                                      onChange={e => setInlineQuantityValue(Number(e.target.value))}
+                                      onBlur={() => {
+                                        if (
+                                          !isNaN(inlineQuantityValue) &&
+                                          inlineQuantityValue >= 0
+                                        ) {
+                                          void updateItem(item.id, {
+                                            quantity: inlineQuantityValue,
+                                          });
+                                          void refetch();
+                                        }
+                                        setEditingQuantityId(null);
+                                      }}
+                                      onKeyDown={e => {
+                                        if (e.key === 'Enter') e.currentTarget.blur();
+                                        if (e.key === 'Escape') setEditingQuantityId(null);
+                                      }}
+                                      className="w-16 text-center px-1 py-0.5 border border-purple-500 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none"
+                                      aria-label={`Quantité de ${item.label}`}
+                                    />
+                                  ) : (
+                                    <span
+                                      className="font-bold cursor-pointer hover:text-purple-400 transition-colors min-w-[24px] text-center tabular-nums"
+                                      title="Cliquer pour éditer"
+                                      onClick={() => {
+                                        setEditingQuantityId(item.id);
+                                        setInlineQuantityValue(item.quantity);
+                                      }}
+                                    >
+                                      {item.quantity}
+                                    </span>
+                                  )}
+                                  <button
+                                    onClick={() => handleUpdateQuantity(item, +1)}
+                                    disabled={itemsLoading.update}
+                                    className="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-100 dark:hover:bg-slate-600 disabled:opacity-50"
+                                    aria-label={`Augmenter la quantité de ${item.label}`}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              )}
+                            </td>
+                            <td className={`px-4 py-3 text-center ${themeClasses.textMuted}`}>
+                              {item.minimumStock}
+                            </td>
+                            {(myRole === 'OWNER' || myRole === 'EDITOR') && (
+                              <td className="px-4 py-3">
+                                <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <button
+                                    onClick={() => setEditingItem(item)}
+                                    className="p-1 rounded hover:bg-purple-100 dark:hover:bg-slate-600"
+                                    aria-label={`Modifier ${item.label}`}
+                                  >
+                                    <Pencil className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteItem(item)}
+                                    disabled={itemsLoading.delete}
+                                    className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 disabled:opacity-50"
+                                    aria-label={`Supprimer ${item.label}`}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </td>
+                            )}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* Pagination */}
