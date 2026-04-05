@@ -107,20 +107,20 @@ export const CollaboratorsModal: React.FC<Props> = ({ stockId, stockLabel, onClo
           {/* Invite form */}
           <form onSubmit={handleInvite} className="flex flex-col gap-3">
             <p className={`text-sm font-semibold ${text}`}>Inviter un collaborateur</p>
+            <input
+              type="email"
+              value={inviteEmail}
+              onChange={e => setInviteEmail(e.target.value)}
+              placeholder="email@exemple.com"
+              required
+              className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500 ${inputCls}`}
+              aria-label="Email du collaborateur"
+            />
             <div className="flex gap-2">
-              <input
-                type="email"
-                value={inviteEmail}
-                onChange={e => setInviteEmail(e.target.value)}
-                placeholder="email@exemple.com"
-                required
-                className={`flex-1 px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500 ${inputCls}`}
-                aria-label="Email du collaborateur"
-              />
               <select
                 value={inviteRole}
                 onChange={e => setInviteRole(e.target.value as StockRole)} // eslint-disable-line @typescript-eslint/consistent-type-assertions
-                className={`px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500 ${inputCls}`}
+                className={`flex-1 px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500 ${inputCls}`}
                 aria-label="Rôle"
               >
                 {ROLES.map(r => (
@@ -132,7 +132,7 @@ export const CollaboratorsModal: React.FC<Props> = ({ stockId, stockLabel, onClo
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-4 py-2 text-sm font-medium bg-purple-600 hover:bg-purple-700 text-white rounded-lg disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium bg-purple-600 hover:bg-purple-700 text-white rounded-lg disabled:opacity-50 whitespace-nowrap"
               >
                 Inviter
               </button>
