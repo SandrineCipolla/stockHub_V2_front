@@ -222,21 +222,11 @@ export const useStocks = () => {
 
   // ===== COMPUTED VALUES =====
 
-  const ownedStocks = useMemo(
-    () => stocks.filter(s => !s.viewerRole || s.viewerRole === 'OWNER'),
-    [stocks]
-  );
-
-  const sharedStocks = useMemo(
-    () => stocks.filter(s => s.viewerRole && s.viewerRole !== 'OWNER'),
-    [stocks]
-  );
-
   const filteredStocks = useMemo(() => {
     return stocks.filter(stock => {
       if (filters.query) {
-        const query = filters.query.toLowerCase();
-        if (!stock.label.toLowerCase().includes(query)) {
+        const normalize = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        if (!normalize(stock.label).includes(normalize(filters.query))) {
           return false;
         }
       }
@@ -253,6 +243,16 @@ export const useStocks = () => {
       return !(filters.maxValue !== undefined && stock.value > filters.maxValue);
     });
   }, [stocks, filters]);
+
+  const ownedStocks = useMemo(
+    () => filteredStocks.filter(s => !s.viewerRole || s.viewerRole === 'OWNER'),
+    [filteredStocks]
+  );
+
+  const sharedStocks = useMemo(
+    () => filteredStocks.filter(s => s.viewerRole && s.viewerRole !== 'OWNER'),
+    [filteredStocks]
+  );
 
   const stats = useMemo(() => {
     return {
