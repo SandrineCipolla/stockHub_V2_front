@@ -235,8 +235,8 @@ export const useStocks = () => {
   const filteredStocks = useMemo(() => {
     return stocks.filter(stock => {
       if (filters.query) {
-        const query = filters.query.toLowerCase();
-        if (!stock.label.toLowerCase().includes(query)) {
+        const normalize = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        if (!normalize(stock.label).includes(normalize(filters.query))) {
           return false;
         }
       }
