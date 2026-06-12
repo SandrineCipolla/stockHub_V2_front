@@ -15,6 +15,21 @@ permissions:
   contents: read
 
 jobs:
+  # Skip Dependabot and Release Please PRs — no functional code changes
+  check:
+    name: 🔍 Should run audits?
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.detect.outputs.skip }}
+    steps:
+      - id: detect
+        run: |
+          if [[ "${{ github.head_ref }}" == dependabot/* ]] || [[ "${{ github.head_ref }}" == release-please--* ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
   # ─────────────────────────────────────────────────────────────────────
   # JOB 1 : size-limit - Budget de performance bundle
   # Remplace bundlephobia (CLI non disponible) pour l'usage CI
@@ -23,6 +38,8 @@ jobs:
   bundle-size:
     name: 📦 Bundle Size Budget
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.skip == 'false'
 
     steps:
       - name: 📥 Checkout
@@ -99,6 +116,8 @@ jobs:
   lighthouse-ci:
     name: 🏠 Lighthouse CI (Perf + A11y + SEO)
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.skip == 'false'
 
     steps:
       - name: 📥 Checkout
@@ -163,6 +182,8 @@ jobs:
   axe-accessibility:
     name: ♿ axe-core Accessibility
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.skip == 'false'
 
     steps:
       - name: 📥 Checkout
@@ -217,6 +238,8 @@ jobs:
   trufflehog-security:
     name: 🔐 TruffleHog - Secret Scanning
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.skip == 'false'
 
     steps:
       - name: 📥 Checkout (full history pour scan complet)
@@ -245,8 +268,8 @@ jobs:
   toolbox-summary:
     name: 📋 Toolbox Summary
     runs-on: ubuntu-latest
-    needs: [lighthouse-ci, axe-accessibility, trufflehog-security, bundle-size]
-    if: always()
+    needs: [check, lighthouse-ci, axe-accessibility, trufflehog-security, bundle-size]
+    if: always() && needs.check.outputs.skip == 'false'
 
     steps:
       - name: 📋 Résumé des audits
