@@ -62,13 +62,16 @@ export const Dashboard: React.FC = () => {
 
   const notificationCount = pendingCount + stats.critical + stats['out-of-stock'];
 
-  const notificationTooltip: string[] = [
-    ...stocks.filter(s => s.status === 'critical').map(s => `🔴 ${s.label} — critique`),
-    ...stocks.filter(s => s.status === 'out-of-stock').map(s => `⚫ ${s.label} — rupture`),
-    ...(pendingCount > 0
-      ? [`🔔 ${pendingCount} contribution${pendingCount > 1 ? 's' : ''} en attente`]
-      : []),
-  ];
+  const notificationTooltip = useMemo(
+    () => [
+      ...stocks.filter(s => s.status === 'critical').map(s => `🔴 ${s.label} — critique`),
+      ...stocks.filter(s => s.status === 'out-of-stock').map(s => `⚫ ${s.label} — rupture`),
+      ...(pendingCount > 0
+        ? [`🔔 ${pendingCount} contribution${pendingCount > 1 ? 's' : ''} en attente`]
+        : []),
+    ],
+    [stocks, pendingCount]
+  );
 
   // Classes CSS basées sur le thème
   const themeClasses = {
