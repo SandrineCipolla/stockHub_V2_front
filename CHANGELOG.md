@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.12.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.12.0...v1.12.1) (2026-06-12)
+
+
+### 📚 Documentation
+
+* add project status snapshot (juin 2026) ([543a642](https://github.com/SandrineCipolla/stockHub_V2_front/commit/543a64207fe11c081c07b1025be166adda8733fb))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump vite in the npm_and_yarn group across 1 directory ([#166](https://github.com/SandrineCipolla/stockHub_V2_front/issues/166)) ([bc61974](https://github.com/SandrineCipolla/stockHub_V2_front/commit/bc619746da54033c529f2bf8657e07193026461e))
+
 ## [1.12.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.11.0...v1.12.0) (2026-04-05)
 
 
