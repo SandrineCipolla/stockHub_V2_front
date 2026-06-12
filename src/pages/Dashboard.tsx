@@ -60,6 +60,8 @@ export const Dashboard: React.FC = () => {
     return generateAISuggestions(stocks);
   }, [stocks]);
 
+  const notificationCount = pendingCount + stats.critical + stats['out-of-stock'];
+
   // Classes CSS basées sur le thème
   const themeClasses = {
     background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -190,7 +192,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper notificationCount={pendingCount} />
+      <HeaderWrapper notificationCount={notificationCount} />
 
       {/* Navigation Section */}
       <NavSection>

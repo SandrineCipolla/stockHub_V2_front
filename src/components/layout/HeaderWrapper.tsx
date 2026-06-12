@@ -11,7 +11,7 @@ import type { HeaderProps } from '@/types';
 export const HeaderWrapper: React.FC<HeaderProps> = ({
   className = '',
   userName,
-  notificationCount = 3,
+  notificationCount = 0,
   isLoggedIn: isLoggedInProp,
 }) => {
   const { theme, toggleTheme } = useTheme();
