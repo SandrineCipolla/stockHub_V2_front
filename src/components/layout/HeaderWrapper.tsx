@@ -83,6 +83,23 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   }, [isLoggedIn]);
 
   useEffect(() => {
+    const shadowRoot = headerRef.current?.shadowRoot;
+    if (!shadowRoot) return;
+    const styleId = 'hide-notification-bell';
+    const existing = shadowRoot.querySelector(`#${styleId}`);
+    if (!isLoggedIn) {
+      if (!existing) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = '.notification-btn { display: none !important; }';
+        shadowRoot.appendChild(style);
+      }
+    } else {
+      existing?.remove();
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
     const onLogout = () => handleLogoutRef.current();
 
     const onButtonClick = (e: Event) => {
