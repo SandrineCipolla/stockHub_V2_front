@@ -100,10 +100,10 @@ describe('HeaderWrapper', () => {
       expect(header?.getAttribute('username')).toBe('Test User');
     });
 
-    it('should use default notificationCount of 3', () => {
+    it('should use default notificationCount of 0', () => {
       const { container } = render(<HeaderWrapper />);
       const header = container.querySelector('sh-header');
-      expect(header?.getAttribute('notificationcount')).toBe('3');
+      expect(header?.getAttribute('notificationcount')).toBe('0');
     });
 
     it('should use empty string as default className', () => {

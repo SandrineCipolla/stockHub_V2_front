@@ -12,6 +12,7 @@ import { CardWrapper } from '@/components/common/CardWrapper';
 
 import { useStocks } from '@/hooks/useStocks';
 import { useTheme } from '@/hooks/useTheme';
+import { usePendingContributionsCount } from '@/hooks/usePendingContributionsCount';
 import { predictStockRuptures } from '@/utils/mlSimulation';
 
 type RiskFilter = 'all' | 'critical' | 'high' | 'medium' | 'low';
@@ -21,6 +22,7 @@ export const Analytics: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { stocks } = useStocks();
+  const { count: pendingCount } = usePendingContributionsCount();
 
   // Generate all ML predictions
   const allPredictions = useMemo(() => {
@@ -53,7 +55,7 @@ export const Analytics: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper />
+      <HeaderWrapper notificationCount={pendingCount} />
 
       {/* Navigation Section */}
       <NavSection>

@@ -4,9 +4,11 @@ import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { NavSection } from '@/components/layout/NavSection';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
 import { useTheme } from '@/hooks/useTheme';
+import { usePendingContributionsCount } from '@/hooks/usePendingContributionsCount';
 
 export const Privacy: React.FC = () => {
   const { theme } = useTheme();
+  const { count: pendingCount } = usePendingContributionsCount();
 
   const themeClasses = {
     background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -20,7 +22,7 @@ export const Privacy: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper />
+      <HeaderWrapper notificationCount={pendingCount} />
 
       <NavSection
         breadcrumbs={[

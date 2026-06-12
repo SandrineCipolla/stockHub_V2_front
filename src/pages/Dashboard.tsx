@@ -60,6 +60,19 @@ export const Dashboard: React.FC = () => {
     return generateAISuggestions(stocks);
   }, [stocks]);
 
+  const notificationCount = pendingCount + stats.critical + stats['out-of-stock'];
+
+  const notificationTooltip = useMemo(
+    () => [
+      ...stocks.filter(s => s.status === 'critical').map(s => `🔴 ${s.label} — critique`),
+      ...stocks.filter(s => s.status === 'out-of-stock').map(s => `⚫ ${s.label} — rupture`),
+      ...(pendingCount > 0
+        ? [`🔔 ${pendingCount} contribution${pendingCount > 1 ? 's' : ''} en attente`]
+        : []),
+    ],
+    [stocks, pendingCount]
+  );
+
   // Classes CSS basées sur le thème
   const themeClasses = {
     background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -190,7 +203,10 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper notificationCount={pendingCount} />
+      <HeaderWrapper
+        notificationCount={notificationCount}
+        notificationTooltip={notificationTooltip}
+      />
 
       {/* Navigation Section */}
       <NavSection>
