@@ -33,7 +33,7 @@ const mockStock: Stock = {
   value: 1500,
   unit: 'piece',
   status: 'optimal',
-  lastUpdate: '2 heures',
+  lastUpdate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
   minThreshold: 20,
   maxThreshold: 200,
 };
@@ -187,17 +187,25 @@ describe('StockCardWrapper', () => {
   });
 
   describe('Last update formatting', () => {
-    it('should format last update text', () => {
+    it('should format last update text with relative date', () => {
       const { container } = render(<StockCardWrapper stock={mockStock} />);
       const card = container.querySelector('sh-stock-card');
-      expect(card?.getAttribute('last-update')).toBe('Mis à jour il y a 2 heures');
+      expect(card?.getAttribute('last-update')).toBe('Mis à jour Il y a 5 j');
     });
 
-    it('should handle different time formats', () => {
-      const stock = { ...mockStock, lastUpdate: 'maintenant' };
+    it('should show "Hier" for yesterday', () => {
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const stock = { ...mockStock, lastUpdate: yesterday };
       const { container } = render(<StockCardWrapper stock={stock} />);
       const card = container.querySelector('sh-stock-card');
-      expect(card?.getAttribute('last-update')).toBe('Mis à jour il y a maintenant');
+      expect(card?.getAttribute('last-update')).toBe('Mis à jour Hier');
+    });
+
+    it('should show "—" for invalid date', () => {
+      const stock = { ...mockStock, lastUpdate: 'invalid' };
+      const { container } = render(<StockCardWrapper stock={stock} />);
+      const card = container.querySelector('sh-stock-card');
+      expect(card?.getAttribute('last-update')).toBe('Mis à jour —');
     });
   });
 

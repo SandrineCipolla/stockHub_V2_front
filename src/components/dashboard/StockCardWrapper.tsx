@@ -6,6 +6,7 @@ import type { WebComponentStatus } from '@/types/web-component-events';
 import type { StockStatus, Stock } from '@/types/stock';
 import { formatQuantityWithUnit } from '@/utils/unitFormatter';
 import { recordUsage } from '@/utils/containerManager';
+import { formatRelativeDate } from '@/utils/dateUtils';
 
 // Conversion du format StockStatus vers le format du web component
 const convertStatusToWebComponent = (status: StockStatus): WebComponentStatus => {
@@ -104,7 +105,7 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     id: `stock-card-${localStock.id}`,
     name: localStock.label,
     category: localStock.category || '',
-    'last-update': `Mis à jour il y a ${localStock.lastUpdate}`,
+    'last-update': `Mis à jour ${formatRelativeDate(localStock.lastUpdate)}`,
     percentage:
       localStock.unit === 'percentage' && localStock.quantity !== undefined
         ? localStock.quantity.toString()

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit, Pencil, Plus, Trash2, Users } from 'lucide-react';
+import { formatRelativeDate } from '@/utils/dateUtils';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
@@ -30,19 +31,6 @@ import type { StockDetailItem } from '@/types';
 const ITEMS_PER_PAGE = 20;
 
 type FilterStatus = 'all' | 'optimal' | 'low' | 'critical' | 'out-of-stock';
-
-const formatRelativeDate = (isoDate: string | null | undefined): string => {
-  if (!isoDate) return '—';
-  const date = new Date(isoDate);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  if (diffDays === 0)
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-  if (diffDays === 1) return 'Hier';
-  if (diffDays < 30) return `Il y a ${diffDays} j`;
-  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-};
 
 const getItemStatus = (item: StockDetailItem): 'optimal' | 'low' | 'critical' | 'out-of-stock' => {
   const min = item.minimumStock ?? 1;
