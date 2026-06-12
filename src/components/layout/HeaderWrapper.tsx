@@ -20,7 +20,9 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   const { instance, accounts, inProgress } = useMsal();
   const isAuthenticated = useIsAuthenticated();
 
-  const account = instance.getActiveAccount() ?? accounts[0];
+  // getAllAccounts() lit le cache MSAL de façon synchrone — disponible dès le premier render
+  // après F5, contrairement à accounts[] (état React) qui se peuple en différé.
+  const account = instance.getActiveAccount() ?? instance.getAllAccounts()[0] ?? accounts[0];
   const emailClaim = account?.idTokenClaims?.['emails'];
   const emailFromToken =
     Array.isArray(emailClaim) && typeof emailClaim[0] === 'string' ? emailClaim[0] : undefined;
