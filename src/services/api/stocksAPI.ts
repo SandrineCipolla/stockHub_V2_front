@@ -51,6 +51,7 @@ interface BackendStock {
   status?: StockStatus;
   items?: BackendItem[];
   viewerRole?: string;
+  updatedAt?: string;
 }
 
 /**
@@ -85,7 +86,7 @@ function mapBackendStockToFrontend(backendStock: BackendStock): Stock {
     quantity: backendStock.totalQuantity ?? fallback.quantity,
     value: 0,
     status: backendStock.status ?? fallback.status,
-    lastUpdate: new Date().toISOString(),
+    lastUpdate: backendStock.updatedAt ?? new Date().toISOString(),
     unit: 'piece',
     viewerRole: backendStock.viewerRole,
   };
