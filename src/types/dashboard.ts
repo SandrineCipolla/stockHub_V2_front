@@ -56,6 +56,7 @@ export interface HeaderProps {
   className?: string;
   userName?: string;
   notificationCount?: number;
+  notificationTooltip?: string[];
   isLoggedIn?: boolean;
 }
 

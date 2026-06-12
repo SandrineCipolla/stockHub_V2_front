@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { useTheme } from '@/hooks/useTheme';
 import { loginRequest } from '@/config/authConfig';
@@ -12,8 +12,10 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   className = '',
   userName,
   notificationCount = 0,
+  notificationTooltip,
   isLoggedIn: isLoggedInProp,
 }) => {
+  const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number } | null>(null);
   const { theme, toggleTheme } = useTheme();
   const { instance, accounts, inProgress } = useMsal();
   const isAuthenticated = useIsAuthenticated();
@@ -95,24 +97,82 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
       if (isLogoutButton) handleLogoutRef.current();
     };
 
+    const onShow = () => {
+      const rect = bellButton?.getBoundingClientRect();
+      if (rect) setTooltipPos({ top: rect.bottom + 6, left: rect.left + rect.width / 2 });
+    };
+    const onHide = () => setTooltipPos(null);
+
+    const headerEl = headerRef.current;
+    const bellButton = headerEl?.shadowRoot?.querySelector<HTMLElement>(
+      'button[title="Notifications"]'
+    );
+    bellButton?.addEventListener('mouseenter', onShow);
+    bellButton?.addEventListener('mouseleave', onHide);
+
+    // Sur mobile (pas de hover), toggle au tap via l'événement custom du DS
+    const onBellClick = () => {
+      setTooltipPos(prev => {
+        if (prev) return null;
+        const rect = bellButton?.getBoundingClientRect();
+        return rect ? { top: rect.bottom + 6, left: rect.left + rect.width / 2 } : null;
+      });
+    };
+
+    // Fermer le tooltip si on clique ailleurs
+    const onClickOutside = (e: MouseEvent) => {
+      const target = e.target;
+      if (!(target instanceof Element) || !target.closest('sh-header')) setTooltipPos(null);
+    };
+
     document.addEventListener('sh-logout-click', onLogout);
     document.addEventListener('sh-button-click', onButtonClick);
+    document.addEventListener('sh-notification-click', onBellClick);
+    document.addEventListener('click', onClickOutside);
 
     return () => {
       document.removeEventListener('sh-logout-click', onLogout);
       document.removeEventListener('sh-button-click', onButtonClick);
+      document.removeEventListener('sh-notification-click', onBellClick);
+      document.removeEventListener('click', onClickOutside);
+      bellButton?.removeEventListener('mouseenter', onShow);
+      bellButton?.removeEventListener('mouseleave', onHide);
     };
   }, []);
 
-  return React.createElement('sh-header', {
-    ref: headerRef,
-    userName: resolvedUserName,
-    notificationCount,
-    'data-theme': theme,
-    className,
-    'onsh-notification-click': handleNotifications,
-    'onsh-theme-toggle': handleThemeToggle,
-    'onsh-login-click': handleLogin,
-    'onsh-logout-click': handleLogout,
-  });
+  return (
+    <div style={{ position: 'relative' }}>
+      {React.createElement('sh-header', {
+        ref: headerRef,
+        userName: resolvedUserName,
+        notificationCount,
+        'data-theme': theme,
+        className,
+        'onsh-notification-click': handleNotifications,
+        'onsh-theme-toggle': handleThemeToggle,
+        'onsh-login-click': handleLogin,
+        'onsh-logout-click': handleLogout,
+      })}
+      {notificationTooltip && notificationTooltip.length > 0 && tooltipPos && (
+        <div
+          role="tooltip"
+          style={{
+            position: 'fixed',
+            top: tooltipPos.top,
+            left: tooltipPos.left,
+            transform: 'translateX(-50%)',
+          }}
+          className={`z-50 rounded-lg shadow-xl px-3 py-2 text-xs whitespace-nowrap pointer-events-none border ${
+            theme === 'dark'
+              ? 'bg-slate-800 text-gray-100 border-slate-600'
+              : 'bg-white text-gray-800 border-gray-200'
+          }`}
+        >
+          {notificationTooltip.map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
