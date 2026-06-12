@@ -16,7 +16,7 @@ export const FooterWrapper: React.FC = () => {
     <>
       {React.createElement('sh-footer', {
         'app-name': 'STOCK HUB',
-        year: '2025',
+        year: String(new Date().getFullYear()),
         'data-theme': theme,
       })}
       <div className={`${bgClass} ${textClass} px-6 py-3 text-center text-xs`}>
