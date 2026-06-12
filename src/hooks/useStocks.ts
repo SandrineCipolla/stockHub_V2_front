@@ -222,16 +222,6 @@ export const useStocks = () => {
 
   // ===== COMPUTED VALUES =====
 
-  const ownedStocks = useMemo(
-    () => stocks.filter(s => !s.viewerRole || s.viewerRole === 'OWNER'),
-    [stocks]
-  );
-
-  const sharedStocks = useMemo(
-    () => stocks.filter(s => s.viewerRole && s.viewerRole !== 'OWNER'),
-    [stocks]
-  );
-
   const filteredStocks = useMemo(() => {
     return stocks.filter(stock => {
       if (filters.query) {
@@ -253,6 +243,16 @@ export const useStocks = () => {
       return !(filters.maxValue !== undefined && stock.value > filters.maxValue);
     });
   }, [stocks, filters]);
+
+  const ownedStocks = useMemo(
+    () => filteredStocks.filter(s => !s.viewerRole || s.viewerRole === 'OWNER'),
+    [filteredStocks]
+  );
+
+  const sharedStocks = useMemo(
+    () => filteredStocks.filter(s => s.viewerRole && s.viewerRole !== 'OWNER'),
+    [filteredStocks]
+  );
 
   const stats = useMemo(() => {
     return {
