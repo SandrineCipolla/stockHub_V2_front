@@ -20,18 +20,22 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   const { instance, accounts, inProgress } = useMsal();
   const isAuthenticated = useIsAuthenticated();
 
-  // getAllAccounts() lit le cache MSAL de façon synchrone — disponible dès le premier render
-  // après F5, contrairement à accounts[] (état React) qui se peuple en différé.
   const account = instance.getActiveAccount() ?? instance.getAllAccounts()[0] ?? accounts[0];
   const emailClaim = account?.idTokenClaims?.['emails'];
   const emailFromToken =
     Array.isArray(emailClaim) && typeof emailClaim[0] === 'string' ? emailClaim[0] : undefined;
+
+  // Fallback localStorage : évite "Utilisateur" (défaut DS) le temps que MsalProvider
+  // finisse son initialisation (inProgress: 'startup' → 'none' avec accounts: []).
+  const CACHE_KEY = 'stockhub_username';
+  const cachedName = localStorage.getItem(CACHE_KEY) ?? undefined;
   const resolvedUserName =
     userName ??
     account?.idTokenClaims?.name ??
     account?.name ??
     emailFromToken ??
     account?.username ??
+    cachedName ??
     '';
 
   // Si isLoggedIn est passé en prop (ex: LandingPage force false), on l'utilise directement.
@@ -60,6 +64,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
 
   const handleLogout = useCallback(() => {
     logger.debug('Logout clicked');
+    localStorage.removeItem(CACHE_KEY);
     instance.logoutRedirect({ postLogoutRedirectUri: '/' })?.catch((err: unknown) => {
       logger.error('Erreur lors du logout:', err);
     });
@@ -77,6 +82,12 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   // la propriété à false, ce qui laisse Lit utiliser son défaut (true).
   // L'assignation impérative contourne ce comportement.
   const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (resolvedUserName) {
+      localStorage.setItem(CACHE_KEY, resolvedUserName);
+    }
+  }, [resolvedUserName]);
 
   useEffect(() => {
     if (headerRef.current) {
