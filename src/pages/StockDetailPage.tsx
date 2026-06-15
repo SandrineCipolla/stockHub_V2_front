@@ -11,6 +11,7 @@ import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
 import { MetricCardWrapper } from '@/components/dashboard/MetricCardWrapper';
 import { StockFormModal } from '@/components/stocks/StockFormModal';
 import { ItemFormModal } from '@/components/items/ItemFormModal';
+import { ItemMobileCard } from '@/components/items/ItemMobileCard';
 
 import { useStockDetail } from '@/hooks/useStockDetail';
 import { useItems } from '@/hooks/useItems';
@@ -467,7 +468,41 @@ export const StockDetailPage: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className={`rounded-xl border overflow-hidden ${themeClasses.table}`}>
+              {/* Vue cards — mobile uniquement */}
+              <div className="md:hidden space-y-3">
+                {paginatedItems.map(item => {
+                  const status = getItemStatus(item);
+                  return (
+                    <ItemMobileCard
+                      key={item.id}
+                      item={item}
+                      status={status}
+                      myRole={myRole}
+                      theme={theme}
+                      textMuted={themeClasses.textMuted}
+                      cardBg={theme === 'dark' ? 'bg-slate-800' : 'bg-white'}
+                      editingQuantityId={editingQuantityId}
+                      setEditingQuantityId={setEditingQuantityId}
+                      inlineQuantityValue={inlineQuantityValue}
+                      setInlineQuantityValue={setInlineQuantityValue}
+                      onUpdateQuantity={handleUpdateQuantity}
+                      onUpdateItem={updateItem}
+                      onRefetch={refetch}
+                      onEdit={setEditingItem}
+                      onDelete={handleDeleteItem}
+                      onContribute={setContributingItem}
+                      isLoadingUpdate={itemsLoading.update}
+                      isLoadingDelete={itemsLoading.delete}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Vue tableau — desktop uniquement */}
+              <div
+                data-testid="items-desktop-table"
+                className={`hidden md:block rounded-xl border overflow-hidden ${themeClasses.table}`}
+              >
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm" aria-label="Liste des items">
                     <thead>
@@ -548,6 +583,7 @@ export const StockDetailPage: React.FC = () => {
                                       min={0}
                                       value={inlineQuantityValue}
                                       autoFocus
+                                      data-testid={`qty-input-${item.id}`}
                                       onChange={e => setInlineQuantityValue(Number(e.target.value))}
                                       onBlur={() => {
                                         if (
@@ -572,6 +608,7 @@ export const StockDetailPage: React.FC = () => {
                                     <span
                                       className="font-bold cursor-pointer hover:text-purple-400 transition-colors min-w-[24px] text-center tabular-nums"
                                       title="Cliquer pour éditer"
+                                      data-testid={`qty-edit-span-${item.id}`}
                                       onClick={() => {
                                         setEditingQuantityId(item.id);
                                         setInlineQuantityValue(item.quantity);
@@ -627,6 +664,7 @@ export const StockDetailPage: React.FC = () => {
                   </table>
                 </div>
               </div>
+              {/* fin vue tableau desktop */}
 
               {/* Pagination */}
               {totalPages > 1 && (
