@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.13.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.12.1...v1.13.0) (2026-06-15)
+
+
+### ✨ Features
+
+* **search:** normalize accents in stock search filter — closes [#16](https://github.com/SandrineCipolla/stockHub_V2_front/issues/16) ([#175](https://github.com/SandrineCipolla/stockHub_V2_front/issues/175)) ([ce8f5cf](https://github.com/SandrineCipolla/stockHub_V2_front/commit/ce8f5cf54c421ae15725d7c324125c7e55f31bf3))
+* **stocks:** display relative date on stock cards — closes [#62](https://github.com/SandrineCipolla/stockHub_V2_front/issues/62) ([#176](https://github.com/SandrineCipolla/stockHub_V2_front/issues/176)) ([674dcae](https://github.com/SandrineCipolla/stockHub_V2_front/commit/674dcae6a3343b6b2295130dec3d703a7da291fb))
+
+
+### 🐛 Bug Fixes
+
+* **header:** notification bell count + tooltip per stock — closes [#171](https://github.com/SandrineCipolla/stockHub_V2_front/issues/171) ([#173](https://github.com/SandrineCipolla/stockHub_V2_front/issues/173)) ([c421bdd](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c421bddbd0d10089f853993b44d640937f7ed63f))
+* **header:** resolve username from MSAL cache on page refresh — closes [#172](https://github.com/SandrineCipolla/stockHub_V2_front/issues/172) ([#177](https://github.com/SandrineCipolla/stockHub_V2_front/issues/177)) ([8371bfb](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8371bfb9450fa78c5a0a1671924489de27c8da0d))
+* **landing:** hide notification bell for unauthenticated users and fix copyright year — closes [#138](https://github.com/SandrineCipolla/stockHub_V2_front/issues/138) ([#174](https://github.com/SandrineCipolla/stockHub_V2_front/issues/174)) ([bbe9a6f](https://github.com/SandrineCipolla/stockHub_V2_front/commit/bbe9a6f01ca18611930efeb44ffc166b36ee4d6a))
+
+
+### 🔧 Chores
+
+* **deps:** bump esbuild in the npm_and_yarn group across 1 directory ([#178](https://github.com/SandrineCipolla/stockHub_V2_front/issues/178)) ([7c16706](https://github.com/SandrineCipolla/stockHub_V2_front/commit/7c16706f185e5993bd0048067905d703e745b75a))
+* **deps:** bump the npm_and_yarn group across 1 directory with 5 updates ([#168](https://github.com/SandrineCipolla/stockHub_V2_front/issues/168)) ([bb249f0](https://github.com/SandrineCipolla/stockHub_V2_front/commit/bb249f09f66bb801e3319c7d03b7e2dd20e0da52))
+
+
+### 👷 CI/CD
+
+* **audits:** skip quality audits on dependabot and release-please PRs ([6e69234](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6e69234d4f85733e254dc965aef29b048754d5d8))
+* **metrics:** upgrade Node.js from 18 to 20 for Vite 6 compatibility ([c570cf4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c570cf4a7595e8cadc49b2ecd1c5d38d499035f3))
+
 ## [1.12.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.12.0...v1.12.1) (2026-06-12)
 
 
