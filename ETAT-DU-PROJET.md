@@ -1,13 +1,38 @@
 # StockHub V2 Frontend — État du projet
 
-**Date de rédaction** : 13 juin 2026
-**Dernière activité** : 13 juin 2026 (session de reprise active)
-**Branche active** : `fix/172-username-after-refresh` (PR #177 ouverte, en attente de merge)
-**Version publiée** : v1.12.1 (Release Please a mergé automatiquement)
+**Date de rédaction** : 15 juin 2026
+**Dernière activité** : 15 juin 2026 (session active)
+**Branche active** : `feat/165-items-mobile-cards` (PR ouverte)
+**Version publiée** : v1.13.0 (Release Please — mergé le 15 juin)
 
 ---
 
-## Session du 12–13 juin 2026 — Ce qui a été fait
+## Session du 15 juin 2026 — Ce qui a été fait
+
+### Tickets fermés
+
+| #    | Titre                                   | PR          |
+| ---- | --------------------------------------- | ----------- |
+| #177 | Username "utilisateur" après F5         | ✅ mergé    |
+| #165 | Items en cards sur mobile (StockDetail) | PR en cours |
+
+### Fix CI
+
+`deploy-metrics.yml` utilisait Node 18, incompatible avec Vite 6.3.5 (exige ≥ 20.19). Passé à Node 20, pushé directement sur `main`.
+
+### #165 — Items en cards sur mobile
+
+Nouveau composant `src/components/items/ItemMobileCard.tsx` :
+
+- Vue cards visible sur mobile (`md:hidden`), tableau conservé sur desktop (`hidden md:block`)
+- Chaque card affiche : nom + badge statut, quantité (role-based), min, date relative, actions directes
+- Gestion des rôles : OWNER (±/inline edit), VIEWER_CONTRIBUTOR (bouton Signaler), VIEWER (lecture seule)
+- Bug découvert et corrigé : `autoFocus` sur deux inputs simultanés (mobile + desktop) causait un conflit de focus → `onBlur` immédiat → `editingQuantityId = null`. Fix : `autoFocus` retiré de la card mobile.
+- Tests adaptés : `data-testid="qty-edit-span-{id}"` et `data-testid="qty-input-{id}"` pour cibler précisément le tableau desktop depuis les tests
+
+---
+
+## Sessions précédentes — 12–13 juin 2026
 
 ### Tickets fermés
 
@@ -17,10 +42,7 @@
 | #138 | Masquer cloche landing + corriger copyright year    | #174 ✅ |
 | #16  | Normalisation accents dans la recherche             | #175 ✅ |
 | #62  | Date relative sur les cartes stocks ("Il y a X j")  | #176 ✅ |
-
-### Bug corrigé en cours (#175)
-
-La recherche ne filtrait pas les cartes stocks — `ownedStocks` et `sharedStocks` étaient dérivés de `stocks` brut au lieu de `filteredStocks`. Corrigé dans `useStocks.ts`.
+| #172 | Username "utilisateur" après F5                     | #177 ✅ |
 
 ### Nouveau fichier utilitaire
 
@@ -28,12 +50,11 @@ La recherche ne filtrait pas les cartes stocks — `ownedStocks` et `sharedStock
 
 ### Tickets créés
 
-| #        | Repo  | Titre                                                           | Board       |
-| -------- | ----- | --------------------------------------------------------------- | ----------- |
-| #170     | Front | Rechercher un item par nom depuis le dashboard (bloqué backend) | Backlog     |
-| #172     | Front | Username "utilisateur" après F5                                 | In Progress |
-| DS#39    | DS    | Supprimer attributs `title` natifs sur boutons sh-header        | Backlog DS  |
-| Back#228 | Back  | Exposer `updatedAt` sur GET /api/v2/stocks                      | Backlog     |
+| #        | Repo  | Titre                                                           | Board      |
+| -------- | ----- | --------------------------------------------------------------- | ---------- |
+| #170     | Front | Rechercher un item par nom depuis le dashboard (bloqué backend) | Backlog    |
+| DS#39    | DS    | Supprimer attributs `title` natifs sur boutons sh-header        | Backlog DS |
+| Back#228 | Back  | Exposer `updatedAt` sur GET /api/v2/stocks                      | Backlog    |
 
 ### CI optimisé
 
@@ -43,9 +64,9 @@ Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Depend
 
 ## PR en attente de merge
 
-| PR   | Branche                          | Sujet                                  |
-| ---- | -------------------------------- | -------------------------------------- |
-| #177 | `fix/172-username-after-refresh` | Username après F5 (localStorage cache) |
+| PR  | Branche                       | Sujet                          |
+| --- | ----------------------------- | ------------------------------ |
+| PR  | `feat/165-items-mobile-cards` | Items en cards sur mobile #165 |
 
 ---
 
@@ -62,19 +83,24 @@ Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Depend
 
 ### Fonctionnalités livrées (résumé par release)
 
-**Session 12–13 juin 2026** _(à venir dans prochaine release)_
+**Session 15 juin 2026** _(à venir dans prochaine release)_
+
+- Items d'un stock affichés en cards sur mobile (tableau conservé sur desktop)
+- Actions (modifier, supprimer) visibles directement sur la card (pas de hover nécessaire)
+- Fix Node 18 → 20 dans le workflow deploy-metrics
+
+**v1.13.0 — 15 juin 2026**
 
 - Cloche notifications : compteur réel (critique + rupture + contributions) + tooltip par stock au survol
 - Cloche masquée sur la landing page (non connecté)
 - Copyright year dynamique dans le footer
-- Recherche stocks avec normalisation des accents
-- Recherche stocks filtre bien les cartes (fix ownedStocks/sharedStocks)
+- Recherche stocks avec normalisation des accents (fix filtrage ownedStocks/sharedStocks)
 - Date relative sur les cartes stocks ("Il y a 5 j", "Hier", "14:30")
 - Username après F5 : lu depuis localStorage en attendant MSAL
 
 **v1.12.1 — mai 2026**
 
-- Colonne "dernière mise à jour" dans le tableau des items (affiche l'heure si aujourd'hui)
+- Colonne "dernière mise à jour" dans le tableau des items
 - Compteur réel de contributions en attente sur la cloche du header
 - Layout responsive amélioré (mobile)
 - Bannière "lecture seule" et carte cliquable pour le rôle VIEWER
@@ -103,18 +129,17 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ## Backlog — ce qui reste à faire
 
-### PR à merger en priorité
+### PR à merger
 
-| PR   | Sujet                       |
-| ---- | --------------------------- |
-| #177 | Username après F5 (fix/172) |
+| PR  | Sujet                        |
+| --- | ---------------------------- |
+| PR  | Items en cards mobile (#165) |
 
 ### Bugs ouverts
 
-| #    | Titre                                                    | Priorité           |
-| ---- | -------------------------------------------------------- | ------------------ |
-| #172 | Username "utilisateur" après F5                          | En cours (PR #177) |
-| #30  | Comportement `optionalDependencies` Vercel à investiguer | P1                 |
+| #   | Titre                                                    | Priorité |
+| --- | -------------------------------------------------------- | -------- |
+| #30 | Comportement `optionalDependencies` Vercel à investiguer | P1       |
 
 ### Design System — à faire dans stockhub_design_system
 
@@ -140,7 +165,6 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 | #    | Titre                                                         | Nature                   |
 | ---- | ------------------------------------------------------------- | ------------------------ |
-| #165 | Afficher les items d'un stock en cards sur mobile             | UX mobile                |
 | #163 | Panneau de notifications avec alertes contextuelles           | Feature (front + back)   |
 | #170 | Rechercher un item par nom depuis le dashboard                | Feature (bloqué backend) |
 | #145 | Shopping list UI — générer, afficher, exporter                | Feature IA               |
@@ -180,25 +204,19 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ---
 
-## Pour demain — par où commencer
+## Pour la prochaine session — par où commencer
 
-### 1. Merger PR #177 (5 min)
+### 1. Merger PR #165 (5 min)
 
-Vérifier CI vert et merger `fix/172-username-after-refresh`.
+Vérifier CI vert et merger `feat/165-items-mobile-cards`.
 
-### 2. Design System DS#39 (30–60 min)
+### 2. Feature #163 — Panneau notifications (2–3h)
 
-Supprimer les attributs `title` natifs sur les boutons `sh-header` (cloche, thème, connexion) dans le repo `stockhub_design_system`. Republier le package et mettre à jour la dépendance dans le front.
+L'infrastructure est posée (cloche avec compteur + tooltip). Étape suivante : un panneau/drawer qui s'ouvre au clic sur la cloche, listant les stocks critiques/en rupture + contributions en attente.
 
-> C'est la correction propre du tooltip "Notifications" qu'on a contourné côté front dans `HeaderWrapper`.
+### 3. DS#39 (session dédiée DS)
 
-### 3. Feature #165 — Items en cards sur mobile (1–2h)
-
-Suite logique du responsive. Les items sont en tableau, pas adapté au petit écran.
-
-### 4. Feature #163 — Panneau notifications (2–3h)
-
-L'infrastructure est posée (cloche avec compteur + tooltip). L'étape suivante est un panneau/drawer qui s'ouvre au clic sur la cloche.
+Supprimer les `title` natifs sur les boutons `sh-header` dans `stockhub_design_system`. À grouper avec d'autres évolutions DS.
 
 ---
 

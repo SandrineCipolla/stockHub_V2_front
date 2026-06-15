@@ -20,6 +20,26 @@ StockHub V2 est une application web moderne de gestion de stocks développée av
 
 ---
 
+## 🎉 Nouveautés Majeures (Juin 2026)
+
+### 📱 Items en cards sur mobile (Juin 2026)
+
+- **`ItemMobileCard`** : composant dédié affichant chaque item en card empilée sur mobile (`< md`)
+- Le tableau existant est conservé intact sur desktop (`≥ md`) — switch purement CSS (`md:hidden` / `hidden md:block`)
+- Gestion complète des rôles : OWNER (±/inline edit), VIEWER_CONTRIBUTOR (bouton Signaler), VIEWER (lecture seule)
+- Actions Modifier/Supprimer visibles directement sur la card, sans hover requis (adapté tactile)
+
+### 🔔 Notifications & UX Header (Juin 2026)
+
+- **Cloche notifications** : compteur réel (stocks critiques + ruptures + contributions en attente) + tooltip par stock au survol
+- **Cloche masquée** sur la landing page (non connecté) via injection CSS dans le shadow DOM `sh-header`
+- **Copyright year dynamique** dans le footer
+- **Recherche accents** : normalisation NFD pour trouver "café" en tapant "cafe"
+- **Date relative** sur les cartes stocks (`formatRelativeDate`) : "Il y a 5 j", "Hier", "14:30"
+- **Username après F5** : cache localStorage `stockhub_username` comme fallback pendant l'init MSAL
+
+---
+
 ## 🎉 Nouveautés Majeures (Mars 2026)
 
 ### 🔮 Prédictions & Historique Backend (Mars 2026)
