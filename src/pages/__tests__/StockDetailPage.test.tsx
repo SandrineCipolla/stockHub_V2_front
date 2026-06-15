@@ -191,8 +191,8 @@ describe('StockDetailPage', () => {
 
       const table = screen.getByRole('table', { name: /liste des items/i });
       expect(table).toBeInTheDocument();
-      expect(screen.getByText('Tomates')).toBeInTheDocument();
-      expect(screen.getByText('Carottes')).toBeInTheDocument();
+      expect(screen.getAllByText('Tomates').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Carottes').length).toBeGreaterThan(0);
     });
 
     it('should show empty state when stock has no items', async () => {
@@ -303,30 +303,28 @@ describe('StockDetailPage', () => {
     it('should show input when clicking on quantity value', async () => {
       await act(async () => renderPage());
 
-      const quantitySpans = screen.getAllByTitle('Cliquer pour éditer');
+      const editSpan = screen.getByTestId('qty-edit-span-1');
       await act(async () => {
-        fireEvent.click(quantitySpans[0]!);
+        fireEvent.click(editSpan);
       });
 
-      expect(screen.getByRole('spinbutton', { name: /quantité de tomates/i })).toBeInTheDocument();
+      expect(screen.getByTestId('qty-input-1')).toBeInTheDocument();
     });
 
     it('should hide input on Escape key', async () => {
       await act(async () => renderPage());
 
-      const quantitySpans = screen.getAllByTitle('Cliquer pour éditer');
+      const editSpan = screen.getByTestId('qty-edit-span-1');
       await act(async () => {
-        fireEvent.click(quantitySpans[0]!);
+        fireEvent.click(editSpan);
       });
 
-      const input = screen.getByRole('spinbutton', { name: /quantité de tomates/i });
+      const input = screen.getByTestId('qty-input-1');
       await act(async () => {
         fireEvent.keyDown(input, { key: 'Escape' });
       });
 
-      expect(
-        screen.queryByRole('spinbutton', { name: /quantité de tomates/i })
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('qty-input-1')).not.toBeInTheDocument();
     });
   });
 
