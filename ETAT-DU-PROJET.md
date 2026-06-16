@@ -1,26 +1,21 @@
 # StockHub V2 Frontend — État du projet
 
-**Date de rédaction** : 15 juin 2026
-**Dernière activité** : 15 juin 2026 (session active)
-**Branche active** : `feat/165-items-mobile-cards` (PR ouverte)
+**Date de rédaction** : 16 juin 2026
+**Dernière activité** : 16 juin 2026 (session active)
+**Branche active** : `main`
 **Version publiée** : v1.13.0 (Release Please — mergé le 15 juin)
 
 ---
 
-## Session du 15 juin 2026 — Ce qui a été fait
+## Session du 16 juin 2026 — Ce qui a été fait
 
 ### Tickets fermés
 
-| #    | Titre                                   | PR          |
-| ---- | --------------------------------------- | ----------- |
-| #177 | Username "utilisateur" après F5         | ✅ mergé    |
-| #165 | Items en cards sur mobile (StockDetail) | PR en cours |
+| #    | Titre                                   | PR      |
+| ---- | --------------------------------------- | ------- |
+| #165 | Items en cards sur mobile (StockDetail) | #179 ✅ |
 
-### Fix CI
-
-`deploy-metrics.yml` utilisait Node 18, incompatible avec Vite 6.3.5 (exige ≥ 20.19). Passé à Node 20, pushé directement sur `main`.
-
-### #165 — Items en cards sur mobile
+### #165 — Items en cards sur mobile (PR #179)
 
 Nouveau composant `src/components/items/ItemMobileCard.tsx` :
 
@@ -29,6 +24,22 @@ Nouveau composant `src/components/items/ItemMobileCard.tsx` :
 - Gestion des rôles : OWNER (±/inline edit), VIEWER_CONTRIBUTOR (bouton Signaler), VIEWER (lecture seule)
 - Bug découvert et corrigé : `autoFocus` sur deux inputs simultanés (mobile + desktop) causait un conflit de focus → `onBlur` immédiat → `editingQuantityId = null`. Fix : `autoFocus` retiré de la card mobile.
 - Tests adaptés : `data-testid="qty-edit-span-{id}"` et `data-testid="qty-input-{id}"` pour cibler précisément le tableau desktop depuis les tests
+
+---
+
+---
+
+## Session du 15 juin 2026
+
+### Tickets fermés
+
+| #    | Titre                           | PR       |
+| ---- | ------------------------------- | -------- |
+| #177 | Username "utilisateur" après F5 | ✅ mergé |
+
+### Fix CI
+
+`deploy-metrics.yml` utilisait Node 18, incompatible avec Vite 6.3.5 (exige ≥ 20.19). Passé à Node 20, pushé directement sur `main`.
 
 ---
 
@@ -62,14 +73,6 @@ Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Depend
 
 ---
 
-## PR en attente de merge
-
-| PR  | Branche                       | Sujet                          |
-| --- | ----------------------------- | ------------------------------ |
-| PR  | `feat/165-items-mobile-cards` | Items en cards sur mobile #165 |
-
----
-
 ## Où en est l'application
 
 ### Ce qui tourne en production
@@ -83,10 +86,9 @@ Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Depend
 
 ### Fonctionnalités livrées (résumé par release)
 
-**Session 15 juin 2026** _(à venir dans prochaine release)_
+**Sessions 15–16 juin 2026** _(à venir dans prochaine release)_
 
-- Items d'un stock affichés en cards sur mobile (tableau conservé sur desktop)
-- Actions (modifier, supprimer) visibles directement sur la card (pas de hover nécessaire)
+- Items d'un stock affichés en cards sur mobile (tableau conservé sur desktop) — #165
 - Fix Node 18 → 20 dans le workflow deploy-metrics
 
 **v1.13.0 — 15 juin 2026**
@@ -128,12 +130,6 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 ---
 
 ## Backlog — ce qui reste à faire
-
-### PR à merger
-
-| PR  | Sujet                        |
-| --- | ---------------------------- |
-| PR  | Items en cards mobile (#165) |
 
 ### Bugs ouverts
 
@@ -206,13 +202,17 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ## Pour la prochaine session — par où commencer
 
-### 1. Merger PR #165 (5 min)
-
-Vérifier CI vert et merger `feat/165-items-mobile-cards`.
-
-### 2. Feature #163 — Panneau notifications (2–3h)
+### 1. Feature #163 — Panneau notifications (2–3h)
 
 L'infrastructure est posée (cloche avec compteur + tooltip). Étape suivante : un panneau/drawer qui s'ouvre au clic sur la cloche, listant les stocks critiques/en rupture + contributions en attente.
+
+### 2. Bugs observés en staging (à confirmer en local)
+
+Vus lors du test visuel de #165 sur la preview Vercel + Render — à vérifier s'ils se reproduisent en local :
+
+- Suppression d'un stock sans modal de confirmation (→ #61 déjà en backlog)
+- Bouton "Éditer" (stock) envoie une requête mais n'ouvre pas la modale
+- Clic sur une carte stock ne navigue pas vers `StockDetailPage`
 
 ### 3. DS#39 (session dédiée DS)
 
