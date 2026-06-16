@@ -7,6 +7,7 @@ import { FooterWrapper } from '@/components/layout/FooterWrapper';
 import { NavSection } from '@/components/layout/NavSection';
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
 import { useTheme } from '@/hooks/useTheme';
+import { useNotificationCount } from '@/hooks/useNotificationCount';
 import { ItemsAPI } from '@/services/api/itemsAPI';
 import type { RawItemDetail } from '@/services/api/itemsAPI';
 import { formatRelativeDate } from '@/utils/dateUtils';
@@ -39,6 +40,7 @@ export const ItemDetailPage: React.FC = () => {
   const { stockId, itemId } = useParams<{ stockId: string; itemId: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { count: notifCount } = useNotificationCount();
 
   const [item, setItem] = useState<RawItemDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +74,7 @@ export const ItemDetailPage: React.FC = () => {
 
   return (
     <div className={`min-h-screen flex flex-col ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper />
+      <HeaderWrapper notificationCount={notifCount} />
 
       <NavSection
         breadcrumbs={[
