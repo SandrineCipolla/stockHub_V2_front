@@ -80,6 +80,7 @@ export const StockDetailPage: React.FC = () => {
   const {
     count: notifCount,
     tooltip: notifTooltip,
+    notifications: notifItems,
     refresh: refreshPendingCount,
   } = useNotificationCount();
 
@@ -259,7 +260,11 @@ export const StockDetailPage: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper notificationCount={notifCount} notificationTooltip={notifTooltip} />
+      <HeaderWrapper
+        notificationCount={notifCount}
+        notificationTooltip={notifTooltip}
+        notifications={notifItems}
+      />
 
       <NavSection>
         <div className="flex flex-wrap items-start gap-3">

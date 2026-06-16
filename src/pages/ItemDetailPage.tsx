@@ -40,7 +40,11 @@ export const ItemDetailPage: React.FC = () => {
   const { stockId, itemId } = useParams<{ stockId: string; itemId: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { count: notifCount, tooltip: notifTooltip } = useNotificationCount();
+  const {
+    count: notifCount,
+    tooltip: notifTooltip,
+    notifications: notifItems,
+  } = useNotificationCount();
 
   const [item, setItem] = useState<RawItemDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +78,11 @@ export const ItemDetailPage: React.FC = () => {
 
   return (
     <div className={`min-h-screen flex flex-col ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper notificationCount={notifCount} notificationTooltip={notifTooltip} />
+      <HeaderWrapper
+        notificationCount={notifCount}
+        notificationTooltip={notifTooltip}
+        notifications={notifItems}
+      />
 
       <NavSection
         breadcrumbs={[

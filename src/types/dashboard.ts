@@ -52,11 +52,18 @@ export interface NavSectionProps {
   className?: string;
 }
 
+export interface NotificationItem {
+  type: 'critical' | 'out-of-stock' | 'contribution';
+  stockId?: number;
+  label: string;
+}
+
 export interface HeaderProps {
   className?: string;
   userName?: string;
   notificationCount?: number;
   notificationTooltip?: string[];
+  notifications?: NotificationItem[];
   isLoggedIn?: boolean;
 }
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BarChart3, ChevronDown, ChevronRight, Download, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import type { Stock } from '@/types';
+import type { Stock, NotificationItem } from '@/types';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
@@ -68,6 +68,34 @@ export const Dashboard: React.FC = () => {
       ...stocks.filter(s => s.status === 'out-of-stock').map(s => `⚫ ${s.label} — rupture`),
       ...(pendingCount > 0
         ? [`🔔 ${pendingCount} contribution${pendingCount > 1 ? 's' : ''} en attente`]
+        : []),
+    ],
+    [stocks, pendingCount]
+  );
+
+  const notificationItems = useMemo<NotificationItem[]>(
+    () => [
+      ...stocks
+        .filter(s => s.status === 'critical')
+        .map(s => ({
+          type: 'critical' as const,
+          stockId: typeof s.id === 'number' ? s.id : Number(s.id),
+          label: s.label,
+        })),
+      ...stocks
+        .filter(s => s.status === 'out-of-stock')
+        .map(s => ({
+          type: 'out-of-stock' as const,
+          stockId: typeof s.id === 'number' ? s.id : Number(s.id),
+          label: s.label,
+        })),
+      ...(pendingCount > 0
+        ? [
+            {
+              type: 'contribution' as const,
+              label: `${pendingCount} contribution${pendingCount > 1 ? 's' : ''} en attente`,
+            },
+          ]
         : []),
     ],
     [stocks, pendingCount]
@@ -206,6 +234,7 @@ export const Dashboard: React.FC = () => {
       <HeaderWrapper
         notificationCount={notificationCount}
         notificationTooltip={notificationTooltip}
+        notifications={notificationItems}
       />
 
       {/* Navigation Section */}
