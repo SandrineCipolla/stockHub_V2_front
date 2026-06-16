@@ -11,10 +11,20 @@
 
 ### Tickets fermés
 
-| #    | Titre                                   | PR      |
-| ---- | --------------------------------------- | ------- |
-| #165 | Items en cards sur mobile (StockDetail) | #179 ✅ |
-| #181 | Page détail d'un item de stock          | #182 ✅ |
+| #    | Titre                                                               | PR      |
+| ---- | ------------------------------------------------------------------- | ------- |
+| #165 | Items en cards sur mobile (StockDetail)                             | #179 ✅ |
+| #181 | Page détail d'un item de stock                                      | #182 ✅ |
+| #183 | Compteur notifications incorrect sur StockDetailPage/ItemDetailPage | #184 ✅ |
+
+### #183 — Fix compteur notifications global (PR #184)
+
+Nouveau hook `src/hooks/useNotificationCount.ts` :
+
+- Calcule `count = critiques + ruptures + contributions` + tooltip identiques au dashboard
+- Remplace `usePendingContributionsCount` sur `StockDetailPage` (qui ne comptait pas les stocks critiques/rupture)
+- Ajouté sur `ItemDetailPage` (qui affichait 0 par défaut)
+- Le Dashboard garde son calcul existant depuis `useStocks()` déjà chargé
 
 ### #181 — Page détail d'un item (PR #182)
 
@@ -100,6 +110,7 @@ Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Depend
 
 - Items d'un stock affichés en cards sur mobile (tableau conservé sur desktop) — #165
 - Page détail d'un item `/stocks/:stockId/items/:itemId` — #181
+- Compteur et tooltip notifications cohérents sur toutes les pages — #183
 - Fix Node 18 → 20 dans le workflow deploy-metrics
 
 **v1.13.0 — 15 juin 2026**
@@ -168,12 +179,6 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 | #101 | Auth interactive Playwright pour tests E2E           |
 | #51  | Accessibilité : améliorer score (4 issues critiques) |
 
-### Bugs ouverts (suite)
-
-| #    | Titre                                                               | Priorité |
-| ---- | ------------------------------------------------------------------- | -------- |
-| #183 | Compteur notifications incorrect sur StockDetailPage/ItemDetailPage | P1       |
-
 ### Features planifiées (par priorité d'intérêt)
 
 | #    | Titre                                                         | Nature                   |
@@ -219,11 +224,7 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ## Pour la prochaine session — par où commencer
 
-### 1. Fix #183 — Compteur notifications global (30 min)
-
-Créer un hook `useNotificationCount` partagé (stocks critiques + ruptures + contributions) et l'utiliser dans Dashboard, StockDetailPage et ItemDetailPage.
-
-### 2. Feature #163 — Panneau notifications (2–3h)
+### 1. Feature #163 — Panneau notifications (2–3h)
 
 L'infrastructure est posée (cloche avec compteur + tooltip). Étape suivante : un panneau/drawer qui s'ouvre au clic sur la cloche, listant les stocks critiques/en rupture + contributions en attente.
 
