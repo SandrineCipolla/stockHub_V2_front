@@ -3,7 +3,7 @@
 **Date de rédaction** : 16 juin 2026
 **Dernière activité** : 16 juin 2026 (session active)
 **Branche active** : `main`
-**Version publiée** : v1.13.0 (Release Please — mergé le 15 juin)
+**Version publiée** : v1.14.0 (Release Please — mergé le 16 juin)
 
 ---
 
@@ -16,6 +16,26 @@
 | #165 | Items en cards sur mobile (StockDetail)                             | #179 ✅ |
 | #181 | Page détail d'un item de stock                                      | #182 ✅ |
 | #183 | Compteur notifications incorrect sur StockDetailPage/ItemDetailPage | #184 ✅ |
+| #163 | Panneau de notifications avec alertes contextuelles                 | #186 ✅ |
+
+### #163 — Panneau notifications (PR #186)
+
+Nouveau composant `src/components/layout/NotificationPanel.tsx` :
+
+- Drawer fixe depuis la droite, overlay backdrop derrière
+- Fermeture : clic overlay, bouton ✕, touche Escape
+- 3 sections : Stocks critiques (🔺), Ruptures de stock (📦), Contributions en attente (🔔)
+- Clic sur un stock → navigation vers `/stocks/:stockId` et fermeture du panel
+- État vide : message "Aucune notification" avec icône
+- Support dark/light mode
+
+Modifications associées :
+
+- `NotificationItem` type ajouté dans `src/types/dashboard.ts`
+- `useNotificationCount` enrichi : retourne `notifications: NotificationItem[]`
+- `HeaderWrapper` : `isPanelOpen` state, clic cloche → panel (tooltip hover conservé)
+- Dashboard : calcule `notificationItems` depuis ses stocks déjà chargés (pas de double fetch)
+- StockDetailPage + ItemDetailPage : passent `notifications={notifItems}` à HeaderWrapper
 
 ### #183 — Fix compteur notifications global (PR #184)
 
@@ -106,14 +126,18 @@ Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Depend
 
 ### Fonctionnalités livrées (résumé par release)
 
-**Sessions 15–16 juin 2026** _(à venir dans prochaine release)_
+**v1.14.0 — 16 juin 2026**
+
+- Panneau de notifications : drawer slide-in depuis la droite, clic cloche, sections critiques/ruptures/contributions, navigation vers le stock — #163
+
+**v1.13.0 — 15 juin 2026**
 
 - Items d'un stock affichés en cards sur mobile (tableau conservé sur desktop) — #165
 - Page détail d'un item `/stocks/:stockId/items/:itemId` — #181
 - Compteur et tooltip notifications cohérents sur toutes les pages — #183
 - Fix Node 18 → 20 dans le workflow deploy-metrics
 
-**v1.13.0 — 15 juin 2026**
+**v1.12.1 — (anciennement dans « à venir »)**
 
 - Cloche notifications : compteur réel (critique + rupture + contributions) + tooltip par stock au survol
 - Cloche masquée sur la landing page (non connecté)
@@ -183,7 +207,6 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 | #    | Titre                                                         | Nature                   |
 | ---- | ------------------------------------------------------------- | ------------------------ |
-| #163 | Panneau de notifications avec alertes contextuelles           | Feature (front + back)   |
 | #170 | Rechercher un item par nom depuis le dashboard                | Feature (bloqué backend) |
 | #145 | Shopping list UI — générer, afficher, exporter                | Feature IA               |
 | #144 | Input catégorie custom avec suggestions autocomplete          | UX                       |
@@ -224,11 +247,7 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ## Pour la prochaine session — par où commencer
 
-### 1. Feature #163 — Panneau notifications (2–3h)
-
-L'infrastructure est posée (cloche avec compteur + tooltip). Étape suivante : un panneau/drawer qui s'ouvre au clic sur la cloche, listant les stocks critiques/en rupture + contributions en attente.
-
-### 2. Bugs observés en staging (à confirmer en local)
+### 1. Bugs observés en staging (à confirmer en local)
 
 Vus lors du test visuel de #165 sur la preview Vercel + Render — à vérifier s'ils se reproduisent en local :
 
@@ -236,7 +255,7 @@ Vus lors du test visuel de #165 sur la preview Vercel + Render — à vérifier 
 - Bouton "Éditer" (stock) envoie une requête mais n'ouvre pas la modale
 - Clic sur une carte stock ne navigue pas vers `StockDetailPage`
 
-### 3. DS#39 (session dédiée DS)
+### 2. DS#39 (session dédiée DS)
 
 Supprimer les `title` natifs sur les boutons `sh-header` dans `stockhub_design_system`. À grouper avec d'autres évolutions DS.
 
