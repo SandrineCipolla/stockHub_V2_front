@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.14.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.13.0...v1.14.0) (2026-06-16)
+
+
+### ✨ Features
+
+* **items:** add item detail page — closes [#181](https://github.com/SandrineCipolla/stockHub_V2_front/issues/181) ([#182](https://github.com/SandrineCipolla/stockHub_V2_front/issues/182)) ([8793555](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8793555322efa50fe78f778ae7d86bfe197c0afd))
+* **items:** display mobile cards on StockDetailPage — closes [#165](https://github.com/SandrineCipolla/stockHub_V2_front/issues/165) ([#179](https://github.com/SandrineCipolla/stockHub_V2_front/issues/179)) ([a93cc22](https://github.com/SandrineCipolla/stockHub_V2_front/commit/a93cc227baf0cd121a4c7e25ad5f643428cdcfda))
+
+
+### 🐛 Bug Fixes
+
+* **header:** global notification count and tooltip on all pages — closes [#183](https://github.com/SandrineCipolla/stockHub_V2_front/issues/183) ([#184](https://github.com/SandrineCipolla/stockHub_V2_front/issues/184)) ([34909ff](https://github.com/SandrineCipolla/stockHub_V2_front/commit/34909ff001aed1b87cb3a55cbf7dde1c21f06439))
+
+
+### 📚 Documentation
+
+* update project state after [#165](https://github.com/SandrineCipolla/stockHub_V2_front/issues/165) merge — session 16 juin ([9dfa42c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/9dfa42c8e8c7682294269f73af534bdac17864e0))
+* update project state after [#183](https://github.com/SandrineCipolla/stockHub_V2_front/issues/183) fix — session 16 juin ([73aa475](https://github.com/SandrineCipolla/stockHub_V2_front/commit/73aa4755801f26565f2b1a4998f303736026111c))
+
 ## [1.13.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.12.1...v1.13.0) (2026-06-15)
 
 
