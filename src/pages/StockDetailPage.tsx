@@ -21,7 +21,7 @@ import { CollaboratorsModal } from '@/components/stocks/CollaboratorsModal';
 import { ContributionFormModal } from '@/components/items/ContributionFormModal';
 import { PendingContributionsSection } from '@/components/stocks/PendingContributionsSection';
 import { useContributions } from '@/hooks/useContributions';
-import { usePendingContributionsCount } from '@/hooks/usePendingContributionsCount';
+import { useNotificationCount } from '@/hooks/useNotificationCount';
 import { AIAlertBannerWrapper } from '@/components/ai/AIAlertBannerWrapper';
 import { computePredictions } from '@/utils/stockPredictions';
 import { PredictionsAPI } from '@/services/api/predictionsAPI';
@@ -77,7 +77,11 @@ export const StockDetailPage: React.FC = () => {
   const { stockId } = useParams<{ stockId: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { count: pendingCount, refresh: refreshPendingCount } = usePendingContributionsCount();
+  const {
+    count: notifCount,
+    tooltip: notifTooltip,
+    refresh: refreshPendingCount,
+  } = useNotificationCount();
 
   const numericId = Number(stockId);
   const { stock, isLoading, error, refetch } = useStockDetail(numericId);
@@ -255,7 +259,7 @@ export const StockDetailPage: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper notificationCount={pendingCount} />
+      <HeaderWrapper notificationCount={notifCount} notificationTooltip={notifTooltip} />
 
       <NavSection>
         <div className="flex flex-wrap items-start gap-3">
