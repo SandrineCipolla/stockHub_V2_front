@@ -77,7 +77,11 @@ export const StockDetailPage: React.FC = () => {
   const { stockId } = useParams<{ stockId: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { count: notifCount, refresh: refreshPendingCount } = useNotificationCount();
+  const {
+    count: notifCount,
+    tooltip: notifTooltip,
+    refresh: refreshPendingCount,
+  } = useNotificationCount();
 
   const numericId = Number(stockId);
   const { stock, isLoading, error, refetch } = useStockDetail(numericId);
@@ -255,7 +259,7 @@ export const StockDetailPage: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClasses.background} ${themeClasses.text}`}>
-      <HeaderWrapper notificationCount={notifCount} />
+      <HeaderWrapper notificationCount={notifCount} notificationTooltip={notifTooltip} />
 
       <NavSection>
         <div className="flex flex-wrap items-start gap-3">
