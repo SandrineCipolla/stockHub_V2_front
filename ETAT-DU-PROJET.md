@@ -161,6 +161,7 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 | #    | Titre                                                         | Nature                   |
 | ---- | ------------------------------------------------------------- | ------------------------ |
+| #181 | Page détail d'un item de stock                                | Feature (P1 — en cours)  |
 | #163 | Panneau de notifications avec alertes contextuelles           | Feature (front + back)   |
 | #170 | Rechercher un item par nom depuis le dashboard                | Feature (bloqué backend) |
 | #145 | Shopping list UI — générer, afficher, exporter                | Feature IA               |

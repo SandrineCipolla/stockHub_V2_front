@@ -1,5 +1,6 @@
 import React from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronRight, Pencil, Trash2 } from 'lucide-react';
 import { formatRelativeDate } from '@/utils/dateUtils';
 import type { StockDetailItem } from '@/types';
 
@@ -27,6 +28,7 @@ const STATUS_BADGE_COLORS: Record<string, string> = {
 interface ItemMobileCardProps {
   item: StockDetailItem;
   status: 'optimal' | 'low' | 'critical' | 'out-of-stock';
+  stockId: number | string;
   myRole: string | undefined;
   theme: 'light' | 'dark';
   textMuted: string;
@@ -48,6 +50,7 @@ interface ItemMobileCardProps {
 export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
   item,
   status,
+  stockId,
   myRole,
   theme,
   textMuted,
@@ -65,6 +68,7 @@ export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
   isLoadingUpdate,
   isLoadingDelete,
 }) => {
+  const navigate = useNavigate();
   const isOwnerOrEditor = myRole === 'OWNER' || myRole === 'EDITOR';
   const isContributor = myRole === 'VIEWER_CONTRIBUTOR';
 
@@ -83,7 +87,13 @@ export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
             aria-hidden="true"
           />
           <div className="min-w-0">
-            <p className="font-semibold truncate">{item.label}</p>
+            <button
+              onClick={() => navigate(`/stocks/${stockId}/items/${item.id}`)}
+              className="font-semibold truncate hover:text-purple-500 transition-colors text-left"
+              aria-label={`Voir le détail de ${item.label}`}
+            >
+              {item.label}
+            </button>
             {item.description && (
               <p className={`text-xs truncate ${textMuted}`}>{item.description}</p>
             )}
@@ -175,27 +185,37 @@ export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
       </div>
 
       {/* Actions */}
-      {isOwnerOrEditor && (
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-700/30">
-          <button
-            onClick={() => onEdit(item)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-slate-600 transition-colors"
-            aria-label={`Modifier ${item.label}`}
-          >
-            <Pencil className="w-3.5 h-3.5" />
-            Modifier
-          </button>
-          <button
-            onClick={() => onDelete(item)}
-            disabled={isLoadingDelete}
-            className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50"
-            aria-label={`Supprimer ${item.label}`}
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-            Supprimer
-          </button>
-        </div>
-      )}
+      <div className="flex items-center justify-between pt-2 border-t border-slate-700/30">
+        <button
+          onClick={() => navigate(`/stocks/${stockId}/items/${item.id}`)}
+          className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-slate-600 transition-colors"
+          aria-label={`Voir le détail de ${item.label}`}
+        >
+          <ChevronRight className="w-3.5 h-3.5" />
+          Voir
+        </button>
+        {isOwnerOrEditor && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onEdit(item)}
+              className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-slate-600 transition-colors"
+              aria-label={`Modifier ${item.label}`}
+            >
+              <Pencil className="w-3.5 h-3.5" />
+              Modifier
+            </button>
+            <button
+              onClick={() => onDelete(item)}
+              disabled={isLoadingDelete}
+              className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50"
+              aria-label={`Supprimer ${item.label}`}
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              Supprimer
+            </button>
+          </div>
+        )}
+      </div>
     </article>
   );
 };
