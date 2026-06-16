@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Pencil, Trash2 } from 'lucide-react';
+import { ChevronRight, Pencil, Trash2 } from 'lucide-react';
 import { formatRelativeDate } from '@/utils/dateUtils';
 import type { StockDetailItem } from '@/types';
 
@@ -185,27 +185,37 @@ export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
       </div>
 
       {/* Actions */}
-      {isOwnerOrEditor && (
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-700/30">
-          <button
-            onClick={() => onEdit(item)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-slate-600 transition-colors"
-            aria-label={`Modifier ${item.label}`}
-          >
-            <Pencil className="w-3.5 h-3.5" />
-            Modifier
-          </button>
-          <button
-            onClick={() => onDelete(item)}
-            disabled={isLoadingDelete}
-            className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50"
-            aria-label={`Supprimer ${item.label}`}
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-            Supprimer
-          </button>
-        </div>
-      )}
+      <div className="flex items-center justify-between pt-2 border-t border-slate-700/30">
+        <button
+          onClick={() => navigate(`/stocks/${stockId}/items/${item.id}`)}
+          className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-slate-600 transition-colors"
+          aria-label={`Voir le détail de ${item.label}`}
+        >
+          <ChevronRight className="w-3.5 h-3.5" />
+          Voir
+        </button>
+        {isOwnerOrEditor && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onEdit(item)}
+              className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-slate-600 transition-colors"
+              aria-label={`Modifier ${item.label}`}
+            >
+              <Pencil className="w-3.5 h-3.5" />
+              Modifier
+            </button>
+            <button
+              onClick={() => onDelete(item)}
+              disabled={isLoadingDelete}
+              className="flex items-center gap-1 px-3 py-1.5 rounded text-sm text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50"
+              aria-label={`Supprimer ${item.label}`}
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              Supprimer
+            </button>
+          </div>
+        )}
+      </div>
     </article>
   );
 };
