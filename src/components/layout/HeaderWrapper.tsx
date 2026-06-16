@@ -3,6 +3,7 @@ import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { useTheme } from '@/hooks/useTheme';
 import { loginRequest } from '@/config/authConfig';
 import { logger } from '@/utils/logger';
+import { NotificationPanel } from '@/components/layout/NotificationPanel';
 import type { HeaderProps } from '@/types';
 
 /**
@@ -13,9 +14,11 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   userName,
   notificationCount = 0,
   notificationTooltip,
+  notifications = [],
   isLoggedIn: isLoggedInProp,
 }) => {
   const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number } | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { instance, accounts, inProgress } = useMsal();
   const isAuthenticated = useIsAuthenticated();
@@ -45,7 +48,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
 
   const handleNotifications = () => {
     logger.debug('Notifications clicked');
-    // TODO: Ouvrir le panneau de notifications
+    setIsPanelOpen(true);
   };
 
   const handleThemeToggle = () => {
@@ -140,13 +143,10 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
     bellButton?.addEventListener('mouseenter', onShow);
     bellButton?.addEventListener('mouseleave', onHide);
 
-    // Sur mobile (pas de hover), toggle au tap via l'événement custom du DS
+    // Clic sur la cloche : ouvre le panneau de notifications
     const onBellClick = () => {
-      setTooltipPos(prev => {
-        if (prev) return null;
-        const rect = bellButton?.getBoundingClientRect();
-        return rect ? { top: rect.bottom + 6, left: rect.left + rect.width / 2 } : null;
-      });
+      setTooltipPos(null);
+      setIsPanelOpen(true);
     };
 
     // Fermer le tooltip si on clique ailleurs
@@ -183,7 +183,7 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
         'onsh-login-click': handleLogin,
         'onsh-logout-click': handleLogout,
       })}
-      {notificationTooltip && notificationTooltip.length > 0 && tooltipPos && (
+      {notificationTooltip && notificationTooltip.length > 0 && tooltipPos && !isPanelOpen && (
         <div
           role="tooltip"
           style={{
@@ -202,6 +202,9 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
             <div key={i}>{line}</div>
           ))}
         </div>
+      )}
+      {isPanelOpen && (
+        <NotificationPanel notifications={notifications} onClose={() => setIsPanelOpen(false)} />
       )}
     </div>
   );

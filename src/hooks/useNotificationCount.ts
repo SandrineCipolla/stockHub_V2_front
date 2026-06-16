@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { StocksAPI } from '@/services/api/stocksAPI';
 import ConfigManager from '@/services/api/ConfigManager';
+import type { NotificationItem } from '@/types';
 
 interface NotificationState {
   count: number;
   tooltip: string[];
+  notifications: NotificationItem[];
 }
 
 /**
@@ -13,7 +15,11 @@ interface NotificationState {
  * Le Dashboard calcule son propre count depuis useStocks() pour éviter un fetch redondant.
  */
 export function useNotificationCount(): NotificationState & { refresh: () => void } {
-  const [state, setState] = useState<NotificationState>({ count: 0, tooltip: [] });
+  const [state, setState] = useState<NotificationState>({
+    count: 0,
+    tooltip: [],
+    notifications: [],
+  });
 
   const load = useCallback(async () => {
     try {
@@ -36,6 +42,7 @@ export function useNotificationCount(): NotificationState & { refresh: () => voi
       const pendingCount = pendingData.count;
 
       const count = criticalStocks.length + ruptures.length + pendingCount;
+
       const tooltip: string[] = [
         ...criticalStocks.map(s => `🔴 ${s.label} — critique`),
         ...ruptures.map(s => `⚫ ${s.label} — rupture`),
@@ -44,7 +51,28 @@ export function useNotificationCount(): NotificationState & { refresh: () => voi
           : []),
       ];
 
-      setState({ count, tooltip });
+      const notifications: NotificationItem[] = [
+        ...criticalStocks.map(s => ({
+          type: 'critical' as const,
+          stockId: typeof s.id === 'number' ? s.id : Number(s.id),
+          label: s.label,
+        })),
+        ...ruptures.map(s => ({
+          type: 'out-of-stock' as const,
+          stockId: typeof s.id === 'number' ? s.id : Number(s.id),
+          label: s.label,
+        })),
+        ...(pendingCount > 0
+          ? [
+              {
+                type: 'contribution' as const,
+                label: `${pendingCount} contribution${pendingCount > 1 ? 's' : ''} en attente`,
+              },
+            ]
+          : []),
+      ];
+
+      setState({ count, tooltip, notifications });
     } catch {
       // non-critical, silently ignore
     }
