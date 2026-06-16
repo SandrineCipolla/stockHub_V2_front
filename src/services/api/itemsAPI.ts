@@ -1,6 +1,11 @@
 import { getApiConfig } from './utils';
 import type { StockItem, CreateItemData, UpdateItemData } from '../../types/stock';
 
+// Type brut retourné par GET /stocks/:stockId/items/:itemId
+export interface RawItemDetail extends StockItem {
+  updatedAt?: string | null;
+}
+
 /**
  * Client API pour les Items d'un Stock
  * Gère les opérations CRUD via l'API Backend v2
@@ -67,6 +72,24 @@ export class ItemsAPI {
 
     const updatedItem: StockItem = await response.json();
     return updatedItem;
+  }
+
+  /**
+   * Récupère un item par son id
+   */
+  static async fetchItem(
+    stockId: number | string,
+    itemId: number | string
+  ): Promise<RawItemDetail> {
+    const { apiUrl, config } = await getApiConfig('GET', 2);
+    const response = await fetch(`${apiUrl}/stocks/${stockId}/items/${itemId}`, config);
+
+    if (!response.ok) {
+      throw new Error(`HTTP response with status ${response.status}`);
+    }
+
+    const item: RawItemDetail = await response.json();
+    return item;
   }
 
   /**

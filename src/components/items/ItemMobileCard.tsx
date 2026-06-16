@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
 import { formatRelativeDate } from '@/utils/dateUtils';
 import type { StockDetailItem } from '@/types';
@@ -27,6 +28,7 @@ const STATUS_BADGE_COLORS: Record<string, string> = {
 interface ItemMobileCardProps {
   item: StockDetailItem;
   status: 'optimal' | 'low' | 'critical' | 'out-of-stock';
+  stockId: number | string;
   myRole: string | undefined;
   theme: 'light' | 'dark';
   textMuted: string;
@@ -48,6 +50,7 @@ interface ItemMobileCardProps {
 export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
   item,
   status,
+  stockId,
   myRole,
   theme,
   textMuted,
@@ -65,6 +68,7 @@ export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
   isLoadingUpdate,
   isLoadingDelete,
 }) => {
+  const navigate = useNavigate();
   const isOwnerOrEditor = myRole === 'OWNER' || myRole === 'EDITOR';
   const isContributor = myRole === 'VIEWER_CONTRIBUTOR';
 
@@ -83,7 +87,13 @@ export const ItemMobileCard: React.FC<ItemMobileCardProps> = ({
             aria-hidden="true"
           />
           <div className="min-w-0">
-            <p className="font-semibold truncate">{item.label}</p>
+            <button
+              onClick={() => navigate(`/stocks/${stockId}/items/${item.id}`)}
+              className="font-semibold truncate hover:text-purple-500 transition-colors text-left"
+              aria-label={`Voir le détail de ${item.label}`}
+            >
+              {item.label}
+            </button>
             {item.description && (
               <p className={`text-xs truncate ${textMuted}`}>{item.description}</p>
             )}

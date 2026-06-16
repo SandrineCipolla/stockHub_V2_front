@@ -22,6 +22,9 @@ const Privacy = lazy(() =>
 const StockDetailPage = lazy(() =>
   import('@/pages/StockDetailPage.tsx').then(module => ({ default: module.StockDetailPage }))
 );
+const ItemDetailPage = lazy(() =>
+  import('@/pages/ItemDetailPage.tsx').then(module => ({ default: module.ItemDetailPage }))
+);
 
 // Composant de chargement accessible
 const LoadingFallback = () => (
@@ -95,6 +98,14 @@ function AppRoutes() {
             element={
               <ProtectedRoute>
                 <StockDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/stocks/:stockId/items/:itemId"
+            element={
+              <ProtectedRoute>
+                <ItemDetailPage />
               </ProtectedRoute>
             }
           />

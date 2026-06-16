@@ -477,6 +477,7 @@ export const StockDetailPage: React.FC = () => {
                       key={item.id}
                       item={item}
                       status={status}
+                      stockId={numericId}
                       myRole={myRole}
                       theme={theme}
                       textMuted={themeClasses.textMuted}
@@ -534,7 +535,13 @@ export const StockDetailPage: React.FC = () => {
                                   aria-hidden="true"
                                 />
                                 <div className="min-w-0">
-                                  <p className="font-medium truncate">{item.label}</p>
+                                  <button
+                                    onClick={() => navigate(`/stocks/${stockId}/items/${item.id}`)}
+                                    className="font-medium truncate hover:text-purple-500 transition-colors text-left"
+                                    aria-label={`Voir le détail de ${item.label}`}
+                                  >
+                                    {item.label}
+                                  </button>
                                   {item.description && (
                                     <p className={`text-xs truncate ${themeClasses.textMuted}`}>
                                       {item.description}
