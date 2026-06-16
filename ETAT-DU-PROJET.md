@@ -14,6 +14,16 @@
 | #    | Titre                                   | PR      |
 | ---- | --------------------------------------- | ------- |
 | #165 | Items en cards sur mobile (StockDetail) | #179 ✅ |
+| #181 | Page détail d'un item de stock          | #182 ✅ |
+
+### #181 — Page détail d'un item (PR #182)
+
+Nouvelle page `ItemDetailPage` (`/stocks/:stockId/items/:itemId`) :
+
+- Appel `GET /api/v2/stocks/:stockId/items/:itemId`
+- Affiche : label, statut calculé, quantité, seuil minimum, date relative (`updatedAt`)
+- Navigation : clic sur le nom de l'item (desktop) ou bouton "Voir →" (mobile card)
+- Nouveau type `RawItemDetail` et méthode `ItemsAPI.fetchItem()` dans `itemsAPI.ts`
 
 ### #165 — Items en cards sur mobile (PR #179)
 
@@ -89,6 +99,7 @@ Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Depend
 **Sessions 15–16 juin 2026** _(à venir dans prochaine release)_
 
 - Items d'un stock affichés en cards sur mobile (tableau conservé sur desktop) — #165
+- Page détail d'un item `/stocks/:stockId/items/:itemId` — #181
 - Fix Node 18 → 20 dans le workflow deploy-metrics
 
 **v1.13.0 — 15 juin 2026**
@@ -157,11 +168,16 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 | #101 | Auth interactive Playwright pour tests E2E           |
 | #51  | Accessibilité : améliorer score (4 issues critiques) |
 
+### Bugs ouverts (suite)
+
+| #    | Titre                                                               | Priorité |
+| ---- | ------------------------------------------------------------------- | -------- |
+| #183 | Compteur notifications incorrect sur StockDetailPage/ItemDetailPage | P1       |
+
 ### Features planifiées (par priorité d'intérêt)
 
 | #    | Titre                                                         | Nature                   |
 | ---- | ------------------------------------------------------------- | ------------------------ |
-| #181 | Page détail d'un item de stock                                | Feature (P1 — en cours)  |
 | #163 | Panneau de notifications avec alertes contextuelles           | Feature (front + back)   |
 | #170 | Rechercher un item par nom depuis le dashboard                | Feature (bloqué backend) |
 | #145 | Shopping list UI — générer, afficher, exporter                | Feature IA               |
@@ -203,7 +219,11 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ## Pour la prochaine session — par où commencer
 
-### 1. Feature #163 — Panneau notifications (2–3h)
+### 1. Fix #183 — Compteur notifications global (30 min)
+
+Créer un hook `useNotificationCount` partagé (stocks critiques + ruptures + contributions) et l'utiliser dans Dashboard, StockDetailPage et ItemDetailPage.
+
+### 2. Feature #163 — Panneau notifications (2–3h)
 
 L'infrastructure est posée (cloche avec compteur + tooltip). Étape suivante : un panneau/drawer qui s'ouvre au clic sur la cloche, listant les stocks critiques/en rupture + contributions en attente.
 
