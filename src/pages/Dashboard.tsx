@@ -13,6 +13,7 @@ import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
 import { SearchInputWrapper } from '@/components/common/SearchInputWrapper';
 import { CardWrapper } from '@/components/common/CardWrapper';
 import { StockFormModal } from '@/components/stocks/StockFormModal';
+import { ConfirmDeleteModal } from '@/components/common/ConfirmDeleteModal';
 
 import { useStocks } from '@/hooks/useStocks';
 import { useDataExport } from '@/hooks/useFrontendState';
@@ -28,6 +29,7 @@ export const Dashboard: React.FC = () => {
   const [editingStock, setEditingStock] = useState<Stock | null>(null);
   const [isOwnedExpanded, setIsOwnedExpanded] = useState<boolean>(true);
   const [isSharedExpanded, setIsSharedExpanded] = useState<boolean>(true);
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | string | null>(null);
 
   const navigate = useNavigate();
   const { theme } = useTheme();
@@ -158,12 +160,15 @@ export const Dashboard: React.FC = () => {
     setIsFormOpen(true);
   }, []);
 
-  const handleDeleteStock = useCallback(
-    async (stockId: number | string): Promise<void> => {
-      await deleteStock(stockId);
-    },
-    [deleteStock]
-  );
+  const handleDeleteStock = useCallback((stockId: number | string) => {
+    setPendingDeleteId(stockId);
+  }, []);
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (pendingDeleteId === null) return;
+    await deleteStock(pendingDeleteId);
+    setPendingDeleteId(null);
+  }, [deleteStock, pendingDeleteId]);
 
   const handleUpdateStock = useCallback(
     (stockId: number | string) => {
@@ -549,6 +554,15 @@ export const Dashboard: React.FC = () => {
             setIsFormOpen(false);
             setEditingStock(null);
           }}
+        />
+      )}
+
+      {pendingDeleteId !== null && (
+        <ConfirmDeleteModal
+          stockLabel={getStockById(pendingDeleteId)?.label ?? 'ce stock'}
+          isDeleting={isLoading.delete}
+          onConfirm={() => void handleConfirmDelete()}
+          onClose={() => setPendingDeleteId(null)}
         />
       )}
     </div>
