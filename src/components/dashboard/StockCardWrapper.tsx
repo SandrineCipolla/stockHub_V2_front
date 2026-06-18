@@ -55,6 +55,26 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
     });
   }, [aiSuggestions]);
 
+  // Masquer le bouton supprimer dans le shadow root quand onDelete n'est pas fourni
+  useEffect(() => {
+    customElements.whenDefined('sh-stock-card').then(() => {
+      const shadowRoot = cardRef.current?.shadowRoot;
+      if (!shadowRoot) return;
+      const styleId = 'hide-delete-btn';
+      const existing = shadowRoot.querySelector(`#${styleId}`);
+      if (!onDelete) {
+        if (!existing) {
+          const style = document.createElement('style');
+          style.id = styleId;
+          style.textContent = 'sh-button[icon-before="Trash2"] { display: none !important; }';
+          shadowRoot.appendChild(style);
+        }
+      } else {
+        existing?.remove();
+      }
+    });
+  }, [onDelete]);
+
   // Handler pour le bouton "Enregistrer session"
   const handleSessionClick = () => {
     if (localStock.unit !== 'percentage') return;
