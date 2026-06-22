@@ -1,9 +1,39 @@
 # StockHub V2 Frontend — État du projet
 
-**Date de rédaction** : 16 juin 2026
-**Dernière activité** : 16 juin 2026 (session active)
+**Date de rédaction** : 22 juin 2026
+**Dernière activité** : 18 juin 2026
 **Branche active** : `main`
-**Version publiée** : v1.14.0 (Release Please — mergé le 16 juin)
+**Version publiée** : v1.14.0 — v1.15.0 en attente (PR #187 Release Please ouverte)
+
+---
+
+## Session du 18 juin 2026 — Ce qui a été fait
+
+### Tickets fermés
+
+| #   | Titre                                                                | PR      |
+| --- | -------------------------------------------------------------------- | ------- |
+| #61 | Modal confirmation avant suppression stock + masquer delete partagés | #190 ✅ |
+
+### #61 — Modale confirmation suppression (PR #190)
+
+- Nouveau composant `src/components/common/ConfirmDeleteModal.tsx` : overlay, focus sur "Annuler", Escape, état `isDeleting`
+- `Dashboard.tsx` : `pendingDeleteId` state → `handleDeleteStock` ouvre la modale au lieu de supprimer directement
+- `StockCardWrapper.tsx` : injection CSS dans le shadow root du web component pour masquer le bouton "Supprimer" sur les stocks partagés (quand `onDelete` n'est pas fourni)
+- 9 tests unitaires dans `ConfirmDeleteModal.test.tsx` (rendering, actions, état isDeleting)
+
+### #189 — Fix auth token expiry (PR #191, ouverte)
+
+- `ConfigManager.getToken()` : suppression des verrous `interaction.status` périmés avant `acquireTokenSilent`, log des échecs, `loginRedirect` au lieu de `acquireTokenRedirect` sur `InteractionRequiredAuthError`
+- `Dashboard.tsx` : bouton "Se reconnecter" dans l'écran d'erreur
+- **Diagnostic** : les 401 récurrents viennent du backend Docker (cache JWKS périmé) — restart du conteneur suffit à résoudre. Le fix frontend est complémentaire pour le cas token MSAL vraiment expiré.
+
+### Tickets créés
+
+| #    | Titre                                             | Priorité |
+| ---- | ------------------------------------------------- | -------- |
+| #188 | Quitter un stock partagé (backend requis)         | P2       |
+| #189 | Fix expiry token / verrou interaction_in_progress | P1       |
 
 ---
 
@@ -205,12 +235,12 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ### Features planifiées (par priorité d'intérêt)
 
-| #    | Titre                                                         | Nature                   |
-| ---- | ------------------------------------------------------------- | ------------------------ |
-| #170 | Rechercher un item par nom depuis le dashboard                | Feature (bloqué backend) |
-| #145 | Shopping list UI — générer, afficher, exporter                | Feature IA               |
-| #144 | Input catégorie custom avec suggestions autocomplete          | UX                       |
-| #61  | Modal de confirmation avant suppression d'un stock avec items | UX                       |
+| #    | Titre                                                | Nature                   |
+| ---- | ---------------------------------------------------- | ------------------------ |
+| #170 | Rechercher un item par nom depuis le dashboard       | Feature (bloqué backend) |
+| #145 | Shopping list UI — générer, afficher, exporter       | Feature IA               |
+| #144 | Input catégorie custom avec suggestions autocomplete | UX                       |
+| #188 | Quitter un stock partagé                             | Feature (bloqué backend) |
 
 ### Dette technique
 
@@ -247,17 +277,22 @@ Design System @stockhub/design-system v1.3.1 (18 Web Components Lit)
 
 ## Pour la prochaine session — par où commencer
 
-### 1. Bugs observés en staging (à confirmer en local)
+### 1. Merger PR #191 (fix/189 auth)
 
-Vus lors du test visuel de #165 sur la preview Vercel + Render — à vérifier s'ils se reproduisent en local :
+La PR est ouverte, le fix est validé. À merger pour que le bouton "Se reconnecter" arrive sur `main`.
 
-- Suppression d'un stock sans modal de confirmation (→ #61 déjà en backlog)
+### 2. Merger PR #187 (Release Please v1.15.0)
+
+La PR de release auto-générée inclut #61 + les sessions du 15–16 juin. À merger pour taguer v1.15.0.
+
+### 3. Bugs staging restants
+
 - Bouton "Éditer" (stock) envoie une requête mais n'ouvre pas la modale
 - Clic sur une carte stock ne navigue pas vers `StockDetailPage`
 
-### 2. DS#39 (session dédiée DS)
+### 4. DS#39 (session dédiée DS)
 
-Supprimer les `title` natifs sur les boutons `sh-header` dans `stockhub_design_system`. À grouper avec d'autres évolutions DS.
+Supprimer les `title` natifs sur les boutons `sh-header` dans `stockhub_design_system`.
 
 ---
 
