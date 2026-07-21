@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.15.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.14.0...v1.15.0) (2026-07-21)
+
+
+### ✨ Features
+
+* **notifications:** add notification panel drawer on bell click — closes [#163](https://github.com/SandrineCipolla/stockHub_V2_front/issues/163) ([#186](https://github.com/SandrineCipolla/stockHub_V2_front/issues/186)) ([6abe17b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6abe17b75c5e98d267c1c5321e9e9a29bda34ee7))
+* **stocks:** add confirm modal before delete and hide delete btn on shared stocks — closes [#61](https://github.com/SandrineCipolla/stockHub_V2_front/issues/61) ([#190](https://github.com/SandrineCipolla/stockHub_V2_front/issues/190)) ([adb5154](https://github.com/SandrineCipolla/stockHub_V2_front/commit/adb5154c19a6b497b8448116a0cfd86246c99052))
+* upgrader @stockhub/design-system vers v2.0.3 (breaking change events) ([#193](https://github.com/SandrineCipolla/stockHub_V2_front/issues/193)) ([57cf730](https://github.com/SandrineCipolla/stockHub_V2_front/commit/57cf730149c505c2e3ba96072a46d5b7a5b70fa0))
+
+
+### 🐛 Bug Fixes
+
+* **auth:** add reconnect button + clear stale interaction lock — closes [#189](https://github.com/SandrineCipolla/stockHub_V2_front/issues/189) ([#191](https://github.com/SandrineCipolla/stockHub_V2_front/issues/191)) ([d135ce7](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d135ce767f812827ec3536fbe6136189c4348e0c))
+
+
+### 📚 Documentation
+
+* **etat-projet:** update session 16 juin — [#163](https://github.com/SandrineCipolla/stockHub_V2_front/issues/163) merged, v1.14.0 ([6ba814f](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6ba814f5a39c9dfa6c1c0d4046882e994d10b9d9))
+* **etat-projet:** update session 18 juin — [#61](https://github.com/SandrineCipolla/stockHub_V2_front/issues/61) closed, [#189](https://github.com/SandrineCipolla/stockHub_V2_front/issues/189) PR open, auth diagnosis ([6e9355a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6e9355a80f856ceccff63450b8cbc5c461ac8fd3))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump js-yaml ([#185](https://github.com/SandrineCipolla/stockHub_V2_front/issues/185)) ([14ecd43](https://github.com/SandrineCipolla/stockHub_V2_front/commit/14ecd43dd72fc9bc4073b0296ea20ced422d0f03))
+
 ## [1.14.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.13.0...v1.14.0) (2026-06-16)
 
 
