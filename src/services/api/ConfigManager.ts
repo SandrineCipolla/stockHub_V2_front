@@ -13,6 +13,11 @@ const getToken = async (): Promise<string | null> => {
   const account = msalInstance.getActiveAccount();
   if (!account) return null;
 
+  // Supprime les verrous d'interaction périmés qui bloquent l'acquisition silencieuse
+  Object.keys(sessionStorage)
+    .filter(k => k.includes('interaction.status'))
+    .forEach(k => sessionStorage.removeItem(k));
+
   try {
     const response = await msalInstance.acquireTokenSilent({
       ...loginRequest,
@@ -20,8 +25,9 @@ const getToken = async (): Promise<string | null> => {
     });
     return response.accessToken;
   } catch (error) {
+    console.error('[getToken] token acquisition failed:', error);
     if (error instanceof InteractionRequiredAuthError) {
-      await msalInstance.acquireTokenRedirect({ ...loginRequest, account });
+      void msalInstance.loginRedirect(loginRequest);
     }
     return null;
   }

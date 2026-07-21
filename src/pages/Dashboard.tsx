@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BarChart3, ChevronDown, ChevronRight, Download, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { Stock, NotificationItem } from '@/types';
+import { msalInstance } from '@/config/msalInstance';
+import { loginRequest } from '@/config/authConfig';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
@@ -215,7 +217,7 @@ export const Dashboard: React.FC = () => {
               <p className="text-sm text-red-400">Suppression: {errors.delete.message}</p>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <Button onClick={() => window.location.reload()}>Recharger</Button>
             <Button
               variant="secondary"
@@ -227,6 +229,12 @@ export const Dashboard: React.FC = () => {
               }}
             >
               Réessayer
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => void msalInstance.loginRedirect(loginRequest)}
+            >
+              Se reconnecter
             </Button>
           </div>
         </CardWrapper>
