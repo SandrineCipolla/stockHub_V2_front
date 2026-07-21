@@ -44,11 +44,11 @@ export const CollaboratorsModal: React.FC<Props> = ({ stockId, stockLabel, onClo
       void remove(e.detail.collaboratorId);
     };
 
-    el.addEventListener('collaborator-role-change', handleRoleChange);
-    el.addEventListener('collaborator-remove', handleRemove);
+    el.addEventListener('sh-collaborator-role-change', handleRoleChange);
+    el.addEventListener('sh-collaborator-remove', handleRemove);
     return () => {
-      el.removeEventListener('collaborator-role-change', handleRoleChange);
-      el.removeEventListener('collaborator-remove', handleRemove);
+      el.removeEventListener('sh-collaborator-role-change', handleRoleChange);
+      el.removeEventListener('sh-collaborator-remove', handleRemove);
     };
   }, [updateRole, remove, isLoading]);
 

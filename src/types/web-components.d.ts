@@ -128,7 +128,7 @@ declare global {
         exclude?: string;
         disabled?: boolean;
         'data-theme'?: 'light' | 'dark';
-        'onrole-change'?: (e: CustomEvent<{ role: string }>) => void;
+        'onsh-role-change'?: (e: CustomEvent<{ role: string }>) => void;
       };
 
       'sh-contribution-form': React.DetailedHTMLProps<
@@ -139,8 +139,8 @@ declare global {
         'current-quantity'?: number;
         disabled?: boolean;
         'data-theme'?: 'light' | 'dark';
-        'oncontribution-submit'?: (e: CustomEvent<{ suggestedQuantity: number }>) => void;
-        'oncontribution-cancel'?: (e: CustomEvent) => void;
+        'onsh-contribution-submit'?: (e: CustomEvent<{ suggestedQuantity: number }>) => void;
+        'onsh-contribution-cancel'?: (e: CustomEvent) => void;
       };
 
       'sh-contribution-card': React.DetailedHTMLProps<
@@ -156,8 +156,8 @@ declare global {
         status?: 'PENDING' | 'APPROVED' | 'REJECTED';
         disabled?: boolean;
         'data-theme'?: 'light' | 'dark';
-        'oncontribution-approve'?: (e: CustomEvent<{ contributionId: string }>) => void;
-        'oncontribution-reject'?: (e: CustomEvent<{ contributionId: string }>) => void;
+        'onsh-contribution-approve'?: (e: CustomEvent<{ contributionId: string }>) => void;
+        'onsh-contribution-reject'?: (e: CustomEvent<{ contributionId: string }>) => void;
       };
 
       'sh-stat-card': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
