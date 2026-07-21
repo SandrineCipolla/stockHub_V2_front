@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Home, Package } from 'lucide-react';
+import { ArrowLeft, Home, Package, StickyNote } from 'lucide-react';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
@@ -178,6 +178,23 @@ export const ItemDetailPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {item.note && (
+              <div className={`rounded-xl border p-4 ${themeClasses.card}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <StickyNote
+                    className={`w-4 h-4 flex-shrink-0 ${themeClasses.textMuted}`}
+                    aria-hidden="true"
+                  />
+                  <p
+                    className={`text-xs font-medium uppercase tracking-wide ${themeClasses.textMuted}`}
+                  >
+                    Note
+                  </p>
+                </div>
+                <p className={`text-sm whitespace-pre-wrap ${themeClasses.text}`}>{item.note}</p>
+              </div>
+            )}
           </>
         )}
       </main>

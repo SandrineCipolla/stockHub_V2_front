@@ -22,6 +22,7 @@ const editItem: StockDetailItem = {
   id: 42,
   label: 'Item Test',
   description: 'Description item',
+  note: 'Note existante',
   quantity: 5,
   minimumStock: 2,
   status: 'optimal',
@@ -41,8 +42,38 @@ describe('ItemFormModal', () => {
       expect(screen.getByRole('heading', { name: 'Nouvel item' })).toBeInTheDocument();
       expect(screen.getByLabelText(/Nom/)).toHaveValue('');
       expect(screen.getByLabelText(/Description/)).toHaveValue('');
+      expect(screen.getByLabelText(/Note/)).toHaveValue('');
       expect(screen.getByLabelText(/Stock minimum/)).toHaveValue(1);
       expect(screen.getByLabelText(/Quantité initiale/)).toHaveValue(0);
+    });
+
+    it('should send the trimmed note on submit', async () => {
+      vi.mocked(ItemsAPI.addItem).mockResolvedValueOnce({
+        id: 99,
+        label: 'Mon item',
+        quantity: 0,
+        minimumStock: 1,
+        stockId: 1,
+      });
+
+      const { container } = render(
+        <ItemFormModal mode="create" stockId={1} onSuccess={mockOnSuccess} onClose={mockOnClose} />
+      );
+
+      fireEvent.change(screen.getByLabelText(/Nom/), { target: { value: 'Mon item' } });
+      fireEvent.change(screen.getByLabelText(/Note/), {
+        target: { value: '  Marque préférée  ' },
+      });
+
+      const submitButton = container.querySelector('sh-button[variant="primary"]');
+      submitButton?.dispatchEvent(new Event('sh-button-click', { bubbles: true }));
+
+      await waitFor(() => {
+        expect(ItemsAPI.addItem).toHaveBeenCalledWith(
+          1,
+          expect.objectContaining({ note: 'Marque préférée' })
+        );
+      });
     });
 
     it('should pass quantity to addItem on submit', async () => {
@@ -130,6 +161,7 @@ describe('ItemFormModal', () => {
           description: 'Une description',
           minimumStock: 3,
           quantity: 0,
+          note: '',
         });
         expect(mockOnSuccess).toHaveBeenCalledTimes(1);
         expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -197,6 +229,7 @@ describe('ItemFormModal', () => {
       expect(screen.getByRole('heading', { name: "Modifier l'item" })).toBeInTheDocument();
       expect(screen.getByLabelText(/Nom/)).toHaveValue('Item Test');
       expect(screen.getByLabelText(/Description/)).toHaveValue('Description item');
+      expect(screen.getByLabelText(/Note/)).toHaveValue('Note existante');
       expect(screen.getByLabelText(/Stock minimum/)).toHaveValue(2);
     });
 
@@ -229,6 +262,7 @@ describe('ItemFormModal', () => {
           label: 'Item Modifié',
           description: 'Description item',
           minimumStock: 2,
+          note: 'Note existante',
         });
         expect(mockOnSuccess).toHaveBeenCalledTimes(1);
         expect(mockOnClose).toHaveBeenCalledTimes(1);

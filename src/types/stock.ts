@@ -116,6 +116,7 @@ export interface StockItem {
   id: number;
   label: string;
   description?: string;
+  note?: string | null;
   quantity: number;
   minimumStock: number;
   stockId: number;
@@ -126,6 +127,7 @@ export interface CreateItemData {
   quantity: number;
   description?: string;
   minimumStock?: number;
+  note?: string;
 }
 
 export interface UpdateItemData {
@@ -133,6 +135,7 @@ export interface UpdateItemData {
   label?: string;
   description?: string;
   minimumStock?: number;
+  note?: string;
 }
 
 export interface StockEvent {
@@ -196,6 +199,7 @@ export interface StockDetailItem {
   id: number;
   label: string;
   description?: string;
+  note?: string | null;
   quantity: number;
   minimumStock?: number;
   status: ItemStatus;
