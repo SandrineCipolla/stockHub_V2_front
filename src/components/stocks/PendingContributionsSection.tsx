@@ -42,11 +42,11 @@ export const PendingContributionsSection: React.FC<Props> = ({
       onContributionReviewed();
     };
 
-    el.addEventListener('contribution-approve', handleApprove);
-    el.addEventListener('contribution-reject', handleReject);
+    el.addEventListener('sh-contribution-approve', handleApprove);
+    el.addEventListener('sh-contribution-reject', handleReject);
     return () => {
-      el.removeEventListener('contribution-approve', handleApprove);
-      el.removeEventListener('contribution-reject', handleReject);
+      el.removeEventListener('sh-contribution-approve', handleApprove);
+      el.removeEventListener('sh-contribution-reject', handleReject);
     };
   }, [review, onContributionReviewed]);
 

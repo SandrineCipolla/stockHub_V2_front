@@ -42,11 +42,11 @@ export const ContributionFormModal: React.FC<Props> = ({
 
     const handleCancel = () => onClose();
 
-    el.addEventListener('contribution-submit', handleSubmit);
-    el.addEventListener('contribution-cancel', handleCancel);
+    el.addEventListener('sh-contribution-submit', handleSubmit);
+    el.addEventListener('sh-contribution-cancel', handleCancel);
     return () => {
-      el.removeEventListener('contribution-submit', handleSubmit);
-      el.removeEventListener('contribution-cancel', handleCancel);
+      el.removeEventListener('sh-contribution-submit', handleSubmit);
+      el.removeEventListener('sh-contribution-cancel', handleCancel);
     };
   }, [itemId, onSubmit, onClose]);
 
