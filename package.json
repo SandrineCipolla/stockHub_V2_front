@@ -57,7 +57,7 @@
     "@azure/msal-react": "^3.0.23",
     "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#v2.0.3",
     "framer-motion": "^12.42.2",
-    "lucide-react": "^0.517.0",
+    "lucide-react": "^1.25.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "react-router-dom": "^7.18.1"
