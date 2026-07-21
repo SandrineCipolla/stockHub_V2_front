@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.15.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.15.0...v1.15.1) (2026-07-21)
+
+
+### 📚 Documentation
+
+* mettre à jour ETAT-DU-PROJET.md après clôture coordination DS ([#194](https://github.com/SandrineCipolla/stockHub_V2_front/issues/194)) ([77f4a84](https://github.com/SandrineCipolla/stockHub_V2_front/commit/77f4a8468361dff5165183fe04a82b5af3d907a7))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump @types/node from 24.0.3 to 26.1.1 ([#204](https://github.com/SandrineCipolla/stockHub_V2_front/issues/204)) ([6037a45](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6037a45c0329f97e395429ecc0f46269b40c57d4))
+* **deps-dev:** bump globals from 16.2.0 to 17.7.0 ([#201](https://github.com/SandrineCipolla/stockHub_V2_front/issues/201)) ([8456791](https://github.com/SandrineCipolla/stockHub_V2_front/commit/84567918ee336deab21056069be1769666e72814))
+* **deps-dev:** bump knip from 5.69.0 to 6.27.0 ([#199](https://github.com/SandrineCipolla/stockHub_V2_front/issues/199)) ([d02ffbf](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d02ffbf22c1440505b6084e187a0e2f90bbfc81f))
+* **deps:** bump lucide-react from 0.517.0 to 1.25.0 ([#205](https://github.com/SandrineCipolla/stockHub_V2_front/issues/205)) ([0623f6f](https://github.com/SandrineCipolla/stockHub_V2_front/commit/0623f6f5fbd98d13334fad54340cb26141f70142))
+* **deps:** bump the minor-and-patch group with 20 updates ([#197](https://github.com/SandrineCipolla/stockHub_V2_front/issues/197)) ([762e772](https://github.com/SandrineCipolla/stockHub_V2_front/commit/762e7724eec0606b4b5b255d8d6b86597971b7ca))
+* **deps:** fix npm audit vulnerabilities and add Dependabot config ([#196](https://github.com/SandrineCipolla/stockHub_V2_front/issues/196)) ([a1ffd09](https://github.com/SandrineCipolla/stockHub_V2_front/commit/a1ffd09fe324e6cd4baff01f9f901cc9e290be0d))
+
 ## [1.15.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.14.0...v1.15.0) (2026-07-21)
 
 
