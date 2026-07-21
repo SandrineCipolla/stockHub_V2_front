@@ -1,9 +1,34 @@
 # StockHub V2 Frontend — État du projet
 
-**Date de rédaction** : 22 juin 2026
-**Dernière activité** : 18 juin 2026
+**Date de rédaction** : 21 juillet 2026
+**Dernière activité** : 21 juillet 2026
 **Branche active** : `main`
-**Version publiée** : v1.14.0 — v1.15.0 en attente (PR #187 Release Please ouverte)
+**Version publiée** : v1.15.0
+
+---
+
+## Session du 21 juillet 2026 — Ce qui a été fait
+
+Clôture de la coordination avec le Design System suite à son breaking change (#42, préfixe `sh-` sur 7 événements, v2.0.0). 4 PR en attente depuis mi-juin mergées ensemble, dans l'ordre :
+
+| #    | Titre                                                                     | PR      |
+| ---- | ------------------------------------------------------------------------- | ------- |
+| #189 | Fix expiry token / verrou `interaction_in_progress`                       | #191 ✅ |
+| —    | Dependabot `js-yaml`                                                      | #185 ✅ |
+| —    | Upgrade `@stockhub/design-system` v1.3.3 → v2.0.3 (adaptation événements) | #193 ✅ |
+| —    | Release Please v1.15.0                                                    | #187 ✅ |
+
+### #193 — Migration DS v2.0.3 (breaking change événements)
+
+- 4 fichiers adaptés : `ContributionFormModal.tsx`, `CollaboratorsModal.tsx`, `PendingContributionsSection.tsx`, `web-components.d.ts` — tous les `addEventListener`/types d'événements renommés avec le préfixe `sh-` (ex. `contribution-submit` → `sh-contribution-submit`)
+- **Vérifié en conditions réelles**, pas seulement build/lint : session de test manuel avec vrai backend staging (Render/Aiven) et vraie session Azure AD B2C connectée — changement de rôle collaborateur bout-en-bout confirmé fonctionnel
+- Le Front est maintenant sur la dernière version publiée du DS
+
+### #191 — Fix auth token expiry
+
+- Mergé tel que décrit dans la session du 18 juin (voir ci-dessous) — diagnostic confirmé : les 401 récurrents venaient du cache JWKS backend (résolu par restart conteneur), le fix frontend reste une protection complémentaire pour un token MSAL réellement expiré
+
+**À noter** : issues #122 et #144 (catégories de stock personnalisées / autocomplete) redeviennent pertinentes côté Front — le backend (#169, mergé le 21/07) accepte maintenant n'importe quelle catégorie en texte libre (avant : 3 valeurs figées). Aucun blocage backend restant sur ces deux tickets.
 
 ---
 
@@ -22,11 +47,12 @@
 - `StockCardWrapper.tsx` : injection CSS dans le shadow root du web component pour masquer le bouton "Supprimer" sur les stocks partagés (quand `onDelete` n'est pas fourni)
 - 9 tests unitaires dans `ConfirmDeleteModal.test.tsx` (rendering, actions, état isDeleting)
 
-### #189 — Fix auth token expiry (PR #191, ouverte)
+### #189 — Fix auth token expiry (PR #191)
 
 - `ConfigManager.getToken()` : suppression des verrous `interaction.status` périmés avant `acquireTokenSilent`, log des échecs, `loginRedirect` au lieu de `acquireTokenRedirect` sur `InteractionRequiredAuthError`
 - `Dashboard.tsx` : bouton "Se reconnecter" dans l'écran d'erreur
 - **Diagnostic** : les 401 récurrents viennent du backend Docker (cache JWKS périmé) — restart du conteneur suffit à résoudre. Le fix frontend est complémentaire pour le cas token MSAL vraiment expiré.
+- Mergé le 21 juillet 2026 (voir session ci-dessus)
 
 ### Tickets créés
 
