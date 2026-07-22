@@ -53,7 +53,7 @@
     "pre-commit": "npm run clean:check"
   },
   "dependencies": {
-    "@azure/msal-browser": "^4.27.0",
+    "@azure/msal-browser": "^5.17.1",
     "@azure/msal-react": "^3.0.23",
     "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#v2.0.3",
     "framer-motion": "^12.42.2",
