@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@azure/msal-browser": "^4.27.0",
-    "@azure/msal-react": "^3.0.23",
+    "@azure/msal-react": "^5.5.3",
     "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#v2.0.3",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.25.0",
