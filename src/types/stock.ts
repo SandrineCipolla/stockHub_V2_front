@@ -18,11 +18,7 @@ export const OVERSTOCKED = 'overstocked';
  * Garantit la cohérence entre les constantes et le type
  */
 export type StockStatus =
-  | typeof OPTIMAL
-  | typeof LOW
-  | typeof CRITICAL
-  | typeof OUT_OF_STOCK
-  | typeof OVERSTOCKED;
+  typeof OPTIMAL | typeof LOW | typeof CRITICAL | typeof OUT_OF_STOCK | typeof OVERSTOCKED;
 
 /**
  * Objet regroupant toutes les constantes pour faciliter l'import

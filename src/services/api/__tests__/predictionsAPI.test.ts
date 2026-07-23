@@ -10,7 +10,7 @@ vi.mock('@/services/api/utils', () => ({
 }));
 
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+globalThis.fetch = mockFetch;
 
 const mockResponse = (body: unknown, ok = true, status = 200) =>
   Promise.resolve({
