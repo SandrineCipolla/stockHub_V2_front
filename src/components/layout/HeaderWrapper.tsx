@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { useTheme } from '@/hooks/useTheme';
 import { loginRequest } from '@/config/authConfig';
@@ -78,7 +78,9 @@ export const HeaderWrapper: React.FC<HeaderProps> = ({
   // jamais supprimé/ré-ajouté lors des re-renders MSAL) tout en appelant
   // toujours la version fraîche de la fonction.
   const handleLogoutRef = useRef(handleLogout);
-  handleLogoutRef.current = handleLogout;
+  useLayoutEffect(() => {
+    handleLogoutRef.current = handleLogout;
+  }, [handleLogout]);
 
   // Ref pour forcer la propriété JS isLoggedIn sur le web component Lit.
   // React 19 supprime l'attribut quand la valeur est false au lieu de définir

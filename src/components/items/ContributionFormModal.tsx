@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
 
 interface Props {
@@ -18,6 +18,9 @@ export const ContributionFormModal: React.FC<Props> = ({
 }) => {
   const { theme } = useTheme();
   const formRef = useRef<HTMLElement | null>(null);
+  const setFormRef = useCallback((el: HTMLElement | null) => {
+    formRef.current = el;
+  }, []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -82,15 +85,19 @@ export const ContributionFormModal: React.FC<Props> = ({
           </div>
         ) : (
           <>
-            {React.createElement('sh-contribution-form', {
-              ref: (el: HTMLElement | null) => {
-                formRef.current = el;
-              },
-              'item-label': itemLabel,
-              'current-quantity': currentQuantity,
-              disabled: isSubmitting,
-              'data-theme': theme,
-            })}
+            {
+              /* callback ref stable (useCallback), exécuté seulement au commit du
+                 DOM, jamais pendant le rendu ; le linter ne reconnaît pas ce
+                 pattern via createElement. */
+              // eslint-disable-next-line react-hooks/refs
+              React.createElement('sh-contribution-form', {
+                ref: setFormRef,
+                'item-label': itemLabel,
+                'current-quantity': currentQuantity,
+                disabled: isSubmitting,
+                'data-theme': theme,
+              })
+            }
             {error && <p className="mt-2 text-sm text-red-400 text-center">{error}</p>}
           </>
         )}
