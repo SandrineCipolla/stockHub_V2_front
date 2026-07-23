@@ -34,7 +34,7 @@
     "src/utils/unitFormatter.ts",
     "src/utils/containerManager.ts"
   ],
-  "ignoreDependencies": ["lighthouse"],
+  "ignoreDependencies": ["lighthouse", "lint-staged"],
   "ignoreExportsUsedInFile": true,
   "includeEntryExports": false,
   "ignoreBinaries": ["powershell"],
