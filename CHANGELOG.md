@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.16.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.15.1...v1.16.0) (2026-07-23)
+
+
+### ✨ Features
+
+* **items:** afficher et éditer la note libre d'un article — closes [#142](https://github.com/SandrineCipolla/stockHub_V2_front/issues/142) ([#212](https://github.com/SandrineCipolla/stockHub_V2_front/issues/212)) ([41f0dd8](https://github.com/SandrineCipolla/stockHub_V2_front/commit/41f0dd850c71edb61181f381e7f7cbf00c1eb059))
+
+
+### 🐛 Bug Fixes
+
+* **knip:** ignorer lint-staged (faux positif) ([#224](https://github.com/SandrineCipolla/stockHub_V2_front/issues/224)) ([94dea66](https://github.com/SandrineCipolla/stockHub_V2_front/commit/94dea6621929874d9e927bc257f577cd956e2116))
+
+
+### 🔧 Chores
+
+* add proprietary license ([777117a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/777117a366c59f01f1a963db4cd7f7aa30cff186))
+* **deps-dev:** bump @testing-library/jest-dom from 6.8.0 to 7.0.0 ([#220](https://github.com/SandrineCipolla/stockHub_V2_front/issues/220)) ([60476f9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/60476f9de8ccd17b9f4fe3c369338f605d65cac6))
+* **deps-dev:** bump eslint from 9.29.0 to 10.7.0 ([#215](https://github.com/SandrineCipolla/stockHub_V2_front/issues/215)) ([d089adf](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d089adf9eef44958a3e610071b9a2a1fa427b6aa))
+* **deps-dev:** bump eslint-plugin-react-hooks from 5.2.0 to 7.1.1 ([#217](https://github.com/SandrineCipolla/stockHub_V2_front/issues/217)) ([8b616d7](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8b616d71af524a0c90ea16a3532537e7a5a0be4e))
+* **deps-dev:** bump lint-staged from 16.2.6 to 17.1.1 ([#214](https://github.com/SandrineCipolla/stockHub_V2_front/issues/214)) ([6014537](https://github.com/SandrineCipolla/stockHub_V2_front/commit/60145373d50db016c927e4428aaf4e6287034948))
+* **deps-dev:** bump typescript from 5.8.3 to 6.0.3 ([#218](https://github.com/SandrineCipolla/stockHub_V2_front/issues/218)) ([4bb6e5b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/4bb6e5b505856884ac4743071baa9c52f91b091a))
+* **deps:** bump the minor-and-patch group across 1 directory with 10 updates ([#225](https://github.com/SandrineCipolla/stockHub_V2_front/issues/225)) ([7ec9483](https://github.com/SandrineCipolla/stockHub_V2_front/commit/7ec9483580dae3cf65620eb819a7d684165b114f))
+* **deps:** grouper les bumps @azure/msal-browser et msal-react ([#222](https://github.com/SandrineCipolla/stockHub_V2_front/issues/222)) ([8c692cf](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8c692cfd53665c197bebc41cfcd868cf9283fcc0))
+
 ## [1.15.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.15.0...v1.15.1) (2026-07-21)
 
 
