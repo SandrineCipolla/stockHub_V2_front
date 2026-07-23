@@ -10,6 +10,12 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      azure-msal:
+        # @azure/msal-react a une peer dependency stricte sur @azure/msal-browser —
+        # les bumper séparément casse systématiquement le CI (ERESOLVE)
+        patterns:
+          - "@azure/msal-browser"
+          - "@azure/msal-react"
     commit-message:
       prefix: "chore"
       include: "scope"
