@@ -49,6 +49,20 @@ Application React moderne de gestion de stocks intelligente avec intelligence ar
 - Feature/fix branches → Vercel preview automatique (URL temporaire par PR)
 - **Staging Vercel** → branche à pointer manuellement dans les settings Vercel
 
+### ⚠️ Piège `.env.local` (dev local)
+
+Vite charge `.env.local` **en priorité sur `.env`**, quel que soit le mode. Si un
+`.env.local` traîne sur la machine (ex: laissé après un test contre le staging
+Render.com), `npm run dev` continue de pointer vers ce backend distant même si un
+backend local tourne sur `localhost:3006` — symptômes : échecs silencieux, lenteurs
+(cold-start Render gratuit), 401 inexpliqués, alors que `curl localhost:3006/...`
+répond correctement.
+
+**Premier réflexe en cas de comportement bizarre en dev local** : `ls .env.local` puis
+vérifier `VITE_API_SERVER_URL` dedans. Les variables d'env ne sont lues qu'au démarrage
+du serveur Vite — un changement nécessite un redémarrage complet (`npm run dev`), le
+hot-reload ne suffit pas.
+
 ### ⚠️ Backend Azure (F1 tier)
 
 Quota CPU limité à **60 min/jour**. Démarrer avant utilisation, arrêter après :

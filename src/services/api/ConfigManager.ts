@@ -8,8 +8,15 @@ const AUTHORIZATION = 'Authorization';
 
 /**
  * Récupère le token d'accès via MSAL (acquireTokenSilent)
+ *
+ * Les appels concurrents partagent la même promesse en vol : plusieurs composants
+ * demandant un token en même temps (ex: useNotificationCount qui fait 2 appels dans
+ * un même Promise.all) déclenchaient sinon plusieurs acquireTokenSilent/loginRedirect
+ * simultanés, ce qui plante MSAL avec "interaction_in_progress" (voir issue #221).
  */
-const getToken = async (): Promise<string | null> => {
+let inFlightTokenRequest: Promise<string | null> | null = null;
+
+const acquireToken = async (): Promise<string | null> => {
   const account = msalInstance.getActiveAccount();
   if (!account) return null;
 
@@ -31,6 +38,15 @@ const getToken = async (): Promise<string | null> => {
     }
     return null;
   }
+};
+
+const getToken = (): Promise<string | null> => {
+  if (!inFlightTokenRequest) {
+    inFlightTokenRequest = acquireToken().finally(() => {
+      inFlightTokenRequest = null;
+    });
+  }
+  return inFlightTokenRequest;
 };
 
 /**
