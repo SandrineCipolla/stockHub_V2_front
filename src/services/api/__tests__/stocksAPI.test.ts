@@ -10,7 +10,7 @@ vi.mock('@/services/api/utils', () => ({
 }));
 
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+globalThis.fetch = mockFetch;
 
 const backendStock = {
   id: 1,

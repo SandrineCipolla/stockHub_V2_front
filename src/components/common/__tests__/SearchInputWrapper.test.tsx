@@ -216,7 +216,7 @@ describe('SearchInputWrapper', () => {
     it('should synchronize value prop to web component', async () => {
       // Mock customElements.whenDefined
       const whenDefinedMock = vi.fn().mockResolvedValue(undefined);
-      global.customElements.whenDefined = whenDefinedMock;
+      globalThis.customElements.whenDefined = whenDefinedMock;
 
       const { container } = render(<SearchInputWrapper value="initial search" />);
       const searchInput = container.querySelector('sh-search-input');
