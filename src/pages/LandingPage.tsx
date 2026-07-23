@@ -120,6 +120,12 @@ export const LandingPage: React.FC = () => {
   const { theme } = useTheme();
 
   const handleLogin = useCallback(() => {
+    // Supprime les verrous d'interaction périmés qui empêchent silencieusement
+    // loginRedirect de se déclencher (voir issue #221)
+    Object.keys(sessionStorage)
+      .filter(k => k.includes('interaction.status'))
+      .forEach(k => sessionStorage.removeItem(k));
+
     instance.loginRedirect(loginRequest).catch(console.error);
   }, [instance]);
 
