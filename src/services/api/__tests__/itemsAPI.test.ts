@@ -123,6 +123,19 @@ describe('ItemsAPI', () => {
       expect(body).not.toHaveProperty('label');
       expect(body).not.toHaveProperty('description');
       expect(body).not.toHaveProperty('minimumStock');
+      expect(body).not.toHaveProperty('note');
+    });
+
+    it('should include note when defined', async () => {
+      mockFetch.mockReturnValue(mockResponse(mockItem));
+      const { getApiConfig } = await import('@/services/api/utils');
+      const getApiConfigMock = vi.mocked(getApiConfig);
+
+      await ItemsAPI.updateItem(42, 1, { note: 'Marque préférée' });
+
+      const callArgs = getApiConfigMock.mock.calls[getApiConfigMock.mock.calls.length - 1];
+      const body = callArgs?.[2] as Record<string, unknown>;
+      expect(body).toHaveProperty('note', 'Marque préférée');
     });
 
     it('should include label and minimumStock but not quantity when only those are defined', async () => {

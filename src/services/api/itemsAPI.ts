@@ -36,6 +36,7 @@ export class ItemsAPI {
       quantity: item.quantity,
       description: item.description ?? '',
       minimumStock: item.minimumStock ?? 1,
+      note: item.note,
     };
 
     const { apiUrl, config } = await getApiConfig('POST', 2, itemData);
@@ -62,6 +63,7 @@ export class ItemsAPI {
     if (updates.label !== undefined) body.label = updates.label;
     if (updates.description !== undefined) body.description = updates.description;
     if (updates.minimumStock !== undefined) body.minimumStock = updates.minimumStock;
+    if (updates.note !== undefined) body.note = updates.note;
 
     const { apiUrl, config } = await getApiConfig('PATCH', 2, body);
     const response = await fetch(`${apiUrl}/stocks/${stockId}/items/${itemId}`, config);
