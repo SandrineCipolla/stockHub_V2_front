@@ -1,9 +1,42 @@
 # StockHub V2 Frontend — État du projet
 
-**Date de rédaction** : 21 juillet 2026
-**Dernière activité** : 21 juillet 2026
+**Date de rédaction** : 23 juillet 2026
+**Dernière activité** : 23 juillet 2026
 **Branche active** : `main`
-**Version publiée** : v1.15.0
+**Version publiée** : v1.16.0
+
+---
+
+## Session du 23 juillet 2026 — Ce qui a été fait
+
+### Tickets fermés
+
+| #    | Titre                                         | PR      |
+| ---- | --------------------------------------------- | ------- |
+| #142 | Afficher et éditer la note libre d'un article | #212 ✅ |
+
+### #142 — Affichage/édition de la note (PR #212)
+
+- `ItemFormModal.tsx` : nouveau champ textarea Note (1000 caractères max, trim avant envoi), pré-rempli en mode édition
+- `ItemDetailPage.tsx` : section Note toujours visible (placeholder "Aucune note" si vide) + bouton "Modifier" ajouté sur la page (absent avant, l'édition ne passait que par la liste du stock)
+- `types/stock.ts`, `itemsAPI.ts` : champ `note` propagé
+- Dépend du backend `stockhub_back` #158 (PR #246)
+
+### Variante — piège `.env.local` (cause réelle des échecs "aléatoires" en dev local)
+
+Un `.env.local` oublié sur la machine (créé pour un test antérieur contre le staging Render.com) pointait `VITE_API_SERVER_URL` vers le backend distant. Vite charge `.env.local` en priorité sur `.env`, dans tous les modes (dev inclus) — donc `npm run dev` parlait au staging même avec un backend local qui tournait, causant des échecs silencieux et des lenteurs prises à tort pour un bug applicatif. Documenté dans `.env.example` et `CLAUDE.md` (section Environnements) pour éviter de reproduire la confusion.
+
+### Variante — fix hors ticket : course de tokens MSAL concurrents
+
+**Diagnostic** : `useNotificationCount` (utilisé sur `ItemDetailPage`/`StockDetailPage`) déclenche 2 acquisitions de token en parallèle dans un même `Promise.all` ; ajouter `useCollaborators` sur `ItemDetailPage` (pour #142) a introduit un 3ᵉ appel concurrent au montage. Plusieurs `acquireTokenSilent`/`loginRedirect` simultanés peuvent faire lever `interaction_in_progress` à MSAL et bloquer toute reconnexion (nécessite de vider le storage navigateur pour s'en sortir). Fix : `ConfigManager.getToken()` mutualise les appels concurrents via une promesse partagée ; `LandingPage.handleLogin` nettoie les verrous d'interaction périmés avant `loginRedirect` ; effets séquencés sur `ItemDetailPage` (fetch de l'item puis des collaborateurs, plus en parallèle). Ce fix est réel et mergé, mais **pas** la cause du blocage total observé pendant la session de test — c'était le piège `.env.local` ci-dessus.
+
+### Variante — fixes CI dependabot (4 PR qui échouaient en boucle)
+
+- **#219/#216** (`@azure/msal-browser`/`msal-react`) : peer dependency stricte entre les deux packages, bumpés dans des PR séparées par dependabot → `ERESOLVE` systématique. Fix : groupe `azure-msal` ajouté à `dependabot.yml` (PR #222 ✅), #219/#216 fermées manuellement.
+- **#224** : `knip` signalait `lint-staged` comme dépendance inutilisée (faux positif — utilisé via CLI dans les hooks husky, invisible à l'analyse statique). Bloquait le pre-push de **toutes** les branches du repo, y compris sur `main`. Fix : ajout à `ignoreDependencies` (PR #224 ✅).
+- **#218** (`typescript` 6.0.3) : `baseUrl` déprécié en TS 6 (retiré en TS 7, inutile avec `moduleResolution: "bundler"`) ; `global` n'est plus fourni par les types `@types/node` récents, remplacé par `globalThis` dans 5 fichiers de test (PR #218 ✅).
+- **#217** (`eslint-plugin-react-hooks` 7.1.1) : 2 nouvelles règles strictes. `refs` (accès à `ref.current` pendant le rendu) corrigée proprement dans 3 fichiers (`useLayoutEffect` pour le pattern "ref toujours à jour", exception ciblée et justifiée pour un cas via `React.createElement`). `set-state-in-effect` (flague le pattern "fetch au montage + `setLoading(true)`", valide et utilisé dans 7 hooks/pages) passée en `warn` — la corriger nécessiterait de re-architecturer le data-fetching de l'app, hors scope d'un bump de dépendance (PR #217 ✅).
+- **#215** (`eslint` 10.7.0) : résolue en cascade sans intervention, une fois #217 mergée (peer dependency d'`eslint-plugin-react-hooks@7.1.1` compatible avec eslint 10).
 
 ---
 
