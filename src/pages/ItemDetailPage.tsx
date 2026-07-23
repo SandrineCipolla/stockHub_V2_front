@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Home, Package } from 'lucide-react';
+import { ArrowLeft, Home, Package, Pencil, StickyNote } from 'lucide-react';
 
 import { HeaderWrapper } from '@/components/layout/HeaderWrapper';
 import { FooterWrapper } from '@/components/layout/FooterWrapper';
 import { NavSection } from '@/components/layout/NavSection';
 import { ButtonWrapper as Button } from '@/components/common/ButtonWrapper';
+import { ItemFormModal } from '@/components/items/ItemFormModal';
 import { useTheme } from '@/hooks/useTheme';
 import { useNotificationCount } from '@/hooks/useNotificationCount';
+import { useCollaborators } from '@/hooks/useCollaborators';
 import { ItemsAPI } from '@/services/api/itemsAPI';
 import type { RawItemDetail } from '@/services/api/itemsAPI';
 import { formatRelativeDate } from '@/utils/dateUtils';
@@ -49,6 +51,10 @@ export const ItemDetailPage: React.FC = () => {
   const [item, setItem] = useState<RawItemDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const { myRole, load: loadCollaborators } = useCollaborators(Number(stockId));
+  const isOwnerOrEditor = myRole === 'OWNER' || myRole === 'EDITOR';
 
   const themeClasses = {
     background: theme === 'dark' ? 'bg-slate-900' : 'bg-gray-50',
@@ -57,22 +63,31 @@ export const ItemDetailPage: React.FC = () => {
     card: theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200',
   };
 
-  useEffect(() => {
+  const fetchItem = useCallback(async () => {
     if (!stockId || !itemId) return;
 
     setIsLoading(true);
-    ItemsAPI.fetchItem(stockId, itemId)
-      .then(data => {
-        setItem(data);
-        setError(null);
-      })
-      .catch(() => {
-        setError('Impossible de charger les informations de cet item.');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const data = await ItemsAPI.fetchItem(stockId, itemId);
+      setItem(data);
+      setError(null);
+    } catch {
+      setError('Impossible de charger les informations de cet item.');
+    } finally {
+      setIsLoading(false);
+    }
   }, [stockId, itemId]);
+
+  useEffect(() => {
+    // Séquentiel plutôt que parallèle : deux acquisitions de token MSAL
+    // concurrentes au montage peuvent déclencher un blocage "interaction_in_progress"
+    // (voir issue #221 pour le fix générique côté ConfigManager).
+    const run = async () => {
+      await fetchItem();
+      await loadCollaborators();
+    };
+    void run();
+  }, [fetchItem, loadCollaborators]);
 
   const status = item ? getStatus(item) : null;
 
@@ -132,11 +147,23 @@ export const ItemDetailPage: React.FC = () => {
                   <p className={`mt-1 text-sm ${themeClasses.textMuted}`}>{item.description}</p>
                 )}
               </div>
-              <span
-                className={`ml-auto flex-shrink-0 px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[status]}`}
-              >
-                {STATUS_LABELS[status]}
-              </span>
+              <div className="ml-auto flex flex-shrink-0 items-center gap-2">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[status]}`}
+                >
+                  {STATUS_LABELS[status]}
+                </span>
+                {isOwnerOrEditor && (
+                  <Button
+                    variant="ghost"
+                    icon={Pencil}
+                    onClick={() => setShowEditModal(true)}
+                    aria-label={`Modifier ${item.label}`}
+                  >
+                    <span className="hidden sm:inline">Modifier</span>
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* Metrics */}
@@ -178,9 +205,45 @@ export const ItemDetailPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            <div className={`rounded-xl border p-4 ${themeClasses.card}`}>
+              <div className="flex items-center gap-2 mb-2">
+                <StickyNote
+                  className={`w-4 h-4 flex-shrink-0 ${themeClasses.textMuted}`}
+                  aria-hidden="true"
+                />
+                <p
+                  className={`text-xs font-medium uppercase tracking-wide ${themeClasses.textMuted}`}
+                >
+                  Note
+                </p>
+              </div>
+              {item.note ? (
+                <p className={`text-sm whitespace-pre-wrap ${themeClasses.text}`}>{item.note}</p>
+              ) : isOwnerOrEditor ? (
+                <button
+                  onClick={() => setShowEditModal(true)}
+                  className={`text-sm italic hover:underline ${themeClasses.textMuted}`}
+                >
+                  Aucune note — cliquer pour en ajouter une
+                </button>
+              ) : (
+                <p className={`text-sm italic ${themeClasses.textMuted}`}>Aucune note</p>
+              )}
+            </div>
           </>
         )}
       </main>
+
+      {showEditModal && item && stockId && (
+        <ItemFormModal
+          mode="edit"
+          stockId={stockId}
+          item={{ ...item, status: getStatus(item) }}
+          onSuccess={fetchItem}
+          onClose={() => setShowEditModal(false)}
+        />
+      )}
 
       <FooterWrapper />
     </div>

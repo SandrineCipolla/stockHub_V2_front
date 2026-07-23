@@ -20,6 +20,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
 }) => {
   const [label, setLabel] = useState(item?.label ?? '');
   const [description, setDescription] = useState(item?.description ?? '');
+  const [note, setNote] = useState(item?.note ?? '');
   const [minimumStock, setMinimumStock] = useState(String(item?.minimumStock ?? 1));
   const [quantity, setQuantity] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -58,12 +59,14 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
           description,
           minimumStock: minStock,
           quantity,
+          note: note.trim(),
         });
       } else {
         await ItemsAPI.updateItem(stockId, item!.id, {
           label: label.trim(),
           description,
           minimumStock: minStock,
+          note: note.trim(),
         });
       }
       onSuccess();
@@ -128,6 +131,24 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
               type="text"
               value={description}
               onChange={e => setDescription(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="item-note"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              Note
+            </label>
+            <textarea
+              id="item-note"
+              value={note}
+              onChange={e => setNote(e.target.value)}
+              maxLength={1000}
+              rows={3}
+              placeholder="Référence fournisseur, emplacement, remarque…"
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
