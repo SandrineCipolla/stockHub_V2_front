@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BarChart3, ChevronDown, ChevronRight, Download, Plus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { Stock, NotificationItem } from '@/types';
@@ -57,7 +57,9 @@ export const Dashboard: React.FC = () => {
   const { exportToCsv, isLoading: isExporting } = useDataExport();
 
   const loadStocksRef = useRef(loadStocks);
-  loadStocksRef.current = loadStocks;
+  useLayoutEffect(() => {
+    loadStocksRef.current = loadStocks;
+  }, [loadStocks]);
 
   // Generate all AI suggestions (memoized for performance)
   const allAISuggestions = useMemo(() => {
