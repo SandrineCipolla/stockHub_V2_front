@@ -25,6 +25,12 @@ dist-ssr
 .env.local
 .env.production
 .env.staging
+.env.e2e
+
+# Playwright
+playwright/.auth/
+playwright-report/
+test-results/
 
 # SSL Certificates
 *.key
