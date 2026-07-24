@@ -1,5 +1,6 @@
 import { test, expect } from '../fixtures';
 import { createStock, deleteStock } from '../helpers/stock-actions';
+import { addItem } from '../helpers/item-actions';
 
 test.describe('Mise à jour de quantité — boutons +/-', () => {
   test('incrémente puis décrémente la quantité via les boutons +/-', async ({ page }) => {
@@ -11,13 +12,7 @@ test.describe('Mise à jour de quantité — boutons +/-', () => {
     await stockCard.click();
     await page.waitForURL(/\/stocks\/\d+$/);
 
-    await page.getByRole('button', { name: 'Ajouter un item' }).click();
-    const itemModal = page.getByRole('dialog', { name: 'Nouvel item' });
-    await page.getByLabel('Nom', { exact: true }).fill(itemLabel);
-    await page.getByLabel('Quantité initiale', { exact: true }).fill('5');
-    await page.getByLabel('Stock minimum', { exact: true }).fill('1');
-    await itemModal.getByRole('button', { name: 'Créer' }).click();
-    await expect(itemModal).not.toBeVisible();
+    await addItem(page, { label: itemLabel, quantity: 5, minimumStock: 1 });
 
     const desktopTable = page.getByTestId('items-desktop-table');
     const itemRow = desktopTable.locator('tr', { hasText: itemLabel });
