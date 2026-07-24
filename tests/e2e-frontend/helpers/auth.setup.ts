@@ -10,15 +10,16 @@ setup('authenticate via Azure AD B2C', async ({ page }) => {
   }
 
   await page.goto('/');
+  const appHostname = new URL(page.url()).hostname;
 
   await page.getByRole('button', { name: 'Se connecter' }).click();
 
-  await page.waitForURL(/b2clogin\.com/);
+  await page.waitForURL(url => url.hostname.endsWith('.b2clogin.com'));
   await page.getByPlaceholder('Email Address').fill(username);
   await page.getByPlaceholder('Password').fill(password);
   await page.getByRole('button', { name: 'Sign in' }).click();
 
-  await page.waitForURL(url => !url.hostname.includes('b2clogin.com'));
+  await page.waitForURL(url => url.hostname === appHostname);
   await expect(page.getByText('Dashboard')).toBeVisible();
 
   await page.context().storageState({ path: authFile });
