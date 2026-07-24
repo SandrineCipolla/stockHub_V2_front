@@ -33,25 +33,27 @@ cp .env.e2e.example .env.e2e
 
 ## 2. Utilisation en local (pas à pas)
 
-```bash
-# Terminal 1 — sert l'app sur http://localhost:5173
-npm run dev
+**Par défaut, cible l'app déployée** (`https://stock-hub-v2-front.vercel.app`)
+— c'est le chemin recommandé, ça marche sans rien démarrer d'autre :
 
-# Terminal 2 — charge .env.e2e puis lance les tests
-npx dotenv-cli -e .env.e2e -- npm run test:e2e
+```bash
+npx dotenv-cli -e .env.e2e -- npx playwright test --ui
 ```
 
 `dotenv-cli` n'est pas une dépendance du projet — `npx` le télécharge à la
-volée au premier lancement (pas d'installation permanente nécessaire). Sans
-`dotenv-cli`, exporter les 3 variables manuellement avant `npm run
-test:e2e` :
+volée au premier lancement (pas d'installation permanente nécessaire).
+`--ui` ouvre l'interface graphique Playwright (recommandé pour un premier
+lancement — navigateur visible, replay pas à pas). Pour un lancement
+silencieux type CI : `npx playwright test` à la place.
+
+Sans `dotenv-cli`, exporter les variables manuellement :
 
 ```bash
 # PowerShell
-$env:E2E_BASE_URL="http://localhost:5173"; $env:AZURE_TEST_USERNAME="..."; $env:AZURE_TEST_PASSWORD="..."; npm run test:e2e
+$env:AZURE_TEST_USERNAME="..."; $env:AZURE_TEST_PASSWORD="..."; npx playwright test --ui
 
 # bash
-E2E_BASE_URL=http://localhost:5173 AZURE_TEST_USERNAME=... AZURE_TEST_PASSWORD=... npm run test:e2e
+AZURE_TEST_USERNAME=... AZURE_TEST_PASSWORD=... npx playwright test --ui
 ```
 
 ### Ce qui se passe au lancement
@@ -65,12 +67,24 @@ E2E_BASE_URL=http://localhost:5173 AZURE_TEST_USERNAME=... AZURE_TEST_PASSWORD=.
 3. Un rapport HTML est généré dans `playwright-report/` — l'ouvrir avec
    `npx playwright show-report` en cas d'échec pour voir les captures
    d'écran et la trace.
+4. En mode `--ui`, cocher **`authenticated`** dans le filtre "Projects" en
+   plus de `setup` (décoché par défaut au premier lancement) — sinon seul
+   le test de login apparaît dans la liste.
 
-### Tester contre l'app déployée plutôt qu'en local
+### ⚠️ Cibler `localhost:5173` (`npm run dev`) ne suffit pas seul
 
 ```bash
-E2E_BASE_URL=https://stock-hub-v2-front.vercel.app npx dotenv-cli -e .env.e2e -- npm run test:e2e
+E2E_BASE_URL=http://localhost:5173 npx dotenv-cli -e .env.e2e -- npx playwright test --ui
 ```
+
+`npm run dev` sert le frontend, mais son `.env` local pointe
+`VITE_API_SERVER_URL` vers un **backend local** (`http://localhost:3006`,
+`stockhub_back` + Docker MySQL) qui n'est pas démarré par défaut. Sans lui,
+toutes les actions authentifiées échouent avec un écran "Une erreur est
+survenue" (le backend distant refuse aussi l'origine `localhost` par CORS
+— `ALLOWED_ORIGINS` côté `stockhub_back`). Ne cibler `localhost:5173` que
+si le backend local tourne aussi (voir `stockhub_back/README.md`) —
+sinon utiliser l'app déployée (option par défaut ci-dessus).
 
 Pas besoin de `npm run dev` dans ce cas — c'est ce que fait la CI.
 
