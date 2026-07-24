@@ -123,6 +123,15 @@ défaut sur une session fraîche. Toujours scoper par nom accessible —
 `page.getByRole('dialog', { name: 'Nouveau stock' })` — plutôt que de
 matcher tous les dialogs de la page.
 
+⚠️ **`getByLabel` matche le texte brut du `<label>`, pas l'accessible name
+du champ associé** : un `<label>Nom <span aria-hidden="true">*</span></label>`
+a pour texte réel "Nom \*" (avec l'astérisque) côté `getByLabel`, alors que
+l'accessible name calculée pour le `<input>` associé exclut bien le `*`.
+`page.getByLabel('Nom', { exact: true })` ne matche donc jamais sur un
+champ requis marqué de cette façon — bloque 30s sans message d'erreur
+clair. Préférer un sélecteur par `id` (`page.locator('#item-label')`)
+pour les champs de formulaire de cette app.
+
 ---
 
 ## 4. Compte de test
@@ -159,10 +168,14 @@ Solution : `auth.setup.ts` sérialise le sessionStorage dans
 tests/e2e-frontend/
   helpers/
     auth.setup.ts               # login réel, génère playwright/.auth/*.json
+    stock-actions.ts             # createStock / deleteStock (réutilisés par les 3 workflows)
+    item-actions.ts              # addItem
   fixtures.ts                    # réinjecte le sessionStorage MSAL (§5)
   auth-smoke.e2e.test.ts         # vérifie que la session réutilisée est valide
   workflows/
     stock-creation.e2e.test.ts   # création + suppression de stock
+    item-management.e2e.test.ts  # ajout d'item + statut Critique/OK
+    quantity-update.e2e.test.ts  # boutons +/- de quantité
 ```
 
 `playwright/.auth/` n'est jamais commité (voir `.gitignore`).
@@ -193,7 +206,8 @@ Déclenchement manuel : `gh workflow run e2e-frontend.yml --ref main`.
 
 - ✅ Authentification interactive + test de fumée (#101)
 - ✅ Workflow création + suppression de stock (#66, workflow 1 et 4)
-- ⏳ Workflow gestion d'items, workflow mise à jour de quantité (#66,
-  workflow 2 et 3) — pas encore couverts
+- ✅ Workflow gestion d'items (#66, workflow 2)
+- ✅ Workflow mise à jour de quantité (#66, workflow 3)
 
+Les 4 workflows Must-Have de #66 sont couverts, **5/5 tests verts en CI**.
 Contexte complet des workflows visés : `documentation/ISSUE_E2E_FULL_UI_BACKEND.md`.
