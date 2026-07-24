@@ -10,6 +10,7 @@
   ],
   "ignore": [
     ".github/workflows/**",
+    "tests/e2e-frontend/helpers/auth.setup.ts",
     "src/test/**",
     "src/**/__tests__/**",
     "src/**/*.test.{ts,tsx}",

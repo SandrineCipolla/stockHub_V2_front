@@ -17,6 +17,12 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: ['./src/test/setup.ts'],
     css: true,
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      'tests/e2e-frontend/**',
+    ],
     poolOptions: {
       threads: {
         minThreads: 1,
