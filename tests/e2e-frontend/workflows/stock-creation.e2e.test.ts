@@ -10,7 +10,7 @@ test.describe('Création et suppression de stock — workflow complet UI → API
 
     // 1. Ouvrir le formulaire de création
     await page.getByRole('button', { name: "Ajouter un Stock à l'inventaire" }).click();
-    const formModal = page.getByRole('dialog');
+    const formModal = page.getByRole('dialog', { name: 'Nouveau stock' });
     await expect(formModal).toBeVisible();
 
     // 2. Remplir et soumettre
