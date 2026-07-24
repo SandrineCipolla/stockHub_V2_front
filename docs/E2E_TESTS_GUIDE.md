@@ -33,10 +33,18 @@ cp .env.e2e.example .env.e2e
 
 ## 2. Utilisation en local (pas à pas)
 
-**Par défaut, cible l'app déployée** (`https://stock-hub-v2-front.vercel.app`)
-— c'est le chemin recommandé, ça marche sans rien démarrer d'autre :
+**Par défaut, cible le staging** (`stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app`,
+backend Render + base Aiven — isolée de la prod) — **jamais**
+`stock-hub-v2-front.vercel.app`, qui est la Production Vercel et pointe
+vers le backend Azure prod (voir §CI plus bas et [[Environnements]] du
+wiki). Le staging est protégé par le mur Vercel Authentication, d'où le
+`VERCEL_AUTOMATION_BYPASS_SECRET` en plus des identifiants B2C (valeur
+dans Vercel → Project Settings → Deployment Protection → "Protection
+Bypass for Automation") :
 
 ```bash
+E2E_BASE_URL=https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app \
+VERCEL_AUTOMATION_BYPASS_SECRET=<valeur du dashboard Vercel> \
 npx dotenv-cli -e .env.e2e -- npx playwright test --ui
 ```
 
@@ -50,10 +58,10 @@ Sans `dotenv-cli`, exporter les variables manuellement :
 
 ```bash
 # PowerShell
-$env:AZURE_TEST_USERNAME="..."; $env:AZURE_TEST_PASSWORD="..."; npx playwright test --ui
+$env:E2E_BASE_URL="https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app"; $env:VERCEL_AUTOMATION_BYPASS_SECRET="..."; $env:AZURE_TEST_USERNAME="..."; $env:AZURE_TEST_PASSWORD="..."; npx playwright test --ui
 
 # bash
-AZURE_TEST_USERNAME=... AZURE_TEST_PASSWORD=... npx playwright test --ui
+E2E_BASE_URL=https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app VERCEL_AUTOMATION_BYPASS_SECRET=... AZURE_TEST_USERNAME=... AZURE_TEST_PASSWORD=... npx playwright test --ui
 ```
 
 ### Ce qui se passe au lancement
@@ -210,9 +218,24 @@ tests/e2e-frontend/
 Workflow séparé `.github/workflows/e2e-frontend.yml`, déclenché
 manuellement (`workflow_dispatch`) ou chaque lundi 6h UTC — **pas** sur
 chaque push/PR, pour ne pas rendre la CI principale dépendante d'un vrai
-login réseau contre Azure AD B2C. Cible l'app déployée
-(`https://stock-hub-v2-front.vercel.app`), nécessite les secrets repo
-`AZURE_TEST_USERNAME` et `AZURE_TEST_PASSWORD`.
+login réseau contre Azure AD B2C.
+
+**Cible le staging** (`https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app`,
+backend Render + base Aiven MySQL — isolée de la prod), **jamais**
+`https://stock-hub-v2-front.vercel.app` qui est la Production Vercel et
+pointe vers le backend Azure prod. Un test E2E crée/modifie/supprime des
+données réelles à chaque run — voir [[Environnements]] du wiki pour le
+détail des environnements.
+
+Le staging Vercel est protégé par le mur "Vercel Authentication" (SSO),
+actif par défaut sur les déploiements Preview de l'équipe. La CI le
+contourne via le secret `VERCEL_AUTOMATION_BYPASS_SECRET` (généré dans
+Vercel → Project Settings → Deployment Protection → "Protection Bypass
+for Automation", stocké comme secret GitHub), envoyé en header
+`x-vercel-protection-bypass` sur chaque requête (`playwright.config.ts`).
+
+Secrets repo requis : `AZURE_TEST_USERNAME`, `AZURE_TEST_PASSWORD`,
+`VERCEL_AUTOMATION_BYPASS_SECRET`.
 
 Déclenchement manuel : `gh workflow run e2e-frontend.yml --ref main`.
 

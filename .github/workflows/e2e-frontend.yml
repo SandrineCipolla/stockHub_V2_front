@@ -32,9 +32,12 @@ jobs:
       - name: 🧪 Run E2E tests
         run: npm run test:e2e
         env:
-          E2E_BASE_URL: https://stock-hub-v2-front.vercel.app
+          # Staging (Vercel branche `staging` + backend Render + Aiven MySQL)
+          # — jamais la prod. Voir docs/E2E_TESTS_GUIDE.md.
+          E2E_BASE_URL: https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app
           AZURE_TEST_USERNAME: ${{ secrets.AZURE_TEST_USERNAME }}
           AZURE_TEST_PASSWORD: ${{ secrets.AZURE_TEST_PASSWORD }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: 📊 Upload Playwright report
         if: always()
