@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.17.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.16.0...v1.17.0) (2026-07-24)
+
+
+### ✨ Features
+
+* **e2e:** basculer les tests E2E vers le staging (pas la prod) ([#244](https://github.com/SandrineCipolla/stockHub_V2_front/issues/244)) ([17860f7](https://github.com/SandrineCipolla/stockHub_V2_front/commit/17860f762be8f144f38305de45f3095c2a5208ae))
+* **e2e:** premier workflow [#66](https://github.com/SandrineCipolla/stockHub_V2_front/issues/66) — création et suppression de stock ([#231](https://github.com/SandrineCipolla/stockHub_V2_front/issues/231)) ([2020c29](https://github.com/SandrineCipolla/stockHub_V2_front/commit/2020c299382cc3201d93aa6077d595afb04d2c92))
+* **e2e:** socle Playwright pour auth interactive Azure AD B2C ([#228](https://github.com/SandrineCipolla/stockHub_V2_front/issues/228)) ([b7c04fd](https://github.com/SandrineCipolla/stockHub_V2_front/commit/b7c04fd9d8753591acf50630410362c64ff59a12))
+* **e2e:** workflows 2 et 3 de [#66](https://github.com/SandrineCipolla/stockHub_V2_front/issues/66) — gestion d'items et mise à jour de quantité ([#238](https://github.com/SandrineCipolla/stockHub_V2_front/issues/238)) ([4dfedc9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/4dfedc99a1bff11b55fb463412588d50b73293b8))
+
+
+### 🐛 Bug Fixes
+
+* **e2e:** créer playwright/.auth/ avant d'écrire session-storage.json ([#230](https://github.com/SandrineCipolla/stockHub_V2_front/issues/230)) ([c309e3d](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c309e3d2f0e71a5cddcc960cf0a54fc718143243))
+* **e2e:** forcer workers=1 (course de tokens MSAL entre tests parallèles) ([#234](https://github.com/SandrineCipolla/stockHub_V2_front/issues/234)) ([f6ff9e3](https://github.com/SandrineCipolla/stockHub_V2_front/commit/f6ff9e31650a5fe9b339f1db072524c731552079))
+* **e2e:** getByLabel('Nom') bloquait 30s sur le formulaire d'item ([#239](https://github.com/SandrineCipolla/stockHub_V2_front/issues/239)) ([71b4525](https://github.com/SandrineCipolla/stockHub_V2_front/commit/71b45251cb9e2c2d9bae0d40e70e8b7c982c1e96))
+* **e2e:** réinjecter le sessionStorage MSAL entre les tests Playwright ([#229](https://github.com/SandrineCipolla/stockHub_V2_front/issues/229)) ([1462c6c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/1462c6c1ba557947e54ccdecc65760a8f062964b))
+* **e2e:** remplacer le locator CSS [name=...] par le rôle accessible ([#235](https://github.com/SandrineCipolla/stockHub_V2_front/issues/235)) ([8d6a9cd](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8d6a9cd3445c08869bc8866d962bd8a3e4b7dc90))
+* **e2e:** scoper le locator du dialog par nom (strict mode violation) ([#232](https://github.com/SandrineCipolla/stockHub_V2_front/issues/232)) ([14bb3da](https://github.com/SandrineCipolla/stockHub_V2_front/commit/14bb3da926921c8913e73a2ecd7176e08d46b7d5))
+
+
+### 📚 Documentation
+
+* clôturer [#66](https://github.com/SandrineCipolla/stockHub_V2_front/issues/66) dans ETAT-DU-PROJET.md et le guide E2E (5/5 tests verts) ([#240](https://github.com/SandrineCipolla/stockHub_V2_front/issues/240)) ([65e74bd](https://github.com/SandrineCipolla/stockHub_V2_front/commit/65e74bd0ac2cf65d1d1cc38ba229cfb6c72fe1ee))
+* compléter la session du 24 juillet — locator fix + incident migration prod ([#236](https://github.com/SandrineCipolla/stockHub_V2_front/issues/236)) ([b6091c4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/b6091c430b2e7d4bd6bff2dde09b99d257fd7513))
+* **e2e:** corriger le pas-à-pas — app déployée par défaut, pas localhost ([#243](https://github.com/SandrineCipolla/stockHub_V2_front/issues/243)) ([6e127d4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6e127d4705913ff5b58fb06f193e185099982421))
+* mettre à jour ETAT-DU-PROJET.md (session [#142](https://github.com/SandrineCipolla/stockHub_V2_front/issues/142)) ([#226](https://github.com/SandrineCipolla/stockHub_V2_front/issues/226)) ([39166d7](https://github.com/SandrineCipolla/stockHub_V2_front/commit/39166d7597101bccf29b026e5c49fa81213fd726))
+* session du 24 juillet 2026 — [#101](https://github.com/SandrineCipolla/stockHub_V2_front/issues/101) (auth E2E) et démarrage [#66](https://github.com/SandrineCipolla/stockHub_V2_front/issues/66) ([#233](https://github.com/SandrineCipolla/stockHub_V2_front/issues/233)) ([ec7878b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/ec7878b839596dbba301e6eeaec30bf7b460512a))
+
+
+### 🔧 Chores
+
+* **e2e:** retirer le script ponctuel de nettoyage ([#242](https://github.com/SandrineCipolla/stockHub_V2_front/issues/242)) ([f562962](https://github.com/SandrineCipolla/stockHub_V2_front/commit/f562962d4747251da3a8fc9c48d0ec79a6ab347a))
+* **e2e:** script ponctuel de nettoyage des stocks orphelins ([#241](https://github.com/SandrineCipolla/stockHub_V2_front/issues/241)) ([dc91365](https://github.com/SandrineCipolla/stockHub_V2_front/commit/dc913657fc89ac6b178b9c8bff28bc781f7c630e))
+
 ## [1.16.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.15.1...v1.16.0) (2026-07-23)
 
 
