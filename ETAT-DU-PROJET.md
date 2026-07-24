@@ -1,9 +1,55 @@
 # StockHub V2 Frontend — État du projet
 
-**Date de rédaction** : 23 juillet 2026
-**Dernière activité** : 23 juillet 2026
+**Date de rédaction** : 24 juillet 2026
+**Dernière activité** : 24 juillet 2026
 **Branche active** : `main`
 **Version publiée** : v1.16.0
+
+---
+
+## Session du 24 juillet 2026 — Ce qui a été fait
+
+### Tickets fermés
+
+| #    | Titre                                               | PR                        |
+| ---- | --------------------------------------------------- | ------------------------- |
+| #101 | Auth interactive Playwright pour tests E2E Frontend | #228, #229, #230, #232 ✅ |
+
+### Ticket en cours
+
+| #   | Titre                                 | PR                                            |
+| --- | ------------------------------------- | --------------------------------------------- |
+| #66 | Tests E2E Complets Frontend + Backend | #231 ✅ (1er workflow mergé, suite à traiter) |
+
+### #101 — Socle Playwright pour l'auth interactive Azure AD B2C
+
+Ajout de `@playwright/test` (Chromium), `playwright.config.ts` (projet `setup` → `authenticated` via `storageState`), `tests/e2e-frontend/helpers/auth.setup.ts` (login réel contre `b2clogin.com`, policy `signupsignin`), test de fumée, workflow CI dédié `e2e-frontend.yml` (`workflow_dispatch` + cron lundi 6h UTC — volontairement hors du pipeline principal). Réutilise le compte de test et les secrets déjà en place côté backend (`AZURE_TEST_USERNAME`/`AZURE_TEST_PASSWORD`), pas de nouveau provisioning.
+
+**3 bugs révélés par les runs CI réels, corrigés en itérant** (PR #229, #230, #232) :
+
+- CodeQL (high) : vérification d'hostname par sous-chaîne (`url.hostname.includes('b2clogin.com')`), contournable par un domaine attaquant contenant cette sous-chaîne → comparaison stricte sur le hostname exact
+- `ENOENT` sur `playwright/.auth/` : `writeFileSync` ne crée pas les dossiers parents (contrairement à `storageState()`) — dossier gitignored, inexistant sur un checkout CI propre → `mkdirSync(..., { recursive: true })`
+- **Piège MSAL le plus significatif** : `cacheLocation: 'sessionStorage'` (`src/config/authConfig.ts`) — `storageState()` de Playwright ne capture jamais le sessionStorage, seulement cookies + localStorage. Sans contournement, chaque test perdait la session. Fix : sérialisation manuelle post-login + réinjection via `context.addInitScript()` (`tests/e2e-frontend/fixtures.ts`). Documenté dans `docs/E2E_TESTS_GUIDE.md` et l'ADR-012 du wiki — piège généralisable à tout projet MSAL + Playwright.
+
+**Risque principal levé** : le login réel passe sans MFA/code de vérification bloquant sur la policy `signupsignin` — condition nécessaire pour que l'automatisation soit viable, non déterminable à l'avance sans un run réel.
+
+### #66 — Premier workflow E2E (création + suppression de stock)
+
+`tests/e2e-frontend/workflows/stock-creation.e2e.test.ts` : ouvre le formulaire, crée un stock réel via l'UI (déclenche `POST /stocks`), vérifie son apparition (`sh-stock-card[name=...]`), le supprime via le bouton du web component (accessible name portée par `sh-button`, sans piercing manuel du shadow DOM) pour ne pas laisser de données de test dans le compte réel. Sélecteurs vérifiés dans le code réel — ceux esquissés dans l'issue #66 (`data-testid`, notification de succès) n'existent pas dans l'app.
+
+**Bug révélé par le run CI** (PR #232) : `getByRole('dialog')` sans nom matchait 2 éléments — la bannière de consentement cookies porte aussi `role="dialog"` et est visible par défaut sur une session fraîche. Fix : scoper par nom accessible (`{ name: 'Nouveau stock' }`).
+
+**Reste à faire** : workflows 2 (gestion d'items) et 3 (mise à jour de quantité).
+
+### Documentation mise à jour dans la foulée
+
+- `docs/E2E_TESTS_GUIDE.md` (repo Front) : transformé en guide pas-à-pas installation/utilisation (prérequis, lancement local et contre l'app déployée, débogage `--ui`/`show-trace`, comment écrire un nouveau test)
+- Wiki (`stockHub_V2_front.wiki`) : ADR-012 (Playwright + auth interactive réelle plutôt que mockée), section CI/CD dédiée au workflow `e2e-frontend.yml`, section Qualité & Métriques avec le tableau de statut des workflows E2E
+
+### Variante — labels de priorité incohérents entre le corps de l'issue et le label GitHub
+
+- **#30** (Vercel `optionalDependencies`) : le corps de l'issue indiquait lui-même "Priorité : P3 (non-urgent, solution temporaire fonctionnelle)" alors que le label GitHub était P1. Label P1 retiré, P3 conservé.
+- **#66** : même incohérence repérée (corps "P2", label "P1") mais **non tranchée** cette session — signalé, pas traité, à trancher séparément si besoin.
 
 ---
 
