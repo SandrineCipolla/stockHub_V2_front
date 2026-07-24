@@ -35,11 +35,17 @@ Ajout de `@playwright/test` (Chromium), `playwright.config.ts` (projet `setup` �
 
 ### #66 — Premier workflow E2E (création + suppression de stock)
 
-`tests/e2e-frontend/workflows/stock-creation.e2e.test.ts` : ouvre le formulaire, crée un stock réel via l'UI (déclenche `POST /stocks`), vérifie son apparition (`sh-stock-card[name=...]`), le supprime via le bouton du web component (accessible name portée par `sh-button`, sans piercing manuel du shadow DOM) pour ne pas laisser de données de test dans le compte réel. Sélecteurs vérifiés dans le code réel — ceux esquissés dans l'issue #66 (`data-testid`, notification de succès) n'existent pas dans l'app.
+`tests/e2e-frontend/workflows/stock-creation.e2e.test.ts` : ouvre le formulaire, crée un stock réel via l'UI (déclenche `POST /stocks`), vérifie son apparition, le supprime via le bouton du web component (accessible name portée par `sh-button`, sans piercing manuel du shadow DOM) pour ne pas laisser de données de test dans le compte réel. Sélecteurs vérifiés dans le code réel — ceux esquissés dans l'issue #66 (`data-testid`, notification de succès) n'existent pas dans l'app. **3/3 tests verts en CI** (PR #235), confirmé sur un run complet en 12s.
 
-**Bug révélé par le run CI** (PR #232) : `getByRole('dialog')` sans nom matchait 2 éléments — la bannière de consentement cookies porte aussi `role="dialog"` et est visible par défaut sur une session fraîche. Fix : scoper par nom accessible (`{ name: 'Nouveau stock' }`).
+**3 bugs trouvés en itérant sur les runs CI réels** (PR #232, #234, #235) :
 
-**Reste à faire** : workflows 2 (gestion d'items) et 3 (mise à jour de quantité).
+- `getByRole('dialog')` sans nom matchait 2 éléments — la bannière de consentement cookies porte aussi `role="dialog"`, visible par défaut sur une session fraîche. Fix : scoper par nom accessible (`{ name: 'Nouveau stock' }`).
+- `workers: 1` ajouté par précaution (fausse piste sur le coup, gardée quand même — hygiène raisonnable vu le compte réel partagé).
+- **Le vrai bug, le plus coûteux à trouver** : `sh-stock-card[name="..."]` ne matchait jamais, alors que le stock était bien créé et visible (confirmé par le snapshot d'accessibilité Playwright). Cause : Lit expose `name` comme propriété JS posée par React sur l'élément, jamais reflétée en attribut HTML — un sélecteur CSS `[name=...]` est structurellement incapable de la cibler. Fix : `getByRole('article', { name: \`Carte de stock ${label}\` })`.
+
+**Incident découvert au passage, sans rapport avec le test** : en creusant pourquoi le stock ne se créait pas, `GET`/`POST /api/v2/stocks` renvoyaient carrément 500 en production **pour tout le monde** — 6 migrations Prisma jamais appliquées à la prod depuis fin mars (colonne `items.note` de #158 manquante en base). Diagnostiqué via Application Insights (`az monitor app-insights query`, pas les logs Kudu qui ne montrent que l'historique de déploiement). Cause process : `prisma migrate deploy` n'existe que dans le job E2E CI (DB éphémère), jamais dans le déploiement réel vers prod/staging. Corrigé manuellement avec accord explicite avant de toucher à la prod (migrations additives, aucune perte de données). Détail complet et gap de process documentés côté backend : `stockhub_back/docs/troubleshooting/prod-migration-drift.md`.
+
+**Reste à faire** : workflows 2 (gestion d'items) et 3 (mise à jour de quantité). Quelques stocks de test orphelins (`E2E Stock ...`) accumulés dans le compte réel pendant les runs qui échouaient avant l'étape de nettoyage — à supprimer manuellement via le dashboard (préfixe facilement identifiable).
 
 ### Documentation mise à jour dans la foulée
 
