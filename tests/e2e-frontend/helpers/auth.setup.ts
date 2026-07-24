@@ -12,7 +12,19 @@ setup('authenticate via Azure AD B2C', async ({ page }) => {
     throw new Error('AZURE_TEST_USERNAME / AZURE_TEST_PASSWORD manquants — voir .env.e2e.example');
   }
 
-  await page.goto('/');
+  // Contourne le mur Vercel Deployment Protection (SSO) sur les URLs de
+  // preview (ex. staging) via un paramètre d'URL au premier chargement —
+  // Vercel pose alors un cookie de contournement, sauvegardé ensuite dans
+  // storageState() et réutilisé automatiquement par les autres tests.
+  // Volontairement PAS un header global (extraHTTPHeaders) : celui-ci
+  // partirait aussi vers le backend Render sur un domaine différent, dont
+  // le CORS n'autorise pas cet en-tête custom — la requête est alors
+  // bloquée par le navigateur (net::ERR_FAILED), constaté en CI.
+  const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+  const initialPath = bypassSecret
+    ? `/?x-vercel-protection-bypass=${bypassSecret}&x-vercel-set-bypass-cookie=true`
+    : '/';
+  await page.goto(initialPath);
   const appHostname = new URL(page.url()).hostname;
 
   await page.getByRole('button', { name: 'Se connecter' }).click();

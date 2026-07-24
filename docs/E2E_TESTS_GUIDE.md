@@ -231,8 +231,14 @@ Le staging Vercel est protégé par le mur "Vercel Authentication" (SSO),
 actif par défaut sur les déploiements Preview de l'équipe. La CI le
 contourne via le secret `VERCEL_AUTOMATION_BYPASS_SECRET` (généré dans
 Vercel → Project Settings → Deployment Protection → "Protection Bypass
-for Automation", stocké comme secret GitHub), envoyé en header
-`x-vercel-protection-bypass` sur chaque requête (`playwright.config.ts`).
+for Automation", stocké comme secret GitHub), passé en **paramètre
+d'URL** au tout premier `page.goto()` (`auth.setup.ts`) plutôt qu'en
+header global : Vercel pose alors un cookie de contournement, sauvegardé
+dans `storageState` et réutilisé automatiquement ensuite. Un header
+global (`extraHTTPHeaders`) partirait aussi vers le backend Render sur un
+domaine différent, dont le CORS n'autorise pas cet en-tête custom — la
+requête serait bloquée par le navigateur (`net::ERR_FAILED`, constaté en
+CI avant ce fix).
 
 Secrets repo requis : `AZURE_TEST_USERNAME`, `AZURE_TEST_PASSWORD`,
 `VERCEL_AUTOMATION_BYPASS_SECRET`.
