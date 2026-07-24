@@ -14,6 +14,7 @@ export default tseslint.config(
       'coverage/**',
       '**/*.test.{ts,tsx}',
       '**/*.spec.{ts,tsx}',
+      'tests/e2e-frontend/**',
       ] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

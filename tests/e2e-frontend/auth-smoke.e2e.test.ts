@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test.describe('Authentification Azure AD B2C', () => {
   test("l'utilisateur reste authentifié via le storageState réutilisé", async ({ page }) => {

@@ -15,19 +15,36 @@
 
 L'authentification interactive est coûteuse (redirections réseau réelles
 vers `b2clogin.com`). Elle n'est donc faite **qu'une fois** par run, dans un
-projet Playwright dédié (`setup`), qui sauvegarde l'état de session
-(cookies/sessionStorage) dans `playwright/.auth/user.json`. Les tests
-suivants (projet `authenticated`) réutilisent ce fichier via
-`storageState`, sans repasser par le login.
+projet Playwright dédié (`setup`), qui sauvegarde l'état de session dans
+`playwright/.auth/user.json`. Les tests suivants (projet `authenticated`)
+réutilisent ce fichier via `storageState`, sans repasser par le login.
 
 ```
 tests/e2e-frontend/
   helpers/
     auth.setup.ts       # login réel, génère playwright/.auth/user.json
+  fixtures.ts            # réinjecte le sessionStorage MSAL (voir piège ci-dessous)
   auth-smoke.e2e.test.ts  # vérifie que la session réutilisée est valide
 ```
 
 `playwright/.auth/user.json` n'est jamais committé (voir `.gitignore`).
+
+### ⚠️ Piège : `storageState` ne capture pas le sessionStorage
+
+MSAL est configuré en `cacheLocation: 'sessionStorage'`
+(`src/config/authConfig.ts`) — choix volontaire côté app pour limiter la
+persistance du token. Or `storageState()` de Playwright ne sauvegarde que
+les **cookies et le localStorage**, jamais le sessionStorage. Sans
+contournement, chaque test du projet `authenticated` repart avec un
+sessionStorage vide → MSAL ne voit plus de session → redirection vers la
+LandingPage au lieu du dashboard.
+
+Solution : `auth.setup.ts` sérialise le sessionStorage dans
+`playwright/.auth/session-storage.json`, et `fixtures.ts` le réinjecte via
+`context.addInitScript()` avant que le code de l'app ne s'exécute. Tous les
+tests du projet `authenticated` doivent importer `test`/`expect` depuis
+`./fixtures` (pas directement `@playwright/test`) pour bénéficier de cette
+réinjection.
 
 ## Compte de test
 
