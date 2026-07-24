@@ -11,15 +11,10 @@
 
 ### Tickets fermés
 
-| #    | Titre                                               | PR                        |
-| ---- | --------------------------------------------------- | ------------------------- |
-| #101 | Auth interactive Playwright pour tests E2E Frontend | #228, #229, #230, #232 ✅ |
-
-### Ticket en cours
-
-| #   | Titre                                 | PR                                            |
-| --- | ------------------------------------- | --------------------------------------------- |
-| #66 | Tests E2E Complets Frontend + Backend | #231 ✅ (1er workflow mergé, suite à traiter) |
+| #    | Titre                                               | PR                                                |
+| ---- | --------------------------------------------------- | ------------------------------------------------- |
+| #101 | Auth interactive Playwright pour tests E2E Frontend | #228, #229, #230, #232 ✅                         |
+| #66  | Tests E2E Complets Frontend + Backend               | #231, #234, #235, #238, #239 ✅ — 5/5 tests verts |
 
 ### #101 — Socle Playwright pour l'auth interactive Azure AD B2C
 
@@ -45,7 +40,17 @@ Ajout de `@playwright/test` (Chromium), `playwright.config.ts` (projet `setup` �
 
 **Incident découvert au passage, sans rapport avec le test** : en creusant pourquoi le stock ne se créait pas, `GET`/`POST /api/v2/stocks` renvoyaient carrément 500 en production **pour tout le monde** — 6 migrations Prisma jamais appliquées à la prod depuis fin mars (colonne `items.note` de #158 manquante en base). Diagnostiqué via Application Insights (`az monitor app-insights query`, pas les logs Kudu qui ne montrent que l'historique de déploiement). Cause process : `prisma migrate deploy` n'existe que dans le job E2E CI (DB éphémère), jamais dans le déploiement réel vers prod/staging. Corrigé manuellement avec accord explicite avant de toucher à la prod (migrations additives, aucune perte de données). Détail complet et gap de process documentés côté backend : `stockhub_back/docs/troubleshooting/prod-migration-drift.md`.
 
-**Reste à faire** : workflows 2 (gestion d'items) et 3 (mise à jour de quantité). Quelques stocks de test orphelins (`E2E Stock ...`) accumulés dans le compte réel pendant les runs qui échouaient avant l'étape de nettoyage — à supprimer manuellement via le dashboard (préfixe facilement identifiable).
+### #66 — Workflows 2 et 3 (gestion d'items, mise à jour de quantité) — clôture
+
+`tests/e2e-frontend/workflows/item-management.e2e.test.ts` et `quantity-update.e2e.test.ts` : ajoutés sur le modèle validé de `stock-creation.e2e.test.ts`, avec `tests/e2e-frontend/helpers/stock-actions.ts` (`createStock`/`deleteStock`) et `item-actions.ts` (`addItem`) factorisés pour éviter la duplication entre les 3 tests. **Item-management** crée un item sous le seuil minimum et vérifie le statut "Critique" + le compteur de filtre. **Quantity-update** utilise les boutons `+`/`-` (appel API direct, pas l'input d'édition inline) et vérifie la persistance de la valeur affichée.
+
+**Bug trouvé au premier run CI** (PR #239) : `getByLabel('Nom', { exact: true })` bloquait 30s sur le formulaire d'ajout d'item, alors que le champ était bien présent et focus. Cause : le `<label>` contient "Nom" + un `<span aria-hidden="true">*</span>` pour l'astérisque requis — le texte réel matché par `getByLabel` inclut ce `*` (contrairement à l'accessible name du textbox associé, calculée différemment). Fix : sélecteurs par `id` (`#item-label`, `#item-quantity`, `#item-minimum-stock`), même pattern que le formulaire de stock.
+
+**5/5 tests E2E verts en CI** (~33s), les 4 workflows Must-Have de #66 sont couverts. Issue #66 fermée.
+
+**Traçabilité créée après coup** (à la demande explicite, pour ne pas laisser ces incidents uniquement dans la doc) : [stockhub_back#254](https://github.com/SandrineCipolla/stockhub_back/issues/254) (incident migration, fermée avec le correctif en commentaire), [stockHub_V2_front#237](https://github.com/SandrineCipolla/stockHub_V2_front/issues/237) (bug locator Lit, fermée avec référence à #235), [stockhub_back#255](https://github.com/SandrineCipolla/stockhub_back/issues/255) (User Story de suivi — automatiser `prisma migrate deploy` vers la prod, gap de process non résolu, reste ouvert).
+
+**Reste hors scope** : quelques stocks de test orphelins (`E2E Stock ...`) accumulés dans le compte réel pendant les runs qui échouaient avant l'étape de nettoyage — à supprimer manuellement via le dashboard (préfixe facilement identifiable). Incohérence de label P1/P2 sur l'issue #66 jamais tranchée (issue fermée entre-temps, non-bloquant).
 
 ### Documentation mise à jour dans la foulée
 
