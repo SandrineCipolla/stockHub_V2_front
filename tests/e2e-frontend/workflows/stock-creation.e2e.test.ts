@@ -23,7 +23,11 @@ test.describe('Création et suppression de stock — workflow complet UI → API
     // déclenché en interne par le formulaire — pas de notification de succès dans
     // l'app, cf. docs/E2E_TESTS_GUIDE.md)
     await expect(formModal).not.toBeVisible();
-    const stockCard = page.locator(`sh-stock-card[name="${stockLabel}"]`);
+    // Le sélecteur CSS [name="..."] ne fonctionne pas ici : Lit expose `name`
+    // comme propriété JS (définie par React sur l'élément), pas comme
+    // attribut HTML reflété — [name="..."] ne matche donc jamais. On cible
+    // plutôt le rôle accessible réel du composant (article "Carte de stock ...").
+    const stockCard = page.getByRole('article', { name: `Carte de stock ${stockLabel}` });
     await expect(stockCard).toBeVisible();
 
     // 4. Nettoyage — supprime le stock créé pour ne pas polluer le compte réel
