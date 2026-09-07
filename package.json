@@ -86,7 +86,7 @@
     "knip": "^6.29.0",
     "lighthouse": "^12.8.2",
     "lint-staged": "^17.2.0",
-    "postcss": "^8.5.22",
+    "postcss": "^8.5.28",
     "prettier": "^3.9.6",
     "puppeteer": "^24.24.0",
     "tailwindcss": "^3.4.19",
