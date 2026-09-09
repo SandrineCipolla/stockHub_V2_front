@@ -19,16 +19,17 @@ Les décisions structurantes du backend vivent dans `stockhub_back/docs/adr/`. L
 | [ADR-010](./ADR-010-css-moderne-container-has.md)  | CSS moderne : Container Queries et `:has()`                     | 2026-02 | ✅ Accepté |
 | [ADR-011](./ADR-011-items-responsive-dual-view.md) | Dual-view responsive items : mobile cards + desktop table       | 2026-06 | ✅ Accepté |
 | [ADR-012](./ADR-012-playwright-auth-reelle.md)     | Playwright avec auth interactive réelle pour les E2E frontend   | 2026-07 | ✅ Accepté |
+| [ADR-020](./ADR-020-fetch-natif-plutot-quaxios.md) | fetch natif plutôt qu'un client HTTP dédié (Axios / ky)         | 2026-09 | ✅ Accepté |
 
-> Numérotation alignée sur celle déjà utilisée par le wiki (ADR-003 et ADR-013 à ADR-019 sont des décisions backend, référencées mais non dupliquées ici — voir `stockhub_back/docs/adr/`).
+> Numérotation **globale au projet**, partagée avec le backend et alignée sur la séquence unique du wiki : ADR-003 et ADR-013 à ADR-019 sont des décisions backend (référencées mais non dupliquées ici — voir `stockhub_back/docs/adr/`), donc le prochain numéro libre pour une nouvelle décision (front ou back) se choisit après ADR-020, pas après ADR-012.
 
 ## Comment créer un nouvel ADR
 
 1. Copier `TEMPLATE.md`
-2. Numéroter séquentiellement (prochain numéro libre : ADR-013 côté front)
+2. Vérifier le prochain numéro libre sur le [wiki](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records) (numérotation globale front+back, pas seulement dans ce dossier)
 3. Nom de fichier : `ADR-XXX-titre-en-kebab-case.md`
 4. Ajouter la ligne dans ce tableau
-5. Mettre à jour le résumé + lien sur le [wiki](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records)
+5. Mettre à jour le résumé + lien sur le wiki
 
 ## Modifier un ADR existant
 
