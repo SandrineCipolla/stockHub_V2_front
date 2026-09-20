@@ -4,7 +4,7 @@
 > De l'installation à la première contribution
 
 **Version Frontend** : v1.1.0
-**Design System** : v1.3.1
+**Design System** : `@stockhub/design-system` (voir `package.json`)
 **Date** : 18 Novembre 2025
 
 ---
@@ -47,7 +47,7 @@ Cela installe :
 
 - React 19.1.0 + TypeScript 5.8.3
 - Vite 6.3.5 (build tool)
-- Design System `@stockhub/design-system@v1.3.1`
+- Design System `@stockhub/design-system` (version définie dans `package.json`)
 - Dépendances de test (Vitest, Testing Library)
 
 **Durée estimée** : 2-3 minutes
@@ -156,7 +156,7 @@ StockHub V2 utilise un **Design System externe** (repository séparé).
 
 - **Repository** : https://github.com/SandrineCipolla/stockhub_design_system
 - **Storybook** : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
-- **Package** : `@stockhub/design-system@v1.3.1`
+- **Package** : `@stockhub/design-system` (voir `package.json`)
 - **Composants** : 18 Web Components (Lit Element)
 
 ### Utilisation dans React

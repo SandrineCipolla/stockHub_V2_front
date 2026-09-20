@@ -11,6 +11,7 @@
 ### SmartSuggestions - IA Prédictive ✅
 
 **Fichiers créés** :
+
 - `src/components/ai/AISummaryWidget.tsx` (200+ lignes)
 - `src/components/ai/StockAIBadge.tsx` (388 lignes)
 - `src/components/ai/SmartSuggestions.tsx`
@@ -18,6 +19,7 @@
 - `src/utils/aiPredictions.ts` (397 lignes)
 
 **Fonctionnalités** :
+
 - ✅ Analyse tendances consommation
 - ✅ Détection surstock
 - ✅ Suggestions réapprovisionnement
@@ -28,6 +30,7 @@
 - ✅ Responsive mobile/desktop
 
 **Algorithmes ML implémentés** :
+
 - Prédiction rupture de stock
 - Calcul quantité optimale
 - Détection patterns de consommation
@@ -40,10 +43,12 @@
 ### 1. StockPrediction - ML Simulé (PRIORITÉ 1) ⏱️ 2h
 
 **Fichiers à créer** :
+
 - `src/components/ai/StockPrediction.tsx`
 - `src/utils/mlSimulation.ts`
 
 **Fonctionnalités attendues** :
+
 - Algorithme régression linéaire
 - Calcul moyenne consommation quotidienne
 - Prédiction jours avant rupture
@@ -52,6 +57,7 @@
 - Quantité optimale réapprovisionnement
 
 **UI attendue** :
+
 - Barre de progression risque (0-100%)
 - Indicateur visuel (vert/orange/rouge)
 - Message "🤖 IA détecte : Rupture dans X jours"
@@ -60,6 +66,7 @@
 - Animation barre progressive
 
 **Intégration** :
+
 - StockCard ou Dashboard
 - Tests unitaires
 
@@ -72,6 +79,7 @@
 **Fichier à créer** : `documentation/AI-FEATURES.md`
 
 **Contenu attendu** :
+
 - Description algorithmes prédictifs utilisés
 - Explication calculs de confiance
 - Documentation formules ML (régression linéaire)
@@ -79,32 +87,42 @@
 - Exemples concrets avec données
 
 **Sections requises** :
+
 ```markdown
 # AI Features - StockHub
 
 ## 1. SmartSuggestions
+
 ### Algorithme de détection rupture
+
 - Formule mathématique
 - Calcul niveau de confiance
 - Seuils et paramètres
 
 ### Algorithme surstock
+
 - Logique détection
 - Calcul économies potentielles
 
 ### Algorithme réapprovisionnement
+
 - Calcul quantité optimale
 - Prise en compte tendances
 
 ## 2. StockPrediction
+
 ### Régression linéaire
+
 - Formule implémentée
 - Variance et confiance
 - Prédiction temporelle
 
 ## 3. Adaptation contexte familial
+
 ### Unités flexibles
+
 ### Sessions créatives
+
 ### Fréquence irrégulière
 ```
 
@@ -113,12 +131,14 @@
 **Fichier à créer** : `documentation/PROMPTS.md`
 
 **Contenu attendu** :
+
 - Liste algorithmes avec justifications
 - Explication choix des métriques
 - Documentation seuils et paramètres
 - Contexte décisions d'implémentation
 
 **Pourquoi c'est OBLIGATOIRE RNCP** :
+
 - Compétence C2.5 : Analyses descriptives et prédictives
 - Démonstration maîtrise techniques ML
 - Documentation professionnelle attendue en soutenance
@@ -129,17 +149,20 @@
 ### 3. Setup Backend (PRIORITÉ 3) ⏱️ 3h
 
 **Fichiers à créer** :
+
 - `src/services/api/client.ts`
 - `src/services/api/stockService.ts`
 - `src/hooks/api/useStocksQuery.ts`
 - `src/hooks/api/useStockMutation.ts`
 
 **Dépendances** :
+
 ```bash
 npm install @tanstack/react-query
 ```
 
 **Fonctionnalités** :
+
 - Configuration React Query Provider
 - Services API CRUD stocks
 - Hooks React Query fonctionnels
@@ -154,24 +177,27 @@ npm install @tanstack/react-query
 
 ### Temps restant estimé : 7h
 
-| Tâche | Durée | Priorité | Bloquant RNCP |
-|-------|-------|----------|---------------|
-| StockPrediction | 2h | P1 | Non |
-| AI-FEATURES.md | 1h30 | P2 | **OUI** ✋ |
-| PROMPTS.md | 30min | P2 | **OUI** ✋ |
-| Setup Backend | 3h | P3 | Non |
+| Tâche           | Durée | Priorité | Bloquant RNCP |
+| --------------- | ----- | -------- | ------------- |
+| StockPrediction | 2h    | P1       | Non           |
+| AI-FEATURES.md  | 1h30  | P2       | **OUI** ✋    |
+| PROMPTS.md      | 30min | P2       | **OUI** ✋    |
+| Setup Backend   | 3h    | P3       | Non           |
 
 ### Planning suggéré
 
 **Soirée 1 (2h)** : StockPrediction
+
 - Algorithme mlSimulation.ts (1h)
 - Composant StockPrediction.tsx (1h)
 
 **Soirée 2 (2h)** : Documentation RNCP ⚠️ PRIORITAIRE
+
 - AI-FEATURES.md (1h30)
 - PROMPTS.md (30min)
 
 **Weekend (3h)** : Setup Backend
+
 - Services API (1h30)
 - Hooks React Query (1h30)
 
@@ -184,13 +210,15 @@ npm install @tanstack/react-query
 > "Analyses descriptives et prédictives sur données avec Machine Learning pour extraire de la valeur métier"
 
 ### État actuel :
+
 - ✅ Analyses descriptives : SmartSuggestions (fait)
 - ⏳ Analyses prédictives : StockPrediction (manquant)
 - ❌ Documentation professionnelle : **MANQUANTE - BLOQUANT**
 
-### Note attendue :
-- Sans doc : 12-14/20 (incomplet)
-- Avec tout : 18-20/20 (excellent)
+### Niveau d'exigence :
+
+- Sans doc : Incomplet (critères de validation partiels)
+- Avec tout : Conforme aux exigences RNCP (documentation et justification)
 
 ---
 

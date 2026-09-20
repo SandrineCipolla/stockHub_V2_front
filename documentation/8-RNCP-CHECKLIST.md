@@ -338,19 +338,19 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
   - [ ] Composants React isolés
   - [ ] Services métier backend
   - [ ] Utilitaires et helpers
-  - 📝 \_Tests unitaires : _\_\_/50 (objectif)_
+  - 📝 \_Tests unitaires : _(objectifs définis dans le plan de test)_
 
 - [ ] **Tests d'intégration**
   - [ ] Endpoints API complets
   - [ ] Base de données intégrée
   - [ ] Flux authentification
-  - 📝 \_Tests intégration : _\_\_/20 (objectif)_
+  - 📝 \_Tests intégration : _(objectifs définis dans le plan de test)_
 
-- [ ] **Tests End-to-End (Cypress)**
+- [ ] **Tests End-to-End (Cypress/Playwright)**
   - [ ] Parcours utilisateur complets
   - [ ] Scénarios critiques métier
   - [ ] Cross-browser testing
-  - 📝 \_Tests E2E : _\_\_/10 (objectif)_
+  - 📝 \_Tests E2E : _(objectifs définis dans le plan de test)_
 
 - [ ] **Tests sécurité OWASP**
   - [ ] Scan vulnérabilités automatique
