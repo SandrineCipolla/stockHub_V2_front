@@ -1,10 +1,10 @@
-# ADR-NNN - Titre de la décision
-
-**Date** : YYYY-MM
-**Statut** : Accepté <!-- PROPOSÉ | ACCEPTÉ | REFUSÉ | SUPPLANTÉ PAR ADR-YYY -->
-**Issue** : #XX <!-- si applicable -->
-
 ---
+author: <!-- nom de la personne ou de l'agent -->
+status: <!-- PROPOSÉ | ACCEPTÉ | REFUSÉ | SUPPLANTÉ PAR ADR-YYY -->
+related: <!-- chemin vers une ou plusieurs ADR liées, sinon vide -->
+---
+
+# ADR-NNN - Titre de la décision
 
 ## Contexte
 
@@ -12,7 +12,7 @@ Quelle est la raison de cette décision ou de ce changement. Contraintes techniq
 
 ## Décision
 
-Ce qu'on choisit, et pourquoi. La justification est intégrée ici directement.
+Ce qu'on choisit, et pourquoi. Ce choix remplace l'ancienne section "Raisons" séparée : la justification est intégrée ici directement.
 
 ## Alternatives <!-- si nécessaire -->
 
@@ -29,9 +29,9 @@ Comment vérifier que la décision tient dans le temps : des critères concrets 
 ## Liens <!-- si nécessaire -->
 
 - Issue GitHub : #XX
-- Code concerné : `src/chemin/fichier.ts`
-- Documentation ou ADR liée : `[ADR-YYY](./ADR-YYY-titre.md)`
+- Scripts ou code concerné : `chemin/fichier`
+- Documentation externe : lien
 
 ---
 
-**Note :** Les ADRs sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci.
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

@@ -1,8 +1,12 @@
-# ADR-012: fetch natif plutôt qu'un client HTTP dédié (Axios / ky)
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-006-coexistence-api-v1-v2.md
+---
 
-**Date:** 2026-09-09
-**Statut:** Accepté
-**Décideurs:** Sandrine Cipolla
+# ADR-012 - fetch natif plutôt qu'un client HTTP dédié (Axios / ky)
+
+**Date** : 2026-09-09
 
 ---
 
@@ -38,13 +42,13 @@ Ce n'est pas un détail de conception isolé : ça touche l'ensemble des appels 
 
 Continuer avec **`fetch` natif** pour tous les appels HTTP du frontend. Ne pas introduire Axios ni un wrapper dédié (ky, ofetch) tant que le besoin réel ne s'en fait pas sentir.
 
-## Raisons
+Ce qui a emporté la décision :
 
 - Le critère « dépendances » du cours s'applique directement : `fetch` natif suffit pour des appels HTTP JSON simples dans un navigateur moderne. Ajouter Axios introduirait une dépendance sans capacité nécessaire aujourd'hui.
 - Cohérent avec le choix backend REST simple (cf. [ADR-016 backend](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-016-rest-api-style.md)) : un seul client, pas de besoin de négociation de contenu ou de features avancées.
 - Zéro dépendance supplémentaire à auditer et à maintenir, ce qui est pertinent pour un projet solo.
 
-## Alternatives considérées
+## Alternatives
 
 ### Alternative 1: Axios
 
@@ -60,13 +64,13 @@ Continuer avec **`fetch` natif** pour tous les appels HTTP du frontend. Ne pas i
 
 ## Comparaison pondérée
 
-| Critère                                  | Poids | fetch natif, note | résultat | Axios, note | résultat | ky, note | résultat |
-| ---------------------------------------- | ----- | ----------------- | -------- | ----------- | -------- | -------- | -------- |
-| Dépendances (moins = mieux)              | 3     | 5                 | 15       | 2           | 6        | 3        | 9        |
-| Fonctionnalités covered vs besoin actuel | 2     | 4                 | 8        | 5           | 10       | 4        | 8        |
-| Testabilité (mock simple)                | 2     | 4                 | 8        | 4           | 8        | 4        | 8        |
-| Verbosité gestion JSON/erreurs           | 1     | 2                 | 2        | 4           | 4        | 4        | 4        |
-| **Total**                                |       |                   | **33**   |             | **28**   |          | **29**   |
+| Critère                                    | Poids | fetch natif, note | résultat | Axios, note | résultat | ky, note | résultat |
+| ------------------------------------------ | ----- | ----------------- | -------- | ----------- | -------- | -------- | -------- |
+| Dépendances (moins = mieux)                | 3     | 5                 | 15       | 2           | 6        | 3        | 9        |
+| Fonctionnalités couvertes vs besoin actuel | 2     | 4                 | 8        | 5           | 10       | 4        | 8        |
+| Testabilité (mock simple)                  | 2     | 4                 | 8        | 4           | 8        | 4        | 8        |
+| Verbosité gestion JSON/erreurs             | 1     | 2                 | 2        | 4           | 4        | 4        | 4        |
+| **Total**                                  |       |                   | **33**   |             | **28**   |          | **29**   |
 
 Grille construite sur les besoins actuels uniquement. Un besoin futur réel (ex. intercepteur d'auth) changerait la pondération du critère "fonctionnalités couvertes" et pourrait inverser le résultat.
 
@@ -93,7 +97,7 @@ Grille construite sur les besoins actuels uniquement. Un besoin futur réel (ex.
 - Gestion du JSON et des erreurs plus verbeuse : chaque call site réimplémente son propre `try/catch` et parsing (5 implémentations actuellement, sans garantie de cohérence entre elles)
 - Pas d'intercepteur centralisé : si un besoin de refresh token automatique apparaît, il faudra soit l'ajouter à la main dans chaque call site, soit migrer vers un wrapper à ce moment-là
 
-## Réexamen
+## Critères de vérification
 
 Rouvrir cette décision si l'une de ces conditions est observée :
 
@@ -109,4 +113,4 @@ Rouvrir cette décision si l'une de ces conditions est observée :
 
 ---
 
-**Note :** Les ADRs sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci.
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.
