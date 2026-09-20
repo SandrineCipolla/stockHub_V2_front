@@ -1,6 +1,6 @@
-# ADR-010 - Dual-view responsive pour les items de stock (mobile cards + desktop table)
+# ADR-010 - Dual-view responsive pour les items de stock
 
-**Date** : 15 juin 2026
+**Date** : 2026-06-15
 **Statut** : Accepté
 **Issue** : #165
 
@@ -8,55 +8,46 @@
 
 ## Contexte
 
-La page `StockDetailPage` affiche les items d'un stock dans un tableau HTML. Sur mobile, ce tableau est tronqué et illisible malgré `overflow-x-auto`. Les utilisateurs ne pouvaient ni lire les données ni interagir avec les boutons d'action (modifier, supprimer), invisibles sur hover sur écran tactile.
+La page `StockDetailPage` affichait les items d'un stock dans un tableau HTML. Sur mobile, ce tableau était tronqué et illisible malgré `overflow-x-auto`. Les utilisateurs ne pouvaient ni lire les données ni atteindre les boutons d'action, modifier et supprimer, qui n'apparaissaient qu'au survol donc jamais sur écran tactile.
 
 ## Décision
 
-Approche **dual-view CSS** : deux sections rendues simultanément dans le DOM, visibilité alternée par Tailwind :
+Rendre deux vues simultanément dans le DOM et alterner leur visibilité en CSS : des cartes sur mobile, le tableau existant sur desktop, via les classes Tailwind `md:hidden` et `hidden md:block`.
 
-```tsx
-{/* Vue cards — mobile */}
-<div className="md:hidden space-y-3">
-  {paginatedItems.map(item => <ItemMobileCard ... />)}
-</div>
+Le rendu des deux vues se trouve dans `src/pages/StockDetailPage.tsx`, et le composant de carte mobile dans `src/components/items/ItemMobileCard.tsx`. Ce composant est autonome et reçoit les mêmes props et callbacks que les lignes du tableau.
 
-{/* Vue tableau — desktop */}
-<div className="hidden md:block ...">
-  <table>...</table>
-</div>
-```
+Ce qui a emporté la décision : aucune logique ni aucun état ne change, la pagination et les callbacks restent les mêmes, et le tableau desktop est préservé à l'identique.
 
-Le composant `ItemMobileCard` (`src/components/items/ItemMobileCard.tsx`) est autonome et reçoit les mêmes props/callbacks que les lignes du tableau.
+## Contrainte découverte : conflit `autoFocus` entre les deux vues
 
-## Alternatives écartées
+Les deux vues partagent l'état `editingQuantityId`. À l'ouverture de l'éditeur inline, l'input desktop prenait le focus grâce à `autoFocus`, puis l'input mobile le lui volait, ce qui déclenchait le `onBlur` du desktop, lequel remettait `editingQuantityId` à `null` et fermait l'éditeur aussitôt.
 
-| Alternative                                    | Raison du rejet                                           |
-| ---------------------------------------------- | --------------------------------------------------------- |
-| `overflow-x-scroll` seul                       | UX dégradée, navigation difficile                         |
-| Réorganisation du tableau en colonnes empilées | Cassait la sémantique table/thead/tbody                   |
-| Composant DS `<sh-stock-item-card>`            | Props insuffisants : pas de rôles, pas d'inline edit      |
-| État local dans ItemMobileCard                 | Désynchronisation avec la vue desktop (même ligne éditée) |
-
-## Contrainte découverte : conflit `autoFocus` entre vues
-
-Les deux vues partagent le state `editingQuantityId`. Quand l'utilisateur ouvre l'éditeur inline :
-
-1. Desktop : input avec `autoFocus` → focus sur l'input desktop
-2. Mobile : input avec `autoFocus` → focus sur l'input mobile → **blur sur l'input desktop**
-3. `onBlur` du desktop appelle `setEditingQuantityId(null)` → éditeur fermé immédiatement
-
-**Fix** : `autoFocus` retiré du composant `ItemMobileCard`. Le desktop conserve `autoFocus` (UX clavier). Sur mobile le tap sur la valeur ouvre l'input sans focus automatique, ce qui est acceptable sur tactile.
+Correctif : `autoFocus` retiré de la vue mobile uniquement. Le desktop le conserve pour le confort clavier. Sur mobile, toucher la valeur ouvre l'input sans focus automatique, ce qui est acceptable sur tactile.
 
 ## Impact sur les tests
 
-jsdom n'applique pas le CSS. En test, les deux vues sont visibles simultanément :
+jsdom n'applique pas le CSS, les deux vues sont donc visibles en même temps pendant les tests. Deux conséquences concrètes : les requêtes par texte doivent utiliser `getAllByText` plutôt que `getByText`, et les requêtes par rôle doivent être délimitées par les `data-testid` posés sur la seule vue desktop.
 
-- `getByText('Tomates')` → erreur "found multiple elements" → changé en `getAllByText`
-- `getByRole('spinbutton')` → deux inputs pour le même item → requêtes scopées via `data-testid="qty-edit-span-{id}"` et `data-testid="qty-input-{id}"` (ajoutés sur la vue desktop uniquement)
+## Alternatives
+
+| Alternative                                  | Pourquoi rejetée                                                      |
+| -------------------------------------------- | --------------------------------------------------------------------- |
+| `overflow-x-scroll` seul                     | Expérience dégradée, navigation difficile                             |
+| Tableau réorganisé en colonnes empilées      | Casse la sémantique `table`, `thead`, `tbody`                         |
+| Composant `<sh-stock-card>` du Design System | Props insuffisantes, ni rôles ni édition inline                       |
+| État local dans la carte mobile              | Désynchronisation avec la vue desktop sur la ligne en cours d'édition |
 
 ## Conséquences
 
-- **Positif** : aucun changement de logique ou d'état, même pagination, mêmes callbacks
-- **Positif** : le tableau desktop est préservé exactement, pas de régression
-- **Négatif** : deux fois plus d'éléments dans le DOM (impact négligeable : 20 items max par page)
-- **À surveiller** : si un troisième point de rupture (ex. tablette) est ajouté, le pattern peut être étendu
+- **Positif** : aucun changement de logique ni d'état, le tableau desktop ne régresse pas
+- **Négatif** : deux fois plus d'éléments dans le DOM, impact négligeable avec 20 items par page au maximum
+- **Négatif** : les tests doivent tenir compte de la double présence, ce qui alourdit les requêtes
+
+## Critères de vérification
+
+Rouvrir cette décision si un troisième point de rupture devient nécessaire, une tablette par exemple. Le motif peut être étendu, mais le coût en DOM et en tests croît à chaque vue ajoutée.
+
+## Liens
+
+- Code concerné : `src/pages/StockDetailPage.tsx`, `src/components/items/ItemMobileCard.tsx`
+- ADR liée : [ADR-009](./ADR-009-css-moderne-container-has.md)

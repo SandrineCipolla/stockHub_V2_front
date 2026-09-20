@@ -1,37 +1,41 @@
 # ADR-008 - Vite comme build tool plutôt que Create React App ou Webpack
 
-**Date** : avril 2025
+**Date** : 2025-04
 **Statut** : Accepté
 
 ---
 
 ## Contexte
 
-Create React App, l'outil de démarrage historique de l'écosystème React, est officiellement déprécié depuis 2023 et n'est plus maintenu. Un build tool devait être choisi pour le projet.
+Choix de l'outil de build pour le frontend React et TypeScript ([ADR-007](./ADR-007-react-19.md)). Create React App était le standard historique de l'écosystème, mais il est officiellement déprécié depuis 2023 et la documentation React ne le recommande plus.
 
 ## Décision
 
 Vite, avec `@vitejs/plugin-react`.
 
-Motifs du choix :
-
-- Serveur de développement à démarrage quasi instantané, rechargement à chaud rapide
-- Configuration minimale pour un projet React et TypeScript standard
-- Outil activement maintenu, contrairement à CRA
+Ce qui a emporté la décision : un serveur de développement à démarrage quasi instantané, grâce aux modules ES natifs, là où un build Webpack demande plusieurs secondes à chaque rechargement. La configuration TypeScript et les alias de chemins sont pris en charge sans éjection, et l'outil est activement maintenu.
 
 ## Alternatives
 
-| Alternative                 | Raison du rejet                                           |
-| --------------------------- | --------------------------------------------------------- |
-| Create React App            | Déprécié, plus de maintenance                             |
-| Webpack configuré à la main | Coût de configuration et de maintenance sans bénéfice ici |
+| Alternative                 | Pourquoi rejetée                                                    |
+| --------------------------- | ------------------------------------------------------------------- |
+| Create React App            | Déprécié officiellement, sans maintenance                           |
+| Webpack configuré à la main | Coût de configuration et d'entretien injustifié pour un projet solo |
+| Parcel                      | Moins adopté en entreprise, écosystème plus restreint               |
+| Turbopack                   | Lié à Next.js, écarté avec lui ([ADR-007](./ADR-007-react-19.md))   |
 
 ## Conséquences
 
-- **Positif** : build de production mesuré à 113,99 KB gzippé, score Lighthouse Performance de 99/100 au moment de la mesure
-- **Négatif** : les variables d'environnement suivent la convention Vite (`VITE_`, chargement `.env.local` prioritaire), source d'un piège récurrent en développement local documenté dans [CLAUDE.md](../../CLAUDE.md)
+- **Positif** : rechargement à chaud quasi instantané, confort de développement élevé
+- **Positif** : au moment de la mesure, build de production à 113,99 KB gzippé et score Lighthouse Performance de 99 sur 100. Les valeurs courantes sont dans `documentation/9-DASHBOARD-QUALITY.md`
+- **Négatif** : écosystème de plugins plus jeune que celui de Webpack sur les cas de niche
+- **Négatif** : les variables d'environnement suivent la convention Vite, avec un `.env.local` prioritaire sur `.env`, source d'un piège récurrent en développement local documenté dans [CLAUDE.md](../../CLAUDE.md)
+
+## Critères de vérification
+
+Rouvrir cette décision si la taille du build ou le score Lighthouse se dégradent nettement avec la croissance du projet.
 
 ## Liens
 
 - Configuration : `vite.config.ts`
-- Décision liée : [ADR-007](./ADR-007-react-19.md)
+- ADR liée : [ADR-007](./ADR-007-react-19.md)
