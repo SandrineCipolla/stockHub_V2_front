@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related:
+---
+
 # ADR-011 - Playwright avec authentification interactive réelle pour les E2E frontend
 
 **Date** : 2026-07
-**Statut** : Accepté
 **Issues** : #101, #66
 
 ---
@@ -51,3 +56,7 @@ Rouvrir cette décision si un compte de test B2C dédié devient provisionnable 
 
 - Guide : [docs/E2E_TESTS_GUIDE.md](../E2E_TESTS_GUIDE.md)
 - Code concerné : `tests/e2e-frontend/`, `playwright.config.ts`
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

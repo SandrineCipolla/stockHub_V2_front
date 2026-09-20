@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-002-web-components-lit.md
+---
+
 # ADR-001 - Séparation du Design System en repository indépendant
 
 **Date** : 2025-10
-**Statut** : Accepté
 
 ---
 
@@ -42,3 +47,7 @@ Rouvrir cette décision si le cycle de publication devient un frein mesurable, p
 - Repository : [stockhub_design_system](https://github.com/SandrineCipolla/stockhub_design_system)
 - Storybook : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
 - ADR liée : [ADR-002](./ADR-002-web-components-lit.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

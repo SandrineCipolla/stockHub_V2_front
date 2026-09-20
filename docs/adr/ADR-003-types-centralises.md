@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-004-fixtures-centralisees.md
+---
+
 # ADR-003 - Types TypeScript centralisés dans `src/types/`
 
 **Date** : 2025-10
-**Statut** : Accepté
 
 ---
 
@@ -38,3 +43,7 @@ Aucune interface décrivant un objet métier ne doit être déclarée hors de `s
 
 - Code concerné : `src/types/`
 - ADR liée : [ADR-004](./ADR-004-fixtures-centralisees.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

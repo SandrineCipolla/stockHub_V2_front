@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-008-vite-build-tool.md
+---
+
 # ADR-007 - Choix du framework frontend : React 19
 
 **Date** : 2025-04
-**Statut** : Accepté
 
 ---
 
@@ -49,3 +54,7 @@ Rouvrir cette décision si le projet devait exposer des pages publiques demandan
 
 - ADR liée : [ADR-008](./ADR-008-vite-build-tool.md)
 - ADR liée : [ADR-002](./ADR-002-web-components-lit.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

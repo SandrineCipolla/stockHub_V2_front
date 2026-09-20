@@ -29,7 +29,7 @@ Prochain numéro : ADR-013.
 
 ## Créer une nouvelle ADR
 
-1. Copier `TEMPLATE.md`
+1. Copier `TEMPLATE.md`, commun aux trois repos
 2. Prendre le numéro qui suit le plus grand de ce tableau
 3. Nommer le fichier `ADR-NNN-titre-en-kebab-case.md`
 4. Ajouter la ligne dans le tableau ci-dessus
@@ -37,4 +37,4 @@ Prochain numéro : ADR-013.
 
 ## Modifier une ADR existante
 
-Les ADR sont immuables une fois acceptées. Si une décision change, créer une nouvelle ADR qui supplante l'ancienne et passer le statut de l'ancienne à `Supplantée par ADR-NNN`.
+Les ADR sont immuables une fois acceptées. Si une décision change, créer une nouvelle ADR qui supplante l'ancienne et passer le `status` de son frontmatter à `SUPPLANTÉ PAR ADR-NNN`.

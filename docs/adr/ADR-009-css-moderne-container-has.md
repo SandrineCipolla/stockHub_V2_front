@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-010-items-responsive-dual-view.md
+---
+
 # ADR-009 - CSS moderne : Container Queries et `:has()`
 
 **Date** : 2026-02
-**Statut** : Accepté
 
 ---
 
@@ -48,3 +53,7 @@ Rouvrir cette décision si le socle de navigateurs visé descend sous la couvert
 
 - Code concerné : `src/styles/index.css`
 - ADR liée : [ADR-010](./ADR-010-items-responsive-dual-view.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

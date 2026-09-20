@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-003-types-centralises.md
+---
+
 # ADR-004 - Fixtures de test centralisées
 
 **Date** : 2025-10
-**Statut** : Accepté
 
 ---
 
@@ -31,3 +36,7 @@ Rouvrir cette décision si des régressions apparaissent sur des cas limites que
 - Code concerné : `src/test/fixtures/`
 - Guide de tests : `documentation/5-TESTING-GUIDE.md`
 - ADR liée : [ADR-003](./ADR-003-types-centralises.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

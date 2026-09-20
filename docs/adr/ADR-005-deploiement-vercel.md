@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related:
+---
+
 # ADR-005 - Déploiement frontend sur Vercel plutôt qu'Azure Static Web Apps
 
 **Date** : automne 2025
-**Statut** : Accepté
 
 ---
 
@@ -40,3 +45,7 @@ Rouvrir cette décision si la gestion de deux fournisseurs devient un frein rée
 
 - Environnements : section Environnements de [CLAUDE.md](../../CLAUDE.md)
 - ADR liée (backend) : [ADR-006 MySQL sur Azure](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-006-mysql-azure-cloud.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

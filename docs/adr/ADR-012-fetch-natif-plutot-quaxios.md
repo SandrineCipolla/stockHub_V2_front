@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related:
+---
+
 # ADR-012 - fetch natif plutôt qu'un client HTTP dédié (Axios / ky)
 
 **Date** : 2026-09-09
-**Statut** : Accepté
 
 ---
 
@@ -105,3 +110,7 @@ Rouvrir cette décision si l'une de ces conditions est observée :
 - Code concerné : `src/components/items/ItemMobileCard.tsx`, `src/hooks/useNotificationCount.ts`, `src/hooks/usePendingContributionsCount.ts`, `src/pages/StockDetailPage.tsx`
 - ADR lié (backend) : [ADR-016 (Style d'API REST)](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-016-rest-api-style.md)
 - Cours de référence : section "Dépendances" de la fiche _Les critères d'un choix technique_
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

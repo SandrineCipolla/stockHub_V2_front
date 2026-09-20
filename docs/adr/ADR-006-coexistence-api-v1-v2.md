@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related:
+---
+
 # ADR-006 - Coexistence des API V1 et V2 côté consommation frontend
 
 **Date** : automne 2025
-**Statut** : Accepté
 
 ---
 
@@ -31,3 +36,7 @@ Rouvrir cette décision, et documenter sa clôture, une fois la migration V2 ter
 - Code concerné : `src/services/api/stocksAPI.ts`
 - ADR liée (backend) : [ADR-005 versioning API V2](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-005-api-versioning-v2.md)
 - ADR liée (backend) : [ADR-001 migration DDD et CQRS](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-001-migration-ddd-cqrs.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

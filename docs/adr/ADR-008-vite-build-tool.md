@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-007-react-19.md
+---
+
 # ADR-008 - Vite comme build tool plutôt que Create React App ou Webpack
 
 **Date** : 2025-04
-**Statut** : Accepté
 
 ---
 
@@ -39,3 +44,7 @@ Rouvrir cette décision si la taille du build ou le score Lighthouse se dégrade
 
 - Configuration : `vite.config.ts`
 - ADR liée : [ADR-007](./ADR-007-react-19.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

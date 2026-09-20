@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-001-separation-design-system.md
+---
+
 # ADR-002 - Web Components (Lit) plutôt que composants React purs
 
 **Date** : 2025-10
-**Statut** : Accepté
 
 ---
 
@@ -40,3 +45,7 @@ Rouvrir cette décision si le coût d'entretien des wrappers dépasse le bénéf
 - Repository : [stockhub_design_system](https://github.com/SandrineCipolla/stockhub_design_system)
 - Guide d'intégration : `documentation/2-WEB-COMPONENTS-GUIDE.md`
 - ADR liée : [ADR-001](./ADR-001-separation-design-system.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.

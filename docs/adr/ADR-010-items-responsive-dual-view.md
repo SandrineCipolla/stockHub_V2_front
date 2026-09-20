@@ -1,7 +1,12 @@
+---
+author: Sandrine Cipolla
+status: ACCEPTÉ
+related: ./ADR-009-css-moderne-container-has.md
+---
+
 # ADR-010 - Dual-view responsive pour les items de stock
 
 **Date** : 2026-06-15
-**Statut** : Accepté
 **Issue** : #165
 
 ---
@@ -51,3 +56,7 @@ Rouvrir cette décision si un troisième point de rupture devient nécessaire, u
 
 - Code concerné : `src/pages/StockDetailPage.tsx`, `src/components/items/ItemMobileCard.tsx`
 - ADR liée : [ADR-009](./ADR-009-css-moderne-container-has.md)
+
+---
+
+Les ADR sont immuables. Si cette décision change, créer une nouvelle ADR qui supplante celle-ci plutôt que de modifier celle-ci.
