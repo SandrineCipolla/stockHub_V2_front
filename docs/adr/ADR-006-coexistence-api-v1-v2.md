@@ -1,7 +1,7 @@
 ---
 author: Sandrine Cipolla
 status: ACCEPTÉ
-related:
+related: ./ADR-012-fetch-natif-plutot-quaxios.md
 ---
 
 # ADR-006 - Coexistence des API V1 et V2 côté consommation frontend

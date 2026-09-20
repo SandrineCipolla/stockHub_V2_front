@@ -1,7 +1,7 @@
 ---
 author: Sandrine Cipolla
 status: ACCEPTÉ
-related:
+related: ./ADR-006-coexistence-api-v1-v2.md
 ---
 
 # ADR-012 - fetch natif plutôt qu'un client HTTP dédié (Axios / ky)

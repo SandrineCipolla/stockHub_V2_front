@@ -27,7 +27,7 @@ Ce qui a emporté la décision : un mock d'authentification ne valide pas le vra
 
 MSAL est configuré avec `cacheLocation: 'sessionStorage'`, voir `src/config/authConfig.ts`. Or `storageState()` ne capture que les cookies et le `localStorage`, jamais le `sessionStorage` : chaque test repartait sans session.
 
-Contournement retenu : sérialisation manuelle du `sessionStorage` après le login dans `auth.setup.ts`, puis réinjection via `context.addInitScript()` dans un fixture partagé, avant l'exécution du code applicatif. Le détail est dans [docs/E2E_TESTS_GUIDE.md](../E2E_TESTS_GUIDE.md). Le piège se généralise à tout projet combinant MSAL et Playwright.
+Contournement retenu : sérialisation manuelle du `sessionStorage` après le login dans `auth.setup.ts`, puis réinjection via `context.addInitScript()` dans un fixture partagé, avant l'exécution du code applicatif. Le détail est dans le [guide des tests E2E](../E2E_TESTS_GUIDE.md). Le piège se généralise à tout projet combinant MSAL et Playwright.
 
 ## Décision opérationnelle : une CI séparée
 
@@ -54,7 +54,7 @@ Rouvrir cette décision si un compte de test B2C dédié devient provisionnable 
 
 ## Liens
 
-- Guide : [docs/E2E_TESTS_GUIDE.md](../E2E_TESTS_GUIDE.md)
+- Guide : [Guide des tests E2E](../E2E_TESTS_GUIDE.md)
 - Code concerné : `tests/e2e-frontend/`, `playwright.config.ts`
 
 ---

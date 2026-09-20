@@ -43,7 +43,7 @@ Rouvrir cette décision si le coût d'entretien des wrappers dépasse le bénéf
 ## Liens
 
 - Repository : [stockhub_design_system](https://github.com/SandrineCipolla/stockhub_design_system)
-- Guide d'intégration : `documentation/2-WEB-COMPONENTS-GUIDE.md`
+- Guide d'intégration : [Guide Web Components](../../documentation/2-WEB-COMPONENTS-GUIDE.md)
 - ADR liée : [ADR-001](./ADR-001-separation-design-system.md)
 
 ---
