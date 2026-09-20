@@ -23,7 +23,7 @@
 │  │   (Repository 1)     │──────────│    (Repository 2)    │     │
 │  │                      │  import  │                      │     │
 │  │  - Lit Element       │  ──────> │  - React 19          │     │
-│  │  - Web Components    │  v1.3.1  │  - TypeScript 5.8    │     │
+│  │  - Web Components    │  npm   │  - TypeScript 5.8    │     │
 │  │  - Storybook         │          │  - Wrappers React    │     │
 │  │  - Design Tokens     │          │  - Pages/Features    │     │
 │  └──────────────────────┘          └──────────────────────┘     │
@@ -39,7 +39,7 @@
 
 **URL** : https://github.com/SandrineCipolla/stockhub_design_system
 **Storybook** : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
-**Package** : `@stockhub/design-system@v1.3.1`
+**Package** : `@stockhub/design-system` (version définie dans [`package.json`](../package.json))
 
 #### Ce qui appartient au Design System
 
@@ -390,7 +390,7 @@ it('should call onClick when sh-click fires', () => {
 
 - **Repository** : https://github.com/SandrineCipolla/stockhub_design_system
 - **Storybook** : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
-- **Package NPM** : `@stockhub/design-system@v1.3.1`
+- **Package NPM** : `@stockhub/design-system` (voir `package.json`)
 
 ### Frontend
 
@@ -438,6 +438,6 @@ it('should call onClick when sh-click fires', () => {
 ---
 
 **Dernière mise à jour** : 18 Novembre 2025
-**Version Design System** : v1.3.1
+**Version Design System** : `@stockhub/design-system` (voir `package.json`)
 **Version Frontend** : v1.1.0
 **Statut** : ✅ Actif et maintenu

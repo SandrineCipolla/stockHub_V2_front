@@ -24,7 +24,7 @@ Ajout de `@playwright/test` (Chromium), `playwright.config.ts` (projet `setup` �
 
 - CodeQL (high) : vérification d'hostname par sous-chaîne (`url.hostname.includes('b2clogin.com')`), contournable par un domaine attaquant contenant cette sous-chaîne → comparaison stricte sur le hostname exact
 - `ENOENT` sur `playwright/.auth/` : `writeFileSync` ne crée pas les dossiers parents (contrairement à `storageState()`) — dossier gitignored, inexistant sur un checkout CI propre → `mkdirSync(..., { recursive: true })`
-- **Piège MSAL le plus significatif** : `cacheLocation: 'sessionStorage'` (`src/config/authConfig.ts`) — `storageState()` de Playwright ne capture jamais le sessionStorage, seulement cookies + localStorage. Sans contournement, chaque test perdait la session. Fix : sérialisation manuelle post-login + réinjection via `context.addInitScript()` (`tests/e2e-frontend/fixtures.ts`). Documenté dans `docs/E2E_TESTS_GUIDE.md` et l'ADR-012 du wiki — piège généralisable à tout projet MSAL + Playwright.
+- **Piège MSAL le plus significatif** : `cacheLocation: 'sessionStorage'` (`src/config/authConfig.ts`) — `storageState()` de Playwright ne capture jamais le sessionStorage, seulement cookies + localStorage. Sans contournement, chaque test perdait la session. Fix : sérialisation manuelle post-login + réinjection via `context.addInitScript()` (`tests/e2e-frontend/fixtures.ts`). Documenté dans `docs/E2E_TESTS_GUIDE.md` et l'ADR-011 (`docs/adr/ADR-011-playwright-auth-reelle.md`) — piège généralisable à tout projet MSAL + Playwright.
 
 **Risque principal levé** : le login réel passe sans MFA/code de vérification bloquant sur la policy `signupsignin` — condition nécessaire pour que l'automatisation soit viable, non déterminable à l'avance sans un run réel.
 
@@ -55,7 +55,7 @@ Ajout de `@playwright/test` (Chromium), `playwright.config.ts` (projet `setup` �
 ### Documentation mise à jour dans la foulée
 
 - `docs/E2E_TESTS_GUIDE.md` (repo Front) : transformé en guide pas-à-pas installation/utilisation (prérequis, lancement local et contre l'app déployée, débogage `--ui`/`show-trace`, comment écrire un nouveau test)
-- Wiki (`stockHub_V2_front.wiki`) : ADR-012 (Playwright + auth interactive réelle plutôt que mockée), section CI/CD dédiée au workflow `e2e-frontend.yml`, section Qualité & Métriques avec le tableau de statut des workflows E2E
+- Wiki (`stockHub_V2_front.wiki`) : ADR-011 (Playwright + auth interactive réelle plutôt que mockée), section CI/CD dédiée au workflow `e2e-frontend.yml`, section Qualité & Métriques avec le tableau de statut des workflows E2E
 
 ### Variante — labels de priorité incohérents entre le corps de l'issue et le label GitHub
 

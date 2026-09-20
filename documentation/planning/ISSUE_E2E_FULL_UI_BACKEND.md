@@ -426,8 +426,8 @@ export async function cleanupTestStocks() {
 **Documentation** :
 
 - Backend: `stockhub_back/tests/e2e/` (tests API E2E existants)
-- Frontend: `documentation/INTEGRATION_BACKEND_SESSION.md`
-- Session recap: `documentation/SESSION_RECAP_2026-01-07.md`
+- Frontend: `documentation/sessions/INTEGRATION_BACKEND_SESSION.md`
+- Session recap: `documentation/sessions/SESSION_RECAP_2026-01-07.md`
 
 **Playwright** :
 

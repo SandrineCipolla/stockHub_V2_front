@@ -30,6 +30,14 @@
 | **15** | [15-APP-QUALITY-METRICS.md](15-APP-QUALITY-METRICS.md)                   | 🎯 **Métriques App** - État qualité & accessibilité    |
 | **16** | [technical/16-CI-TROUBLESHOOTING.md](technical/16-CI-TROUBLESHOOTING.md) | 🛠️ **CI/CD Troubleshooting** - Résolution problèmes CI |
 
+### Fichiers racine
+
+- [../CONTRIBUTING.md](../CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
+- [../CLAUDE.md](../CLAUDE.md) : contexte projet pour sessions IA
+- [../README.md](../README.md) : présentation du projet
+- [../docs/adr/INDEX.md](../docs/adr/INDEX.md) : Architecture Decision Records (ADR)
+- [../docs/E2E_TESTS_GUIDE.md](../docs/E2E_TESTS_GUIDE.md) : guide d'exécution des tests E2E Playwright
+
 ### Quick Links
 
 - **🚀 Nouveau sur le projet ?** → [1-GETTING-STARTED.md](1-GETTING-STARTED.md)
@@ -42,7 +50,7 @@
 ## 🎨 Design System (Externe)
 
 > **Repository séparé** : [stockhub_design_system](https://github.com/SandrineCipolla/stockhub_design_system)
-> **Package NPM** : `@stockhub/design-system@v1.3.1`
+> **Package NPM** : `@stockhub/design-system` (version définie dans [`package.json`](../package.json))
 > **Storybook** : [Documentation interactive](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
 
 ### Documentation Design System
@@ -67,7 +75,7 @@
 **Liste complète** : Voir [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md#composants-disponibles)
 **Documentation interactive** : [Storybook](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
 
-**Version actuelle** : v1.3.1 (stable)
+**Version actuelle** : Gérée via [`package.json`](../package.json)
 
 ---
 
@@ -169,7 +177,7 @@
 
 ### Améliorations & Issues
 
-- [Améliorations Futures](../AMELIORATIONS-FUTURES.md) - Améliorations planifiées
+- [Améliorations Futures](planning/AMELIORATIONS-FUTURES.md) - Améliorations planifiées
 - [GitHub Issues](https://github.com/SandrineCipolla/stockHub_V2_front/issues) - Suivi actif des tâches
 
 ---

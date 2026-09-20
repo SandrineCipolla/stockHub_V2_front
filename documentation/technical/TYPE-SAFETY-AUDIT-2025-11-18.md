@@ -590,7 +590,7 @@ export type StatClickEvent = CustomEvent<void>;
 **Ajouté référence au rapport d'audit** (ligne 90) :
 
 ```markdown
-- [technical/TYPE-SAFETY-AUDIT-2025-11-18.md](technical/TYPE-SAFETY-AUDIT-2025-11-18.md) - Audit TypeScript & sécurité des types
+- [TYPE-SAFETY-AUDIT-2025-11-18.md](./TYPE-SAFETY-AUDIT-2025-11-18.md) - Audit TypeScript & sécurité des types
 ```
 
 ---

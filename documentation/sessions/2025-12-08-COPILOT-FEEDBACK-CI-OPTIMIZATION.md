@@ -558,7 +558,7 @@ const PAUSE = parseInt(process.env.PAUSE_MS || '2000', 10);
 
 ## Références
 
-- [CI Troubleshooting Guide](../technical/CI-TROUBLESHOOTING.md)
+- [CI Troubleshooting Guide](../technical/16-CI-TROUBLESHOOTING.md)
 - [GitHub Actions Docs](https://docs.github.com/en/actions)
 - [Lighthouse API](https://github.com/GoogleChrome/lighthouse/blob/main/docs/understanding-results.md)
 - [npm Optional Dependencies](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#optionaldependencies)
