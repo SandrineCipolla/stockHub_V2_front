@@ -67,11 +67,38 @@ function toPosix(path) {
     return path.split('\\').join('/');
 }
 
+/** Vrai pour un bloc de code indenté : 4 espaces après une ligne vide, hors liste et tableau. */
+function isIndentedCodeStart(lines, index) {
+    if (!/^(\t| {4})\S/.test(lines[index])) return false;
+    let previous = index - 1;
+    while (previous >= 0 && lines[previous].trim() === '') previous--;
+    if (previous < 0) return false;
+    if (index - previous < 2) return false; // pas de ligne vide avant, donc pas un bloc
+    return !/^\s*([-*+]|\d+\.|\||>)/.test(lines[previous]);
+}
+
 /** Masque les blocs et spans de code : le guide de rédaction ne s'applique pas au code. */
 function stripCode(content) {
-    return content
-        .replace(/```[\s\S]*?```/g, m => m.replace(/[^\n]/g, ' '))
-        .replace(/`[^`\n]*`/g, m => ' '.repeat(m.length));
+    const masked = content
+        .replace(/^(```|~~~)[\s\S]*?^\1/gm, m => m.replace(/[^\n]/g, ' '))
+        .replace(/`[^`\n]*`/g, m => ' '.repeat(m.length))
+        // Entités HTML : leur point-virgule n'est pas de la ponctuation
+        .replace(/&(#\d+|#x[0-9a-fA-F]+|[a-zA-Z]+);/g, m => ' '.repeat(m.length));
+
+    const lines = masked.split('\n');
+    let inIndentedBlock = false;
+    return lines
+        .map((line, index) => {
+            if (inIndentedBlock) {
+                if (line.trim() === '' || /^(\t| {4})/.test(line)) return line.replace(/[^\n]/g, ' ');
+                inIndentedBlock = false;
+            } else if (isIndentedCodeStart(lines, index)) {
+                inIndentedBlock = true;
+                return line.replace(/[^\n]/g, ' ');
+            }
+            return line;
+        })
+        .join('\n');
 }
 
 function checkLinks(files, root) {
@@ -79,7 +106,11 @@ function checkLinks(files, root) {
     for (const file of files) {
         // Les exemples en bloc ou en span de code ne sont pas des liens à suivre
         const content = stripCode(readFileSync(file, 'utf-8'));
-        for (const match of content.matchAll(/!?\[[^\]]*]\(([^)\s]+)\)/g)) {
+        // Le chemin peut contenir une paire de parenthèses, par exemple fichier(1).md
+        const inline = [...content.matchAll(/!?\[[^\]]*]\(\s*<?([^()<>\s]+(?:\([^()\s]*\)[^()<>\s]*)*)>?\s*(?:"[^"]*")?\)/g)];
+        // Liens de référence : [texte][ref] défini plus bas par [ref]: cible
+        const references = [...content.matchAll(/^\s{0,3}\[[^\]]+]:\s*<?(\S+)>?/gm)];
+        for (const match of [...inline, ...references]) {
             const target = match[1];
             if (/^(https?:|mailto:|#)/.test(target)) continue;
             const path = target.split('#')[0];
