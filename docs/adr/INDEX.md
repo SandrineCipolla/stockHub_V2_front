@@ -1,36 +1,40 @@
-# Architecture Decision Records (ADRs) — Frontend
+# Architecture Decision Records (ADR) - Frontend
 
-Ce dossier contient les **Architecture Decision Records** du frontend StockHub V2.
+Ce dossier contient les Architecture Decision Records du frontend StockHub V2. Les fichiers de ce dossier sont la source de vérité : le wiki présente une vue transverse aux trois repos, il ne remplace pas ces fichiers.
 
-Les décisions structurantes du backend vivent dans `stockhub_back/docs/adr/`, avec leur propre numérotation locale. Le [wiki du projet](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records) tient la table de correspondance entre les deux séquences (front et back ne partagent pas une numérotation commune). Les fichiers ci-dessous restent la source de vérité pour le texte complet des ADR front.
+## Numérotation
 
-## Liste des ADRs
+Chaque repo numérote ses ADR localement, à partir de 001, sans trou. Le numéro d'une ADR front ne correspond à rien dans `stockhub_back` ni dans `stockhub_design_system` : l'ADR-005 du front (déploiement Vercel) et l'ADR-005 du back (versioning API V2) sont deux décisions sans rapport.
 
-| #                                                  | Titre                                                           | Date    | Statut     |
-| -------------------------------------------------- | --------------------------------------------------------------- | ------- | ---------- |
-| [ADR-001](./ADR-001-separation-design-system.md)   | Séparation du Design System en repository indépendant           | 2025-10 | ✅ Accepté |
-| [ADR-002](./ADR-002-web-components-lit.md)         | Web Components (Lit) plutôt que composants React purs           | 2025-10 | ✅ Accepté |
-| [ADR-004](./ADR-004-types-centralises.md)          | Types TypeScript centralisés dans `src/types/`                  | 2025-10 | ✅ Accepté |
-| [ADR-005](./ADR-005-fixtures-centralisees.md)      | Fixtures de test centralisées dans `test/fixtures/`             | 2025-10 | ✅ Accepté |
-| [ADR-006](./ADR-006-deploiement-vercel.md)         | Déploiement frontend sur Vercel plutôt qu'Azure Static Web Apps | 2025    | ✅ Accepté |
-| [ADR-007](./ADR-007-coexistence-api-v1-v2.md)      | Coexistence API V1 et V2 côté consommation frontend             | 2025    | ✅ Accepté |
-| [ADR-008](./ADR-008-react-19.md)                   | Choix du framework frontend — React 19                          | 2025-04 | ✅ Accepté |
-| [ADR-009](./ADR-009-vite-build-tool.md)            | Vite comme build tool plutôt que CRA / Webpack                  | 2025-04 | ✅ Accepté |
-| [ADR-010](./ADR-010-css-moderne-container-has.md)  | CSS moderne : Container Queries et `:has()`                     | 2026-02 | ✅ Accepté |
-| [ADR-011](./ADR-011-items-responsive-dual-view.md) | Dual-view responsive items : mobile cards + desktop table       | 2026-06 | ✅ Accepté |
-| [ADR-012](./ADR-012-playwright-auth-reelle.md)     | Playwright avec auth interactive réelle pour les E2E frontend   | 2026-07 | ✅ Accepté |
-| [ADR-020](./ADR-020-fetch-natif-plutot-quaxios.md) | fetch natif plutôt qu'un client HTTP dédié (Axios / ky)         | 2026-09 | ✅ Accepté |
+Une référence croisée entre repos se fait par lien explicite vers le fichier de l'autre repo, jamais par numéro seul. La table de correspondance entre les trois séquences vit sur le [wiki](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records).
 
-> Numérotation locale à ce repo : le prochain numéro est le plus grand numéro existant dans ce tableau, plus un (donc après ADR-020 actuellement). Elle ne correspond pas à celle de `stockhub_back` ni à un ordre global. ADR-003 et ADR-013 à ADR-019 n'existent pas dans ce repo : ce sont des décisions backend, à consulter dans `stockhub_back/docs/adr/`.
+## Liste des ADR
 
-## Comment créer un nouvel ADR
+| #                                                  | Titre                                                            | Date    | Statut  |
+| -------------------------------------------------- | ---------------------------------------------------------------- | ------- | ------- |
+| [ADR-001](./ADR-001-separation-design-system.md)   | Séparation du Design System en repository indépendant            | 2025-10 | Accepté |
+| [ADR-002](./ADR-002-web-components-lit.md)         | Web Components (Lit) plutôt que composants React purs            | 2025-10 | Accepté |
+| [ADR-003](./ADR-003-types-centralises.md)          | Types TypeScript centralisés dans `src/types/`                   | 2025-10 | Accepté |
+| [ADR-004](./ADR-004-fixtures-centralisees.md)      | Fixtures de test centralisées                                    | 2025-10 | Accepté |
+| [ADR-005](./ADR-005-deploiement-vercel.md)         | Déploiement frontend sur Vercel plutôt qu'Azure Static Web Apps  | 2025    | Accepté |
+| [ADR-006](./ADR-006-coexistence-api-v1-v2.md)      | Coexistence des API V1 et V2 côté consommation frontend          | 2025    | Accepté |
+| [ADR-007](./ADR-007-react-19.md)                   | Choix du framework frontend : React 19                           | 2025-04 | Accepté |
+| [ADR-008](./ADR-008-vite-build-tool.md)            | Vite comme build tool plutôt que CRA ou Webpack                  | 2025-04 | Accepté |
+| [ADR-009](./ADR-009-css-moderne-container-has.md)  | CSS moderne : Container Queries et `:has()`                      | 2026-02 | Accepté |
+| [ADR-010](./ADR-010-items-responsive-dual-view.md) | Dual-view responsive items : mobile cards et desktop table       | 2026-06 | Accepté |
+| [ADR-011](./ADR-011-playwright-auth-reelle.md)     | Playwright avec authentification interactive réelle pour les E2E | 2026-07 | Accepté |
+| [ADR-012](./ADR-012-fetch-natif-plutot-quaxios.md) | `fetch` natif plutôt qu'un client HTTP dédié (Axios, ky)         | 2026-09 | Accepté |
+
+Prochain numéro : ADR-013.
+
+## Créer une nouvelle ADR
 
 1. Copier `TEMPLATE.md`
-2. Lister ce dossier pour trouver le plus grand numéro existant, le nouveau numéro est ce numéro plus un
-3. Nom de fichier : `ADR-NNN-titre-en-kebab-case.md`
-4. Ajouter la ligne dans ce tableau
-5. Mettre à jour la table de correspondance sur le wiki
+2. Prendre le numéro qui suit le plus grand de ce tableau
+3. Nommer le fichier `ADR-NNN-titre-en-kebab-case.md`
+4. Ajouter la ligne dans le tableau ci-dessus
+5. Mettre à jour la table de correspondance du wiki
 
-## Modifier un ADR existant
+## Modifier une ADR existante
 
-Les ADR sont immuables une fois acceptés. Si une décision change, créer un nouvel ADR qui supplante l'ancien et mettre à jour son statut : `Supplanté par ADR-XXX`.
+Les ADR sont immuables une fois acceptées. Si une décision change, créer une nouvelle ADR qui supplante l'ancienne et passer le statut de l'ancienne à `Supplantée par ADR-NNN`.

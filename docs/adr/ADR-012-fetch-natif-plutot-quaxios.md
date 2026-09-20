@@ -1,4 +1,4 @@
-# ADR-020: fetch natif plutôt qu'un client HTTP dédié (Axios / ky)
+# ADR-012: fetch natif plutôt qu'un client HTTP dédié (Axios / ky)
 
 **Date:** 2026-09-09
 **Statut:** Accepté
@@ -86,7 +86,7 @@ Grille construite sur les besoins actuels uniquement — un besoin futur réel (
 ### Positives
 
 - Zéro dépendance HTTP supplémentaire à auditer, mettre à jour ou surveiller côté sécurité
-- Bundle plus léger (cohérent avec les 113 KB gzippé mesurés en ADR-009)
+- Bundle plus léger (cohérent avec les 113 KB gzippé mesurés en ADR-008)
 
 ### Négatives
 

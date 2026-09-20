@@ -18,7 +18,7 @@ test.describe('Gestion des items — ajout et statut', () => {
     await addItem(page, { label: itemLabel, quantity: 2, minimumStock: 10 });
 
     // 3. L'item apparaît dans le tableau (vue desktop — vue mobile coexiste
-    // dans le DOM mais cachée en CSS, cf. wiki ADR-011) avec le statut Critique
+    // dans le DOM mais cachée en CSS, cf. ADR-010) avec le statut Critique
     const desktopTable = page.getByTestId('items-desktop-table');
     const itemRow = desktopTable.locator('tr', { hasText: itemLabel });
     await expect(itemRow).toBeVisible();
