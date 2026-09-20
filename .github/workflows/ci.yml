@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
@@ -47,6 +49,9 @@ jobs:
 
       - name: 🔍 Detect as const
         run: npm run detect:as-const
+
+      - name: 📚 Documentation (liens et guide de rédaction)
+        run: npm run check:docs
 
   test:
     name: 🧪 Tests

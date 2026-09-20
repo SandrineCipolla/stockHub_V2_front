@@ -30,7 +30,7 @@ Comment vérifier que la décision tient dans le temps : des critères concrets 
 
 - Issue GitHub : #XX
 - Code concerné : `src/chemin/fichier.ts`
-- Documentation ou ADR liée : [ADR-YYY](./ADR-YYY-titre.md)
+- Documentation ou ADR liée : `[ADR-YYY](./ADR-YYY-titre.md)`
 
 ---
 

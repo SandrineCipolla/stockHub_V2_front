@@ -13,6 +13,15 @@
 
 ---
 
+## 📚 check-docs.mjs
+
+Vérifie la documentation Markdown : liens relatifs cassés (avec baseline dans `docs-links-baseline.json`) et règles fixes de `documentation/technical/guide-redaction.md` sur les fichiers modifiés.
+
+```bash
+npm run check:docs        # liens + style sur les fichiers modifiés (inclus dans ci:quality)
+npm run check:docs:all    # audit de style sur tout le dépôt, sans échec
+```
+
 ## 🚀 Utilisation Rapide
 
 ### Prérequis
@@ -473,7 +482,7 @@ npm install -D puppeteer
 ### Complète
 
 - [TESTS-PERFORMANCE.md](../documentation/TESTS-PERFORMANCE.md)
-- [ANIMATIONS.md](../documentation/ANIMATIONS.md)
+- [ANIMATIONS.md](../documentation/technical/ANIMATIONS.md)
 
 ### Lighthouse
 

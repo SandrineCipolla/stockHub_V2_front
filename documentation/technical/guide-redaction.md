@@ -27,3 +27,12 @@ Chaque entrée illustre une catégorie à reconnaître. Ne garder un terme signa
 ## Portée
 
 S'applique à toute documentation rédigée pour ce projet : ADR, README, CONTRIBUTING, sessions de développement, commentaires de PR. Ne s'applique pas au code lui-même (noms de variables, commentaires techniques) sauf pour les commentaires en prose longue.
+
+## Vérification automatique
+
+`npm run check:docs` vérifie deux choses, et tourne dans `npm run ci:quality` comme dans la CI :
+
+- Les liens relatifs de tous les fichiers Markdown pointent vers un fichier existant. Les liens déjà cassés à la mise en place sont listés dans `scripts/docs-links-baseline.json` et n'échouent pas. Cette liste est faite pour diminuer.
+- Les règles fixes ci-dessus (tiret cadratin, point-virgule en prose, point médian) sur les seuls fichiers modifiés par rapport à `main`, la règle étant plus récente que le dépôt. Les blocs et spans de code sont ignorés.
+
+`npm run check:docs:all` applique les règles de style à tout le dépôt sans faire échouer : c'est la mesure de la dette restante.

@@ -348,4 +348,4 @@ npm ci
 - [TESTS-PERFORMANCE.md](TESTS-PERFORMANCE.md) - Tests et métriques
 - [ANIMATIONS.md](ANIMATIONS.md) - Système d'animations
 - [TROUBLESHOOTING-WEB-COMPONENTS.md](TROUBLESHOOTING-WEB-COMPONENTS.md) - Debug
-- [INDEX.md](INDEX.md) - Index de la documentation
+- [0-INDEX.md](../0-INDEX.md) - Index de la documentation
