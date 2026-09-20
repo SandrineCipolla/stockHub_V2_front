@@ -1,8 +1,7 @@
-# État des lieux — Connexion Front V2 ↔ Back
+# Diagnostic de la connexion front vers back
 
-> **Mode d'emploi** : Dépose ce fichier dans le repo `stockHub_V2_front`.
-> Dans Claude Code : **"Lis ETAT_CONNEXION_FRONT_BACK.md et exécute le diagnostic"**
-> Mode diagnostic uniquement — ne modifie rien.
+> **Mode d'emploi** : dans Claude Code, demander « lis `documentation/technical/diagnostic-connexion-front-back.md` et exécute le diagnostic ».
+> Le diagnostic est en lecture seule, il ne modifie aucun fichier.
 
 ---
 
@@ -20,7 +19,7 @@ car le token Bearer Azure B2C n'était pas correctement attaché aux headers.
 
 ---
 
-## DIAGNOSTIC 1 — Fichiers de service API
+## DIAGNOSTIC 1 : Fichiers de service API
 
 ```bash
 # Lister les fichiers de services API
@@ -38,7 +37,7 @@ find src -name "*api*" -o -name "*Api*" -o -name "*service*" -o -name "*Service*
 
 ---
 
-## DIAGNOSTIC 2 — Gestion du token MSAL
+## DIAGNOSTIC 2 : Gestion du token MSAL
 
 ```bash
 # Chercher comment le token est acquis et utilisé
@@ -53,7 +52,7 @@ grep -rn "acquireToken\|getAccessToken\|Authorization\|Bearer\|authToken\|msalIn
 
 ---
 
-## DIAGNOSTIC 3 — Variables d'environnement
+## DIAGNOSTIC 3 : Variables d'environnement
 
 ```bash
 # Vérifier les fichiers .env
@@ -72,7 +71,7 @@ grep -rn "VITE_API\|VITE_BACK\|import.meta.env" src/ --include="*.ts" --include=
 
 ---
 
-## DIAGNOSTIC 4 — Pages et composants connectés vs mockés
+## DIAGNOSTIC 4 : Pages et composants connectés vs mockés
 
 ```bash
 # Chercher les pages principales
@@ -93,7 +92,7 @@ grep -rn "fetch\|axios\|useQuery\|apiClient\|stocksAPI" src/ --include="*.ts" --
 
 ---
 
-## DIAGNOSTIC 5 — CORS et configuration réseau
+## DIAGNOSTIC 5 : CORS et configuration réseau
 
 ```bash
 # Vérifier la config Vite (proxy éventuel)
@@ -110,7 +109,7 @@ grep -n "proxy\|cors\|3006" vite.config.ts
 
 ---
 
-## DIAGNOSTIC 6 — État des routes front vs endpoints back
+## DIAGNOSTIC 6 : État des routes front vs endpoints back
 
 Liste les routes front existantes et pour chacune indique si elle est connectée au back :
 
@@ -136,9 +135,9 @@ Date : [date]
 
 ## Résumé
 
-- Fichier API centralisé : ✅ / ❌ — [nom du fichier]
-- Token Bearer attaché : ✅ / ❌ / ⚠️ Partiel — [détail]
-- Variables d'env configurées : ✅ / ❌ — [variables trouvées]
+- Fichier API centralisé : ✅ ou ❌, avec le nom du fichier
+- Token Bearer attaché : ✅, ❌ ou ⚠️ partiel, avec le détail
+- Variables d'env configurées : ✅ ou ❌, avec les variables trouvées
 - Proxy Vite configuré : ✅ / ❌
 
 ## Pages connectées au back
@@ -160,4 +159,4 @@ Date : [date]
 3. 🟢 [amélioration]
 ```
 
-Dépose ce fichier dans `documentation/` et reviens avec les résultats.
+Rendre le résultat au format ci-dessus, sans modifier de fichier.
