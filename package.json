@@ -42,7 +42,7 @@
     "metrics:update": "node scripts/update-metrics-files.mjs",
     "metrics:dashboard": "npm run generate:all && npm run metrics:update",
     "metrics:serve": "node scripts/serve-metrics.mjs",
-    "ci:quality": "npm run type-check && npm run lint && npm run clean:deadcode && npm run detect:as-const",
+    "ci:quality": "npm run type-check && npm run lint && npm run clean:deadcode && npm run detect:as-const && npm run check:docs",
     "ci:test": "npm run test:run",
     "ci:build": "npm run build",
     "ci:check": "npm run ci:quality && npm run ci:test && npm run ci:build",
@@ -51,7 +51,9 @@
     "ci:full": "npm run ci:check && npm run audit:full",
     "debug:ci": "node scripts/debug-ci.mjs",
     "prepare": "husky",
-    "pre-commit": "npm run clean:check"
+    "pre-commit": "npm run clean:check",
+    "check:docs": "node scripts/check-docs.mjs",
+    "check:docs:all": "node scripts/check-docs.mjs --all"
   },
   "dependencies": {
     "@azure/msal-browser": "^4.27.0",

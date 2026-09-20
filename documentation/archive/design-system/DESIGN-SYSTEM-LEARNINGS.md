@@ -17,6 +17,7 @@
 **Solution complète :** Voir [`documentation/TROUBLESHOOTING-WEB-COMPONENTS.md`](./documentation/TROUBLESHOOTING-WEB-COMPONENTS.md)
 
 **Leçons apprises :**
+
 1. ✅ Les fichiers `.d.ts` doivent avoir une syntaxe parfaite (attention aux accolades)
 2. ✅ Utiliser `vite-env.d.ts` pour les déclarations globales (toujours chargé par Vite)
 3. ✅ Créer des fonctions de conversion pour mapper camelCase → kebab-case
@@ -25,6 +26,7 @@
 6. ✅ **Spécifier des valeurs explicites** pour les attributs boolean
 
 **Fichiers corrigés :**
+
 - `src/types/web-components.d.ts` - Correction syntaxe
 - `src/vite-env.d.ts` - Ajout déclarations web components
 - `src/components/dashboard/StockCard.tsx` - Fonction convertStatusToWebComponent()
@@ -56,21 +58,24 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.
 
 **Impact :** Temps de chargement lent, pas de mise en cache efficace
 
-**Solution complète :** Voir [`documentation/BUILD-OPTIMIZATIONS.md`](./documentation/BUILD-OPTIMIZATIONS.md)
+**Solution complète :** Voir [`documentation/BUILD-OPTIMIZATIONS.md`](../../technical/BUILD-OPTIMIZATIONS.md)
 
 **Optimisations appliquées :**
+
 1. ✅ Code-splitting avec `manualChunks` (5 chunks au lieu de 1)
 2. ✅ Minification avancée avec Terser
 3. ✅ Suppression automatique des `console.log` en production
 4. ✅ Meilleure mise en cache des vendors (React, Design System, etc.)
 
 **Résultats :**
+
 - **Taille réduite** : 1,137 kB → 882 kB (-22%)
 - **Plus gros chunk** : 1,137 kB → 472 kB (-58%)
 - **Chargement parallèle** : 5 chunks en parallèle
 - **Cache optimisé** : Vendors stables (842 kB) + App (235 kB)
 
 **Fichiers modifiés :**
+
 - `vite.config.ts` - Configuration build optimisée
 - `package.json` - Ajout terser
 - `src/main.tsx` - Correction import Design System
@@ -94,6 +99,7 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.
 **Cause :** Les fichiers `ARCHITECTURE.md` et autres `.md` étaient inclus dans `tsconfig.json`, TypeScript essayait d'analyser les blocs de code
 
 **Solution :**
+
 - Ajout de `"exclude": ["**/*.md"]` dans `tsconfig.json` et `tsconfig.app.json`
 - Suppression de `documentation/V2/ARCHITECTURE.md` de la liste `include`
 
@@ -105,14 +111,15 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.
 
 ### Composants Testés: 10/16 (62.5%)
 
-| Statut | Nombre | % | Composants |
-|--------|--------|---|------------|
-| ✅ **Fonctionnels** | 3 | 30% | `sh-footer`, `sh-status-badge`, `sh-search-input` |
-| ⚠️ **Partiels** | 3 | 30% | `sh-button`, `sh-ia-alert-banner`, `sh-logo` |
-| ❌ **Non fonctionnels** | 3 | 30% | `sh-header`, `sh-metric-card`, `sh-stock-card` |
-| ⏭️ **Non testés** | 1 | 10% | `sh-badge` |
+| Statut                  | Nombre | %   | Composants                                        |
+| ----------------------- | ------ | --- | ------------------------------------------------- |
+| ✅ **Fonctionnels**     | 3      | 30% | `sh-footer`, `sh-status-badge`, `sh-search-input` |
+| ⚠️ **Partiels**         | 3      | 30% | `sh-button`, `sh-ia-alert-banner`, `sh-logo`      |
+| ❌ **Non fonctionnels** | 3      | 30% | `sh-header`, `sh-metric-card`, `sh-stock-card`    |
+| ⏭️ **Non testés**       | 1      | 10% | `sh-badge`                                        |
 
 ### Bilan Chiffré
+
 - **23 problèmes** documentés au total
 - **15 problèmes critiques** (❌) nécessitant des corrections
 - **8 améliorations** (⚠️) souhaitables
@@ -124,12 +131,14 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.
 ### 1. ✅ Ce qui Fonctionne Bien
 
 #### Intégration Technique
+
 - ✅ Les Web Components s'intègrent correctement dans React
 - ✅ Les événements custom (`onsh-*-click`, `onsh-*-change`) fonctionnent
 - ✅ Le système de design tokens CSS est opérationnel
 - ✅ L'attribut `data-theme` permet le support dark/light
 
 #### Composants de Qualité
+
 - ✅ **`sh-footer`**: Parfait, prêt pour production
 - ✅ **`sh-status-badge`**: Couleurs correctes, bien intégré dans les StockCards
 - ✅ **`sh-search-input`**: Debounce, clear, événements impeccables
@@ -139,6 +148,7 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.
 #### A. Manque d'Alignement Visuel avec StockHub V2
 
 **Symptômes:**
+
 - Bordures trop opaques (`sh-stock-card`)
 - Icônes non colorées selon le variant (`sh-metric-card`)
 - Badges avec styles différents (`sh-ia-alert-banner`)
@@ -148,6 +158,7 @@ onsh-search-change={(e: CustomEvent<{ query: string }>) => handleSearchChange(e.
 Le Design System n'a pas été développé en observant le design exact de StockHub V2.
 
 **Solution:**
+
 ```markdown
 1. Créer un guide de référence visuel StockHub V2
    - Screenshots des composants React actuels
@@ -163,6 +174,7 @@ Le Design System n'a pas été développé en observant le design exact de Stock
 #### B. Responsive Incomplet
 
 **Symptômes:**
+
 - `sh-logo` trop gros sur mobile
 - `sh-button` ne supporte pas le masquage du texte sur mobile
 - Pas d'adaptation automatique des tailles
@@ -171,6 +183,7 @@ Le Design System n'a pas été développé en observant le design exact de Stock
 Les tailles (sm/md/lg) sont fixes, pas d'utilisation de media queries internes.
 
 **Solution:**
+
 ```typescript
 // Dans les composants Lit, ajouter des media queries CSS
 static styles = css`
@@ -195,6 +208,7 @@ responsive = false;
 #### C. Animations Manquantes
 
 **Symptômes:**
+
 - `sh-metric-card`: Pas de count-up animation pour les nombres
 - `sh-metric-card`: Pas d'animation en cascade (stagger)
 - Composants organisms statiques
@@ -203,6 +217,7 @@ responsive = false;
 Les animations complexes nécessitent du JavaScript, pas juste du CSS.
 
 **Solution:**
+
 ```typescript
 // Ajouter count-up animation
 private animateValue(start: number, end: number, duration: number) {
@@ -235,6 +250,7 @@ get animationDelay() {
 #### D. Fonctionnalités Manquantes
 
 **Symptômes:**
+
 - `sh-ia-alert-banner`: Pas de expand/collapse
 - `sh-stock-card`: Bouton "Enregistrer session" ne fonctionne pas
 - `sh-header`: Toggle thème ne change que le header
@@ -243,6 +259,7 @@ get animationDelay() {
 Les composants sont trop simples et ne gèrent pas tous les cas d'usage.
 
 **Solution:**
+
 ```typescript
 // Ajouter expand/collapse
 @state()
@@ -269,6 +286,7 @@ handleThemeToggle() {
 #### E. Mapping d'Attributs Problématique
 
 **Symptômes:**
+
 - `sh-button`: `icon-before="Plus"` ne fonctionne pas
 - `sh-header`: `user-name` ne s'affiche pas
 - `sh-header`: `notification-count` ne s'affiche pas
@@ -277,6 +295,7 @@ handleThemeToggle() {
 Problèmes de conversion kebab-case → camelCase dans Lit.
 
 **Solution:**
+
 ```typescript
 // Utiliser @property avec attribute correctement
 @property({ type: String, attribute: 'icon-before' })
@@ -305,11 +324,13 @@ render() {
 ### `sh-button` (⚠️ Partiel)
 
 **Problèmes:**
+
 1. Icône ne s'affiche pas
 2. Couleur primary pas violet StockHub
 3. Pas de support responsive text
 
 **Solutions:**
+
 ```typescript
 // 1. Fix icon mapping
 @property({ type: String, attribute: 'icon-before' })
@@ -341,12 +362,14 @@ hideTextMobile = false;
 ### `sh-header` (❌ Non fonctionnel)
 
 **Problèmes:**
+
 1. Logo trop petit
 2. Toggle thème ne change que le header
 3. Nom utilisateur ne s'affiche pas
 4. Notifications count invisible
 
 **Solutions:**
+
 ```typescript
 // 1. Logo plus grand
 .logo {
@@ -380,12 +403,14 @@ ${this.notificationCount > 0 ? html`
 ### `sh-metric-card` (❌ Non fonctionnel)
 
 **Problèmes:**
+
 1. Taille trop grande
 2. Icône non colorée
 3. Animation count-up manquante
 4. Animation cascade manquante
 
 **Solutions:**
+
 ```typescript
 // 1. Réduire padding
 .card {
@@ -424,6 +449,7 @@ connectedCallback() {
 ### `sh-stock-card` (❌ Non fonctionnel)
 
 **Problèmes:**
+
 1. Bordure trop opaque
 2. Quantité/valeur mal alignées
 3. "Mise à jour" mal affiché
@@ -432,6 +458,7 @@ connectedCallback() {
 6. Boutons d'action mal stylisés
 
 **Solutions:**
+
 ```css
 /* 1. Bordure discrète */
 .card {
@@ -476,11 +503,13 @@ handleSessionClick() {
 ### `sh-ia-alert-banner` (⚠️ Partiel)
 
 **Problèmes:**
+
 1. Pas de expand/collapse
 2. Emoji robot manquant
 3. Styles badges différents
 
 **Solutions:**
+
 ```typescript
 // 1. Ajouter expand/collapse
 @property({ type: Boolean })
@@ -513,20 +542,22 @@ render() {
 ### `sh-logo` (⚠️ Partiel)
 
 **Problèmes:**
+
 1. Pas responsive
 2. Dégradés différents
 
 **Solutions:**
+
 ```css
 /* 1. Responsive avec media queries */
-:host([size="md"]) .logo-icon {
+:host([size='md']) .logo-icon {
   width: 32px;
   height: 32px;
   font-size: 0.875rem;
 }
 
 @media (min-width: 640px) {
-  :host([size="md"]) .logo-icon {
+  :host([size='md']) .logo-icon {
     width: 40px;
     height: 40px;
     font-size: 1rem;
@@ -618,6 +649,7 @@ Les composants du DS ne correspondent pas visuellement à StockHub V2.
 
 **Leçon:**
 Avant de développer un composant DS, **toujours** avoir sous les yeux:
+
 - Screenshot du composant React original
 - Valeurs CSS exactes (couleurs, espacements, bordures, opacités)
 - Comportements d'interaction (hover, focus, disabled)
@@ -647,12 +679,15 @@ Certains boutons ne fonctionnent pas car événements pas émis.
 
 **Leçon:**
 **Toujours** émettre des événements custom pour les actions utilisateur:
+
 ```typescript
-this.dispatchEvent(new CustomEvent('sh-action-name', {
-  detail: { data },
-  bubbles: true,
-  composed: true // Important pour Shadow DOM
-}));
+this.dispatchEvent(
+  new CustomEvent('sh-action-name', {
+    detail: { data },
+    bubbles: true,
+    composed: true, // Important pour Shadow DOM
+  })
+);
 ```
 
 ### 5. Attributs kebab-case
