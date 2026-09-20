@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.17.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.0...v1.17.1) (2026-09-20)
+
+
+### 📚 Documentation
+
+* **adr:** intégrer le contenu de [#263](https://github.com/SandrineCipolla/stockHub_V2_front/issues/263) et appliquer la documentation vivante ([#286](https://github.com/SandrineCipolla/stockHub_V2_front/issues/286)) ([b47a21c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/b47a21cd3d223b24855a8b9bb375d3f066d4eb02))
+* ajouter le prompt de diagnostic de connexion front vers back ([#272](https://github.com/SandrineCipolla/stockHub_V2_front/issues/272)) ([f99c4e8](https://github.com/SandrineCipolla/stockHub_V2_front/commit/f99c4e88e0c3be3a53e7121e31d0f710ab58eda5))
+
+
+### 🔧 Chores
+
+* **ci:** vérifier les liens et le guide de rédaction dans ci:quality (closes [#275](https://github.com/SandrineCipolla/stockHub_V2_front/issues/275)) ([#276](https://github.com/SandrineCipolla/stockHub_V2_front/issues/276)) ([63edda2](https://github.com/SandrineCipolla/stockHub_V2_front/commit/63edda2b7e3a97cdb1070ca013c2fffce77e56cf))
+* **deps:** résorber les 37 vulnérabilités npm en un lot ([#284](https://github.com/SandrineCipolla/stockHub_V2_front/issues/284)) ([6f9427f](https://github.com/SandrineCipolla/stockHub_V2_front/commit/6f9427fbcc0f9a5d01f8cf5363c1a95bbf95be79))
+
 ## [1.17.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.16.0...v1.17.0) (2026-09-20)
 
 
