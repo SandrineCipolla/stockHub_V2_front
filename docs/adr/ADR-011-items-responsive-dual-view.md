@@ -1,4 +1,4 @@
-# ADR-001 — Dual-view responsive pour les items de stock (mobile cards + desktop table)
+# ADR-011 — Dual-view responsive pour les items de stock (mobile cards + desktop table)
 
 **Date** : 15 juin 2026
 **Statut** : Accepté

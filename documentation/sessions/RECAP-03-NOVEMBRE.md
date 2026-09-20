@@ -1070,7 +1070,7 @@ Fourchette: 10-14 jours (IC 95%)
 
 > "Analyses descriptives et prédictives sur données avec Machine Learning"
 
-**Note Estimée** : 18-20/20 (vs 12-14/20 sans doc)
+**Niveau de conformité** : Excellent (documentation complète & justification d'architecture)
 
 ---
 
