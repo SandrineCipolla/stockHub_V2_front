@@ -1,4 +1,4 @@
-# ADR-010 — Dual-view responsive pour les items de stock (mobile cards + desktop table)
+# ADR-010 - Dual-view responsive pour les items de stock (mobile cards + desktop table)
 
 **Date** : 15 juin 2026
 **Statut** : Accepté
@@ -45,7 +45,7 @@ Les deux vues partagent le state `editingQuantityId`. Quand l'utilisateur ouvre 
 2. Mobile : input avec `autoFocus` → focus sur l'input mobile → **blur sur l'input desktop**
 3. `onBlur` du desktop appelle `setEditingQuantityId(null)` → éditeur fermé immédiatement
 
-**Fix** : `autoFocus` retiré du composant `ItemMobileCard`. Le desktop conserve `autoFocus` (UX clavier). Sur mobile le tap sur la valeur ouvre l'input sans focus automatique — ce qui est acceptable sur tactile.
+**Fix** : `autoFocus` retiré du composant `ItemMobileCard`. Le desktop conserve `autoFocus` (UX clavier). Sur mobile le tap sur la valeur ouvre l'input sans focus automatique, ce qui est acceptable sur tactile.
 
 ## Impact sur les tests
 

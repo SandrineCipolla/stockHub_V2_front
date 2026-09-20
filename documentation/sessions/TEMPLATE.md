@@ -1,8 +1,8 @@
-# Template — Session de développement
+# Template de session de développement
 
 > Extrait du format réellement utilisé dans `ETAT-DU-PROJET.md`
 > (blocs "Session du [DATE]", actifs depuis plusieurs mois, dernière
-> occurrence : 18 juin 2026). Pas un nouveau format — la structure
+> occurrence : 18 juin 2026). Pas un nouveau format : la structure
 > déjà en usage, isolée pour être réutilisable.
 
 À insérer en tête de `ETAT-DU-PROJET.md`, sous le bloc d'en-tête
@@ -10,7 +10,7 @@
 
 ---
 
-## Session du [DATE] — Ce qui a été fait
+## Session du [DATE] : ce qui a été fait
 
 ### Tickets fermés
 
@@ -18,7 +18,7 @@
 | ---- | ------------- | ------- |
 | #XXX | [Titre court] | #XXX ✅ |
 
-### #XXX — [Titre court] (PR #XXX)
+### #XXX [Titre court] (PR #XXX)
 
 - [Composant/fichier modifié] : [ce qui a changé]
 - [Composant/fichier modifié] : [ce qui a changé]
@@ -36,7 +36,7 @@ réellement vs ce qu'il ne couvre pas]. -->
 
 ---
 
-## Variante — modification hors ticket (fix CI, chore direct sur main)
+## Variante : modification hors ticket (fix CI, chore direct sur main)
 
 ### [Titre court de la modification]
 
@@ -48,7 +48,7 @@ réellement vs ce qu'il ne couvre pas]. -->
 
 - Un bloc "Session du [DATE]" par session de travail, ajouté **en tête**
   des sessions précédentes dans `ETAT-DU-PROJET.md` (ordre antéchronologique).
-- Ne documenter que ce qui a été réellement fait — pas de planification
+- Ne documenter que ce qui a été réellement fait, pas de planification
   dans ce bloc (la section "Pour la prochaine session" du fichier sert
   à ça).
 - Un ticket sans PR encore ouverte reste dans "Tickets créés", pas

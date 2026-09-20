@@ -129,7 +129,7 @@ Actuellement, l'entité Stock backend ne possède que les propriétés de base (
 **Documentation**:
 
 - `docs/technical/frontend-v2-integration.md` (section Limitations)
-- Frontend: `documentation/INTEGRATION_BACKEND_SESSION.md`
+- Frontend: `documentation/sessions/INTEGRATION_BACKEND_SESSION.md`
 
 ---
 

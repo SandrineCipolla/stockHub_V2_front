@@ -52,7 +52,7 @@
    - Documentation complète dans `INTEGRATION_BACKEND_SESSION.md`
 
 3. **Commit 482caa4** - Documentation issues
-   - Fichier `ISSUES_TO_CREATE.md` avec 7 issues détaillées
+   - Fichier `documentation/planning/ISSUES_TO_CREATE.md` avec 7 issues détaillées
 
 **Statut**: ✅ Prêt pour PR - Intégration backend complète
 
@@ -90,9 +90,9 @@
 
 ### Frontend
 
-- ✅ `documentation/INTEGRATION_BACKEND_SESSION.md` (section Limitations)
-- ✅ `documentation/ISSUES_TO_CREATE.md` (7 issues détaillées)
-- ✅ `documentation/SESSION_RECAP_2026-01-07.md` (ce fichier)
+- ✅ `documentation/sessions/INTEGRATION_BACKEND_SESSION.md` (section Limitations)
+- ✅ `documentation/planning/ISSUES_TO_CREATE.md` (7 issues détaillées)
+- ✅ `documentation/sessions/SESSION_RECAP_2026-01-07.md` (ce fichier)
 
 ---
 
@@ -301,8 +301,8 @@ git push origin feat/backend-integration
 ### Documentation
 
 - Backend: `docs/technical/frontend-v2-integration.md`
-- Frontend: `documentation/INTEGRATION_BACKEND_SESSION.md`
-- Issues: `documentation/ISSUES_TO_CREATE.md`
+- Frontend: `documentation/sessions/INTEGRATION_BACKEND_SESSION.md`
+- Issues: `documentation/planning/ISSUES_TO_CREATE.md`
 
 ---
 

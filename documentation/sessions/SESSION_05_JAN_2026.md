@@ -270,8 +270,8 @@ return React.createElement('sh-stock-card', {
 
 **Nouveaux fichiers** :
 
-- `documentation/INTEGRATION_BACKEND_SESSION.md`
-- `documentation/SESSION_05_JAN_2026.md` (ce fichier)
+- `documentation/sessions/INTEGRATION_BACKEND_SESSION.md`
+- `documentation/sessions/SESSION_05_JAN_2026.md` (ce fichier)
 - `kill-vite.ps1`
 - `localhost.cert`
 - `nul`
@@ -330,7 +330,7 @@ return React.createElement('sh-stock-card', {
 
 - **Issue GitHub**: #57 - Frontend V2 Backend Integration
 - **Backend Integration Guide**: `stockhub_back/docs/technical/frontend-v2-integration.md`
-- **Session précédente**: `documentation/INTEGRATION_BACKEND_SESSION.md` (29-30 déc 2025)
+- **Session précédente**: `documentation/sessions/INTEGRATION_BACKEND_SESSION.md` (29-30 déc 2025)
 - **Branche**: `feat/backend-integration`
 - **Database**: `stockhub-database-mysql-decembre.mysql.database.azure.com`
 
