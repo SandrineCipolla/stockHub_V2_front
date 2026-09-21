@@ -112,7 +112,7 @@ D'après l'audit Lighthouse (`lighthouse-1764235132743.json`) :
 
 **Analyse** :
 
-- Le Design System contient 18 Web Components
+- Le Design System contient plusieurs dizaines de Web Components, le Storybook en fait foi
 - Mais toutes les pages n'utilisent pas tous les composants
 - Tree-shaking insuffisant
 

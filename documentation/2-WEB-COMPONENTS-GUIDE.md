@@ -22,8 +22,10 @@ Le StockHub Design System est basé sur des **Web Components** construits avec L
 ### Installation
 
 ```bash
-npm install github:SandrineCipolla/stockhub_design_system#v1.3.1
+npm install github:SandrineCipolla/stockhub_design_system#<tag>
 ```
+
+Le tag à utiliser est la dernière version publiée du Design System, visible dans ses [releases](https://github.com/SandrineCipolla/stockhub_design_system/releases). La version installée dans ce dépôt est celle que porte `package.json`.
 
 ### Import Global
 
