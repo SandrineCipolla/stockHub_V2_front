@@ -88,29 +88,29 @@ Nous avons choisi de **ne pas** supprimer les `console.*` en production (`drop_c
 
 ```typescript
 // src/utils/logger.ts
-const isDev = import.meta.env.DEV,
+const isDev = import.meta.env.DEV;
 
 export const logger = {
   log: (...args: any[]) => {
-    if (isDev) console.log(...args),
+    if (isDev) console.log(...args);
   },
   warn: (...args: any[]) => {
-    if (isDev) console.warn(...args),
+    if (isDev) console.warn(...args);
   },
   error: (...args: any[]) => {
     // Les erreurs sont toujours loggées, même en production
-    console.error(...args),
+    console.error(...args);
   },
   info: (...args: any[]) => {
-    if (isDev) console.info(...args),
+    if (isDev) console.info(...args);
   },
-},
+};
 
 // Utilisation dans le code
-import { logger } from '@/utils/logger',
+import { logger } from '@/utils/logger';
 
-logger.log('Debug info'), // ✅ Seulement en dev
-logger.error('Critical error'), // ✅ En dev ET production
+logger.log('Debug info'); // ✅ Seulement en dev
+logger.error('Critical error'); // ✅ En dev ET production
 ```
 
 #### **Alternative 2 : Bibliothèque de logging professionnelle**
@@ -121,22 +121,22 @@ npm install loglevel
 
 ```typescript
 // src/utils/logger.ts
-import log from 'loglevel',
+import log from 'loglevel';
 
 // Configuration par environnement
 if (import.meta.env.PROD) {
-  log.setLevel('error'), // Production : seulement les erreurs
+  log.setLevel('error'); // Production : seulement les erreurs
 } else {
-  log.setLevel('debug'), // Développement : tous les logs
+  log.setLevel('debug'); // Développement : tous les logs
 }
 
-export { log },
+export { log };
 
 // Utilisation
-import { log } from '@/utils/logger',
+import { log } from '@/utils/logger';
 
-log.debug('Debug info'), // ❌ Pas affiché en production
-log.error('Critical error'), // ✅ Affiché en production
+log.debug('Debug info'); // ❌ Pas affiché en production
+log.error('Critical error'); // ✅ Affiché en production
 ```
 
 #### **Alternative 3 : Service de monitoring (Sentry, LogRocket)**
@@ -147,14 +147,14 @@ npm install @sentry/react
 
 ```typescript
 // src/main.tsx
-import * as Sentry from '@sentry/react',
+import * as Sentry from '@sentry/react';
 
 if (import.meta.env.PROD) {
   Sentry.init({
     dsn: 'YOUR_SENTRY_DSN',
     environment: import.meta.env.MODE,
     tracesSampleRate: 1.0,
-  }),
+  });
 }
 
 // Les erreurs sont automatiquement capturées et envoyées à Sentry en production
@@ -190,16 +190,16 @@ terserOptions: {
 
 3. **Code plus propre**
 
-   ```typescript
-   // Au lieu de
-   console.log('Debug info'), // Supprimé en prod (perdu)
-   console.error('Critical error'), // Supprimé en prod (CATASTROPHE)
+```typescript
+// Au lieu de
+console.log('Debug info'); // Supprimé en prod (perdu)
+console.error('Critical error'); // Supprimé en prod (CATASTROPHE)
 
-   // On utilise
-   import { logger } from '@/utils/logger',
-   logger.log('Debug info'), // ✅ Auto-désactivé en prod
-   logger.error('Critical error'), // ✅ Toujours visible en prod
-   ```
+// On utilise
+import { logger } from '@/utils/logger';
+logger.log('Debug info'); // ✅ Auto-désactivé en prod
+logger.error('Critical error'); // ✅ Toujours visible en prod
+```
 
 4. **Fonctionnalités avancées**
    - `logger.group()` pour des logs organisés
@@ -347,8 +347,8 @@ manualChunks: {
 Utiliser `React.lazy()` pour charger les pages à la demande :
 
 ```typescript
-const Dashboard = React.lazy(() => import('./pages/Dashboard')),
-const Settings = React.lazy(() => import('./pages/Settings')),
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const Settings = React.lazy(() => import('./pages/Settings'));
 
 // Dans le routeur
 <Suspense fallback={<Spinner />}>
@@ -369,14 +369,14 @@ npm install -D rollup-plugin-visualizer
 
 ```typescript
 // vite.config.ts
-import { visualizer } from 'rollup-plugin-visualizer',
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
     react(),
     visualizer({ open: true }), // Ouvre le graphique après le build
   ],
-}),
+});
 ```
 
 ---

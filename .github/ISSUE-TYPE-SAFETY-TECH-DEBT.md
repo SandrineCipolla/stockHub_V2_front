@@ -56,11 +56,11 @@ Cependant, **3 problèmes de types** identifiés dans l'Issue #23 originale (pos
 
 - `src/components/common/ButtonWrapper.tsx` (ligne 53)
   ```typescript
-  onClick(e as unknown as React.MouseEvent<HTMLButtonElement>),
+  onClick(e as unknown as React.MouseEvent<HTMLButtonElement>);
   ```
 - `src/components/common/CardWrapper.tsx` (ligne 47)
   ```typescript
-  onClick(e as unknown as React.MouseEvent<HTMLElement>),
+  onClick(e as unknown as React.MouseEvent<HTMLElement>);
   ```
 
 **Solutions proposées** :
@@ -73,9 +73,9 @@ const handleClick = (e: Event) => {
     ...e,
     currentTarget: e.target as HTMLButtonElement,
     nativeEvent: e,
-  } as React.MouseEvent<HTMLButtonElement>,
-  onClick(syntheticEvent),
-},
+  } as React.MouseEvent<HTMLButtonElement>;
+  onClick(syntheticEvent);
+};
 ```
 
 **Option B** : Changer signature de onClick
@@ -90,7 +90,7 @@ interface Props {
 
 ---
 
-### 3. Error Handling Duplication (Priorité Basse 🟢 - Optionnel)
+## 3. Error Handling Duplication (Priorité Basse 🟢 - Optionnel)
 
 **Problème** : Duplication du pattern `error instanceof Error ? error.message : 'Erreur inconnue'`
 
@@ -111,9 +111,9 @@ interface Props {
 ```typescript
 // src/utils/errors.ts
 export function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) return error.message,
-  if (typeof error === 'string') return error,
-  return 'Erreur inconnue',
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'Erreur inconnue';
 }
 ```
 
