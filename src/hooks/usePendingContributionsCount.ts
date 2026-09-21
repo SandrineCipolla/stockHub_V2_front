@@ -20,6 +20,8 @@ export function usePendingContributionsCount() {
   }, []);
 
   useEffect(() => {
+    // Chargement asynchrone légitime du nombre de contributions en attente au montage du composant
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetch();
   }, [fetch]);
 
