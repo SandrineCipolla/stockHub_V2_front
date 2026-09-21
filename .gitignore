@@ -1,10 +1,12 @@
-# Claude Code local settings
-.claude/settings.local.json
+# Claude Code
+# Configuration du projet versionnee. Le runtime local et les fichiers d'etat
+# restent ignores, seule la liste ci-dessous est suivie.
+.claude/*
+!.claude/commands/
+!.claude/agents/
+!.claude/skills/
+!.claude/settings.json
 
-# Dossier de travail Claude (prompts, audits, notes)
-claude/
-.claude/
-audit-results/
 
 # Logs
 logs

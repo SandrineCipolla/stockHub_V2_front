@@ -1,4 +1,4 @@
-# Créer une Issue GitHub — Bug Report
+# Créer une issue GitHub au format rapport de bug
 
 Crée une issue GitHub de type bug en respectant strictement le format du projet.
 

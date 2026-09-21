@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StockHub V2 — Gestion intelligente de stocks familiale</title>
+  <meta name="description" content="StockHub V2 est une application web de gestion d'inventaire familiale. Organisez vos stocks, anticipez les ruptures, recevez des alertes intelligentes." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-card-hover: #243147;
+      --border: rgba(139, 92, 246, 0.2);
+      --border-hover: rgba(139, 92, 246, 0.5);
+      --purple-500: #8b5cf6;
+      --purple-600: #7c3aed;
+      --purple-700: #6d28d9;
+      --purple-100: #ede9fe;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #64748b;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--purple-600), var(--purple-500));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg { width: 18px; height: 18px; fill: white; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--purple-600);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--purple-700); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-hover);
+    }
+    .btn-outline:hover { background: rgba(139, 92, 246, 0.1); }
+
+    .btn-lg { padding: 14px 32px; font-size: 16px; border-radius: var(--radius-lg); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 96px 2rem 80px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: #c4b5fd;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--purple-500);
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #f8fafc 0%, #c4b5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--purple-500);
+      display: block;
+      letter-spacing: -0.5px;
+    }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    /* SECTIONS */
+    section { padding: 80px 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--purple-500);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .section-header { margin-bottom: 52px; }
+
+    /* FEATURE CARDS */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all 0.2s ease;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .feature-icon svg { width: 22px; height: 22px; }
+
+    .icon-purple { background: rgba(139, 92, 246, 0.15); }
+    .icon-purple svg { stroke: var(--purple-500); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-green { background: rgba(34, 197, 94, 0.12); }
+    .icon-green svg { stroke: var(--success); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-amber { background: rgba(245, 158, 11, 0.12); }
+    .icon-amber svg { stroke: var(--warning); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .feature-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+    .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
+
+    /* DEMO SECTION */
+    .demo-section { background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .demo-grid { grid-template-columns: 1fr; }
+    }
+
+    .demo-text h2 { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 14px; }
+    .demo-text p { font-size: 16px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; }
+
+    /* PREDICTION CARD */
+    .prediction-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prediction-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--danger), var(--warning));
+    }
+
+    .pred-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .pred-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; }
+
+    .pred-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .pred-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .pred-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .pred-item-name { font-size: 15px; font-weight: 600; }
+
+    .pred-days {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--danger);
+    }
+
+    .pred-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .pred-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .confidence-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--warning), var(--danger));
+    }
+
+    .confidence-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+
+    .pred-item-2 .pred-days { color: var(--warning); }
+    .pred-item-2 .confidence-fill { background: linear-gradient(90deg, var(--success), var(--warning)); }
+
+    .pred-footer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .pred-footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+
+    /* STATUS DOTS */
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .status-critical { background: var(--danger); }
+    .status-warning { background: var(--warning); }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 40%, #7c3aed 100%);
+      border-top: 1px solid rgba(139, 92, 246, 0.4);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.4);
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+
+    .cta-section p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 36px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--purple-700);
+      font-weight: 700;
+    }
+    .btn-white:hover { background: #f1f5f9; transform: translateY(-1px); }
+
+    /* TECH STACK */
+    .stack-section { text-align: center; padding: 60px 2rem; }
+
+    .stack-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .stack-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tech-badge {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: border-color 0.15s;
+    }
+
+    .tech-badge:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .footer-brand-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--purple-600);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-brand-icon svg { width: 14px; height: 14px; fill: white; }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-links a:hover { color: var(--text-secondary); }
+
+    .footer-copy { font-size: 13px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 7H4C2.9 7 2 7.9 2 9v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM4 5h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1s.45 1 1 1z"/>
+        </svg>
+      </div>
+      StockHub
+    </div>
+    <a href="#" class="btn btn-outline" style="padding: 8px 18px; font-size: 13px;">Se connecter</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Alimenté par l'IA — Prédit les ruptures avant qu'elles arrivent
+    </div>
+    <h1>Gérez vos stocks familiaux, intelligemment</h1>
+    <p>StockHub centralise vos inventaires, anticipe les ruptures et vous alerte au bon moment. Fini les produits périmés ou les placards vides.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn btn-primary btn-lg">
+        Se connecter
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+      <a href="#features" class="btn btn-outline btn-lg">Voir les fonctionnalités</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-value">3</span>
+        <div class="stat-label">Catégories de stocks</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">IA</span>
+        <div class="stat-label">Prédictions de rupture</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">CSV</span>
+        <div class="stat-label">Export de données</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">RGPD</span>
+        <div class="stat-label">Données hébergées en France</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Fonctionnalités</div>
+        <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+        <p class="section-subtitle">De la gestion quotidienne aux alertes intelligentes — StockHub V2 couvre l'ensemble du cycle de vie de vos stocks.</p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon icon-purple">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <h3>Tableau de bord temps réel</h3>
+          <p>Visualisez l'état de tous vos stocks en un coup d'œil : métriques clés, articles en sous-stock, alertes actives — tout sur une seule page.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon icon-green">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>Prédictions IA de rupture</h3>
+          <p>L'analyse prédictive calcule automatiquement les délais avant rupture pour chaque article à risque, classés par niveau de confiance.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon icon-amber">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3>Alertes de réapprovisionnement</h3>
+          <p>Recevez des recommandations automatiques classées par urgence : articles critiques, en stock bas, ou approchant du seuil minimum.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon icon-purple">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          </div>
+          <h3>Gestion article par article</h3>
+          <p>Suivez chaque article avec son statut visuel (OK / Stock bas / Critique / Rupture), sa quantité et son seuil minimum personnalisable.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon icon-green">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </div>
+          <h3>Catégories dédiées</h3>
+          <p>Organisez vos stocks par domaine — alimentation, hygiène, matériel créatif — chacun avec ses propres articles et métriques.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon icon-amber">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <h3>Export CSV</h3>
+          <p>Téléchargez votre inventaire complet en CSV pour l'analyser dans vos outils existants ou l'archiver.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="demo-section">
+    <div class="container">
+      <div class="demo-grid">
+        <div class="demo-text">
+          <div class="section-label">Prédictions IA</div>
+          <h2>Anticipez les ruptures avant qu'elles arrivent</h2>
+          <p>Le moteur d'analyse calcule en temps réel les délais estimés avant rupture pour chaque article, avec un niveau de confiance associé. Vous savez exactement quoi réapprovisionner et quand.</p>
+          <a href="#" class="btn btn-outline">Essayer avec le compte démo</a>
+        </div>
+
+        <div class="prediction-card">
+          <div class="pred-header">
+            <span class="pred-title">Prédictions de rupture</span>
+            <span class="pred-badge">2 articles critiques</span>
+          </div>
+
+          <div class="pred-item">
+            <div class="pred-item-header">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="status-dot status-critical"></span>
+                <span class="pred-item-name">Sauce tomate</span>
+              </div>
+              <span class="pred-days">3 jours</span>
+            </div>
+            <div class="pred-meta">
+              <span>Stock : 2 unités</span>
+              <span>Seuil min : 3</span>
+              <span>Cave · Alimentation</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="confidence-fill" style="width: 87%;"></div>
+            </div>
+            <div class="confidence-label">
+              <span>Confiance</span>
+              <span style="color:#fca5a5;font-weight:600;">87%</span>
+            </div>
+          </div>
+
+          <div class="pred-item pred-item-2">
+            <div class="pred-item-header">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="status-dot status-warning"></span>
+                <span class="pred-item-name">Doliprane 1000mg</span>
+              </div>
+              <span class="pred-days" style="color:var(--warning);">8 jours</span>
+            </div>
+            <div class="pred-meta">
+              <span>Stock : 1 unité</span>
+              <span>Seuil min : 2</span>
+              <span>Pharmacie · Hygiène</span>
+            </div>
+            <div class="confidence-bar">
+              <div class="confidence-fill" style="width: 72%; background: linear-gradient(90deg, var(--success), var(--warning));"></div>
+            </div>
+            <div class="confidence-label">
+              <span>Confiance</span>
+              <span style="color:#fcd34d;font-weight:600;">72%</span>
+            </div>
+          </div>
+
+          <div class="pred-footer">
+            <div class="pred-footer-dot"></div>
+            Analyse mise à jour en temps réel — 9 articles surveillés
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section class="stack-section">
+    <div class="stack-label">Stack technique</div>
+    <div class="stack-badges">
+      <span class="tech-badge">React 19</span>
+      <span class="tech-badge">TypeScript</span>
+      <span class="tech-badge">Node.js 22</span>
+      <span class="tech-badge">Prisma ORM</span>
+      <span class="tech-badge">Azure B2C</span>
+      <span class="tech-badge">Design System Lit</span>
+      <span class="tech-badge">DDD / CQRS</span>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Prêt à reprendre le contrôle de vos stocks ?</h2>
+      <p>Connectez-vous et découvrez StockHub V2 avec des données de démonstration déjà en place.</p>
+      <a href="#" class="btn btn-white btn-lg">
+        Accéder à l'application
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 7H4C2.9 7 2 7.9 2 9v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM4 5h16c.55 0 1-.45 1-1s-.45-1-1-1H4c-.55 0-1 .45-1 1s.45 1 1 1z"/>
+          </svg>
+        </div>
+        StockHub V2
+      </div>
+      <div class="footer-links">
+        <a href="#">GitHub</a>
+        <a href="#">Storybook</a>
+        <a href="#">Politique de confidentialité</a>
+      </div>
+      <div class="footer-copy">© 2026 Sandrine Cipolla — Ada Tech School</div>
+    </div>
+  </footer>
+
+</body>
+</html>
