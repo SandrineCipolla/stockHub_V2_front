@@ -13,7 +13,6 @@ Ces fichiers sont historiques. Ils ne sont plus modifiés, ce qui est le seul mo
 | `AUDIT_STAGING_VERCEL.md`       | mars 2026    | Configuration du staging Vercel                                                          |
 | `AUDIT_STAGING_RESULTS.md`      | mars 2026    | Résultats de l'audit du staging                                                          |
 | `INVESTIGATION_84_TOKENS.md`    | mars 2026    | Issue #84, sécurité des tokens Azure B2C, voir l'ADR-011 pour la décision qui en découle |
-| `ia-front-audit.md`             | mars 2026    | Module IA côté frontend, état réel                                                       |
 | `ia-front-feasibility-audit.md` | mars 2026    | Faisabilité des écrans IA                                                                |
 | `landing-front-audit.md`        | mars 2026    | Landing page                                                                             |
 | `rncp-code-audit-mars2026.md`   | mars 2026    | Audit de code orienté référentiel RNCP                                                   |
