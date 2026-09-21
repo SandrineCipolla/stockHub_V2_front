@@ -18,7 +18,7 @@
     "coverage/**",
     "vite.config.*",
     "dist/**",
-    "documentation/**",
+    "docs/**",
     "audits/**",
     "src/types/web-component-events.ts",
     "src/types/ui.ts",

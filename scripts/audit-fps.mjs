@@ -205,7 +205,7 @@ async function runPerformanceTests() {
   console.log(allPassed ? '✅ TOUS LES TESTS PASSENT' : '❌ CERTAINS TESTS ÉCHOUENT');
   console.log('='.repeat(60) + '\n');
 
-  const jsonPath = `./documentation/metrics/data/fps-${Date.now()}.json`;
+  const jsonPath = `./docs/metrics/data/fps-${Date.now()}.json`;
   const json = {
     tests: results,
     avgOverall,

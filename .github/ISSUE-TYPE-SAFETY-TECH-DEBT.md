@@ -6,7 +6,7 @@ Suite à l'audit Type Safety (Issue #23), les types web components ont été cor
 
 Cependant, **3 problèmes de types** identifiés dans l'Issue #23 originale (post-merge `feature/ai-business-intelligence`) restent à traiter.
 
-**Référence** : `documentation/technical/TYPE-SAFETY-AUDIT-2025-11-18.md` (section "Audit Complémentaire")
+**Référence** : `docs/technical/TYPE-SAFETY-AUDIT-2025-11-18.md` (section "Audit Complémentaire")
 
 ---
 
@@ -90,7 +90,7 @@ interface Props {
 
 ---
 
-### 3. Error Handling Duplication (Priorité Basse 🟢 - Optionnel)
+## 3. Error Handling Duplication (Priorité Basse 🟢 - Optionnel)
 
 **Problème** : Duplication du pattern `error instanceof Error ? error.message : 'Erreur inconnue'`
 
@@ -197,5 +197,5 @@ export function getErrorMessage(error: unknown): string {
 **Effort** : 2-3 heures
 **Milestone** : Type Safety Improvements
 
-**Référence audit** : `documentation/technical/TYPE-SAFETY-AUDIT-2025-11-18.md`
+**Référence audit** : `docs/technical/TYPE-SAFETY-AUDIT-2025-11-18.md`
 **Issue source** : #23 (partiellement traitée - web components 100% ✅)

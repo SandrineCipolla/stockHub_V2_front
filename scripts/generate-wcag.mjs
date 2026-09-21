@@ -14,7 +14,7 @@ try {
     };
 
     const filename = `risk-levels-${Date.now()}.json`;
-    writeFileSync(`./documentation/metrics/data/${filename}`, JSON.stringify(json, null, 2));
+    writeFileSync(`./docs/metrics/data/${filename}`, JSON.stringify(json, null, 2));
     console.log(`💾 Rapport JSON généré : ${filename}`);
 } catch (err) {
     console.error("❌ Erreur WCAG :", err.message);

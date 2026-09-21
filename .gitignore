@@ -58,10 +58,10 @@ localhost.cert
 coverage/
 
 # Documentation files
-documentation/propositionIA/propositionIA.tsx
+docs/propositionIA/propositionIA.tsx
 
 # Temporary audit report files
-documentation/metrics/data/*.json
+docs/metrics/data/*.json
 
 # Claude Code configuration (personal)
 CLAUDE.local.md

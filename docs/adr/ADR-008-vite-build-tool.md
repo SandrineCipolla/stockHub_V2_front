@@ -32,7 +32,7 @@ Ce qui a emporté la décision : un serveur de développement à démarrage quas
 ## Conséquences
 
 - **Positif** : rechargement à chaud quasi instantané, confort de développement élevé
-- **Positif** : au moment de la mesure, build de production à 113,99 KB gzippé et score Lighthouse Performance de 99 sur 100. Les valeurs courantes sont dans `documentation/9-DASHBOARD-QUALITY.md`
+- **Positif** : au moment de la mesure, build de production à 113,99 KB gzippé et score Lighthouse Performance de 99 sur 100. Les valeurs courantes sont dans `docs/9-DASHBOARD-QUALITY.md`
 - **Négatif** : écosystème de plugins plus jeune que celui de Webpack sur les cas de niche
 - **Négatif** : les variables d'environnement suivent la convention Vite, avec un `.env.local` prioritaire sur `.env`, source d'un piège récurrent en développement local documenté dans [CLAUDE.md](../../CLAUDE.md)
 

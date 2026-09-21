@@ -299,7 +299,7 @@ async function testRiskLevelColors() {
   // Sauvegarde
   try {
     const { writeFileSync } = await import('fs');
-    const reportPath = `./documentation/metrics/data/risk-levels-audit-${Date.now()}.json`;
+    const reportPath = `./docs/metrics/data/risk-levels-audit-${Date.now()}.json`;
     writeFileSync(reportPath, JSON.stringify(results, null, 2));
     log(`💾 Rapport sauvegardé: ${reportPath}\n`, 'cyan');
   } catch (e) {

@@ -11,7 +11,7 @@ async function generateCoverageJSON() {
   const coverageDir = './coverage';
   const coverageJsonPath = `${coverageDir}/coverage-final.json`;
   const summaryPath = `${coverageDir}/coverage-summary.json`;
-  const outputPath = `./documentation/metrics/data/coverage-${timestamp}.json`;
+  const outputPath = `./docs/metrics/data/coverage-${timestamp}.json`;
 
   let success = false;
   let global = { statements:null, lines:null, branches:null, functions:null };
@@ -105,8 +105,8 @@ async function generateCoverageJSON() {
   writeFileSync(outputPath, JSON.stringify(result, null, 2));
   console.log(`💾 Report coverage généré : ${outputPath}`);
 
-  // Copier coverage-final.json vers documentation/metrics/coverage/ pour le dashboard
-  const coverageDestDir = './documentation/metrics/coverage';
+  // Copier coverage-final.json vers docs/metrics/coverage/ pour le dashboard
+  const coverageDestDir = './docs/metrics/coverage';
   if (existsSync(coverageJsonPath)) {
     mkdirSync(coverageDestDir, { recursive: true });
     const destPath = `${coverageDestDir}/coverage-final.json`;

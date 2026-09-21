@@ -219,7 +219,7 @@ async function runDatasetTests() {
 
   console.log('='.repeat(70) + '\n');
 
-  const jsonPath = `./documentation/metrics/data/datasets-${Date.now()}.json`;
+  const jsonPath = `./docs/metrics/data/datasets-${Date.now()}.json`;
   const json = {
     tests: results,
     avgOverall,

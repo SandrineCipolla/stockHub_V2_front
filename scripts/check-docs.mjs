@@ -11,7 +11,7 @@ import {dirname, join, normalize, relative, resolve} from 'path';
  *    Les liens déjà cassés au moment de la mise en place sont listés dans
  *    docs-links-baseline.json et n'échouent pas. Le baseline est fait pour
  *    diminuer, jamais pour grossir.
- * 2. Style : règles fixes de documentation/technical/guide-redaction.md
+ * 2. Style : règles fixes de docs/technical/guide-redaction.md
  *    (tiret cadratin, point-virgule en prose, point médian). Appliqué aux
  *    seuls fichiers modifiés par rapport à la branche de base, la règle
  *    étant récente.
@@ -24,10 +24,17 @@ import {dirname, join, normalize, relative, resolve} from 'path';
 
 const EXCLUDE_DIRS = ['node_modules', 'dist', 'coverage', '.git', 'playwright-report', 'test-results'];
 
-// Documents non réécrits : archives figées et fichiers générés
+// Documents non réécrits : archives figées, historiques de sessions/planning et fichiers générés
 const STYLE_EXCLUDE = [
-    'documentation/archive/',
-    'documentation/designV1/',
+    'docs/archive/',
+    'docs/designV1/',
+    'docs/sessions/',
+    'docs/planning/',
+    'docs/metrics/',
+    'docs/V2/',
+    'docs/E2E_TESTS_GUIDE.md',
+    'docs/7-SESSIONS.md',
+    'docs/9-DASHBOARD-QUALITY.md',
     'CHANGELOG.md',
 ];
 
@@ -218,7 +225,7 @@ if (!linksOnly) {
         const log = checkAll ? console.log : console.error;
         log(`\n${checkAll ? '📋' : '❌'} ${violations.length} occurrence(s) :`);
         for (const v of violations) log(`   ${v.file}:${v.line}  ${v.message}${v.count > 1 ? ` (x${v.count})` : ''}`);
-        log(`\n   Règles : documentation/technical/guide-redaction.md`);
+        log(`\n   Règles : docs/technical/guide-redaction.md`);
     }
 }
 

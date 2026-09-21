@@ -8,7 +8,7 @@ import path from 'path';
 async function generateEcoReport() {
   console.log('🌱 Analyse éco-conception en cours…');
   const timestamp = Date.now();
-  const outputPath = `./documentation/metrics/data/eco-${timestamp}.json`;
+  const outputPath = `./docs/metrics/data/eco-${timestamp}.json`;
 
   let bundleSize = null, gzipSize = null, totalRequests = null, manifestData = null, buildSucceeded = false;
   const notes = [];
