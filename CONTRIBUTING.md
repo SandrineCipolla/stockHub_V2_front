@@ -37,11 +37,24 @@ type(scope): message concis (closes #numero)
 
 **Exemples** : `feat(items): add item edit modal (closes #110)`, `fix(auth): correct msal cache storage (closes #84)`
 
-### Pull requests
+### Pull requests et revues de code
 
 - Titre : `type(scope): description (closes #numero)`
 - Body : composants modifiés, test plan, `Closes #numero`
-- Vérifier que le CI passe avant de merger
+- Vérifier que la CI passe avant de merger
+
+#### Règles de rédaction des commentaires de PR (Code & Doc Reviews)
+
+Toute revue de PR doit respecter le [guide-redaction.md](docs/technical/guide-redaction.md) :
+
+1. **Uniquement les points à corriger ou améliorer** : Ne pas lister ce qui est validé ou conforme. Un commentaire de revue sert exclusivement à signaler des éléments à modifier ou améliorer.
+2. **Si aucun point à modifier** : Ne pas ajouter de commentaire de revue inutile. Le statut de la PR suffit.
+3. **Rédaction concrète et factuelle** :
+   - Écrire court pour réduire le temps de relecture.
+   - Aucun tiret cadratin (`—`).
+   - Aucun point-virgule dans la prose (`;`).
+   - Aucun point médian (`·`).
+   - Aucun qualificatif subjectif ou formule de remplissage.
 
 ### Releases
 
