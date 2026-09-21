@@ -1,4 +1,4 @@
-# Créer une Issue GitHub — User Story
+# Créer une issue GitHub au format User Story
 
 Crée une issue GitHub en respectant **strictement** le format User Story du projet.
 
