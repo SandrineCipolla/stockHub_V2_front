@@ -1,6 +1,7 @@
-# 📊 Dashboard Qualité - Documentation Complète
+# 📊 Dashboard Qualité - Manuel Technique UI (`docs/metrics/index.html`)
 
-> **Documentation technique exhaustive du Dashboard Qualité Interactif StockHub V2**
+> **Manuel technique d'architecture et de maintenance de l'interface HTML du Dashboard Qualité (`docs/metrics/index.html`).**  
+> Pour la **Source de Vérité Unique** récapitulant les métriques vivantes de l'application, les objectifs de score et les commandes CLI d'audit, consulter [`docs/15-APP-QUALITY-METRICS.md`](15-APP-QUALITY-METRICS.md).
 
 ---
 

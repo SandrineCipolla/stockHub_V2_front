@@ -1,4 +1,9 @@
-# 🤖 Stratégie d'Automatisation des Métriques - StockHub V2
+# 🤖 Stratégie d'Automatisation des Métriques - StockHub V2 (Archivé)
+
+> ⚠️ **DOCUMENT ARCHIVÉ - TRAÇABILITÉ RNCP**  
+> Ce document conserve la stratégie initiale d'automatisation des métriques. Pour la **Source de Vérité Unique** sur les métriques et audits vivants du projet, consulter [`docs/15-APP-QUALITY-METRICS.md`](../../15-APP-QUALITY-METRICS.md).
+
+---
 
 ## 📋 Problématiques Identifiées
 

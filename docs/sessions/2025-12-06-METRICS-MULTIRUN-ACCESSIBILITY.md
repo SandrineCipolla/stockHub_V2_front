@@ -494,7 +494,7 @@ successifs pour des résultats stables.
 
 ### Documentation Connexe
 
-- [12-PERFORMANCE-ANALYSIS.md](../12-PERFORMANCE-ANALYSIS.md)
+- [12-PERFORMANCE-ANALYSIS.md](../archive/metrics/12-PERFORMANCE-ANALYSIS.md)
 - [14-CI-CD-WORKFLOWS.md](../14-CI-CD-WORKFLOWS.md)
 - [6-ACCESSIBILITY.md](../6-ACCESSIBILITY.md)
 

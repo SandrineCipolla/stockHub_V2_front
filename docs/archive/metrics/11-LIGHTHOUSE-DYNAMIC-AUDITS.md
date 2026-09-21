@@ -1,4 +1,9 @@
-# Documentation - Lighthouse Dynamic Audits Extraction
+# Documentation - Lighthouse Dynamic Audits Extraction (Archivé)
+
+> ⚠️ **DOCUMENT ARCHIVÉ - TRAÇABILITÉ RNCP**  
+> Ce document conserve la spécification technique initiale d'extraction dynamique Lighthouse. Pour la **Source de Vérité Unique** sur les métriques et audits vivants du projet, consulter [`docs/15-APP-QUALITY-METRICS.md`](../../15-APP-QUALITY-METRICS.md).
+
+---
 
 ## 📋 Table des matières
 
