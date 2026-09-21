@@ -79,6 +79,8 @@ export function useNotificationCount(): NotificationState & { refresh: () => voi
   }, []);
 
   useEffect(() => {
+    // Chargement asynchrone légitime des notifications au montage du composant
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
   }, [load]);
 

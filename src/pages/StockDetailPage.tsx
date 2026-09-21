@@ -179,6 +179,8 @@ export const StockDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (!stock) return;
+    // Initialiser l'état de chargement avant le fetch des suggestions
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsSuggestionsLoading(true);
     void PredictionsAPI.getStockSuggestions(numericId)
       .then(suggestions => setBackendSuggestions(suggestions))

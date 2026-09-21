@@ -5,14 +5,15 @@ import type { Theme, ThemeProviderProps } from '@/types';
 import { ThemeContext } from '@/contexts/theme';
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>('dark');
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('stockhub-theme');
-    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-      setTheme(savedTheme);
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('stockhub-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        return savedTheme;
+      }
     }
-  }, []);
+    return 'dark';
+  });
 
   useEffect(() => {
     localStorage.setItem('stockhub-theme', theme);

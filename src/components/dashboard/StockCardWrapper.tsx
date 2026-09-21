@@ -34,12 +34,14 @@ export const StockCardWrapper: React.FC<StockCardProps> = ({
 }) => {
   const { theme } = useTheme();
   const cardRef = useRef<HTMLElement>(null);
+  const [prevStock, setPrevStock] = useState<Stock>(stock);
   const [localStock, setLocalStock] = useState<Stock>(stock);
 
-  // Mettre à jour le stock local quand le stock parent change
-  useEffect(() => {
+  // Mettre à jour le stock local quand le stock parent change (réconciliation au rendu)
+  if (stock !== prevStock) {
+    setPrevStock(stock);
     setLocalStock(stock);
-  }, [stock]);
+  }
 
   // Assigner les propriétés complexes via JavaScript (iaCount, hideDetails)
   useEffect(() => {

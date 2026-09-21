@@ -21,6 +21,8 @@ export function useStockDetail(stockId: number) {
   }, [stockId]);
 
   useEffect(() => {
+    // Chargement asynchrone légitime des détails du stock lors du changement d'ID
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void fetchStock();
   }, [fetchStock]);
 
