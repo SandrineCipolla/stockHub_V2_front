@@ -24,7 +24,7 @@ import {dirname, join, normalize, relative, resolve} from 'path';
 
 const EXCLUDE_DIRS = ['node_modules', 'dist', 'coverage', '.git', 'playwright-report', 'test-results'];
 
-// Documents non réécrits : archives figées et fichiers générés
+// Documents non réécrits : archives figées, historiques de sessions/planning et fichiers générés
 const STYLE_EXCLUDE = [
     'docs/archive/',
     'docs/designV1/',
