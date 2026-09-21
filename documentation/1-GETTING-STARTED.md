@@ -45,10 +45,12 @@ npm install
 
 Cela installe :
 
-- React 19.1.0 + TypeScript 5.8.3
-- Vite 6.3.5 (build tool)
-- Design System `@stockhub/design-system` (version définie dans `package.json`)
-- Dépendances de test (Vitest, Testing Library)
+- React et TypeScript en mode strict
+- Vite comme build tool
+- Le Design System `@stockhub/design-system`
+- Les dépendances de test, Vitest et Testing Library
+
+Les versions exactes de chacune sont dans `package.json`, elles ne sont pas recopiées ici.
 
 **Durée estimée** : 2-3 minutes
 
@@ -92,7 +94,7 @@ Teste le build de production localement.
 npm run test:run
 ```
 
-**Résultat attendu** : 464 tests passent (33 skipped, 497 total)
+**Résultat attendu** : tous les tests passent. Le décompte courant est celui que la commande affiche, et le badge CI du README.
 
 ### Mode watch (développement)
 
@@ -108,7 +110,7 @@ Les tests se relancent automatiquement quand vous modifiez un fichier.
 npm run test:coverage
 ```
 
-**Couverture actuelle** : 60.67% global, composants 90-98%
+La couverture courante est celle que la commande affiche. Les seuils exigés sont configurés dans `vitest.config.ts`.
 
 ---
 
@@ -157,7 +159,7 @@ StockHub V2 utilise un **Design System externe** (repository séparé).
 - **Repository** : https://github.com/SandrineCipolla/stockhub_design_system
 - **Storybook** : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
 - **Package** : `@stockhub/design-system` (voir `package.json`)
-- **Composants** : 18 Web Components (Lit Element)
+- **Composants** : Web Components en Lit Element, liste et documentation dans le Storybook
 
 ### Utilisation dans React
 
@@ -195,7 +197,7 @@ Exécute :
 - ✅ TypeScript (type-check)
 - ✅ ESLint (linting)
 - ✅ Knip (code mort)
-- ✅ Tests (464 tests)
+- ✅ Tests unitaires
 - ✅ Build production
 
 **Durée** : ~30 secondes
@@ -227,7 +229,7 @@ Automatique à chaque `git commit` :
 
 Automatique à chaque `git push` :
 
-- ✅ Tous les tests (464 tests)
+- ✅ Tous les tests unitaires
 - ✅ Knip (détection code mort)
 - ✅ Build production
 

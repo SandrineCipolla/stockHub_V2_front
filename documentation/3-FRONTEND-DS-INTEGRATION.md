@@ -105,8 +105,8 @@ stockhub_design_system/
 
 ✅ **Tests Frontend**
 
-- Tests unitaires React (464 tests)
-- Tests wrappers (234 tests)
+- Tests unitaires React
+- Tests des wrappers de Web Components
 - Tests d'intégration
 
 ✅ **Documentation Technique**
@@ -191,7 +191,7 @@ git commit -m "feat: add sh-new-component"
 ```bash
 # Bump version (package.json)
 npm version patch  # ou minor/major
-git tag v1.3.2
+git tag v<nouvelle-version>
 git push && git push --tags
 ```
 
@@ -201,7 +201,7 @@ git push && git push --tags
 # Dans stockHub_V2_front/
 npm install @stockhub/design-system@latest
 # OU spécifier version
-npm install github:SandrineCipolla/stockhub_design_system#v1.3.2
+npm install github:SandrineCipolla/stockhub_design_system#v<nouvelle-version>
 ```
 
 #### Étape 4 : Créer wrapper React (si nécessaire)

@@ -110,14 +110,7 @@ npm run audit:datasets
 npx lighthouse http://localhost:4173 --view
 ```
 
-**Résultats actuels** :
-
-- Performance : **99/100** ✅
-- Accessibility : **96/100** ✅
-- FCP : 1.5s
-- LCP : 1.5s
-- TBT : **0ms** ⭐
-- CLS : 0.055
+**Résultats** : ceux que la commande affiche. Les valeurs suivies dans le temps sont dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md), et le workflow `Quality Audits` les recalcule à chaque passage.
 
 **Rapports** : Sauvegardés dans `documentation/metrics/`
 

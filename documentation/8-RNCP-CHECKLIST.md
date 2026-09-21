@@ -150,7 +150,7 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 
 ### **C2.1 - Architecture logicielle** _(CE2.1.1 à CE2.1.6)_
 
-#### ✅ **Excellents acquis V2**
+#### ✅ **Acquis V2**
 
 - [x] Design system complet avec tokens
 - [x] Accessibilité RGAA conforme
@@ -215,9 +215,9 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 
 #### ✅ **EXCELLENCE - Validation encadrante 85/100**
 
-- [x] React 19.1 + TypeScript 5.8.3 + Vite 6.3.5
+- [x] React, TypeScript en mode strict et Vite, versions dans `package.json`
 - [x] Design System avec tokens CSS cohérents
-- [x] Responsive Mobile First parfaitement adapté
+- [x] Responsive Mobile First
 - [x] Accessibilité RGAA (WAVE: 0 erreur, 96 Lighthouse)
 - [x] Performance exceptionnelle (Lighthouse 99/100)
 - [x] Éco-conception (EcoIndex A - 88.42)
@@ -609,7 +609,7 @@ _Point de départ : Octobre 2025_
   - [ ] Questions/réponses anticipées
 - [ ] **Finalisation projet** _(Deadline : mars 2027)_
   - [ ] Application StockHub V2 production
-  - [ ] Démo parfaitement rodée
+  - [ ] Démo rodée
   - [ ] Métriques finales validées
 
 📝 _Notes Phase 4 - Certification :_
@@ -633,11 +633,13 @@ _Point de départ : Octobre 2025_
 
 ### **📊 Métriques cibles**
 
-- [x] **Performance** : Lighthouse 99/100 _(✅ Excellent - Validé encadrante)_
-- [ ] **Tests** : Coverage > 80% _(Actuel : 0% - À implémenter nov 2025)_
-- [ ] **Sécurité** : 0 vulnérabilité critique \_(Actuel : _\_\_)_
-- [x] **Accessibilité** : RGAA AAA _(✅ 96/100 Lighthouse - Validé)_
-- [x] **Éco-conception** : EcoIndex Grade A _(✅ 88.42 - Excellent)_
+Les cibles sont fixées ici, les valeurs atteintes se lisent dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md) et les badges du README.
+
+- [x] **Performance** : Lighthouse au-dessus de 90, validé par l'encadrante
+- [ ] **Tests** : couverture au-dessus de 80 %
+- [ ] **Sécurité** : aucune vulnérabilité critique
+- [x] **Accessibilité** : RGAA, validé
+- [x] **Éco-conception** : EcoIndex de grade A
 
 ### **📋 Livrables certification**
 

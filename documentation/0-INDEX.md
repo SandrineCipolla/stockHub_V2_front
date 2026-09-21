@@ -70,7 +70,7 @@
 
 ### Composants Disponibles
 
-**18 Web Components** répartis en 3 catégories (Atoms, Molecules, Organisms)
+Les composants sont répartis en trois catégories, atoms, molecules et organisms. Leur nombre et leur liste évoluent avec le Design System, le Storybook fait foi.
 
 **Liste complète** : Voir [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md#composants-disponibles)
 **Documentation interactive** : [Storybook](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
@@ -158,22 +158,17 @@
 - [technical/AI-DECISIONS.md](technical/AI-DECISIONS.md) ⭐ - Décisions architecturales (C2.5)
 - [7-SESSIONS.md](7-SESSIONS.md) ⭐ - Index chronologique sessions (9 sessions)
 
-### Accomplissements Récents (Novembre 2025)
+### Accomplissements de novembre 2025
 
 ✅ **Complété** :
 
-- Design System externe créé (18 Web Components, Storybook)
-- Tests wrappers 100% (Issue #24) - 7/7 wrappers testés, 464 tests
+- Design System externe créé, avec son Storybook
+- Tests des wrappers terminés (issue #24), 7 wrappers sur 7 couverts
 - Audit accessibilité WCAG AA (Issue #10) - 100% conforme
 - Migration Analytics (Issue #9) - 100% Design System
 - Bug recherche résolu (Issue #33) - SearchInputWrapper créé
 
-📊 **Métriques** :
-
-- Tests : 464 passent (33 skipped, 497 total)
-- Coverage : 60.67% global, composants 90-98%
-- Performance Lighthouse : 99/100
-- Accessibilité Lighthouse : 96/100
+📊 **Métriques** : elles ne sont pas recopiées ici, elles seraient fausses au premier changement. Voir les badges du README et [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md).
 
 ### Améliorations & Issues
 

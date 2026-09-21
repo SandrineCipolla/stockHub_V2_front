@@ -80,7 +80,7 @@ on:
 #### 2. 🧪 Tests (~1min 20s)
 
 ```bash
-✓ 464 tests unitaires (Vitest)
+✓ Tests unitaires (Vitest)
 ✓ Upload coverage vers Codecov (optionnel)
 ```
 
@@ -110,11 +110,11 @@ on:
     ⚠️ Detect as const (5s) - 0 usage détecté
 
   ✅ Tests (1m 20s)
-    ✓ 464 tests passed
-    ✓ Coverage: 60.67%
+    ✓ N tests passed
+    ✓ Coverage: NN %
 
   ✅ Build (48s)
-    ✓ Bundle: 113.99 KB gzipped
+    ✓ Bundle: NNN KB gzipped
     ✓ Assets generated
 ```
 
@@ -396,18 +396,14 @@ ls -lh dist/assets/*.js
 
 ## Statut actuel
 
-| Metric                     | Valeur         | Status |
-| -------------------------- | -------------- | ------ |
-| **Performance Lighthouse** | 95/100         | ✅     |
-| **Accessibilité**          | 96/100         | ✅     |
-| **Tests**                  | 464 passed     | ✅     |
-| **Coverage**               | 60.67%         | ⚠️     |
-| **Build time**             | ~5s            | ✅     |
-| **Bundle size**            | 113.99 KB      | ✅     |
-| **TypeScript errors**      | 0              | ✅     |
-| **ESLint warnings**        | 0              | ✅     |
-| **Knip dead code**         | 0              | ✅     |
-| **`as const` usage**       | 0 (production) | ✅     |
+Aucune valeur n'est recopiée ici, elle serait fausse dès le prochain passage de la CI.
+
+| Indicateur                                  | Où le lire                                                                                       |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Lighthouse, performance et accessibilité    | Workflow `Quality Audits`, et [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](11-LIGHTHOUSE-DYNAMIC-AUDITS.md) |
+| Tests et couverture                         | Sortie de `npm run test:coverage`, badges du README                                              |
+| Taille du bundle                            | Job `Bundle Size Budget` de la CI                                                                |
+| Erreurs TypeScript et avertissements ESLint | `npm run ci:quality`                                                                             |
 
 ---
 
