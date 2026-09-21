@@ -13,7 +13,7 @@
     "generate-sitemap": "tsx scripts/generate-sitemap.ts",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint . --fix --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "detect:as-const": "node scripts/detect-as-const.mjs",
