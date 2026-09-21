@@ -6,7 +6,7 @@ Suite à l'audit Type Safety (Issue #23), les types web components ont été cor
 
 Cependant, **3 problèmes de types** identifiés dans l'Issue #23 originale (post-merge `feature/ai-business-intelligence`) restent à traiter.
 
-**Référence** : `documentation/technical/TYPE-SAFETY-AUDIT-2025-11-18.md` (section "Audit Complémentaire")
+**Référence** : `docs/technical/TYPE-SAFETY-AUDIT-2025-11-18.md` (section "Audit Complémentaire")
 
 ---
 
@@ -56,11 +56,11 @@ Cependant, **3 problèmes de types** identifiés dans l'Issue #23 originale (pos
 
 - `src/components/common/ButtonWrapper.tsx` (ligne 53)
   ```typescript
-  onClick(e as unknown as React.MouseEvent<HTMLButtonElement>);
+  onClick(e as unknown as React.MouseEvent<HTMLButtonElement>),
   ```
 - `src/components/common/CardWrapper.tsx` (ligne 47)
   ```typescript
-  onClick(e as unknown as React.MouseEvent<HTMLElement>);
+  onClick(e as unknown as React.MouseEvent<HTMLElement>),
   ```
 
 **Solutions proposées** :
@@ -73,9 +73,9 @@ const handleClick = (e: Event) => {
     ...e,
     currentTarget: e.target as HTMLButtonElement,
     nativeEvent: e,
-  } as React.MouseEvent<HTMLButtonElement>;
-  onClick(syntheticEvent);
-};
+  } as React.MouseEvent<HTMLButtonElement>,
+  onClick(syntheticEvent),
+},
 ```
 
 **Option B** : Changer signature de onClick
@@ -111,9 +111,9 @@ interface Props {
 ```typescript
 // src/utils/errors.ts
 export function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) return error.message;
-  if (typeof error === 'string') return error;
-  return 'Erreur inconnue';
+  if (error instanceof Error) return error.message,
+  if (typeof error === 'string') return error,
+  return 'Erreur inconnue',
 }
 ```
 
@@ -197,5 +197,5 @@ export function getErrorMessage(error: unknown): string {
 **Effort** : 2-3 heures
 **Milestone** : Type Safety Improvements
 
-**Référence audit** : `documentation/technical/TYPE-SAFETY-AUDIT-2025-11-18.md`
+**Référence audit** : `docs/technical/TYPE-SAFETY-AUDIT-2025-11-18.md`
 **Issue source** : #23 (partiellement traitée - web components 100% ✅)

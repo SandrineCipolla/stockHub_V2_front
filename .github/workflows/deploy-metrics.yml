@@ -47,7 +47,7 @@ jobs:
 
       - name: 📊 Generate metrics data
         run: |
-          mkdir -p documentation/metrics/data
+          mkdir -p docs/metrics/data
           # Lancer les audits indépendants en parallèle (gain ~1min)
           node scripts/audit-fps.mjs &
           node scripts/audit-wcag.mjs &
@@ -62,10 +62,10 @@ jobs:
           if [ -d coverage ]; then
             echo "📁 Contenu du dossier coverage:"
             ls -la coverage/ | head -20
-            mkdir -p documentation/metrics/coverage
-            cp -r coverage/* documentation/metrics/coverage/ || true
-            echo "✅ Fichiers copiés vers documentation/metrics/coverage/"
-            ls -la documentation/metrics/coverage/ | head -20
+            mkdir -p docs/metrics/coverage
+            cp -r coverage/* docs/metrics/coverage/ || true
+            echo "✅ Fichiers copiés vers docs/metrics/coverage/"
+            ls -la docs/metrics/coverage/ | head -20
           else
             echo "⚠️  Dossier coverage introuvable"
           fi
@@ -79,7 +79,7 @@ jobs:
       - name: 📂 Upload metrics folder
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './documentation/metrics'
+          path: './docs/metrics'
 
       - name: 🚀 Deploy to GitHub Pages
         id: deployment

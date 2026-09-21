@@ -3,7 +3,7 @@
  */
 import {readdirSync, readFileSync, statSync, writeFileSync} from 'fs';
 
-const DATA_DIR = './documentation/metrics/data/';
+const DATA_DIR = './docs/metrics/data/';
 const TIMESTAMP = Date.now();
 
 function listFiles(prefix) {

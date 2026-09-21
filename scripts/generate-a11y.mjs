@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 const OUTPUT_DIR = path.join(
     __dirname,
     "..",
-    "documentation",
+    "docs",
     "metrics",
     "data"
 );

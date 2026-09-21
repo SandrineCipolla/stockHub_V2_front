@@ -32,7 +32,7 @@ function median(numbers) {
  */
 async function singleRun(runNumber) {
     const timestamp = Date.now();
-    const rawJsonPath = `./documentation/metrics/data/lighthouse-raw-${timestamp}-run${runNumber}.json`;
+    const rawJsonPath = `./docs/metrics/data/lighthouse-raw-${timestamp}-run${runNumber}.json`;
 
     try {
         const cmd = `npx lighthouse ${TEST_URL} \
@@ -181,7 +181,7 @@ async function runLighthouseMulti() {
 
     // JSON final optimisé pour dashboard (utilise les médianes)
     const timestamp = Date.now();
-    const finalJsonPath = `./documentation/metrics/data/lighthouse-${timestamp}.json`;
+    const finalJsonPath = `./docs/metrics/data/lighthouse-${timestamp}.json`;
 
     const final = {
         scores: {
@@ -217,7 +217,7 @@ async function runLighthouseMulti() {
     };
 
     // Sauvegarder le rapport brut complet du dernier run
-    const rawJsonPath = `./documentation/metrics/data/lighthouse-raw-${timestamp}.json`;
+    const rawJsonPath = `./docs/metrics/data/lighthouse-raw-${timestamp}.json`;
     writeFileSync(rawJsonPath, JSON.stringify(raw, null, 2));
     console.log(`\n💾 Rapport brut enregistré : ${rawJsonPath}`);
 

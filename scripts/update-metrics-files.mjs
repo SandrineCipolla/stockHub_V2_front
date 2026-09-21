@@ -2,7 +2,7 @@
 
 /**
  * Script pour mettre à jour automatiquement la liste des fichiers JSON
- * dans documentation/metrics/index.html
+ * dans docs/metrics/index.html
  *
  * Utilisation: node scripts/update-metrics-files.mjs
  */
@@ -15,8 +15,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const PROJECT_ROOT = join(__dirname, '..');
-const DATA_DIR = join(PROJECT_ROOT, 'documentation', 'metrics', 'data');
-const HTML_FILE = join(PROJECT_ROOT, 'documentation', 'metrics', 'index.html');
+const DATA_DIR = join(PROJECT_ROOT, 'docs', 'metrics', 'data');
+const HTML_FILE = join(PROJECT_ROOT, 'docs', 'metrics', 'index.html');
 
 /**
  * Trouve le fichier le plus récent pour chaque type
@@ -95,7 +95,7 @@ function main() {
 
     if (success) {
         console.log('\n✨ Terminé! Le dashboard devrait maintenant fonctionner sur GitHub Pages.');
-        console.log('   Pour tester en local: ouvrez documentation/metrics/index.html');
+        console.log('   Pour tester en local: ouvrez docs/metrics/index.html');
     } else {
         process.exit(1);
     }

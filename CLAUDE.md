@@ -77,7 +77,7 @@ src/
 
 ### Qualité du code
 
-TypeScript strict (0 erreur tolérée), ESLint 0 warning, Prettier, Knip pour la détection de code mort. Métriques à jour (couverture, Lighthouse) : badges du README et `documentation/9-DASHBOARD-QUALITY.md`, pas de chiffre figé ici.
+TypeScript strict (0 erreur tolérée), ESLint 0 warning, Prettier, Knip pour la détection de code mort. Métriques à jour (couverture, Lighthouse) : badges du README et `docs/9-DASHBOARD-QUALITY.md`, pas de chiffre figé ici.
 
 ### Patterns de mise à jour d'état (hooks)
 
@@ -102,7 +102,7 @@ Le backend V2 retourne uniquement `id, label, description, category`. Pour les c
 
 ### Accessibilité (RGAA)
 
-Navigation clavier complète, contrastes conformes, attributs ARIA appropriés, structure HTML sémantique, focus visible. Audit complet : [documentation/6-ACCESSIBILITY.md](documentation/6-ACCESSIBILITY.md).
+Navigation clavier complète, contrastes conformes, attributs ARIA appropriés, structure HTML sémantique, focus visible. Audit complet : [docs/6-ACCESSIBILITY.md](docs/6-ACCESSIBILITY.md).
 
 ## Intégration avec le Design System
 
@@ -174,7 +174,7 @@ Documentation complète de l'intégration : `stockhub_back/docs/technical/fronte
 
 ## Releases automatiques (Release Please)
 
-Configuration : `.github/workflows/release-please.yml`. Documentation complète : `documentation/technical/RELEASE-AUTOMATION.md`. Chaque merge dans `main` déclenche l'analyse des commits, la mise à jour d'une PR de release (CHANGELOG, version bump semver), et à son merge, tag + GitHub Release automatiques.
+Configuration : `.github/workflows/release-please.yml`. Documentation complète : `docs/technical/RELEASE-AUTOMATION.md`. Chaque merge dans `main` déclenche l'analyse des commits, la mise à jour d'une PR de release (CHANGELOG, version bump semver), et à son merge, tag + GitHub Release automatiques.
 
 ## Ressources externes
 

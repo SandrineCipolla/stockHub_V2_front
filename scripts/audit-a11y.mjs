@@ -6,7 +6,7 @@ import {existsSync, mkdirSync, writeFileSync} from 'fs';
 import {execSync, spawn} from 'child_process';
 
 const TEST_URL = 'http://localhost:4173';
-const OUTPUT_DIR = './documentation/metrics/data';
+const OUTPUT_DIR = './docs/metrics/data';
 
 async function ensureServer() {
   // Build si dist absent

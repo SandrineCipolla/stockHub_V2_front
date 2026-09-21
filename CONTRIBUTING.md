@@ -58,7 +58,7 @@ Toute revue de PR doit respecter le [guide-redaction.md](docs/technical/guide-re
 
 ### Releases
 
-Automatiques via **Release Please** (semver) sur push `main`. Détail : `documentation/technical/RELEASE-AUTOMATION.md`.
+Automatiques via **Release Please** (semver) sur push `main`. Détail : `docs/technical/RELEASE-AUTOMATION.md`.
 
 ## Workflow par ticket
 

@@ -34,7 +34,7 @@ Rouvrir cette décision si des régressions apparaissent sur des cas limites que
 ## Liens
 
 - Code concerné : `src/test/fixtures/`
-- Guide de tests : [Guide de tests](../../documentation/5-TESTING-GUIDE.md)
+- Guide de tests : [Guide de tests](../../docs/5-TESTING-GUIDE.md)
 - ADR liée : [ADR-003](./ADR-003-types-centralises.md)
 
 ---

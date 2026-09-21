@@ -42,7 +42,7 @@ export default defineConfig({
         // Scripts et outils
         'audits/**',
         'scripts/**',
-        'documentation/**',
+        'docs/**',
         // Points d'entrée (difficiles à tester)
         'src/main.tsx',
         'src/App.tsx',

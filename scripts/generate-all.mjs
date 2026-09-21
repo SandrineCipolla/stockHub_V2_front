@@ -33,7 +33,7 @@ for (const { name, cmd } of generators) {
 }
 
 console.log("\n✅ Tous les rapports JSON ont été générés !");
-console.log("➡️  Ils sont disponibles dans documentation/metrics/data/");
+console.log("➡️  Ils sont disponibles dans docs/metrics/data/");
 
 // Ajout Audit Complet
 try {

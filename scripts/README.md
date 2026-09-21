@@ -15,7 +15,7 @@
 
 ## 📚 check-docs.mjs
 
-Vérifie la documentation Markdown : liens relatifs cassés (avec baseline dans `docs-links-baseline.json`) et règles fixes de `documentation/technical/guide-redaction.md` sur les fichiers modifiés.
+Vérifie la documentation Markdown : liens relatifs cassés (avec baseline dans `docs-links-baseline.json`) et règles fixes de `docs/technical/guide-redaction.md` sur les fichiers modifiés.
 
 ```bash
 npm run check:docs        # liens + style sur les fichiers modifiés (inclus dans ci:quality)
@@ -178,7 +178,7 @@ L'application reste **pleinement utilisable même en vision monochrome**.
 
 ### Rapport JSON
 
-Sauvegardé dans `documentation/metrics/daltonisme-{timestamp}.json`
+Sauvegardé dans `docs/metrics/daltonisme-{timestamp}.json`
 
 ---
 
@@ -255,7 +255,7 @@ Script tout-en-un regroupant tous les audits de performance, accessibilité, éc
 Génère un rapport JSON complet :
 
 ```
-documentation/metrics/audit-complet-{timestamp}.json
+docs/metrics/audit-complet-{timestamp}.json
 ```
 
 ### Structure du Rapport
@@ -434,7 +434,7 @@ jobs:
         if: always()
         with:
           name: audit-reports
-          path: documentation/metrics/
+          path: docs/metrics/
 ```
 
 ---
@@ -481,8 +481,8 @@ npm install -D puppeteer
 
 ### Complète
 
-- [TESTS-PERFORMANCE.md](../documentation/TESTS-PERFORMANCE.md)
-- [ANIMATIONS.md](../documentation/technical/ANIMATIONS.md)
+- [TESTS-PERFORMANCE.md](../docs/TESTS-PERFORMANCE.md)
+- [ANIMATIONS.md](../docs/technical/ANIMATIONS.md)
 
 ### Lighthouse
 
