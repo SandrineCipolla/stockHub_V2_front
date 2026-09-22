@@ -1,7 +1,7 @@
 # StockHub V2 🏭
 
 ![CI](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/ci.yml/badge.svg)
-![Security Audit](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/security-audit.yml/badge.svg)
+[![Security Audit](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/security-audit.yml/badge.svg)](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/security-audit.yml)
 ![Version](https://img.shields.io/github/package-json/v/SandrineCipolla/stockHub_V2_front)
 [![Coverage](https://codecov.io/gh/SandrineCipolla/stockHub_V2_front/branch/main/graph/badge.svg)](https://codecov.io/gh/SandrineCipolla/stockHub_V2_front)
 [![Accessibility](https://img.shields.io/badge/Accessibility-RGAA-blue)](docs/6-ACCESSIBILITY.md)
