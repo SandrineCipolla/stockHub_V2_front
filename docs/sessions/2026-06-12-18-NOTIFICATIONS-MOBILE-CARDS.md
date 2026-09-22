@@ -11,7 +11,7 @@
 ### #61 — Modale confirmation suppression (PR #190)
 
 - Nouveau composant `src/components/common/ConfirmDeleteModal.tsx` : overlay, focus sur "Annuler", Escape, état `isDeleting`
-- `Dashboard.tsx` : `pendingDeleteId` state -> `handleDeleteStock` ouvre la modale au lieu de supprimer directement
+- `Dashboard.tsx` : `pendingDeleteId` state → `handleDeleteStock` ouvre la modale au lieu de supprimer directement
 - `StockCardWrapper.tsx` : injection CSS dans le shadow root du web component pour masquer le bouton "Supprimer" sur les stocks partagés (quand `onDelete` n'est pas fourni)
 - 9 tests unitaires dans `ConfirmDeleteModal.test.tsx` (rendering, actions, état isDeleting)
 
@@ -19,8 +19,8 @@
 
 - `ConfigManager.getToken()` : suppression des verrous `interaction.status` périmés avant `acquireTokenSilent`, log des échecs, `loginRedirect` au lieu de `acquireTokenRedirect` sur `InteractionRequiredAuthError`
 - `Dashboard.tsx` : bouton "Se reconnecter" dans l'écran d'erreur
-- **Diagnostic** : les 401 récurrents viennent du backend Docker (cache JWKS périmé) -> restart du conteneur suffit à résoudre. Le fix frontend est complémentaire pour le cas token MSAL vraiment expiré.
-- Mergé le 21 juillet 2026
+- **Diagnostic** : les 401 récurrents viennent du backend Docker (cache JWKS périmé) — restart du conteneur suffit à résoudre. Le fix frontend est complémentaire pour le cas token MSAL vraiment expiré.
+- Mergé le 21 juillet 2026 (voir [2026-07-21-24-E2E-PLAYWRIGHT-DS-MIGRATION.md](2026-07-21-24-E2E-PLAYWRIGHT-DS-MIGRATION.md))
 
 ### Tickets créés
 
@@ -48,8 +48,8 @@ Nouveau composant `src/components/layout/NotificationPanel.tsx` :
 
 - Drawer fixe depuis la droite, overlay backdrop derrière
 - Fermeture : clic overlay, bouton ✕, touche Escape
-- 3 sections : Stocks critiques, Ruptures de stock, Contributions en attente
-- Clic sur un stock -> navigation vers `/stocks/:stockId` et fermeture du panel
+- 3 sections : Stocks critiques (🔺), Ruptures de stock (📦), Contributions en attente (🔔)
+- Clic sur un stock → navigation vers `/stocks/:stockId` et fermeture du panel
 - État vide : message "Aucune notification" avec icône
 - Support dark/light mode
 
@@ -57,7 +57,7 @@ Modifications associées :
 
 - `NotificationItem` type ajouté dans `src/types/dashboard.ts`
 - `useNotificationCount` enrichi : retourne `notifications: NotificationItem[]`
-- `HeaderWrapper` : `isPanelOpen` state, clic cloche -> panel (tooltip hover conservé)
+- `HeaderWrapper` : `isPanelOpen` state, clic cloche → panel (tooltip hover conservé)
 - Dashboard : calcule `notificationItems` depuis ses stocks déjà chargés (pas de double fetch)
 - StockDetailPage + ItemDetailPage : passent `notifications={notifItems}` à HeaderWrapper
 
@@ -76,7 +76,7 @@ Nouvelle page `ItemDetailPage` (`/stocks/:stockId/items/:itemId`) :
 
 - Appel `GET /api/v2/stocks/:stockId/items/:itemId`
 - Affiche : label, statut calculé, quantité, seuil minimum, date relative (`updatedAt`)
-- Navigation : clic sur le nom de l'item (desktop) ou bouton "Voir ->" (mobile card)
+- Navigation : clic sur le nom de l'item (desktop) ou bouton "Voir →" (mobile card)
 - Nouveau type `RawItemDetail` et méthode `ItemsAPI.fetchItem()` dans `itemsAPI.ts`
 
 ### #165 — Items en cards sur mobile (PR #179)
@@ -85,9 +85,11 @@ Nouveau composant `src/components/items/ItemMobileCard.tsx` :
 
 - Vue cards visible sur mobile (`md:hidden`), tableau conservé sur desktop (`hidden md:block`)
 - Chaque card affiche : nom + badge statut, quantité (role-based), min, date relative, actions directes
-- Gestion des rôles : OWNER (+/-/inline edit), VIEWER_CONTRIBUTOR (bouton Signaler), VIEWER (lecture seule)
-- Bug découvert et corrigé : `autoFocus` sur deux inputs simultanés (mobile + desktop) causait un conflit de focus -> `onBlur` immédiat -> `editingQuantityId = null`. Fix : `autoFocus` retiré de la card mobile.
+- Gestion des rôles : OWNER (±/inline edit), VIEWER_CONTRIBUTOR (bouton Signaler), VIEWER (lecture seule)
+- Bug découvert et corrigé : `autoFocus` sur deux inputs simultanés (mobile + desktop) causait un conflit de focus → `onBlur` immédiat → `editingQuantityId = null`. Fix : `autoFocus` retiré de la card mobile.
 - Tests adaptés : `data-testid="qty-edit-span-{id}"` et `data-testid="qty-input-{id}"` pour cibler précisément le tableau desktop depuis les tests
+
+---
 
 ---
 
@@ -101,11 +103,11 @@ Nouveau composant `src/components/items/ItemMobileCard.tsx` :
 
 ### Fix CI
 
-`deploy-metrics.yml` utilisait Node 18, incompatible avec Vite 6.3.5 (exige >= 20.19). Passé à Node 20, pushé directement sur `main`.
+`deploy-metrics.yml` utilisait Node 18, incompatible avec Vite 6.3.5 (exige ≥ 20.19). Passé à Node 20, pushé directement sur `main`.
 
 ---
 
-## Sessions précédentes — 12-13 juin 2026
+## Sessions précédentes — 12–13 juin 2026
 
 ### Tickets fermés
 
@@ -119,8 +121,18 @@ Nouveau composant `src/components/items/ItemMobileCard.tsx` :
 
 ### Nouveau fichier utilitaire
 
-`src/utils/dateUtils.ts` : `formatRelativeDate()` partagée entre `StockCardWrapper` et `StockDetailPage`.
+`src/utils/dateUtils.ts` — `formatRelativeDate()` partagée entre `StockCardWrapper` et `StockDetailPage`.
+
+### Tickets créés
+
+| #        | Repo  | Titre                                                           | Board      |
+| -------- | ----- | --------------------------------------------------------------- | ---------- |
+| #170     | Front | Rechercher un item par nom depuis le dashboard (bloqué backend) | Backlog    |
+| DS#39    | DS    | Supprimer attributs `title` natifs sur boutons sh-header        | Backlog DS |
+| Back#228 | Back  | Exposer `updatedAt` sur GET /api/v2/stocks                      | Backlog    |
 
 ### CI optimisé
 
 Le workflow "Quality Audits" (Lighthouse, axe-core, bundle) saute les PRs Dependabot et Release Please.
+
+---
