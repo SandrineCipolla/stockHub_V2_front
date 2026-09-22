@@ -34,16 +34,16 @@
 L'évaluation de la qualité repose sur une chaîne automatisée et reproductible reliant les scripts `package.json`, la persistance sous `docs/metrics/data/`, l'interface d'affichage et la CI :
 
 ```
-[Commandes CLI npm run audit:*] ➔ [Fichiers JSON sous docs/metrics/data/] ➔ [Dashboard HTML docs/metrics/index.html]
+[Commandes CLI npm run generate:* / audit:*] ➔ [Fichiers JSON sous docs/metrics/data/] ➔ [Dashboard HTML docs/metrics/index.html]
 ```
 
 ### 🛠️ Commandes CLI d'audit
 
-| Commande                   | Action                                                             | Destination des artefacts                           |
-| -------------------------- | ------------------------------------------------------------------ | --------------------------------------------------- |
-| `npm run audit:lighthouse` | Génère l'audit Lighthouse headless (3 runs, médiane)               | `docs/metrics/data/lighthouse-raw-{timestamp}.json` |
-| `npm run audit:all`        | Exécute la suite complète (Lighthouse, a11y, FPS, dataset)         | `docs/metrics/data/audit-complet-{timestamp}.json`  |
-| `npm run ci:quality`       | Vérifie la conformité en CI (ESLint `--max-warnings 0`, TS, tests) | Output CI / Status checks                           |
+| Commande                      | Action                                                                          | Destination des artefacts                           |
+| ----------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `npm run generate:lighthouse` | Génère l'audit Lighthouse headless (3 runs, médiane)                            | `docs/metrics/data/lighthouse-raw-{timestamp}.json` |
+| `npm run audit:full`          | Exécute la suite complète (Lighthouse, a11y, FPS, dataset)                      | `docs/metrics/data/audit-complet-{timestamp}.json`  |
+| `npm run ci:quality`          | Vérifie la conformité en CI (TypeScript, ESLint, Knip, strict-check, doc-links) | Output CI / Status checks                           |
 
 ---
 
