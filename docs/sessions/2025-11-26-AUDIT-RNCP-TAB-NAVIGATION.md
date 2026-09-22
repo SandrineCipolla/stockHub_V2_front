@@ -682,7 +682,7 @@ modified:   README.md                                 # +8 lignes (lien doc inte
 
 ### Documentation
 
-- [10-AUDIT-RNCP-DASHBOARD.md](../10-AUDIT-RNCP-DASHBOARD.md) - Documentation technique complète
+- [10-AUDIT-RNCP-DASHBOARD.md](../archive/metrics/10-AUDIT-RNCP-DASHBOARD.md) - Documentation technique complète (archivée)
 - [9-DASHBOARD-QUALITY.md](../9-DASHBOARD-QUALITY.md) - Documentation dashboard qualité global
 - [README.md](../../README.md) - Documentation projet
 

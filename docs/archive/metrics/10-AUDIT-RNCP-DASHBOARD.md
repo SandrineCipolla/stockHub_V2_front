@@ -1,4 +1,9 @@
-# Documentation - Audit RNCP Dashboard
+# Documentation - Audit RNCP Dashboard (Archivé)
+
+> ⚠️ **DOCUMENT ARCHIVÉ - TRAÇABILITÉ RNCP**  
+> Ce document conserve l'historique d'implémentation de la section RNCP du Dashboard. Pour la **Source de Vérité Unique** sur les métriques et audits vivants du projet, consulter [`docs/15-APP-QUALITY-METRICS.md`](../../15-APP-QUALITY-METRICS.md).
+
+---
 
 ## 📋 Table des matières
 

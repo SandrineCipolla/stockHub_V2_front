@@ -1,12 +1,15 @@
-# 15. Métriques Qualité - Application StockHub V2
+# 15. Métriques Qualité & Performance - Source de Vérité Unique (SSOT)
 
-> État actuel des performances et de l'accessibilité de **l'application** (Dashboard page)
+> 🎯 **SOURCE DE VÉRITÉ UNIQUE (SSOT) : QUALITÉ ET MÉTRIQUES FRONTEND**  
+> Ce document est l'unique référence du dépôt frontend récapitulant les métriques vivantes de l'application, les seuils cibles, la chaîne de génération d'audit et les règles d'intégration CI/CD.  
+> _Pour l'architecture de l'interface HTML du dashboard de visualisation, consulter le manuel UI [`docs/9-DASHBOARD-QUALITY.md`](9-DASHBOARD-QUALITY.md)._
 
 ---
 
 ## 📋 Table des matières
 
 - [Vue d'ensemble](#vue-densemble)
+- [Flux de Données & Commandes d'Audit CLI](#flux-de-données--commandes-daudit-cli)
 - [Métriques Lighthouse Actuelles](#métriques-lighthouse-actuelles)
 - [Performance Détaillée](#performance-détaillée)
 - [Problèmes d'Accessibilité Critiques](#problèmes-daccessibilité-critiques)
@@ -21,12 +24,26 @@
 ### URLs de Test
 
 - **App** : http://localhost:4176/ (page Dashboard)
-- **Métriques Dashboard** : http://localhost:5173/docs/metrics/
+- **Métriques Dashboard (UI)** : http://localhost:5173/docs/metrics/
 - **GitHub Pages (Dashboard métriques)** : https://sandrinecipolla.github.io/stockHub_V2_front/
 
-### ⚠️ Important
+---
 
-Ce document concerne les métriques de **l'application StockHub V2** (page Dashboard `/`), **pas** le dashboard de métriques (`docs/metrics/index.html`).
+## Flux de Données & Commandes d'Audit CLI
+
+L'évaluation de la qualité repose sur une chaîne automatisée et reproductible reliant les scripts `package.json`, la persistance sous `docs/metrics/data/`, l'interface d'affichage et la CI :
+
+```
+[Commandes CLI npm run generate:* / audit:*] ➔ [Fichiers JSON sous docs/metrics/data/] ➔ [Dashboard HTML docs/metrics/index.html]
+```
+
+### 🛠️ Commandes CLI d'audit
+
+| Commande                      | Action                                                                          | Destination des artefacts                           |
+| ----------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `npm run generate:lighthouse` | Génère l'audit Lighthouse headless (3 runs, médiane)                            | `docs/metrics/data/lighthouse-raw-{timestamp}.json` |
+| `npm run audit:full`          | Exécute la suite complète (Lighthouse, a11y, FPS, dataset)                      | `docs/metrics/data/audit-complet-{timestamp}.json`  |
+| `npm run ci:quality`          | Vérifie la conformité en CI (TypeScript, ESLint, Knip, strict-check, doc-links) | Output CI / Status checks                           |
 
 ---
 
@@ -457,7 +474,7 @@ npm run audit:daltonisme   # Vérifie daltonisme
 ### Documentation Interne
 
 - **CI/CD** : [14-CI-CD-WORKFLOWS.md](14-CI-CD-WORKFLOWS.md)
-- **Performance Analysis** : [12-PERFORMANCE-ANALYSIS.md](12-PERFORMANCE-ANALYSIS.md)
+- **Performance Analysis (archivé)** : [12-PERFORMANCE-ANALYSIS.md](archive/metrics/12-PERFORMANCE-ANALYSIS.md)
 - **Dashboard Métriques** : [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)
 
 ### Repos Liés

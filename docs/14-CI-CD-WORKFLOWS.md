@@ -398,12 +398,12 @@ ls -lh dist/assets/*.js
 
 Aucune valeur n'est recopiée ici, elle serait fausse dès le prochain passage de la CI.
 
-| Indicateur                                  | Où le lire                                                                                       |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Lighthouse, performance et accessibilité    | Workflow `Quality Audits`, et [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](11-LIGHTHOUSE-DYNAMIC-AUDITS.md) |
-| Tests et couverture                         | Sortie de `npm run test:coverage`, badges du README                                              |
-| Taille du bundle                            | Job `Bundle Size Budget` de la CI                                                                |
-| Erreurs TypeScript et avertissements ESLint | `npm run ci:quality`                                                                             |
+| Indicateur                                  | Où le lire                                                                                                       |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Lighthouse, performance et accessibilité    | Workflow `Quality Audits`, et [11-LIGHTHOUSE-DYNAMIC-AUDITS.md](archive/metrics/11-LIGHTHOUSE-DYNAMIC-AUDITS.md) |
+| Tests et couverture                         | Sortie de `npm run test:coverage`, badges du README                                                              |
+| Taille du bundle                            | Job `Bundle Size Budget` de la CI                                                                                |
+| Erreurs TypeScript et avertissements ESLint | `npm run ci:quality`                                                                                             |
 
 ---
 

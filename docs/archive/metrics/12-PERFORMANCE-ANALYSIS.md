@@ -1,6 +1,7 @@
-# 📊 Analyse des Performances - StockHub V2 Front
+# 📊 Analyse des Performances - StockHub V2 Front (Archivé)
 
-> **Documentation technique de la dégradation des performances et solutions appliquées**
+> ⚠️ **DOCUMENT ARCHIVÉ - TRAÇABILITÉ RNCP**  
+> Ce document conserve l'analyse post-mortem de la dégradation des performances de nov. 2025. Pour la **Source de Vérité Unique** sur les métriques et audits vivants du projet, consulter [`docs/15-APP-QUALITY-METRICS.md`](../../15-APP-QUALITY-METRICS.md).
 
 ---
 
@@ -304,8 +305,8 @@ Could not find a declaration file for module '@stockhub/design-system'
 
 ### Documentation Interne
 
-- [Dashboard Qualité](./9-DASHBOARD-QUALITY.md)
-- [Métriques Live](./metrics/index.html)
+- [Dashboard Qualité](../../9-DASHBOARD-QUALITY.md)
+- [Métriques Live](../../metrics/index.html)
 
 ---
 
