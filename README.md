@@ -95,6 +95,7 @@ Optimisation des images (formats modernes, lazy loading), purge CSS, tree shakin
 ## Documentation
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
+- [SECURITY.md](SECURITY.md) : politique de sécurité et signalement des vulnérabilités
 - [CLAUDE.md](CLAUDE.md) : contexte projet pour sessions IA
 - [docs/0-INDEX.md](docs/0-INDEX.md) : index complet de la documentation
 - [docs/adr/INDEX.md](docs/adr/INDEX.md) : Architecture Decision Records
