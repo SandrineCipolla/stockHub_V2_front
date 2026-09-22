@@ -30,6 +30,7 @@
 ### Fichiers racine
 
 - [../CONTRIBUTING.md](../CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
+- [../SECURITY.md](../SECURITY.md) : politique de sécurité (versions supportées, signalement)
 - [../CLAUDE.md](../CLAUDE.md) : contexte projet pour sessions IA
 - [../README.md](../README.md) : présentation du projet
 - [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md) : tableau de bord de l'état courant et point de reprise
@@ -105,6 +106,11 @@ Les composants sont répartis en trois catégories, atoms, molecules et organism
 - [technical/SCRIPTS-AUDIT.md](technical/SCRIPTS-AUDIT.md) - Scripts audit (FPS, a11y, daltonisme)
 - [technical/TYPE-SAFETY-AUDIT-2025-11-18.md](technical/TYPE-SAFETY-AUDIT-2025-11-18.md) - Audit TypeScript & sécurité des types
 - [technical/16-CI-TROUBLESHOOTING.md](technical/16-CI-TROUBLESHOOTING.md) ⭐ **CI/CD Troubleshooting** - Résolution problèmes CI
+
+### Sécurité
+
+- [../SECURITY.md](../SECURITY.md) - Politique de sécurité (versions supportées, signalement)
+- [security/SECURITY-VULNERABILITIES.md](security/SECURITY-VULNERABILITIES.md) - Journal des vulnérabilités découvertes et corrigées
 
 ---
 
