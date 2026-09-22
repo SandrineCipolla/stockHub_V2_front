@@ -22,11 +22,11 @@ If you discover a security vulnerability in StockHub Frontend, report it private
 - Potential impact
 - Suggested fix, if any
 
-### Response timeline
+### How reports are handled
 
-- **Initial response:** within 48 hours
-- **Status update:** within 7 days
-- **Fix timeline:** depends on severity, critical issues prioritized
+This project is maintained by a single person, on available time. Reports are reviewed as soon as possible, with critical and high severity issues taking priority over everything else.
+
+No response time is guaranteed. You will be kept informed in the advisory thread as the report progresses.
 
 ## Security Measures
 
