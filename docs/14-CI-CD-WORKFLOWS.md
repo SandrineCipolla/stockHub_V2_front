@@ -25,10 +25,14 @@ Le projet utilise **GitHub Actions** pour automatiser les processus de qualité,
 
 ```
 .github/workflows/
-├── ci.yml                    # CI automatique sur PR et push
-├── deploy-metrics.yml        # Déploiement dashboard qualité
-├── deploy-pages.yml          # (DÉSACTIVÉ) Ancien déploiement app
-└── release-please.yml        # Gestion automatique des releases
+├── ci.yml                        # CI automatique sur PR et push
+├── security-audit.yml            # npm audit sur PR, push main et hebdomadaire
+├── e2e-frontend.yml              # E2E Playwright hebdomadaire et manuel
+├── Quality Audits (Toolbox).yml  # Audits performance, accessibilité, sécurité
+├── deploy-metrics.yml            # Déploiement dashboard qualité
+├── deploy-pages.yml              # (DÉSACTIVÉ) Ancien déploiement app
+├── azure-static-web-apps-deploy.yml # Déploiement production Azure
+└── release-please.yml            # Gestion automatique des releases
 ```
 
 ### Philosophie
@@ -42,12 +46,14 @@ Le projet utilise **GitHub Actions** pour automatiser les processus de qualité,
 
 ## Workflows disponibles
 
-| Workflow                       | Déclenchement    | Statut       | Durée |
-| ------------------------------ | ---------------- | ------------ | ----- |
-| **CI - Quality & Tests**       | PR, push main    | ✅ Active    | ~2min |
-| **Deploy Metrics Dashboard**   | Push main        | ✅ Active    | ~5min |
-| **Release Please**             | Push main        | ✅ Active    | ~30s  |
-| ~~Deploy App to GitHub Pages~~ | Manuel seulement | ⚠️ Désactivé | N/A   |
+| Workflow                       | Déclenchement               | Statut       | Durée |
+| ------------------------------ | --------------------------- | ------------ | ----- |
+| **CI - Quality & Tests**       | PR, push main               | ✅ Active    | ~2min |
+| **Security Audit**             | PR, push main, lundi 5h UTC | ✅ Active    | ~1min |
+| **E2E Frontend**               | Lundi 6h UTC, manuel        | ✅ Active    | ~5min |
+| **Deploy Metrics Dashboard**   | Push main                   | ✅ Active    | ~5min |
+| **Release Please**             | Push main                   | ✅ Active    | ~30s  |
+| ~~Deploy App to GitHub Pages~~ | Manuel seulement            | ⚠️ Désactivé | N/A   |
 
 ---
 

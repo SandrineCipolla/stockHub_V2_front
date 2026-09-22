@@ -1,7 +1,9 @@
 # StockHub V2 🏭
 
 ![CI](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/ci.yml/badge.svg)
+[![Security Audit](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/security-audit.yml/badge.svg)](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/security-audit.yml)
 ![Version](https://img.shields.io/github/package-json/v/SandrineCipolla/stockHub_V2_front)
+[![Coverage](https://codecov.io/gh/SandrineCipolla/stockHub_V2_front/branch/main/graph/badge.svg)](https://codecov.io/gh/SandrineCipolla/stockHub_V2_front)
 [![Accessibility](https://img.shields.io/badge/Accessibility-RGAA-blue)](docs/6-ACCESSIBILITY.md)
 
 Plateforme de gestion de stocks intelligente. Interface web responsive et accessible, avec design system intégré et suggestions IA pour l'analyse des stocks.
@@ -80,7 +82,9 @@ Conformité WCAG 2.1 niveau AA visée : navigation clavier, contrastes validés,
 
 ## Tests et qualité
 
-Trois niveaux : unitaires (Vitest + Testing Library), wrappers Web Components, E2E (Playwright). Métriques à jour (couverture, Lighthouse, bundle size) : badge CI ci-dessus et [docs/9-DASHBOARD-QUALITY.md](docs/9-DASHBOARD-QUALITY.md), pas de chiffre figé ici.
+Deux étages fonctionnels, unitaires et composants (Vitest + Testing Library) puis E2E (Playwright sur le staging, avec le vrai backend), complétés par des audits non fonctionnels. Ce que chaque étage couvre, où vivent les tests et quand ils s'exécutent : [docs/5-TESTING-GUIDE.md](docs/5-TESTING-GUIDE.md#pyramide-de-tests). Exécution des E2E en local : [docs/E2E_TESTS_GUIDE.md](docs/E2E_TESTS_GUIDE.md).
+
+Métriques à jour (couverture, Lighthouse, bundle size) : badges ci-dessus et [docs/9-DASHBOARD-QUALITY.md](docs/9-DASHBOARD-QUALITY.md), pas de chiffre figé ici.
 
 Audits disponibles : `npm run audit:full` (Lighthouse, FPS, a11y, datasets, WCAG). Détail des sous-audits : `package.json`.
 
