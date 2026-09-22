@@ -4,14 +4,14 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.x     | :white_check_mark: |
-| < 2.0   | :x:                |
+| 1.x     | :white_check_mark: |
+| < 1.0   | :x:                |
 
-Only the latest released 2.x version receives security fixes. The current version is in [package.json](package.json).
+Only the latest released 1.x version receives security fixes. The current version is in [package.json](package.json).
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in StockHub Frontend, please report it by emailing the maintainer directly.
+If you discover a security vulnerability in StockHub Frontend, report it privately through the repository's **Security** tab, using [Report a vulnerability](https://github.com/SandrineCipolla/stockHub_V2_front/security/advisories/new).
 
 **Please do not open public issues for security vulnerabilities.**
 
@@ -32,10 +32,9 @@ If you discover a security vulnerability in StockHub Frontend, please report it 
 
 ### Automated security checks
 
-Workflows in GitHub Actions run `npm audit`. HIGH and CRITICAL vulnerabilities block the build.
+`security-audit.yml` runs `npm audit --audit-level=high`, so HIGH and CRITICAL vulnerabilities block the build. MODERATE and LOW are reported as information only.
 
-- `ci.yml`, on every push and pull request, alongside tests, lint and build
-- `security-audit.yml`, dedicated workflow with its own badge, also scheduled weekly
+It runs on every pull request targeting `main`, on every push to `main`, every Monday at 05:00 UTC, and on manual dispatch.
 
 ![Security Audit](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/security-audit.yml/badge.svg)
 
