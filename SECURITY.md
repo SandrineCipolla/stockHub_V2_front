@@ -1,65 +1,65 @@
-# Security Policy
+# Politique de sécurité
 
-## Supported Versions
+## Versions supportées
 
-| Version | Supported          |
+| Version | Supportée          |
 | ------- | ------------------ |
 | 1.x     | :white_check_mark: |
 | < 1.0   | :x:                |
 
-Only the latest released 1.x version receives security fixes. The current version is in [package.json](package.json).
+Seule la dernière version 1.x publiée reçoit les correctifs de sécurité. La version courante est indiquée dans [package.json](package.json).
 
-## Reporting a Vulnerability
+## Signaler une vulnérabilité
 
-If you discover a security vulnerability in StockHub Frontend, report it privately through the repository's **Security** tab, using [Report a vulnerability](https://github.com/SandrineCipolla/stockHub_V2_front/security/advisories/new).
+Si vous découvrez une vulnérabilité dans StockHub Frontend, signalez-la en privé depuis l'onglet **Security** du dépôt, via [Report a vulnerability](https://github.com/SandrineCipolla/stockHub_V2_front/security/advisories/new).
 
-**Please do not open public issues for security vulnerabilities.**
+**Merci de ne pas ouvrir d'issue publique pour une vulnérabilité de sécurité.**
 
-### What to include in your report
+### Ce que doit contenir le signalement
 
-- Description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact
-- Suggested fix, if any
+- Description de la vulnérabilité
+- Étapes pour la reproduire
+- Impact potentiel
+- Correctif suggéré, le cas échéant
 
-### How reports are handled
+### Traitement des signalements
 
-This project is maintained by a single person, on available time. Reports are reviewed as soon as possible, with critical and high severity issues taking priority over everything else.
+Ce projet est maintenu par une seule personne, sur son temps disponible. Les signalements sont examinés dès que possible, les vulnérabilités critiques et hautes étant prioritaires sur le reste.
 
-No response time is guaranteed. You will be kept informed in the advisory thread as the report progresses.
+Aucun délai de réponse n'est garanti. Vous serez tenu informé de l'avancement dans le fil de l'advisory.
 
-## Security Measures
+## Mesures de sécurité
 
-### Automated security checks
+### Contrôles automatiques
 
-`security-audit.yml` runs `npm audit --audit-level=high`, so HIGH and CRITICAL vulnerabilities block the build. MODERATE and LOW are reported as information only.
+`security-audit.yml` exécute `npm audit --audit-level=high` : les vulnérabilités HIGH et CRITICAL bloquent le build. Les vulnérabilités MODERATE et LOW sont remontées à titre informatif.
 
-It runs on every pull request targeting `main`, on every push to `main`, every Monday at 05:00 UTC, and on manual dispatch.
+Le workflow s'exécute sur chaque pull request vers `main`, sur chaque push sur `main`, chaque lundi à 5h00 UTC, et sur déclenchement manuel.
 
 ![Security Audit](https://github.com/SandrineCipolla/stockHub_V2_front/actions/workflows/security-audit.yml/badge.svg)
 
-Dependency updates are proposed automatically by Dependabot.
+Les mises à jour de dépendances sont proposées automatiquement par Dependabot.
 
-### Authentication and client security
+### Authentification et sécurité côté client
 
-- **Authentication:** Azure AD B2C via MSAL (`@azure/msal-browser` / `@azure/msal-react`) with PKCE flow
-- **API security:** HTTPS only, Bearer tokens sent to backend APIs, no secret tokens stored in client repository
-- **Content & Privacy:** GDPR compliant cookie consent, see [CookieBanner](src/components/common/CookieBanner.tsx)
+- **Authentification** : Azure AD B2C via MSAL (`@azure/msal-browser` / `@azure/msal-react`), flux PKCE
+- **Sécurité des API** : HTTPS uniquement, jetons Bearer envoyés aux API backend, aucun secret stocké dans le dépôt client
+- **Contenu et vie privée** : consentement aux cookies conforme RGPD, voir [CookieBanner](src/components/common/CookieBanner.tsx)
 
-## Security Best Practices
+## Bonnes pratiques
 
-When contributing to this project:
+Pour toute contribution à ce projet :
 
-1. Never commit sensitive data such as API keys, passwords or client secrets
-2. Follow TypeScript strict mode and the ESLint security rules
-3. Sanitize and validate all user inputs before rendering
-4. Keep dependencies up to date
+1. Ne jamais committer de données sensibles : clés d'API, mots de passe, secrets client
+2. Respecter le mode strict de TypeScript et les règles de sécurité ESLint
+3. Nettoyer et valider toutes les entrées utilisateur avant affichage
+4. Maintenir les dépendances à jour
 
-## Vulnerability History
+## Historique des vulnérabilités
 
-Every vulnerability found and fixed is recorded in [docs/security/SECURITY-VULNERABILITIES.md](docs/security/SECURITY-VULNERABILITIES.md).
+Chaque vulnérabilité découverte et corrigée est consignée dans [docs/security/SECURITY-VULNERABILITIES.md](docs/security/SECURITY-VULNERABILITIES.md).
 
 ---
 
-**Maintainer:** Sandrine Cipolla
-**Project:** StockHub Frontend (RNCP project)
+**Mainteneuse** : Sandrine Cipolla
+**Projet** : StockHub Frontend (projet RNCP)
