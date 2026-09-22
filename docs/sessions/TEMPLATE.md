@@ -1,11 +1,11 @@
 # Template de session de développement
 
-> Extrait du format réellement utilisé dans `ETAT-DU-PROJET.md`
+> Extrait du format réellement utilisé dans `ETAT_DU_PROJET.md`
 > (blocs "Session du [DATE]", actifs depuis plusieurs mois, dernière
-> occurrence : 18 juin 2026). Pas un nouveau format : la structure
+> occurrence : 22 septembre 2026). Pas un nouveau format : la structure
 > déjà en usage, isolée pour être réutilisable.
 
-À insérer en tête de `ETAT-DU-PROJET.md`, sous le bloc d'en-tête
+À insérer en tête de `ETAT_DU_PROJET.md`, sous le bloc d'en-tête
 (Date de rédaction / Dernière activité / Branche active / Version).
 
 ---
@@ -47,9 +47,11 @@ réellement vs ce qu'il ne couvre pas]. -->
 ## Règles d'usage
 
 - Un bloc "Session du [DATE]" par session de travail, ajouté **en tête**
-  des sessions précédentes dans `ETAT-DU-PROJET.md` (ordre antéchronologique).
+  des sessions précédentes dans `ETAT_DU_PROJET.md` (ordre antéchronologique).
 - Ne documenter que ce qui a été réellement fait, pas de planification
-  dans ce bloc (la section "Pour la prochaine session" du fichier sert
-  à ça).
+  dans ce bloc (le suivi des tâches à venir se fait sur le GitHub
+  Project).
+- Un bloc bascule dans `docs/sessions/` dès un mois d'ancienneté ou
+  au-delà de 3 sessions actives dans `ETAT_DU_PROJET.md`.
 - Un ticket sans PR encore ouverte reste dans "Tickets créés", pas
   dans "Tickets fermés".
