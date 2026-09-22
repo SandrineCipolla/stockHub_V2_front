@@ -17,7 +17,7 @@
 | **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)                   | 🎨 Guide utilisation web components React                                  |
 | **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)             | 🔗 **Harmonisation Frontend ↔ Design System**                              |
 | **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                             | 🐛 Résolution problèmes web components                                     |
-| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                                 | 🧪 Guide tests & métriques performance                                     |
+| **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                                 | 🧪 Pyramide de tests, audits performance et accessibilité                  |
 | **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                                 | ♿ Accessibilité WCAG AA (audit complet)                                   |
 | **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                           | 📅 Index sessions développement (11 sessions)                              |
 | **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                               | 🎓 Suivi compétences & livrables RNCP                                      |
@@ -234,7 +234,7 @@ docs/
 ├── 2-WEB-COMPONENTS-GUIDE.md          # 🎨 Guide web components
 ├── 3-FRONTEND-DS-INTEGRATION.md       # 🔗 Harmonisation Frontend ↔ DS
 ├── 4-TROUBLESHOOTING.md               # 🐛 Debug
-├── 5-TESTING-GUIDE.md                 # 🧪 Tests
+├── 5-TESTING-GUIDE.md                 # 🧪 Pyramide de tests & audits
 ├── 6-ACCESSIBILITY.md                 # ♿ Accessibilité
 ├── 7-SESSIONS.md                      # 📅 Index sessions
 ├── 8-RNCP-CHECKLIST.md                # 🎓 RNCP
@@ -313,7 +313,7 @@ docs/
 | **Utiliser web components**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)       |
 | **Comprendre Frontend ↔ DS** | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md) |
 | **Problème technique**       | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 |
-| **Écrire des tests**         | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                     |
+| **Écrire des tests**         | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md#pyramide-de-tests)   |
 | **Accessibilité**            | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     |
 | **Sessions développement**   | [7-SESSIONS.md](7-SESSIONS.md)                               |
 | **Suivi RNCP**               | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   |

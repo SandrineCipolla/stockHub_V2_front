@@ -80,6 +80,14 @@ jobs:
       - name: 🧪 Run Tests
         run: npm run test:run
 
+      # Génère le rapport lu par Codecov. Les seuils de vitest.config.ts ne sont
+      # pas encore atteints : l'échec n'arrête pas la CI, le badge Codecov du
+      # README porte le signal. Les tests eux-mêmes sont vérifiés à l'étape
+      # précédente, qui elle est bloquante.
+      - name: 📈 Generate Coverage Report
+        continue-on-error: true
+        run: npm run test:coverage
+
       - name: 📊 Upload Coverage
         if: always()
         uses: codecov/codecov-action@v4

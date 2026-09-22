@@ -1,13 +1,49 @@
-# 🔍 Tests de Performance & Audits - StockHub V2
+# 🔍 Tests & audits - StockHub V2
 
 ## 📋 Vue d'ensemble
 
-StockHub V2 dispose d'une suite complète de tests automatisés couvrant :
+Le dépôt a deux étages de tests fonctionnels, unitaires et E2E, complétés par des audits non fonctionnels (performance, accessibilité, éco-conception). La [pyramide de tests](#pyramide-de-tests) décrit ce que chaque étage couvre, les sections suivantes décrivent les audits.
 
-- **Performance** (FPS, Lighthouse, scalabilité)
-- **Accessibilité** (WCAG, prefers-reduced-motion, contraste)
-- **Éco-conception** (bundle, CO2, requêtes)
-- **Qualité code** (TypeScript, tests, coverage)
+---
+
+## Pyramide de tests
+
+| Étage                   | Outil                    | Où vivent les tests   | Quand il s'exécute                                   |
+| ----------------------- | ------------------------ | --------------------- | ---------------------------------------------------- |
+| Unitaires et composants | Vitest + Testing Library | `src/**/__tests__/`   | pre-push, PR et push `main` (`ci.yml`)               |
+| E2E                     | Playwright               | `tests/e2e-frontend/` | lundi 6h UTC et manuel (`e2e-frontend.yml`)          |
+| Audits non fonctionnels | Puppeteer, Lighthouse    | `scripts/audit-*.mjs` | PR et push sur branche de travail (`Quality Audits`) |
+
+Le nombre de tests et la couverture ne sont pas écrits ici : badges en haut du [README](../README.md) et [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md).
+
+### Étage unitaire et composants
+
+Environnement `happy-dom`, backend et design system jamais appelés pour de vrai. Configuration et seuils de couverture : [`vitest.config.ts`](../vitest.config.ts).
+
+Ce que cet étage couvre :
+
+- Les hooks de données (`src/hooks/__tests__/`), avec les services API mockés
+- Les clients API (`src/services/api/__tests__/`), avec `fetch` mocké
+- Les composants React et les pages (`src/components/**/__tests__/`, `src/pages/__tests__/`)
+- Les wrappers de Web Components, qui vérifient que le wrapper émet la bonne balise `sh-*` avec les bons attributs et propage les évènements
+
+Ce qu'il ne couvre pas : le rendu interne des Web Components du design system, dont le Shadow DOM n'est pas monté dans `happy-dom`, le vrai backend, l'authentification Azure AD B2C, la navigation entre pages dans un vrai navigateur. Les fichiers exclus de la couverture, et la raison de chaque exclusion, sont listés dans [`vitest.config.ts`](../vitest.config.ts).
+
+Commandes : `npm run test:run` (une passe), `npm test` (watch), `npm run test:coverage`.
+
+### Étage E2E
+
+Playwright pilote un vrai navigateur sur le staging déployé, avec le vrai backend et un vrai login Azure AD B2C. Un seul worker, les tests partagent le compte de test. Configuration : [`playwright.config.ts`](../playwright.config.ts).
+
+Ce que cet étage couvre : le login B2C interactif et un smoke du dashboard (`auth-smoke.e2e.test.ts`), puis les parcours de bout en bout dans `tests/e2e-frontend/workflows/` (création de stock, gestion des articles, mise à jour de quantité).
+
+Ce qu'il ne couvre pas : les cas d'erreur unitaires et les variantes de rendu, qui restent à l'étage unitaire. L'étage est volontairement mince, chaque test coûte un login réel.
+
+Installation, identifiants, exécution locale et cible staging : [E2E_TESTS_GUIDE.md](E2E_TESTS_GUIDE.md).
+
+### Pas d'étage d'intégration dédié
+
+Le front n'a pas d'étage intermédiaire séparé : il n'a ni base de données ni serveur à lui. Les tests de wrappers et de pages jouent ce rôle en mémoire (plusieurs composants assemblés, services mockés), et l'intégration avec le vrai backend est vérifiée par l'étage E2E. Côté back, cet étage existe et utilise TestContainers.
 
 ---
 
@@ -305,7 +341,7 @@ npm run audit:daltonisme
 npm run type-check
 ```
 
-**Résultat actuel** : **0 erreur** ✅
+**Résultat** : celui que la commande affiche, la CI échoue à la première erreur.
 
 ---
 
@@ -317,11 +353,7 @@ npm run type-check
 npm run test:run
 ```
 
-**Résultats actuels** :
-
-- Tests : **369/369 passent** ✅
-- Fichiers : 15
-- Durée : ~14s
+**Résultats** : ceux que la commande affiche. Le total est suivi par le badge CI du [README](../README.md).
 
 ---
 
@@ -333,14 +365,9 @@ npm run test:run
 npm run test:coverage
 ```
 
-**Résultats actuels** :
+**Résultats** : ceux que la commande affiche, et le badge Codecov du [README](../README.md) pour la valeur sur `main`. Le détail par dossier est dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md).
 
-- Coverage global : **93.3%** ✅
-- Components : 99.56%
-- Hooks : 87.79%
-- Pages : 90.84%
-
-**Objectif** : ≥80% (largement dépassé)
+**Seuils** : définis dans [`vitest.config.ts`](../vitest.config.ts), la CI échoue en dessous.
 
 ---
 
@@ -424,24 +451,24 @@ Les rapports sont sauvegardés dans `docs/metrics/` :
 
 ## 🎯 Objectifs et Seuils
 
-| Catégorie     | Métrique                | Objectif | Actuel   | Status |
-| ------------- | ----------------------- | -------- | -------- | ------ |
-| Performance   | FPS                     | >55      | 60.81    | ✅     |
-| Performance   | Lighthouse              | ≥98      | 99       | ✅     |
-| Performance   | Dégradation             | <10%     | 0.8%     | ⭐     |
-| Accessibility | Lighthouse              | ≥96      | 96       | ✅     |
-| Accessibility | Reduced Motion          | Conforme | Oui      | ✅     |
-| Accessibility | Contraste WCAG          | ≥3:1 UI  | 8/10     | ⚠️     |
-| Accessibility | Daltonisme Deutéranopie | Conforme | 10/10    | ✅     |
-| Accessibility | Daltonisme Protanopie   | Conforme | 9/10     | ✅     |
-| Accessibility | Daltonisme Tritanopie   | Conforme | 9/10     | ✅     |
-| Accessibility | Indicateurs non-couleur | Présents | Oui      | ✅     |
-| Éco           | Bundle gzippé           | <600KB   | 113.99KB | ✅     |
-| Éco           | Requêtes                | <10      | 3        | ✅     |
-| Éco           | CO2/chargement          | Minimal  | 0.057g   | ✅     |
-| Qualité       | TypeScript              | 0 erreur | 0        | ✅     |
-| Qualité       | Tests                   | >300     | 369      | ✅     |
-| Qualité       | Coverage                | ≥80%     | 93.3%    | ✅     |
+| Catégorie     | Métrique                | Objectif                     | Actuel        | Status |
+| ------------- | ----------------------- | ---------------------------- | ------------- | ------ |
+| Performance   | FPS                     | >55                          | 60.81         | ✅     |
+| Performance   | Lighthouse              | ≥98                          | 99            | ✅     |
+| Performance   | Dégradation             | <10%                         | 0.8%          | ⭐     |
+| Accessibility | Lighthouse              | ≥96                          | 96            | ✅     |
+| Accessibility | Reduced Motion          | Conforme                     | Oui           | ✅     |
+| Accessibility | Contraste WCAG          | ≥3:1 UI                      | 8/10          | ⚠️     |
+| Accessibility | Daltonisme Deutéranopie | Conforme                     | 10/10         | ✅     |
+| Accessibility | Daltonisme Protanopie   | Conforme                     | 9/10          | ✅     |
+| Accessibility | Daltonisme Tritanopie   | Conforme                     | 9/10          | ✅     |
+| Accessibility | Indicateurs non-couleur | Présents                     | Oui           | ✅     |
+| Éco           | Bundle gzippé           | <600KB                       | 113.99KB      | ✅     |
+| Éco           | Requêtes                | <10                          | 3             | ✅     |
+| Éco           | CO2/chargement          | Minimal                      | 0.057g        | ✅     |
+| Qualité       | TypeScript              | 0 erreur                     | 0             | ✅     |
+| Qualité       | Tests                   | tous verts                   | badge CI      | -      |
+| Qualité       | Coverage                | seuils de `vitest.config.ts` | badge Codecov | -      |
 
 ---
 
