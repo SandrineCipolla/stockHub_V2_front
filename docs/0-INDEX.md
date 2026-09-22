@@ -32,6 +32,7 @@
 - [../CONTRIBUTING.md](../CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
 - [../CLAUDE.md](../CLAUDE.md) : contexte projet pour sessions IA
 - [../README.md](../README.md) : présentation du projet
+- [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md) : tableau de bord de l'état courant et point de reprise
 - [../docs/adr/INDEX.md](../docs/adr/INDEX.md) : Architecture Decision Records (ADR)
 - [../docs/E2E_TESTS_GUIDE.md](../docs/E2E_TESTS_GUIDE.md) : guide d'exécution des tests E2E Playwright
 

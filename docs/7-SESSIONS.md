@@ -6,8 +6,8 @@
 
 ## 📊 Vue d'Ensemble
 
-**Total sessions documentées** : 18
-**Période** : Octobre 2024 - Décembre 2025
+**Total sessions documentées** : 25 fichiers dans [sessions/](sessions/)
+**Période** : Octobre 2024 - Septembre 2026
 **Format** : Chaque session est documentée avec objectifs, réalisations et décisions techniques
 
 ---
@@ -432,6 +432,22 @@
 - `reflect: true` nécessaire pour sélecteurs CSS `:host([attr])`
 - Importance de tester visuellement après migration
 - Workflow de mise à jour du DS maîtrisé
+
+---
+
+## 🗓️ Sessions 2026
+
+| Période            | Fichier                                                                                                        | Thèmes                                                            |
+| ------------------ | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 21-24 juillet 2026 | [sessions/2026-07-21-24-E2E-PLAYWRIGHT-DS-MIGRATION.md](sessions/2026-07-21-24-E2E-PLAYWRIGHT-DS-MIGRATION.md) | E2E Playwright (#66, #101), migration Design System v2.0.3        |
+| 12-18 juin 2026    | [sessions/2026-06-12-18-NOTIFICATIONS-MOBILE-CARDS.md](sessions/2026-06-12-18-NOTIFICATIONS-MOBILE-CARDS.md)   | Notifications (#163, #183), cards mobile (#165), page item (#181) |
+| 11 mars 2026       | [sessions/2026-03-11-staging-vercel-setup.md](sessions/2026-03-11-staging-vercel-setup.md)                     | Mise en place du staging Vercel                                   |
+| 25 février 2026    | [sessions/2026-02-25-merge-pr65-logout-fix-deploy.md](sessions/2026-02-25-merge-pr65-logout-fix-deploy.md)     | Fix logout, déploiement                                           |
+| 23 février 2026    | [sessions/2026-02-23-integration-prod.md](sessions/2026-02-23-integration-prod.md)                             | Intégration production                                            |
+| 7 janvier 2026     | [sessions/SESSION_RECAP_2026-01-07.md](sessions/SESSION_RECAP_2026-01-07.md)                                   | Récapitulatif                                                     |
+| 5 janvier 2026     | [sessions/SESSION_05_JAN_2026.md](sessions/SESSION_05_JAN_2026.md)                                             | Récapitulatif                                                     |
+
+Les sessions antérieures à leur archivage sont visibles dans [ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md), qui ne conserve que les 2 à 3 dernières.
 
 ---
 
