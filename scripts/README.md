@@ -481,7 +481,7 @@ npm install -D puppeteer
 
 ### Complète
 
-- [TESTS-PERFORMANCE.md](../docs/TESTS-PERFORMANCE.md)
+- TESTS-PERFORMANCE.md (document disparu depuis, non retrouvé)
 - [ANIMATIONS.md](../docs/technical/ANIMATIONS.md)
 
 ### Lighthouse

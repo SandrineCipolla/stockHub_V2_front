@@ -16,15 +16,10 @@
       "target": "./TROUBLESHOOTING-WEB-COMPONENTS.md"
     },
     {
-      "file": "docs/archive/design-system/DESIGN-SYSTEM-LEARNINGS.md",
-      "target": "./docs/TROUBLESHOOTING-WEB-COMPONENTS.md"
-    },
-    {
       "file": "docs/technical/SCRIPTS-AUDIT.md",
       "target": "TROUBLESHOOTING-WEB-COMPONENTS.md"
     },
     { "file": "docs/technical/SCRIPTS-AUDIT.md", "target": "TESTS-PERFORMANCE.md" },
-    { "file": "scripts/README.md", "target": "../docs/TESTS-PERFORMANCE.md" },
     { "file": "docs/0-INDEX.md", "target": "archive/prompts/INDEX.md" },
     { "file": "docs/0-INDEX.md", "target": "archive/audits/INDEX.md" }
   ]

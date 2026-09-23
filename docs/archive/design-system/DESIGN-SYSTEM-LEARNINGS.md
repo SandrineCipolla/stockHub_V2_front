@@ -14,7 +14,7 @@
 
 **Impact :** Blocage compilation TypeScript, impossible d'utiliser les web components
 
-**Solution complète :** Voir [`docs/TROUBLESHOOTING-WEB-COMPONENTS.md`](./docs/TROUBLESHOOTING-WEB-COMPONENTS.md)
+**Solution complète :** voir le guide `TROUBLESHOOTING-WEB-COMPONENTS.md` (document disparu depuis, non retrouvé)
 
 **Leçons apprises :**
 
