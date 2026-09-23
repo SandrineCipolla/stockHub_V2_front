@@ -134,12 +134,10 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 
 #### 📋 **À ajouter** _(vérifié absent le 23/09/2026)_
 
-- [ ] **Diagrammes UML complets**
-  - [ ] Diagramme de classes (entités métier)
-  - [ ] Diagramme de séquence (flux utilisateur)
-  - [ ] Diagramme de composants (architecture)
-  - 📝 _Les ADR documentent les décisions mais pas de diagrammes UML formels trouvés_
-  - ***
+- [x] **Diagrammes UML et C4** : fait le 24/09/2026, page wiki [Architecture-Globale](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Globale#diagrammes-c4--uml), modélisés à partir du code réel
+  - [x] Diagramme de classes (entités métier, `prisma/schema.prisma`)
+  - [x] Diagramme de séquence (flux `GET /suggestions`, `StockSuggestionsController`)
+  - [x] Contexte et conteneurs C4 + composants backend (architecture)
 
 - [ ] **Documentation sécurité formelle OWASP**
   - [ ] Analyse menaces OWASP Top 10 explicite
