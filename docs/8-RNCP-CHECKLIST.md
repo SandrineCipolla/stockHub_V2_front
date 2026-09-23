@@ -193,10 +193,13 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
   - [ ] Micro-animations métriques dashboard — idem
   - 📝 _Améliorations visuelles faites le : ***/***/_____
 
-- [ ] **IA plus concrète et visible côté front**
+- [x] **IA plus concrète et visible côté front** — vérifié le 23/09/2026, livré à 3 endroits
   - [x] Le backend expose des suggestions IA réelles (`GET /api/v2/stocks/{stockId}/suggestions`, [ADR-015](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-015-openrouter-mistral-ai-service.md))
-  - [ ] Pas confirmé que l'UI front consomme et affiche ces suggestions de façon visible — à vérifier dans le code frontend avant la soutenance
-  - 📝 _Notes personnelles :_
+  - [x] Dashboard — widget résumé, top 5 suggestions ([Dashboard.tsx:350](../src/pages/Dashboard.tsx))
+  - [x] Détail d'un stock — bannière complète ([StockDetailPage.tsx:371](../src/pages/StockDetailPage.tsx))
+  - [x] Carte stock — badge de comptage `iaCount` (`StockCardWrapper.tsx`)
+  - [x] Distinction visuelle LLM vs déterministe (badges "IA"/"Calcul", footer "Propulsé par IA • Mistral via OpenRouter") — [AIAlertBannerWrapper.tsx](../src/components/ai/AIAlertBannerWrapper.tsx)
+  - 📝 _Rien à faire ici, item clos_
 
 ### **C2.4 - Développement backend** _(Ce2.4.1 à Ce2.4.4)_
 
@@ -409,7 +412,7 @@ _Point de départ : Octobre 2025_
   - [ ] **Améliorations créativité** : Différenciation visuelle cartes stocks par statut — non confirmé livré
   - [ ] **Micro-animations** : Ajouter animations sur métriques dashboard — non confirmé livré
   - [x] **Tests unitaires** : Vitest + React Testing Library — fait (464 tests)
-  - [ ] **IA plus concrète** : backend prêt (ADR-013/014/015), visibilité front non confirmée
+  - [x] **IA plus concrète** : backend (ADR-013/014/015) + front (Dashboard, StockDetailPage, StockCardWrapper) — vérifié 23/09/2026
 
 - [ ] **Retours encadrant Backend V1**
   - 📝 _Non vérifié cette session_
