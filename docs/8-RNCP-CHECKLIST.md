@@ -197,13 +197,13 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
   - [ ] Micro-animations métriques dashboard, idem
   - 📝 _Améliorations visuelles faites le : ***/***/_____
 
-- [x] **IA plus concrète et visible côté front** : vérifié le 23/09/2026, livré à 3 endroits
+- [x] **IA plus concrète et visible côté front** : vérifié le 24/09/2026, livré à 3 endroits, avec une nuance importante entre eux
   - [x] Le backend expose des suggestions IA réelles (`GET /api/v2/stocks/{stockId}/suggestions`, [ADR-015](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-015-openrouter-mistral-ai-service.md))
-  - [x] Dashboard, widget résumé, top 5 suggestions ([Dashboard.tsx:350](../src/pages/Dashboard.tsx))
-  - [x] Détail d'un stock, bannière complète ([StockDetailPage.tsx:371](../src/pages/StockDetailPage.tsx))
-  - [x] Carte stock, badge de comptage `iaCount` (`StockCardWrapper.tsx`)
-  - [x] Distinction visuelle LLM vs déterministe (badges "IA"/"Calcul", footer `Propulsé par IA • Mistral via OpenRouter`), [AIAlertBannerWrapper.tsx](../src/components/ai/AIAlertBannerWrapper.tsx)
-  - 📝 _Rien à faire ici, item clos_
+  - [x] Détail d'un stock, bannière complète : **seul écran réellement connecté au backend**, via `PredictionsAPI.getStockSuggestions()` ([StockDetailPage.tsx:185](../src/pages/StockDetailPage.tsx))
+  - [x] Dashboard (widget résumé) et badge de comptage sur chaque carte : suggestions calculées **côté client** par `generateAISuggestions()` (`src/utils/aiPredictions.ts`), sans appel au backend, `source: 'deterministic'` forcé
+  - [x] Distinction visuelle honnête : `AIAlertBannerWrapper` affiche le badge "IA" uniquement pour les suggestions `source: 'llm'` (StockDetailPage), "Calcul" pour les autres (Dashboard, cartes). L'UI ne prétend pas à tort qu'un calcul local est du LLM
+  - [ ] `src/hooks/useSuggestions.ts` : hook non utilisé dans l'app (seulement dans son propre test), à nettoyer ou à brancher
+  - 📝 _Détail complet et diagramme de séquence : wiki [Architecture-Globale § Diagrammes](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Globale#diagrammes-c4--uml)_
 
 ### **C2.4 - Développement backend** _(Ce2.4.1 à Ce2.4.4)_
 
@@ -416,7 +416,7 @@ _Point de départ : Octobre 2025_
   - [ ] **Améliorations créativité** : Différenciation visuelle cartes stocks par statut, non confirmé livré
   - [ ] **Micro-animations** : Ajouter animations sur métriques dashboard, non confirmé livré
   - [x] **Tests unitaires** : Vitest + React Testing Library, fait (464 tests)
-  - [x] **IA plus concrète** : backend (ADR-013/014/015) + front (Dashboard, StockDetailPage, StockCardWrapper), vérifié 23/09/2026
+  - [x] **IA plus concrète** : backend (ADR-013/014/015) + front, avec nuance (StockDetailPage connecté au backend, Dashboard/cartes en calcul local), vérifié 24/09/2026, voir C2.3
 
 - [ ] **Retours encadrant Backend V1**
   - 📝 _Non vérifié cette session_
