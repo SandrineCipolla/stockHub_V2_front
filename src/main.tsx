@@ -37,7 +37,7 @@ async function initializeMsal() {
       console.debug('MSAL Event received:', event.eventType);
 
       // Cas: utilisateur a cliqué sur "Forgot password"
-      if (event.eventType === EventType.LOGIN_FAILURE && event.error) {
+      if (event.eventType === EventType.ACQUIRE_TOKEN_FAILURE && event.error) {
         const error = event.error;
         const message =
           ('errorMessage' in error ? error.errorMessage : '') ||
@@ -60,8 +60,7 @@ async function initializeMsal() {
       // Authentification réussie → setActiveAccount
       if (
         (event.eventType === EventType.LOGIN_SUCCESS ||
-          event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
-          event.eventType === EventType.SSO_SILENT_SUCCESS) &&
+          event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS) &&
         event.payload
       ) {
         const payload = event.payload;
