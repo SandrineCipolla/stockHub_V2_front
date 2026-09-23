@@ -4,17 +4,24 @@
 
 _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisations et ajoutez vos notes personnelles._
 
+> **Rafraîchi le 23/09/2026** — passe de vérification contre l'état réel du
+> projet (wiki `Qualite-et-Metriques`, `CICD-et-Deploiement`,
+> `Gestion-Issues-et-Planning`, ADR des 3 repos, Second Brain Obsidian).
+> Ce fichier avait dérivé : plusieurs items marqués "à faire" étaient déjà
+> faits (CI/CD, tests, RGPD, éco-conception...). Un item non coché ici
+> signifie vérifié absent, pas "pas encore vérifié" — sauf mention contraire.
+
 ---
 
 ## **🎯 STATUT GLOBAL DU PROJET**
 
 ### 📊 **Avancement Global**
 
-- [ ] **Bloc 1** - Planification projet (3 acquis / 10 actions à faire)
-- [x] **Bloc 2** - Développement solutions (Frontend V2 validé 85/100 ✨ / Backend à valider)
-- [ ] **Bloc 3** - Mise en production (0/6 actions - Démarrage jan 2026)
-- [ ] **Bloc 4** - Management équipe (0/4 actions - Simulation à préparer)
-- [x] **Compétences transversales** - Anglais & Numérique responsable (partiellement acquis)
+- [ ] **Bloc 1** - Planification projet (C1.2 veille fait ; C1.1/C1.3/C1.4 partiels)
+- [x] **Bloc 2** - Développement solutions (Frontend V2 85/100, Backend DDD/CQRS avec 20 ADR — les deux solides)
+- [ ] **Bloc 3** - Mise en production (CI/CD + monitoring déjà opérationnels, tests sécurité OWASP et blue/green restent à faire)
+- [ ] **Bloc 4** - Management équipe (0/4 actions - contexte solo, simulation non démarrée)
+- [x] **Compétences transversales** - Anglais (veille EN via `veille-widget` + daily.dev) & Numérique responsable (EcoIndex Grade A) — acquis
 
 **🎯 Objectif certification : 80% minimum par bloc**
 
@@ -27,15 +34,15 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 
 ## **BLOC 1 : PLANIFIER ET ORGANISER**
 
-### **C1.1 - Étude de faisabilité** _(CE1.1.1 à CE1.1.3)_
+### **C1.1 - Étude de faisabilité** _(Ce1.1.1 à Ce1.1.3)_
 
 #### ✅ **Déjà fait**
 
 - [x] Analyse métier (problématique gestion stocks familiale)
 - [x] Public cible défini (usage familial)
-- [x] Stack technique choisie et justifiée
+- [x] Stack technique choisie et justifiée (20 ADR back, 12 ADR front)
 
-#### 📋 **À faire**
+#### 📋 **À faire** _(vérifié absent le 23/09/2026)_
 
 - [ ] **Analyse financière ROI**
   - [ ] Estimation coûts développement
@@ -58,362 +65,242 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
   - 📝 _Notes personnelles :_
   - ***
 
-### **C1.2 - Plan de veille technologique** _(CE1.2.1 à CE1.2.3)_
+### **C1.2 - Plan de veille technologique** _(Ce1.2.1 à Ce1.2.3)_ ✅ **FAIT**
 
-#### ✅ **Partiellement fait**
+#### ✅ **Complété le 23/09/2026**
 
 - [x] Stack moderne utilisée (React 19, TypeScript 5.8)
-- [x] Innovation IA prévue
+- [x] Innovation IA prévue et livrée (OpenRouter + Mistral, [ADR-013](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-013-llm-provider-local-vs-cloud.md)/[015](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-015-openrouter-mistral-ai-service.md))
+- [x] **Documentation veille formelle** — section [Veille technologique](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Decision-Records#veille-technologique) publiée dans le wiki (issue [#90](https://github.com/SandrineCipolla/stockHub_V2_front/issues/90), fermée)
+  - [x] Sources listées : `veille-widget` (Tavily, 9 topics EN/FR, pipeline automatisé), daily.dev (flux perso), GitHub Dependabot
+  - [x] Outils monitoring définis : cron GitHub Actions quotidien + hebdo, archivage wiki daté
+- [x] **Analyse comparative frameworks** — benchmark technique complet (Azure AD B2C vs Auth0 vs Clerk, grille pondérée + radar) dans le Second Brain (`stockhub-veille.md`), pas encore une ADR formelle
+  - 📝 _Migration Auth non engagée — à trancher si le sujet ressort en soutenance_
+- [x] **Veille anglophone documentée** — 6 des 10 topics `veille-widget` sont en anglais, daily.dev en anglais ; récap **hebdomadaire** en français (mieux que la synthèse mensuelle demandée)
 
-#### 📋 **À faire**
+### **C1.3 - Cahier des charges fonctionnel** _(Ce1.3.1 à Ce1.3.4)_
 
-- [ ] **Documentation veille formelle**
-  - [ ] Créer fichier VEILLE-TECHNOLOGIQUE.md
-  - [ ] Lister sources (GitHub Trends, Stack Overflow, blogs)
-  - [ ] Définir outils monitoring (RSS, newsletters)
-  - 📝 _Notes sources prioritaires :_
-  - ***
-
-- [ ] **Analyse comparative frameworks**
-  - [ ] React vs Next.js vs Vue.js vs Svelte
-  - [ ] Justification choix argumentée
-  - [ ] Roadmap évolutions technologiques
-  - 📝 _Critères de comparaison :_
-  - ***
-
-- [ ] **Veille anglophone documentée**
-  - [ ] 5+ sources techniques anglaises
-  - [ ] Synthèse mensuelle en français
-  - [ ] Impact sur projet StockHub
-  - 📝 _Sources anglaises identifiées :_
-  - ***
-
-### **C1.3 - Cahier des charges fonctionnel** _(CE1.3.1 à CE1.3.4)_
-
-#### ✅ **Bien avancé**
+#### ✅ **Bien avancé — mis à jour 23/09/2026**
 
 - [x] Cas d'usage définis
-- [x] Accessibilité RGAA implémentée
-- [x] Architecture technique documentée
+- [x] Accessibilité RGAA implémentée (WCAG AA 94/100, 100% conforme sur les critères testés)
+- [x] Architecture technique documentée (12 ADR front, 20 ADR back, page wiki `Architecture-Globale`)
+- [x] **Conformité réglementaire détaillée** — RGPD traité en profondeur : `CookieBanner`, page `/privacy`, tableau des traitements, base légale par donnée (voir wiki `Qualite-et-Metriques` § Conformité RGPD, PR #83)
+- [x] **Éco-conception mesurée** — EcoIndex **Grade A** (objectif était Grade C+, largement dépassé)
 
 #### 📋 **À compléter**
 
 - [ ] **Spécifications performance**
-  - [ ] SLA définis (temps réponse < 2s)
-  - [ ] Charge utilisateurs cible
-  - [ ] Métriques Lighthouse > 95
-  - 📝 _Objectifs performance :_
+  - [x] Lighthouse Performance 99/100, SEO 100/100 (objectif >90 dépassé)
+  - [ ] Accessibilité 94/100, objectif interne >95 — encore en cours
+  - [ ] SLA temps de réponse backend (<2s) — pas de mesure formalisée trouvée
+  - 📝 _Notes personnelles :_
   - ***
 
-- [ ] **Conformité réglementaire détaillée**
-  - [ ] Audit RGPD complet
-  - [ ] Politique confidentialité enrichie
-  - [ ] Gestion consentements cookies
-  - 📝 _Points RGPD critiques :_
-  - ***
+### **C1.4 - Plan projet détaillé** _(Ce1.4.1 à Ce1.4.4)_
 
-- [ ] **Éco-conception mesurée**
-  - [ ] Test EcoIndex (objectif Grade B)
-  - [ ] Métriques consommation énergétique
-  - [ ] Plan optimisation environnementale
-  - 📝 _Score EcoIndex actuel :_
-  - ***
+#### ✅ **Existe déjà — pas "à faire entièrement"**
 
-### **C1.4 - Plan projet détaillé** _(CE1.4.1 à CE1.4.4)_
+- [x] **Outil de gestion projet** — GitHub Projects avec board, labels de priorité P0–P4, champ "Estimation" (XS à XL), voir wiki `Gestion-Issues-et-Planning`
+- [x] Backlog priorisé (règle de complétude d'issue documentée : scope, type, priorité, estimation, milestone)
 
-#### 📋 **À faire entièrement**
+#### 📋 **À faire**
 
 - [ ] **Méthodologie Agile formalisée**
-  - [ ] Définition sprints 2 semaines
-  - [ ] User stories avec critères acceptation
-  - [ ] Cérémonies Scrum (daily, retro, review)
-  - 📝 _Organisation sprints choisie :_
-  - ***
-
-- [ ] **Outil de gestion projet**
-  - [ ] Setup GitHub Projects ou Trello
-  - [ ] Tableaux Kanban (To Do, In Progress, Done)
-  - [ ] Backlog priorisé
-  - 📝 _Outil sélectionné :_
+  - [ ] Sprints de 2 semaines explicites (le board fonctionne en continu, pas en sprints formels)
+  - [ ] Cérémonies Scrum (daily, retro, review) — non applicable en solo sans adaptation
+  - 📝 _Notes personnelles :_
   - ***
 
 - [ ] **Indicateurs de performance**
-  - [ ] Velocity équipe
-  - [ ] Burndown charts
-  - [ ] Code coverage > 80%
-  - 📝 _KPI prioritaires :_
+  - [x] Code coverage suivi : 74.97% global, 90-100% sur composants critiques (objectif 80% atteint sur le périmètre critique)
+  - [ ] Velocity équipe, burndown charts — non pertinents en solo sans adaptation pour la soutenance
+  - 📝 _Notes personnelles :_
   - ***
 
 ---
 
 ## **BLOC 2 : CONCEVOIR ET DÉVELOPPER**
 
-### **C2.1 - Architecture logicielle** _(CE2.1.1 à CE2.1.6)_
+### **C2.1 - Architecture logicielle** _(Ce2.1.1 à Ce2.1.6)_
 
 #### ✅ **Acquis V2**
 
 - [x] Design system complet avec tokens
 - [x] Accessibilité RGAA conforme
-- [x] Éco-conception (tree shaking, lazy loading)
-- [x] Architecture DDD backend V1
+- [x] Éco-conception (tree shaking, lazy loading, bundle 113.99 KB gzippé)
+- [x] Architecture DDD backend validée (wiki `Qualite-et-Metriques` § Backend)
+- [x] Schéma d'architecture globale — page wiki `Architecture-Globale` existe (vérifier son niveau de détail avant la soutenance)
 
-#### 📋 **À ajouter**
+#### 📋 **À ajouter** _(vérifié absent le 23/09/2026)_
 
 - [ ] **Diagrammes UML complets**
   - [ ] Diagramme de classes (entités métier)
   - [ ] Diagramme de séquence (flux utilisateur)
   - [ ] Diagramme de composants (architecture)
-  - 📝 _Outil modélisation choisi :_
+  - 📝 _Les ADR documentent les décisions mais pas de diagrammes UML formels trouvés_
   - ***
 
-- [ ] **Documentation sécurité**
-  - [ ] Analyse menaces OWASP Top 10
+- [ ] **Documentation sécurité formelle OWASP**
+  - [ ] Analyse menaces OWASP Top 10 explicite
   - [ ] Matrice risques/contre-mesures
-  - [ ] Politique sécurité Azure AD
-  - 📝 _Vulnérabilités identifiées :_
+  - 📝 _Sécurité pratiquée (0 route non protégée, npm audit en CI, Dependabot) mais pas de document d'analyse de menaces dédié_
   - ***
 
-- [ ] **Schéma architecture globale**
-  - [ ] Frontend ↔ Backend ↔ Database
-  - [ ] Flux de données
-  - [ ] Points de sécurité
-  - 📝 _Outils diagrammes :_
-  - ***
+### **C2.2 - Développement continu** _(Ce2.2.1 à Ce2.2.6)_
 
-### **C2.2 - Développement continu** _(CE2.2.1 à CE2.2.6)_
+#### ✅ **Fait — CI/CD opérationnel sur les 3 repos**
 
-#### ✅ **Bonnes bases**
-
-- [x] Git avec bonnes pratiques
-- [x] ESLint + TypeScript strict
+- [x] Git avec bonnes pratiques (GitHub Flow, [ADR-018](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-018-github-flow.md))
+- [x] ESLint + TypeScript strict (0 erreur, 0 warning)
 - [x] Sécurité HTTPS + Azure AD
+- [x] **GitHub Actions configuré** — pipeline `quality → test → build → lighthouse-ci` sur le front, `continuous-integration → security-audit → e2e-tests → build-and-deploy` sur le back (wiki `CICD-et-Deploiement`)
+- [x] **Tests automatisés intégrés** — 464 tests Vitest (front), 304 tests Jest (back)
+- [x] **Shift-left security** — `security-audit` bloque le merge si vuln high/critical (`npm audit --audit-level=high`), Dependabot actif depuis juin 2026
 
-#### 📋 **Pipeline CI/CD à créer**
+#### 📋 **Reste à faire**
 
-- [ ] **GitHub Actions configuré**
-  - [ ] Pipeline test → build → deploy
-  - [ ] Tests automatisés intégrés
-  - [ ] Analyse sécurité CodeQL
-  - 📝 _Workflow créé le :_
+- [ ] **Métriques qualité automatisées type SonarCloud**
+  - [ ] SonarCloud non intégré — TypeScript strict + ESLint + Knip (code mort) utilisés à la place
+  - [ ] Coverage 80% : atteint sur composants critiques (90-100%), pas encore sur le global (74.97%)
+  - [ ] Complexité cyclomatique surveillée — pas d'outil dédié trouvé
+  - 📝 _À décider : ouvrir SonarCloud ou documenter l'outillage actuel comme équivalent assumé_
   - ***
 
-- [ ] **Métriques qualité automatisées**
-  - [ ] SonarCloud intégré
-  - [ ] Couverture de code > 80%
-  - [ ] Complexité cyclomatique surveillée
-  - 📝 _Score qualité actuel :_
+- [ ] **Analyse sécurité CodeQL**
+  - [ ] Pas de job CodeQL trouvé dans les workflows — `npm audit` couvre les dépendances, pas l'analyse statique du code applicatif
+  - 📝 _Notes personnelles :_
   - ***
 
-- [ ] **Shift-left security**
-  - [ ] Scan vulnérabilités pré-commit
-  - [ ] Analyse dépendances automatique
-  - [ ] Tests sécurité dans CI
-  - 📝 _Outils sécurité choisis :_
-  - ***
-
-### **C2.3 - Développement frontend** _(CE2.3.1 à CE2.3.4)_ ✨
+### **C2.3 - Développement frontend** _(Ce2.3.1 à Ce2.3.4)_ ✨
 
 #### ✅ **EXCELLENCE - Validation encadrante 85/100**
 
 - [x] React, TypeScript en mode strict et Vite, versions dans `package.json`
 - [x] Design System avec tokens CSS cohérents
 - [x] Responsive Mobile First
-- [x] Accessibilité RGAA (WAVE: 0 erreur, 96 Lighthouse)
+- [x] Accessibilité RGAA (WAVE: 0 erreur, 94/100 Lighthouse Accessibilité — en amélioration continue)
 - [x] Performance exceptionnelle (Lighthouse 99/100)
 - [x] Éco-conception (EcoIndex A - 88.42)
 - [x] Documentation GitHub niveau professionnel
 - [x] Optimisations modernes (tree shaking, lazy loading)
+- [x] **Tests unitaires sécurisants** — Vitest + React Testing Library, 464 tests, 90-100% sur composants/hooks/pages critiques ([Ce2.3.4](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Qualite-et-Metriques) justifié explicitement dans le wiki)
 
-#### 📋 **Améliorations encadrante à implémenter**
-
-- [ ] **Tests unitaires sécurisants**
-  - [ ] Jest + React Testing Library setup
-  - [ ] Tests composants critiques (Button, Card, Dashboard)
-  - [ ] Coverage >80% sur composants principaux
-  - 📝 \_Tests implémentés le : _\_\_/11/2025_
+#### 📋 **Reste à vérifier / faire**
 
 - [ ] **Créativité visuelle renforcée**
-  - [ ] Différenciation cartes stocks par statut (couleurs, icônes)
-  - [ ] Micro-animations métriques dashboard
-  - [ ] Transitions fluides entre états
-  - 📝 \_Améliorations visuelles faites le : _\_\_/11/2025_
+  - [ ] Différenciation cartes stocks par statut (couleurs, icônes) — pas de preuve trouvée que c'est livré
+  - [ ] Micro-animations métriques dashboard — idem
+  - 📝 _Améliorations visuelles faites le : ***/***/_____
 
-- [ ] **IA plus concrète et visible**
-  - [ ] Fonctionnalités IA utilisables (pas juste mentionnées)
-  - [ ] Interface suggestions intelligentes
-  - [ ] Démonstration claire valeur ajoutée IA
-  - 📝 \_IA concrète intégrée le : _\_\_/11/2025_
+- [ ] **IA plus concrète et visible côté front**
+  - [x] Le backend expose des suggestions IA réelles (`GET /api/v2/stocks/{stockId}/suggestions`, [ADR-015](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-015-openrouter-mistral-ai-service.md))
+  - [ ] Pas confirmé que l'UI front consomme et affiche ces suggestions de façon visible — à vérifier dans le code frontend avant la soutenance
+  - 📝 _Notes personnelles :_
 
-### **C2.4 - Développement backend** _(CE2.4.1 à CE2.4.4)_
+### **C2.4 - Développement backend** _(Ce2.4.1 à Ce2.4.4)_
 
-#### ✅ **Bonnes bases V1**
+#### ✅ **Fait — au-delà des bonnes bases V1**
 
 - [x] Architecture DDD
-- [x] API REST /api/v2/stocks
-- [x] MySQL + migrations
+- [x] API REST `/api/v2/stocks` ([ADR-016](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-016-rest-api-style.md))
+- [x] MySQL + migrations Prisma
 - [x] Authentification Azure AD
+- [x] **Tests unitaires TDD** — 304 tests Jest, entités/Value Objects couverts ([ADR-004](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-004-tests-value-objects-entities.md))
+- [x] **Documentation API OpenAPI** — Swagger UI actif (`SWAGGER_ENABLED=true`, endpoints visibles et testables, cf. [ADR-015](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-015-openrouter-mistral-ai-service.md))
+- [x] **Requêtes optimisées** — Index SQL optimisés (wiki `Qualite-et-Metriques` § Backend)
 
-#### 📋 **À améliorer pour V2**
+#### 📋 **Décision assumée, pas un gap**
 
-- [ ] **Tests unitaires TDD**
-  - [ ] Jest sur services métier
-  - [ ] Tests entités DDD
-  - [ ] Mocks base de données
-  - 📝 _Framework tests choisi :_
-  - ***
+- [ ] **Cache Redis** — délibérément **non retenu** : le cache des suggestions IA vit dans la table `stock_predictions` (MySQL déjà en place), voir [ADR-015](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-015-openrouter-mistral-ai-service.md) alternative 4 ("le vrai coût à éviter est l'appel LLM, pas la lecture DB"). Ne pas présenter comme une dette — c'est une ADR argumentée.
 
-- [ ] **Documentation API OpenAPI**
-  - [ ] Swagger UI généré
-  - [ ] Exemples requêtes/réponses
-  - [ ] Codes erreur documentés
-  - 📝 _URL documentation API :_
-  - ***
+### **C2.5 - IA et données massives** _(Ce2.5.1 à Ce2.5.4)_
 
-- [ ] **Optimisations performance**
-  - [ ] Cache Redis implémenté
-  - [ ] Requêtes optimisées (N+1)
-  - [ ] Indexes base de données
-  - 📝 _Optimisations appliquées :_
-  - ***
+#### ✅ **Fait — reformulé par rapport à l'ambition initiale**
 
-### **C2.5 - IA et données massives** _(CE2.5.1 à CE2.5.4)_
+- [x] **Intégration LLM** — OpenRouter + Mistral plutôt qu'OpenAI direct ([ADR-013](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-013-llm-provider-local-vs-cloud.md)), suggestions d'achat via `StockSuggestionsController`
+- [x] **Modèle prédictif** — algorithmes déterministes (`avgDailyConsumption`, `daysUntilEmpty`, `detectTrend`) plutôt que ML/régression linéaire, choix argumenté par un spike ([ADR-014](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-014-stock-prediction-deterministic.md)) — 170 tests unitaires
+- [x] **Alertes proactives** — prédictions de rupture exposées via l'API
 
-#### 📋 **Innovation à implémenter**
-
-- [ ] **Intégration OpenAI**
-  - [ ] API suggestions d'achat intelligentes
-  - [ ] Analyse tendances consommation
-  - [ ] Chat assistant gestion stocks
-  - 📝 _Use cases IA identifiés :_
-  - ***
+#### 📋 **Reste à faire**
 
 - [ ] **Analytics et métriques**
-  - [ ] Collecte données utilisateur (anonymisées)
-  - [ ] Dashboard analytics avancé
-  - [ ] Métriques usage temps réel
-  - 📝 _KPI analytics prioritaires :_
-  - ***
-
-- [ ] **Modèle prédictif simple**
-  - [ ] Prédiction ruptures de stock
-  - [ ] Régression linéaire consommation
-  - [ ] Alertes proactives
-  - 📝 _Modèle ML choisi :_
+  - [x] Vercel Analytics activé (perf, visites — wiki `CICD-et-Deploiement` § Monitoring)
+  - [ ] Dashboard analytics avancé / collecte comportementale anonymisée — pas trouvé
+  - 📝 _Notes personnelles :_
   - ***
 
 ---
 
 ## **BLOC 3 : MISE EN PRODUCTION**
 
-### **C3.1 - Intégration continue** _(CE3.1.1 à CE3.1.4)_
+### **C3.1 - Intégration continue** _(Ce3.1.1 à Ce3.1.4)_
 
-#### 📋 **Pipeline complet à créer**
+#### ✅ **Fait**
 
-- [ ] **GitHub Actions opérationnel**
-  - [ ] Workflow main : test → build → deploy
-  - [ ] Branches protection rules
-  - [ ] Pull request obligatoires
-  - 📝 _Workflow configuré le :_
+- [x] **GitHub Actions opérationnel** sur les 3 repos (voir C2.2)
+- [x] Pull requests utilisées comme flux principal (GitHub Flow, [ADR-018](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/adr/ADR-018-github-flow.md))
+
+#### 📋 **À vérifier / faire**
+
+- [ ] **Branch protection rules** — pas vérifié explicitement (`gh api repos/.../branches/main/protection`) cette session
+- [ ] **Conformité RGPD automatisée** — RGPD est conçu dans l'app (voir C1.3) mais pas de tests automatisés dédiés (audit logs, anonymisation) trouvés en CI
+  - 📝 _Notes personnelles :_
   - ***
 
-- [ ] **Tests automatisés intégrés**
-  - [ ] Tests unitaires Jest
-  - [ ] Tests intégration API
-  - [ ] Tests E2E Cypress
-  - 📝 _Coverage tests actuel :_
-  - ***
+### **C3.2 - Tests automatisés** _(Ce3.2.1 à Ce3.2.4)_
 
-- [ ] **Conformité RGPD automatisée**
-  - [ ] Validation données personnelles
-  - [ ] Audit logs accès
-  - [ ] Tests anonymisation
-  - 📝 _Contrôles RGPD mis en place :_
-  - ***
+#### ✅ **Fait — suite de tests réelle et large**
 
-### **C3.2 - Tests automatisés** _(CE3.2.1 à CE3.2.4)_
+- [x] **Tests unitaires** — 464 tests Vitest (front), 304 tests Jest (back)
+- [x] **Tests End-to-End** — Playwright sur front ([ADR-011](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/adr/ADR-011-playwright-auth-reelle.md), auth Azure B2C réelle, 5/5 verts) et sur back (job `e2e-tests`, cron hebdo)
 
-#### 📋 **Suite de tests complète**
+#### 📋 **À faire**
 
-- [ ] **Tests unitaires (Jest)**
-  - [ ] Composants React isolés
-  - [ ] Services métier backend
-  - [ ] Utilitaires et helpers
-  - 📝 \_Tests unitaires : _(objectifs définis dans le plan de test)_
-
-- [ ] **Tests d'intégration**
-  - [ ] Endpoints API complets
-  - [ ] Base de données intégrée
-  - [ ] Flux authentification
-  - 📝 \_Tests intégration : _(objectifs définis dans le plan de test)_
-
-- [ ] **Tests End-to-End (Cypress/Playwright)**
-  - [ ] Parcours utilisateur complets
-  - [ ] Scénarios critiques métier
-  - [ ] Cross-browser testing
-  - 📝 \_Tests E2E : _(objectifs définis dans le plan de test)_
-
-- [ ] **Tests sécurité OWASP**
-  - [ ] Scan vulnérabilités automatique
-  - [ ] Tests injection SQL
-  - [ ] Validation XSS
+- [ ] **Tests d'intégration** explicitement isolés — pas de job CI dédié distinct des tests unitaires/E2E trouvé
+- [ ] **Tests sécurité OWASP** — `npm audit` couvre les dépendances connues, mais pas de tests actifs d'injection SQL ou XSS trouvés
   - 📝 _Outils sécurité utilisés :_
   - ***
 
-### **C3.3 - Surveillance continue** _(CE3.3.1 à CE3.3.4)_
+### **C3.3 - Surveillance continue** _(Ce3.3.1 à Ce3.3.4)_
 
-#### 📋 **Monitoring production**
+#### ✅ **Fait**
 
-- [ ] **Azure Application Insights**
-  - [ ] Métriques performance temps réel
-  - [ ] Traces requêtes distribuées
-  - [ ] Alertes automatiques
-  - 📝 _Dashboard monitoring configuré le :_
+- [x] **Azure Application Insights** — actif en production (logs, traces, erreurs), utilisé concrètement lors de l'incident [prod-migration-drift](https://github.com/SandrineCipolla/stockhub_back/blob/main/docs/troubleshooting/prod-migration-drift.md) pour diagnostiquer une 500 en prod
+- [x] **Logs structurés côté front** — `logger.ts`, pattern `noop` prod-safe, niveaux debug/info/warn/error documentés (wiki `Qualite-et-Metriques`)
+
+#### 📋 **À faire / décision assumée**
+
+- [ ] **Sentry** — non utilisé, Application Insights joue ce rôle côté back. Décision à documenter plutôt qu'un gap si le sujet ressort en soutenance.
+- [ ] **Alertes automatiques configurées** — App Insights collecte, mais pas de règle d'alerte (seuil, notification) confirmée
+- [ ] **Logs structurés backend en JSON** — non confirmé (le format exact des logs Application Insights côté backend reste à vérifier)
+  - 📝 _Notes personnelles :_
   - ***
 
-- [ ] **Gestion erreurs Sentry**
-  - [ ] Capture erreurs JavaScript
-  - [ ] Notifications équipe
-  - [ ] Analyse tendances erreurs
-  - 📝 _Sentry configuré le :_
-  - ***
+### **C3.4 - Déploiement continu** _(Ce3.4.1 à Ce3.4.4)_
 
-- [ ] **Logs structurés**
-  - [ ] Format JSON standardisé
-  - [ ] Niveaux appropriés (info, warn, error)
-  - [ ] Rotation et archivage
-  - 📝 _Solution logs choisie :_
-  - ***
+#### ✅ **Fait**
 
-### **C3.4 - Déploiement continu** _(CE3.4.1 à CE3.4.4)_
+- [x] **Azure App Service configuré** — prod backend (zip deploy), Vercel prod/staging front
+- [x] **Environnements dev/staging/prod** — table complète dans wiki `CICD-et-Deploiement` et page dédiée `Environnements`
+- [x] **Variables environnement sécurisées** — secrets GitHub Actions par environnement
+- [x] **SSL automatique** — géré nativement par Vercel/Azure
 
-#### 📋 **Pipeline déploiement**
+#### 📋 **À faire**
 
-- [ ] **Azure App Service configuré**
-  - [ ] Environnements dev/staging/prod
-  - [ ] Variables environnement sécurisées
-  - [ ] SSL certificats automatiques
-  - 📝 _URL production :_
-  - ***
-
-- [ ] **Blue/Green deployment**
-  - [ ] Zéro downtime deployment
-  - [ ] Tests smoke post-déploiement
-  - [ ] Rollback automatique si échec
-  - 📝 _Stratégie deployment choisie :_
-  - ***
-
-- [ ] **Feedback utilisateurs**
-  - [ ] Système feedback intégré
-  - [ ] Analytics usage post-déploiement
-  - [ ] A/B testing sur nouvelles features
-  - 📝 _Outils feedback utilisés :_
+- [ ] **Blue/Green deployment** — non implémenté ; `build-and-deploy` sérialise les déploiements sur `main` (évite les 409 Azure) mais ce n'est pas du blue/green ni un rollback automatique
+- [ ] **Feedback utilisateurs intégré** — pas de système de feedback in-app trouvé
+- [ ] **A/B testing** — non applicable à ce stade
+  - 📝 _Notes personnelles :_
   - ***
 
 ---
 
 ## **BLOC 4 : MANAGEMENT D'ÉQUIPE** _(Adaptation projet individuel)_
 
-### **C4.1 - Définition besoins compétences** _(CE4.1.1 à CE4.1.4)_
+> **Non démarré** — confirmé lors de cette passe. Contexte solo sur toute la durée du projet, aucune simulation de rôles/RACI trouvée dans les 3 repos ni dans le Second Brain. Pas de changement par rapport à la version précédente de ce fichier.
+
+### **C4.1 - Définition besoins compétences** _(Ce4.1.1 à Ce4.1.4)_
 
 #### 📋 **Simulation contexte équipe**
 
@@ -432,7 +319,7 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
   - 📝 _RACI principal défini le :_
   - ***
 
-### **C4.2 - Constitution équipe** _(CE4.2.1 à CE4.2.3)_
+### **C4.2 - Constitution équipe** _(Ce4.2.1 à Ce4.2.3)_
 
 #### 📋 **Fiches de poste détaillées**
 
@@ -440,7 +327,7 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
   - [ ] Compétences techniques requises
   - [ ] Soft skills nécessaires
   - [ ] Niveau d'expérience attendu
-  - 📝 \_Fiches créées pour _\_\_/4 rôles_
+  - 📝 \_Fiches créées pour ___/4 rôles_
 
 - [ ] **Plan formation interne**
   - [ ] Montée en compétences React 19
@@ -473,144 +360,89 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 
 ### **🌍 Anglais technique**
 
-#### ✅ **Partiellement acquis**
+#### ✅ **Acquis — mis à jour 23/09/2026**
 
 - [x] Documentation technique en anglais
 - [x] Stack internationale utilisée
+- [x] **Veille technologique anglophone** — 6/10 topics `veille-widget` en anglais + daily.dev, compte-rendu en français **hebdomadaire** (dépasse l'exigence mensuelle), impact tracé sur les choix techniques (voir section wiki Veille technologique)
 
 #### 📋 **À renforcer**
 
-- [ ] **Veille technologique anglophone**
-  - [ ] 5+ sources techniques anglaises
-  - [ ] Compte-rendu mensuel en français
-  - [ ] Impact sur choix techniques StockHub
-  - 📝 _Sources principales :_
-  - ***
-
 - [ ] **Communication professionnelle**
-  - [ ] Issues GitHub en anglais
-  - [ ] Documentation API bilingue
-  - [ ] Présentation technique en anglais
+  - [ ] Issues GitHub en anglais — actuellement en français
+  - [ ] Documentation API bilingue — Swagger existe mais langue non vérifiée
+  - [ ] Présentation technique en anglais — à préparer pour l'entretien jury
   - 📝 _Niveau anglais évalué :_
   - ***
 
 ### **🌱 Numérique responsable**
 
-#### ✅ **Bien avancé**
+#### ✅ **Fait — objectif dépassé**
 
 - [x] Optimisations performance Vite
 - [x] Tree shaking et lazy loading
-- [x] Bundle size optimisé
+- [x] Bundle size optimisé (113.99 KB gzippé)
+- [x] **Test EcoIndex** — Grade **A** (88.42), objectif Grade C+ largement dépassé
+- [x] **Core Web Vitals** — couverts par Lighthouse 99/100 Performance
 
-#### 📋 **Impact environnemental mesurable**
+#### 📋 **Reste à faire**
 
-- [ ] **Test EcoIndex**
-  - [ ] Score actuel mesuré
-  - [ ] Objectif Grade A/B
-  - [ ] Plan amélioration identifié
-  - 📝 \_Score EcoIndex : _\_\_/100_
-
-- [ ] **Métriques consommation**
-  - [ ] Core Web Vitals optimaux
-  - [ ] Analyse taille transferts
-  - [ ] Carbon footprint estimé
-  - 📝 _Optimisations prioritaires :_
+- [ ] **Carbon footprint estimé** — pas de métrique carbone dédiée au-delà d'EcoIndex
+  - 📝 _Notes personnelles :_
   - ***
 
 ---
 
 ## **📅 PLANNING DE RÉALISATION - MARS 2027**
 
+> ⚠️ Section non ré-auditée intégralement cette session (dates de phases
+> passées, contenu partiellement obsolète). Les items ci-dessus (Blocs 1-3,
+> transversales) sont la source à jour. À reprendre dans une session dédiée
+> si ce planning doit encore servir de référence pour la suite.
+
 _Point de départ : Octobre 2025_
 
 ### **🎯 PHASE 1 : AMÉLIORATION & FEEDBACK** _(Oct 2025 - Déc 2025 - 3 mois)_
 
-- [ ] **✅ Retours encadrante Frontend V2 - 85/100 reçus** _(Deadline : novembre 2025)_
+- [x] **✅ Retours encadrante Frontend V2 - 85/100 reçus**
   - [x] **Points forts identifiés** : Interface pro, design system mature, performance excellente
-  - [ ] **Améliorations créativité** : Différenciation visuelle cartes stocks par statut
-  - [ ] **Micro-animations** : Ajouter animations sur métriques dashboard
-  - [ ] **Tests unitaires** : Jest + React Testing Library pour sécuriser le code
-  - [ ] **IA plus concrète** : Fonctionnalités IA visibles et utilisables
-  - 📝 \_Améliorations V2 implémentées le : _\_\_/11/2025_
+  - [ ] **Améliorations créativité** : Différenciation visuelle cartes stocks par statut — non confirmé livré
+  - [ ] **Micro-animations** : Ajouter animations sur métriques dashboard — non confirmé livré
+  - [x] **Tests unitaires** : Vitest + React Testing Library — fait (464 tests)
+  - [ ] **IA plus concrète** : backend prêt (ADR-013/014/015), visibilité front non confirmée
 
-- [ ] **Retours encadrant Backend V1** _(Deadline : novembre 2025)_
-  - [ ] Recevoir et analyser feedback backend
-  - [ ] Corrections architecture/code si nécessaire
-  - [ ] Optimisations recommandées
-  - 📝 \_Feedback backend reçu le : **_/_**/2025\_
+- [ ] **Retours encadrant Backend V1**
+  - 📝 _Non vérifié cette session_
 
-- [ ] **Gestion projet - Retours encadrants** _(Deadline : décembre 2025)_
-  - [ ] Feedback méthodologie Agile
-  - [ ] Améliorations documentation projet
-  - [ ] Ajustements organisation/planning
-  - 📝 \_Feedback gestion projet reçu le : **_/_**/2025\_
-
-📝 _Notes Phase 1 - Retours encadrants :_
-**Encadrante Frontend V2 très satisfaite ! Points d'excellence :**
-
-- Lighthouse 99 Performance, 96 Accessibilité ✨
-- EcoIndex A (88.42) - excellent environnemental
-- Documentation GitHub niveau professionnel
-- Architecture technique solide React 19 + TypeScript
-  **Axes d'amélioration prioritaires :**
-- Tests unitaires (sécurisation code)
-- IA plus visible/concrète
-- Micro-animations dashboard
+- [ ] **Gestion projet - Retours encadrants**
+  - 📝 _Non vérifié cette session_
 
 ---
 
 ### **📋 PHASE 2 : MIGRATION & INTÉGRATION** _(Jan 2026 - Mai 2026 - 5 mois)_
 
-- [ ] **Migration Frontend V1→V2** _(Deadline : février 2026)_
-  - [ ] Connexion API Backend V1
-  - [ ] Services API et gestion d'état React
-  - [ ] Configuration CORS et authentification
-- [ ] **Tests automatisés complets** _(Deadline : avril 2026)_
-  - [ ] Jest + Cypress sur app complète
-  - [ ] Tests intégration Frontend↔Backend
-  - [ ] Coverage >80% atteint
-- [ ] **Pipeline CI/CD** _(Deadline : mai 2026)_
-  - [ ] GitHub Actions sur app intégrée
-  - [ ] Déploiement automatique Azure
-  - [ ] Tests sécurité intégrés
-
-📝 _Notes Phase 2 - Intégration :_
+- [x] **Migration Frontend V1→V2** — connexion API backend, gestion d'état React : confirmée par les 12 ADR front et l'usage réel de `/api/v2`
+- [x] **Tests automatisés complets** — Vitest + Playwright sur l'app, coverage >80% sur le périmètre critique
+- [x] **Pipeline CI/CD** — GitHub Actions opérationnel sur les 3 repos, déploiement automatique Azure/Vercel
 
 ---
 
 ### **🚀 PHASE 3 : INNOVATION & PRODUCTION** _(Juin 2026 - Déc 2026 - 7 mois)_
 
-- [ ] **Architecture documentée** _(Deadline : juillet 2026)_
-  - [ ] Diagrammes UML complets V2
-  - [ ] Documentation technique API
-  - [ ] Schémas sécurité mis à jour
-- [ ] **Monitoring & Observabilité** _(Deadline : septembre 2026)_
-  - [ ] Azure Application Insights
-  - [ ] Sentry error tracking
-  - [ ] Dashboard métriques custom
-- [ ] **Intégration IA** _(Deadline : décembre 2026)_
-  - [ ] OpenAI API pour suggestions
-  - [ ] Analytics comportement utilisateur
-  - [ ] Prédictions ruptures stock
-
-📝 _Notes Phase 3 - Innovation :_
+- [ ] **Architecture documentée** — ADR complets (20 back, 12 front) et pages wiki, mais **pas de diagrammes UML formels** (voir C2.1)
+- [x] **Monitoring & Observabilité** — Azure Application Insights actif, utilisé en conditions réelles (incident migration Prisma)
+- [x] **Intégration IA** — OpenRouter/Mistral en production, prédictions déterministes livrées (choix différent de l'ambition initiale "OpenAI API", argumenté par ADR)
 
 ---
 
 ### **🔧 PHASE 4 : CERTIFICATION RNCP** _(Jan - Mars 2027 - 3 mois)_
 
-- [ ] **Dossiers de certification** _(Deadline : janvier 2027)_
-  - [ ] 4 dossiers écrits structurés
-  - [ ] Veille technologique documentée
-  - [ ] Analyse comparative et ROI
-- [ ] **Préparations soutenances** _(Deadline : février 2027)_
-  - [ ] 4 présentations PowerPoint 20min
-  - [ ] Répétitions et chronométrage
-  - [ ] Questions/réponses anticipées
-- [ ] **Finalisation projet** _(Deadline : mars 2027)_
-  - [ ] Application StockHub V2 production
-  - [ ] Démo rodée
-  - [ ] Métriques finales validées
+- [ ] **Dossiers de certification**
+  - [x] Veille technologique documentée (C1.2, fait le 23/09/2026)
+  - [ ] 4 dossiers écrits structurés — à rédiger
+  - [ ] Analyse comparative et ROI — voir C1.1, pas fait
+- [ ] **Préparations soutenances** — à venir
+- [ ] **Finalisation projet** — à venir
 
 📝 _Notes Phase 4 - Certification :_
 
@@ -618,51 +450,31 @@ _Point de départ : Octobre 2025_
 
 ### **🎤 SOUTENANCES RNCP** _(Mars 2027)_
 
-- [ ] **Soutenance Bloc 1** : _\_\_/03/2027 _(Planification projet)\_
-- [ ] **Soutenance Bloc 2** : _\_\_/03/2027 _(Solutions techniques)\_
-- [ ] **Soutenance Bloc 3** : _\_\_/03/2027 _(Mise en production)\_
-- [ ] **Soutenance Bloc 4** : _\_\_/03/2027 _(Management équipe)\_
-
-📝 _Planning personnel soutenances :_
-
----
+- [ ] **Soutenance Bloc 1** : ___/03/2027 _(Planification projet)_
+- [ ] **Soutenance Bloc 2** : ___/03/2027 _(Solutions techniques)_
+- [ ] **Soutenance Bloc 3** : ___/03/2027 _(Mise en production)_
+- [ ] **Soutenance Bloc 4** : ___/03/2027 _(Management équipe)_
 
 ---
 
 ## **🎯 OBJECTIFS DE VALIDATION**
 
-### **📊 Métriques cibles**
+### **📊 Métriques cibles — valeurs réelles au 23/09/2026**
 
-Les cibles sont fixées ici, les valeurs atteintes se lisent dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md) et les badges du README.
+Les valeurs à jour se lisent dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md), les badges du README, et le wiki `Qualite-et-Metriques`.
 
-- [x] **Performance** : Lighthouse au-dessus de 90, validé par l'encadrante
-- [ ] **Tests** : couverture au-dessus de 80 %
-- [ ] **Sécurité** : aucune vulnérabilité critique
-- [x] **Accessibilité** : RGAA, validé
-- [x] **Éco-conception** : EcoIndex de grade A
+- [x] **Performance** : Lighthouse 99/100 (objectif >90 dépassé)
+- [ ] **Tests** : 74.97% coverage global (objectif 80% — atteint sur composants critiques à 90-100%, pas encore global)
+- [x] **Sécurité** : 0 vulnérabilité npm critique, `security-audit` bloquant en CI
+- [x] **Accessibilité** : RGAA, WCAG AA 94/100 (amélioration continue vers 95+)
+- [x] **Éco-conception** : EcoIndex Grade A (objectif dépassé)
 
 ### **📋 Livrables certification**
 
-- [ ] **Dossier Bloc 1** : Planification + veille \_(Statut : _\_\_%)_
-- [x] **Dossier Bloc 2** : Solution technique _(✅ Frontend V2 validé 85/100)_
-- [ ] **Dossier Bloc 3** : Mise en production \_(Statut : _\_\_%)_
-- [ ] **Dossier Bloc 4** : Management équipe \_(Statut : _\_\_%)_
-
-### **🎤 Préparation soutenances (4 × 40min)**
-
-- [ ] **Présentation 20min Bloc 1** : Planification projet
-- [ ] **Présentation 20min Bloc 2** : Solutions techniques
-- [ ] **Présentation 20min Bloc 3** : Mise en production
-- [ ] **Présentation 20min Bloc 4** : Management équipe
-- [ ] **Entretiens 20min** : Préparation questions/réponses
-- [ ] **Démo StockHub** : Application fonctionnelle pour chaque bloc
-
-📝 _Dates soutenances prévues :_
-
-- Bloc 1 : **_/_**/2025
-- Bloc 2 : **_/_**/2025
-- Bloc 3 : **_/_**/2025
-- Bloc 4 : **_/_**/2025
+- [ ] **Dossier Bloc 1** : Planification + veille _(veille C1.2 fait ; ROI/risques/PESTEL restent)_
+- [x] **Dossier Bloc 2** : Solution technique _(✅ Frontend V2 85/100, Backend DDD/CQRS 20 ADR)_
+- [ ] **Dossier Bloc 3** : Mise en production _(CI/CD + monitoring opérationnels ; UML, OWASP formel, blue/green restent)_
+- [ ] **Dossier Bloc 4** : Management équipe _(non démarré — contexte solo)_
 
 ---
 
@@ -694,12 +506,12 @@ Les cibles sont fixées ici, les valeurs atteintes se lisent dans [9-DASHBOARD-Q
 
 ### **📞 Contacts utiles**
 
-- **Formateur/Tuteur** : ****\*\*\*\*****\_****\*\*\*\*****
-- **Jury certification** : ****\*\*\*\*****\_****\*\*\*\*****
-- **Experts techniques** : ****\*\*\*\*****\_****\*\*\*\*****
+- **Formateur/Tuteur** : ________________
+- **Jury certification** : ________________
+- **Experts techniques** : ________________
 
 ---
 
 **🎯 Objectif final : Validation RNCP 7 avec excellence ! (4 × 40min de soutenance)**
 
-_📅 Dernière mise à jour : ***/***/2025_
+_📅 Dernière mise à jour : 23/09/2026_
