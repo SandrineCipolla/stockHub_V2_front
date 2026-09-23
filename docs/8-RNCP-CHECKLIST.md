@@ -5,8 +5,8 @@
 _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisations et ajoutez vos notes personnelles._
 
 > **Rafraîchi le 23/09/2026** : passe de vérification contre l'état réel du
-> projet (wiki `Qualite-et-Metriques`, `CICD-et-Deploiement`,
-> `Gestion-Issues-et-Planning`, ADR des 3 repos, Second Brain Obsidian).
+> projet (wiki [Qualite-et-Metriques](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Qualite-et-Metriques), [CICD-et-Deploiement](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/CICD-et-Deploiement),
+> [Gestion-Issues-et-Planning](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Gestion-Issues-et-Planning), ADR des 3 repos, Second Brain Obsidian).
 > Ce fichier avait dérivé : plusieurs items marqués "à faire" étaient déjà
 > faits (CI/CD, tests, RGPD, éco-conception...). Un item non coché ici
 > signifie vérifié absent, pas "pas encore vérifié", sauf mention contraire.
@@ -167,8 +167,14 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
   - 📝 _À décider : ouvrir SonarCloud ou documenter l'outillage actuel comme équivalent assumé_
   - ***
 
-- [ ] **Analyse sécurité CodeQL**
-  - [ ] Pas de job CodeQL trouvé dans les workflows, `npm audit` couvre les dépendances, pas l'analyse statique du code applicatif
+- [x] **Analyse sécurité CodeQL** : le "default setup" GitHub est actif depuis le 21/07/2026 (`actions`, `javascript`, `typescript`, scan hebdomadaire), pas besoin d'un workflow dédié dans le repo
+
+#### 🔴 **Trouvé le 23/09/2026 : 4 alertes CodeQL ouvertes, sévérité haute, jamais triées**
+
+- [ ] `js/reflected-xss` et `js/stored-xss` dans `scripts/serve-metrics.mjs:107`, ouvertes depuis février 2026
+- [ ] `js/tainted-format-string` dans `scripts/serve-metrics.mjs:130`, ouverte depuis février 2026
+- [ ] `js/incomplete-url-substring-sanitization` dans `docs/metrics/index.html:392`, ouverte depuis le 21/09/2026
+- 📝 _Ces fichiers sont l'outillage de reporting local (dashboard métriques), pas le code applicatif servi aux utilisateurs (`src/`), donc l'exposition réelle est probablement faible. À trier quand même : soit corriger, soit fermer avec justification écrite (`gh api repos/.../code-scanning/alerts/{number}` pour le détail)._
   - 📝 _Notes personnelles :_
   - ***
 
@@ -468,7 +474,7 @@ Les valeurs à jour se lisent dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.
 
 - [x] **Performance** : Lighthouse 99/100 (objectif >90 dépassé)
 - [ ] **Tests** : 74.97% coverage global (objectif 80%, atteint sur composants critiques à 90-100%, pas encore global)
-- [x] **Sécurité** : 0 vulnérabilité npm critique, `security-audit` bloquant en CI
+- [ ] **Sécurité** : 0 vulnérabilité npm critique (dépendances), mais 4 alertes CodeQL haute sévérité ouvertes non triées (voir C2.2)
 - [x] **Accessibilité** : RGAA, WCAG AA 94/100 (amélioration continue vers 95+)
 - [x] **Éco-conception** : EcoIndex Grade A (objectif dépassé)
 
