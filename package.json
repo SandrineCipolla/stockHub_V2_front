@@ -56,8 +56,8 @@
     "check:docs:all": "node scripts/check-docs.mjs --all"
   },
   "dependencies": {
-    "@azure/msal-browser": "^4.27.0",
-    "@azure/msal-react": "^3.0.23",
+    "@azure/msal-browser": "^5.22.0",
+    "@azure/msal-react": "^5.7.1",
     "@stockhub/design-system": "github:SandrineCipolla/stockhub_design_system#v2.0.3",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.47.0",
