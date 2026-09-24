@@ -1,7 +1,6 @@
 name: "⚙️ Tâche technique"
 description: "Tâche technique sans valeur utilisateur directe (refacto, CI, docs...)"
-title: "[TECH] "
-labels: ["technique"]
+labels: ["front", "tech-debt"]
 body:
   - type: dropdown
     id: type

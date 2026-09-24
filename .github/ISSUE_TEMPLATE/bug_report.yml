@@ -1,7 +1,6 @@
 name: "🐛 Bug Report"
 description: "Signaler un bug ou comportement inattendu"
-title: "[BUG] "
-labels: ["bug"]
+labels: ["front", "bug"]
 body:
   - type: dropdown
     id: severite
