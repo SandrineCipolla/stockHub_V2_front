@@ -39,7 +39,7 @@ Ce que cet étage couvre : le login B2C interactif et un smoke du dashboard (`au
 
 Ce qu'il ne couvre pas : les cas d'erreur unitaires et les variantes de rendu, qui restent à l'étage unitaire. L'étage est volontairement mince, chaque test coûte un login réel.
 
-Installation, identifiants, exécution locale et cible staging : [16-E2E-TESTS-GUIDE.md](16-E2E-TESTS-GUIDE.md).
+Installation, identifiants, exécution locale et cible staging : [17-E2E-TESTS-GUIDE.md](17-E2E-TESTS-GUIDE.md).
 
 ### Pas d'étage d'intégration dédié
 

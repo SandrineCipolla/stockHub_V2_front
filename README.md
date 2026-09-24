@@ -82,7 +82,7 @@ Conformité WCAG 2.1 niveau AA visée : navigation clavier, contrastes validés,
 
 ## Tests et qualité
 
-Deux étages fonctionnels, unitaires et composants (Vitest + Testing Library) puis E2E (Playwright sur le staging, avec le vrai backend), complétés par des audits non fonctionnels. Ce que chaque étage couvre, où vivent les tests et quand ils s'exécutent : [docs/5-TESTING-GUIDE.md](docs/5-TESTING-GUIDE.md#pyramide-de-tests). Exécution des E2E en local : [docs/16-E2E-TESTS-GUIDE.md](docs/16-E2E-TESTS-GUIDE.md).
+Deux étages fonctionnels, unitaires et composants (Vitest + Testing Library) puis E2E (Playwright sur le staging, avec le vrai backend), complétés par des audits non fonctionnels. Ce que chaque étage couvre, où vivent les tests et quand ils s'exécutent : [docs/5-TESTING-GUIDE.md](docs/5-TESTING-GUIDE.md#pyramide-de-tests). Exécution des E2E en local : [docs/17-E2E-TESTS-GUIDE.md](docs/17-E2E-TESTS-GUIDE.md).
 
 Métriques à jour (couverture, Lighthouse, bundle size) : badges ci-dessus et [docs/9-DASHBOARD-QUALITY.md](docs/9-DASHBOARD-QUALITY.md), pas de chiffre figé ici.
 
