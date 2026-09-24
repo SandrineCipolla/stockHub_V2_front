@@ -48,4 +48,5 @@ gh issue create \
 - ✅ Maximum 5 critères d'acceptation
 - ✅ Le titre doit être compréhensible par un non-développeur, sans préfixe (`[US-XXX]`, `feat:`...)
 - ✅ Convention complète : section « Gestion des issues GitHub » de `CONTRIBUTING.md`
+- ❌ Aucune signature d'outil ou d'IA dans le body
 - ✅ Les critères d'acceptation décrivent un comportement visible, pas du code

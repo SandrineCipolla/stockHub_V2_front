@@ -45,3 +45,4 @@ gh issue create \
 - ✅ Se concentrer sur les faits observables
 - ✅ Les étapes de reproduction doivent être vérifiables
 - ✅ Convention de titre et de labels : section « Gestion des issues GitHub » de `CONTRIBUTING.md`
+- ❌ Aucune signature d'outil ou d'IA dans le body

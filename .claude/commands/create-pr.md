@@ -53,4 +53,6 @@ Closes #[numéro]
 - ✅ Toujours lier à une issue avec `Closes #`
 - ✅ Le titre suit les Conventional Commits (`feat:`, `fix:`, `refactor:`, etc.), numéro de ticket juste après le type, avant la description (voir [CONTRIBUTING.md](../../CONTRIBUTING.md))
 - ✅ Les détails techniques vont ici, PAS dans l'issue
+- ❌ Supprimer les sections sans objet (ex : Screenshots sans changement UI), ne pas écrire « Sans objet »
+- ❌ Aucune signature d'outil ou d'IA dans le body (voir [CONTRIBUTING.md](../../CONTRIBUTING.md))
 - ❌ Ne pas merger sans que la checklist soit complète

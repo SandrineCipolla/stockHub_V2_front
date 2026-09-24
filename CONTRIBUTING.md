@@ -41,6 +41,8 @@ type(scope): message concis (closes #numero)
 
 - Titre : `type(scope): #numero description`, numéro de ticket juste après `type(scope):`, avant la description, même principe que les branches (`type/numero-description`)
 - Body : composants modifiés, test plan, `Closes #numero`
+- Sections du template sans objet : les supprimer, ne pas écrire « Sans objet »
+- Aucune mention d'outil ou d'IA (signature, lien de session, « Generated with ») dans les titres, bodies et commentaires de PR et d'issues, même règle que pour les commits
 - Vérifier que la CI passe avant de merger
 
 #### Règles de rédaction des commentaires de PR (Code & Doc Reviews)
