@@ -39,7 +39,7 @@ type(scope): message concis (closes #numero)
 
 ### Pull requests et revues de code
 
-- Titre : `type(scope): #numero description` — le numéro de ticket juste après `type(scope):`, avant la description, même principe que les branches (`type/numero-description`)
+- Titre : `type(scope): #numero description`, numéro de ticket juste après `type(scope):`, avant la description, même principe que les branches (`type/numero-description`)
 - Body : composants modifiés, test plan, `Closes #numero`
 - Vérifier que la CI passe avant de merger
 
