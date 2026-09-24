@@ -1,20 +1,11 @@
 name: "📖 User Story"
 description: "Rédiger une user story fonctionnelle"
-title: "[US-XXX] "
-labels: ["user-story"]
+labels: ["front", "feature"]
 body:
   - type: markdown
     attributes:
       value: |
         ## 📋 Informations générales
-
-  - type: input
-    id: reference
-    attributes:
-      label: "Référence US"
-      placeholder: "ex: US-042"
-    validations:
-      required: true
 
   - type: dropdown
     id: priorite

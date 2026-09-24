@@ -8,10 +8,10 @@ Crée une issue GitHub en respectant **strictement** le format User Story du pro
    - **Persona** : qui est l'utilisateur ? (ex: utilisateur connecté, admin famille)
    - **Action souhaitée** : que veut-il faire ?
    - **Bénéfice** : pourquoi / quelle valeur ?
-   - **Priorité** : Très haute / Haute / Moyenne / Basse / Très basse
-   - **Module** : Frontend / Backend / Design System / Transverse
+   - **Priorité** : `P1` (haute) / `P2` (moyenne) / `P3` (basse) / `P4` (très basse)
+   - **Type** : `feature` / `improvement` / `documentation` / `tech-debt`
 
-2. Génère le body **uniquement** avec ce format, sans rien ajouter d'autre :
+2. Génère le body avec ce format. Seul ajout autorisé : une section `**Contexte**` facultative après les critères, qui décrit le constat sans solution technique.
 
 ```
 **En tant que** [persona]
@@ -34,8 +34,8 @@ Alors :
 
 ```bash
 gh issue create \
-  --title "[US-XXX] [titre court orienté utilisateur]" \
-  --label "user-story" \
+  --title "[phrase courte orientée résultat, sans préfixe]" \
+  --label "front,[type],[priorité]" \
   --body "[body généré ci-dessus]"
 ```
 
@@ -46,5 +46,6 @@ gh issue create \
 - ❌ Pas de commandes à exécuter
 - ❌ Pas de TODO techniques
 - ✅ Maximum 5 critères d'acceptation
-- ✅ Le titre doit être compréhensible par un non-développeur
+- ✅ Le titre doit être compréhensible par un non-développeur, sans préfixe (`[US-XXX]`, `feat:`...)
+- ✅ Convention complète : section « Gestion des issues GitHub » de `CONTRIBUTING.md`
 - ✅ Les critères d'acceptation décrivent un comportement visible, pas du code

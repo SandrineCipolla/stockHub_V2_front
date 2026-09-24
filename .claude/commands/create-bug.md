@@ -9,14 +9,15 @@ Crée une issue GitHub de type bug en respectant strictement le format du projet
    - **Étapes pour reproduire**
    - **Comportement attendu** vs **comportement actuel**
    - **Sévérité** : Bloquant / Majeur / Mineur / Cosmétique
+   - **Priorité** : `P1` (haute) / `P2` (moyenne) / `P3` (basse) / `P4` (très basse)
    - **Module** : Frontend / Backend / Design System
 
 2. Exécute :
 
 ```bash
 gh issue create \
-  --title "[BUG] [description courte du problème]" \
-  --label "bug" \
+  --title "[problème observé en une phrase, sans préfixe]" \
+  --label "front,bug,[priorité]" \
   --body "## Description
 [description du bug]
 
@@ -43,3 +44,4 @@ gh issue create \
 - ❌ Pas de solution technique dans le body (ça va dans la PR)
 - ✅ Se concentrer sur les faits observables
 - ✅ Les étapes de reproduction doivent être vérifiables
+- ✅ Convention de titre et de labels : section « Gestion des issues GitHub » de `CONTRIBUTING.md`

@@ -115,14 +115,25 @@ Toute issue doit avoir **au minimum** ces deux labels :
 
 Sans ces labels, les issues n'apparaissent pas correctement dans le GitHub Project board.
 
+Priorité : un label `P1` (haute) à `P4` (très basse), ajouté à la création.
+
 ```bash
-gh issue create --label "front,bug" ...
+gh issue create --title "Le login échoue après réinitialisation du mot de passe" --label "front,bug,P1" ...
 gh issue edit <numero> --repo SandrineCipolla/stockHub_V2_front --add-label "front,bug"
 ```
 
+### Titre d'une issue
+
+Une phrase courte qui décrit le résultat attendu ou le problème observé, compréhensible sans ouvrir l'issue.
+
+- Pas de préfixe manuel (`[US-XXX]`, `[BUG]`, `[TECH]`) : GitHub numérote déjà l'issue
+- Pas de préfixe `type(scope):` : ce format sert aux commits et aux PR, le type d'une issue passe par son label
+
+**Exemples** : `Afficher la couverture de tests dans le README`, `Le login échoue après réinitialisation du mot de passe`
+
 ### Format User Story (obligatoire pour toute nouvelle fonctionnalité)
 
-Les templates sont dans `.github/ISSUE_TEMPLATE/`, à utiliser comme référence.
+Les templates sont dans `.github/ISSUE_TEMPLATE/`, à utiliser comme référence. Une section **Contexte** facultative peut suivre les critères d'acceptation : le constat qui motive l'issue, sans solution technique.
 
 ```
 **En tant que** [persona]

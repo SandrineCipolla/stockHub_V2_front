@@ -26,7 +26,7 @@ git diff main --name-only
 
 ```bash
 gh pr create \
-  --title "[type]: #[numero] [description courte]" \
+  --title "[type]([scope]): #[numero] [description courte]" \
   --body "## 🔗 Issue liée
 Closes #[numéro]
 
