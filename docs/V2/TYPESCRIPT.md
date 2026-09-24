@@ -11,7 +11,7 @@ Ce document présente les conventions de typage adoptées pour StockHub V2, gara
 ### Problèmes Web Components
 
 Pour les erreurs liées aux web components (TS2339, TS1005, etc.), consulter :
-👉 **[TROUBLESHOOTING-WEB-COMPONENTS.md](../TROUBLESHOOTING-WEB-COMPONENTS.md)**
+👉 **[4-TROUBLESHOOTING.md](../4-TROUBLESHOOTING.md)**
 
 **Problèmes courants :**
 

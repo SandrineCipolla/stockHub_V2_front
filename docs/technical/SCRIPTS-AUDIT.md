@@ -272,7 +272,7 @@ Ces scripts démontrent :
 
 **Documentation liée** :
 
-- [TESTS-PERFORMANCE.md](TESTS-PERFORMANCE.md) - Métriques de performance
+- [15-APP-QUALITY-METRICS.md](../15-APP-QUALITY-METRICS.md) - Métriques de performance
 - [ANIMATIONS.md](ANIMATIONS.md) - Système d'animations
 
 ---
@@ -345,7 +345,7 @@ npm ci
 
 ## 🔗 Voir Aussi
 
-- [TESTS-PERFORMANCE.md](TESTS-PERFORMANCE.md) - Tests et métriques
+- [15-APP-QUALITY-METRICS.md](../15-APP-QUALITY-METRICS.md) - Tests et métriques
 - [ANIMATIONS.md](ANIMATIONS.md) - Système d'animations
-- [TROUBLESHOOTING-WEB-COMPONENTS.md](TROUBLESHOOTING-WEB-COMPONENTS.md) - Debug
+- [4-TROUBLESHOOTING.md](../4-TROUBLESHOOTING.md) - Debug
 - [0-INDEX.md](../0-INDEX.md) - Index de la documentation
