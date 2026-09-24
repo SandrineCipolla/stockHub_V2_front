@@ -2,25 +2,8 @@
   "comment": "Liens cassés existants au moment de la mise en place du check (2026-09-20). Leur cible est perdue : documents supprimés sans successeur identifiable, captures d'écran jamais commitées. Cette liste est faite pour diminuer, jamais pour grossir. Un nouveau lien cassé fait échouer npm run ci:quality.",
   "knownBroken": [
     {
-      "file": "docs/6-ACCESSIBILITY.md",
-      "target": "./captures/analytics-dark-risk-levels.png"
-    },
-    {
-      "file": "docs/6-ACCESSIBILITY.md",
-      "target": "./captures/analytics-light-risk-levels.png"
-    },
-    { "file": "docs/6-ACCESSIBILITY.md", "target": "./captures/analytics-protanopia.png" },
-    { "file": "docs/V2/TYPESCRIPT.md", "target": "../TROUBLESHOOTING-WEB-COMPONENTS.md" },
-    {
       "file": "docs/archive/STOCKHUB-V2-INTEGRATION.md",
       "target": "./TROUBLESHOOTING-WEB-COMPONENTS.md"
-    },
-    {
-      "file": "docs/technical/SCRIPTS-AUDIT.md",
-      "target": "TROUBLESHOOTING-WEB-COMPONENTS.md"
-    },
-    { "file": "docs/technical/SCRIPTS-AUDIT.md", "target": "TESTS-PERFORMANCE.md" },
-    { "file": "docs/0-INDEX.md", "target": "archive/prompts/INDEX.md" },
-    { "file": "docs/0-INDEX.md", "target": "archive/audits/INDEX.md" }
+    }
   ]
 }

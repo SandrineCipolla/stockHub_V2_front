@@ -201,8 +201,8 @@ Documentation archivée (historique du projet pour RNCP) :
 
 ### Prompts et audits des sessions Claude Code
 
-- [archive/prompts/INDEX.md](archive/prompts/INDEX.md) : prompts d'audit et de correction écrits entre février et mars 2026, tous déjà exécutés
-- [archive/audits/INDEX.md](archive/audits/INDEX.md) : résultats de ces audits, diagnostics et investigations, datés
+- [documentation/archive/prompts/INDEX.md](../documentation/archive/prompts/INDEX.md) : prompts d'audit et de correction écrits entre février et mars 2026, tous déjà exécutés
+- [documentation/archive/audits/INDEX.md](../documentation/archive/audits/INDEX.md) : résultats de ces audits, diagnostics et investigations, datés
 
 ### Sessions Archivées
 

@@ -22,8 +22,8 @@
 │  │   Design System      │          │      Frontend        │     │
 │  │   (Repository 1)     │──────────│    (Repository 2)    │     │
 │  │                      │  import  │                      │     │
-│  │  - Lit Element       │  ──────> │  - React 19          │     │
-│  │  - Web Components    │  npm   │  - TypeScript 5.8    │     │
+│  │  - Lit Element       │  ──────> │  - React             │     │
+│  │  - Web Components    │  npm   │  - TypeScript strict │     │
 │  │  - Storybook         │          │  - Wrappers React    │     │
 │  │  - Design Tokens     │          │  - Pages/Features    │     │
 │  └──────────────────────┘          └──────────────────────┘     │

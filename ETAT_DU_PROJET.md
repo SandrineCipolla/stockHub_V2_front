@@ -22,7 +22,7 @@ Un bloc de session bascule dans [docs/sessions/](docs/sessions/) dès qu'il dép
 | **Stack**         | React, TypeScript strict, Vite, TailwindCSS, Framer Motion (versions dans `package.json`) |
 | **Design System** | `@stockhub/design-system` (Web Components Lit, version dans `package.json`)               |
 | **Auth**          | Azure AD B2C (MSAL React)                                                                 |
-| **Tests**         | 558 tests unitaires et de composants, 5 tests E2E Playwright                              |
+| **Tests**         | Vitest (unitaires et composants), Playwright (E2E), nombre exact : `npm run test:run`     |
 | **Qualité**       | ESLint 0 warning (`--max-warnings 0`), 0 vulnérabilité npm                                |
 | **Prod**          | Azure Static Web Apps (branche `main`)                                                    |
 | **Staging**       | Vercel (branche `staging`)                                                                |
@@ -72,7 +72,7 @@ Mise en place de `scripts/check-docs.mjs` pour contrôler automatiquement les li
 - **Gestion des stocks** : Création, édition, suppression (avec modale de confirmation #61), affichage dynamique des statuts.
 - **Gestion des items** : Ajout, édition inline, note libre (#142), vue cards responsive sur mobile (#165), page détail d'item (`/stocks/:stockId/items/:itemId` #181).
 - **Notifications et alertes** : Compteur global dans le header (#183), panneau latéral de notifications (#163) avec filtres par niveau d'alerte.
-- **Tests et qualité** : 558 tests unitaires et de composants, 5 tests E2E Playwright couvrant les 4 workflows Must-Have (#66, #101), lancés contre le staging.
+- **Tests et qualité** : tests unitaires et de composants (Vitest), tests E2E Playwright couvrant les 4 workflows Must-Have (#66, #101), lancés contre le staging.
 
 ---
 

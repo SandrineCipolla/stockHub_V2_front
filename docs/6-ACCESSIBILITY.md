@@ -256,30 +256,6 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
 
 ---
 
-## 📸 Captures d'Écran
-
-### Mode Sombre
-
-![Analytics Dark Mode](./captures/analytics-dark-risk-levels.png)
-
-- Tous les risk levels visibles et contrastés
-- Différenciation claire critical/high/medium/low
-
-### Mode Clair
-
-![Analytics Light Mode](./captures/analytics-light-risk-levels.png)
-
-- Couleurs plus foncées pour maintenir contraste
-- Lisibilité parfaite sur fond blanc
-
-### Simulation Daltonisme
-
-![Protanopie Simulation](./captures/analytics-protanopia.png)
-
-- Les niveaux restent distinguables même sans rouge
-
----
-
 ## 🔗 Références
 
 ### Outils Utilisés
