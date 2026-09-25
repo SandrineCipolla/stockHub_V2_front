@@ -34,11 +34,18 @@
 {
   "installCommand": "npm ci --no-optional && npm install --no-save @rollup/rollup-linux-x64-gnu || npm ci",
   "buildCommand": "npm run build",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "git": {
+    "deploymentEnabled": {
+      "main": false
+    }
+  }
 }
 ```
 
 > Le rewrite SPA est obligatoire pour `BrowserRouter` : sans lui, toute URL directe retourne 404.
+
+> `deploymentEnabled.main: false` empêche Vercel de construire la branche `main`. La production est publiée uniquement sur Azure Static Web Apps. Les previews des autres branches restent actives.
 
 ### Variables d'environnement (Vercel dashboard)
 

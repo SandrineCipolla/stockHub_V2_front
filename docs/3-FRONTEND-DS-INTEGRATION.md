@@ -86,7 +86,7 @@ stockhub_design_system/
 ### ⚛️ Frontend React (`stockHub_V2_front`)
 
 **URL** : https://github.com/SandrineCipolla/stockHub_V2_front
-**Démo** : https://stock-hub-v2-front.vercel.app/
+**Démo** : https://brave-field-03611eb03.5.azurestaticapps.net/
 **Version** : v1.1.0
 
 #### Ce qui appartient au Frontend
@@ -395,7 +395,7 @@ it('should call onClick when sh-click fires', () => {
 ### Frontend
 
 - **Repository** : https://github.com/SandrineCipolla/stockHub_V2_front
-- **Démo Live** : https://stock-hub-v2-front.vercel.app/
+- **Démo Live** : https://brave-field-03611eb03.5.azurestaticapps.net/
 - **Documentation** : `/docs/0-INDEX.md`
 
 ### Documentation Technique

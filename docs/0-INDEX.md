@@ -384,7 +384,7 @@ docs/
 
 - **Storybook DS** : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
 - **Repository DS** : https://github.com/SandrineCipolla/stockhub_design_system
-- **Démo Live** : https://stock-hub-v2-front.vercel.app/
+- **Démo Live** : https://brave-field-03611eb03.5.azurestaticapps.net/
 - **React Docs** : https://react.dev/
 - **TypeScript** : https://www.typescriptlang.org/docs/
 

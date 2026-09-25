@@ -8,7 +8,7 @@ class AuditReportGenerator {
     constructor() {
         this.auditData = {
             appName: 'StockHub V2',
-            appUrl: 'https://stock-hub-v2-front.vercel.app/',
+            appUrl: 'https://brave-field-03611eb03.5.azurestaticapps.net/',
             auditDate: new Date().toLocaleDateString('fr-FR'),
             auditor: 'Sandrine Cipolla',
             scores: {
