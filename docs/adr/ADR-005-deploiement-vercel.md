@@ -1,12 +1,14 @@
 ---
 author: Sandrine Cipolla
-status: ACCEPTÉ
+status: SUPPLANTÉ PAR ADR-013
 related:
 ---
 
 # ADR-005 - Déploiement frontend sur Vercel plutôt qu'Azure Static Web Apps
 
 **Date** : automne 2025
+
+> Supplantée par [ADR-013](./ADR-013-production-azure-previews-vercel.md) : cette décision n'a jamais été appliquée, la production est restée sur Azure Static Web Apps depuis la V1.
 
 ---
 

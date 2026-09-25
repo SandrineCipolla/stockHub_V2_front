@@ -482,8 +482,8 @@ useEffect(() => {
 useEffect(() => {
   const element = ref.current;
   if (element) {
-    element.addEventListener('sh-click', handleClick);
-    return () => element.removeEventListener('sh-click', handleClick);
+    element.addEventListener('sh-button-click', handleClick);
+    return () => element.removeEventListener('sh-button-click', handleClick);
   }
 }, [handleClick]);
 ```

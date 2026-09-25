@@ -1,7 +1,7 @@
 # 🤖 Intelligence Artificielle - StockHub V2
 
 > **Documentation technique des fonctionnalités d'IA et Machine Learning**
-> Projet RNCP 7 - Développeur Web Full Stack
+> Projet Expert en Architecture et Développement Logiciel (formation Ada Tech School, certification INGETIS)
 > Développé par: Sandrine Cipolla
 
 > 💡 **Documents liés**: Pour les justifications et décisions architecturales (pourquoi ces choix), voir [AI-DECISIONS.md](AI-DECISIONS.md)

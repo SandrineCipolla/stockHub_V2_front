@@ -1,7 +1,7 @@
 # 📝 Décisions & Justifications - IA StockHub V2
 
 > **Documentation des choix techniques et méthodologiques**
-> Projet RNCP 7 - Développeur Web Full Stack
+> Projet Expert en Architecture et Développement Logiciel (formation Ada Tech School, certification INGETIS)
 > Développé par: Sandrine Cipolla
 
 > 💡 **Documents liés**: Pour la documentation technique détaillée des algorithmes et formules, voir [AI-FEATURES.md](AI-FEATURES.md)

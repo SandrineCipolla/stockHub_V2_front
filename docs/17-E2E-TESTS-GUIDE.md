@@ -35,8 +35,7 @@ cp .env.e2e.example .env.e2e
 
 **Par défaut, cible le staging** (`stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app`,
 backend Render + base Aiven, isolée de la prod), **jamais**
-`stock-hub-v2-front.vercel.app`, qui est la Production Vercel et pointe
-vers le backend Azure prod (voir §CI plus bas et [[Environnements]] du
+la production Azure (voir §CI plus bas et [[Environnements]] du
 wiki). Le staging est protégé par le mur Vercel Authentication, d'où le
 `VERCEL_AUTOMATION_BYPASS_SECRET` en plus des identifiants B2C (valeur
 dans Vercel → Project Settings → Deployment Protection → "Protection
@@ -222,8 +221,7 @@ login réseau contre Azure AD B2C.
 
 **Cible le staging** (`https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app`,
 backend Render + base Aiven MySQL, isolée de la prod), **jamais**
-`https://stock-hub-v2-front.vercel.app` qui est la Production Vercel et
-pointe vers le backend Azure prod. Un test E2E crée/modifie/supprime des
+la production Azure. Un test E2E crée/modifie/supprime des
 données réelles à chaque run : voir [[Environnements]] du wiki pour le
 détail des environnements.
 
