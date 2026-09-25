@@ -46,7 +46,9 @@ S'applique à toute documentation rédigée pour ce projet : ADR, README, CONTRI
 
 `npm run check:docs` vérifie deux choses, et tourne dans `npm run ci:quality` comme dans la CI :
 
-- Les liens relatifs de tous les fichiers Markdown pointent vers un fichier existant. Les liens déjà cassés à la mise en place sont listés dans `scripts/docs-links-baseline.json` et n'échouent pas. Cette liste est faite pour diminuer.
-- Les règles fixes ci-dessus (tiret cadratin, point-virgule en prose, point médian) sur les seuls fichiers modifiés par rapport à `main`, la règle étant plus récente que le dépôt. Les blocs et spans de code sont ignorés.
+- Les liens relatifs de tous les fichiers Markdown pointent vers un fichier existant, avec la casse exacte. Les liens GitHub vers un fichier des autres repos StockHub sont vérifiés contre un clone de ces repos (la CI les clone, en local le script les cherche dans le dossier parent ou dans `DOCS_SIBLINGS_DIR`, et signale sans échouer ceux qu'il n'a pas pu vérifier). Les liens déjà cassés à la mise en place sont listés dans `scripts/docs-links-baseline.json` et n'échouent pas. Cette liste est faite pour diminuer.
+- Les règles fixes ci-dessus (tiret cadratin, point-virgule en prose, point médian) sur les seuls fichiers modifiés par rapport à la branche de base, la règle étant plus récente que le dépôt. Les blocs et spans de code sont ignorés.
 
 `npm run check:docs:all` applique les règles de style à tout le dépôt sans faire échouer : c'est la mesure de la dette restante.
+
+Le script (`scripts/check-docs.mjs`) sert aussi au backend et au design system : leur CI le télécharge depuis ce repo. Chaque repo le configure par un fichier `.docs-check.json` à sa racine (chemin du guide, baseline, dossiers exclus du contrôle de style).
