@@ -68,7 +68,7 @@ Mise en place de `scripts/check-docs.mjs` pour contrôler automatiquement les li
 
 ## Ce qui est livré et fonctionnel
 
-- **Authentification et autorisations** : Login/logout Azure AD B2C, gestion des rôles OWNER, VIEWER_CONTRIBUTOR, VIEWER par stock.
+- **Authentification et autorisations** : Login/logout Azure AD B2C, gestion des rôles OWNER, EDITOR, VIEWER_CONTRIBUTOR, VIEWER par stock.
 - **Gestion des stocks** : Création, édition, suppression (avec modale de confirmation #61), affichage dynamique des statuts.
 - **Gestion des items** : Ajout, édition inline, note libre (#142), vue cards responsive sur mobile (#165), page détail d'item (`/stocks/:stockId/items/:itemId` #181).
 - **Notifications et alertes** : Compteur global dans le header (#183), panneau latéral de notifications (#163) avec filtres par niveau d'alerte.

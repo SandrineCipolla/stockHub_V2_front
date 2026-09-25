@@ -96,9 +96,9 @@ try {
 }
 ```
 
-#### Fusion locale pour update (limitation backend V2)
+#### Fusion locale pour update
 
-Le backend V2 retourne uniquement `id, label, description, category`. Pour les champs non retournés (`quantity`, `value`, `status`), fusionner `updateData` sur l'état local existant et recalculer `status` côté client. Ne pas utiliser directement la réponse API pour ces champs.
+`PUT /stocks/:id` ne modifie que `label`, `description` et `category`, et sa réponse ne contient ni quantité agrégée ni statut. Pour `quantity`, `value` et `status`, fusionner `updateData` sur l'état local existant et recalculer `status` côté client (`src/hooks/useStocks.ts`). Les lectures, elles, renvoient le statut et la quantité agrégés : voir `mapBackendStockToFrontend` dans `src/services/api/stocksAPI.ts`.
 
 ### Accessibilité (RGAA)
 
@@ -170,7 +170,7 @@ interface Stock {
 }
 ```
 
-Documentation complète de l'intégration : `stockhub_back/docs/technical/frontend-v2-integration.md`.
+Contrat de l'API : `docs/openapi.yaml` du repo backend (Swagger sur `/api-docs`). Correspondance avec les types du front : `src/services/api/stocksAPI.ts`.
 
 ## Releases automatiques (Release Please)
 
