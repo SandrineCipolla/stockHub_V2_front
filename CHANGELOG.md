@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.17.2](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.1...v1.17.2) (2026-09-25)
+
+
+### 🐛 Bug Fixes
+
+* **eslint:** ramener ESLint à zéro avertissement et l'imposer en CI (closes [#287](https://github.com/SandrineCipolla/stockHub_V2_front/issues/287)) ([#294](https://github.com/SandrineCipolla/stockHub_V2_front/issues/294)) ([95f539a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/95f539a66613c55d668d60b64dca1fb55346869f))
+
+
+### ♻️ Code Refactoring
+
+* **docs:** unifier toute la documentation sous le dossier unique docs/ (closes [#279](https://github.com/SandrineCipolla/stockHub_V2_front/issues/279)) ([#292](https://github.com/SandrineCipolla/stockHub_V2_front/issues/292)) ([059f82d](https://github.com/SandrineCipolla/stockHub_V2_front/commit/059f82d4a9f7cdfa746f7d7b934e6972db5f74cf))
+
+
+### 📚 Documentation
+
+* ajouter SECURITY.md et le journal des vulnérabilités (closes [#282](https://github.com/SandrineCipolla/stockHub_V2_front/issues/282)) ([#301](https://github.com/SandrineCipolla/stockHub_V2_front/issues/301)) ([18c8174](https://github.com/SandrineCipolla/stockHub_V2_front/commit/18c817417f4e7ac2b8424f1407223396250abac7))
+* aligner la structure sur la convention numérotée ([#308](https://github.com/SandrineCipolla/stockHub_V2_front/issues/308)) ([372ade4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/372ade44ca2cc764d9dfd1074cfa6039db8355ce))
+* **contributing:** [#311](https://github.com/SandrineCipolla/stockHub_V2_front/issues/311) unifier titre et labels des issues ([#313](https://github.com/SandrineCipolla/stockHub_V2_front/issues/313)) ([99ce3eb](https://github.com/SandrineCipolla/stockHub_V2_front/commit/99ce3eb364c7393e3b4017e8ef9afbbc7fffee93))
+* **contributing:** ajouter les regles de redaction des revues de PR ([778b5bc](https://github.com/SandrineCipolla/stockHub_V2_front/commit/778b5bcdf83281730f4565c657256dca167c29bf))
+* **contributing:** interdire les commentaires de revue sans action a modifier ([3f18992](https://github.com/SandrineCipolla/stockHub_V2_front/commit/3f18992f5459fc2419dbcefca922fe910a260358))
+* **contributing:** numéro de ticket devant dans le titre de PR ([#309](https://github.com/SandrineCipolla/stockHub_V2_front/issues/309)) ([de9ed1a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/de9ed1af865d9dd9a322be5c7e9d9155f7b9d4e6))
+* **docs:** [#310](https://github.com/SandrineCipolla/stockHub_V2_front/issues/310) corriger les liens morts et retirer les valeurs figées ([#312](https://github.com/SandrineCipolla/stockHub_V2_front/issues/312)) ([c1e5c95](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c1e5c958875228a8b825dfcf8c1e5d385e607c21))
+* **docs:** [#319](https://github.com/SandrineCipolla/stockHub_V2_front/issues/319) aligner la documentation front sur l'état réel ([#320](https://github.com/SandrineCipolla/stockHub_V2_front/issues/320)) ([c56dc24](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c56dc240f19eb7dfc3bd79d581960f79b123083e))
+* **metrics:** consolidate quality guides and archive redundant docs (closes [#281](https://github.com/SandrineCipolla/stockHub_V2_front/issues/281)) ([#295](https://github.com/SandrineCipolla/stockHub_V2_front/issues/295)) ([1adb766](https://github.com/SandrineCipolla/stockHub_V2_front/commit/1adb766519b55402db18b63fd2501533dbfc1d42))
+* rafraîchir et alléger ETAT_DU_PROJET.md (closes [#283](https://github.com/SandrineCipolla/stockHub_V2_front/issues/283)) ([#297](https://github.com/SandrineCipolla/stockHub_V2_front/issues/297)) ([6150400](https://github.com/SandrineCipolla/stockHub_V2_front/commit/615040022f62902eec51b1be0c7da03721f5b00d))
+* rafraîchir la checklist RNCP contre l'état réel du projet ([#304](https://github.com/SandrineCipolla/stockHub_V2_front/issues/304)) ([bfb47b4](https://github.com/SandrineCipolla/stockHub_V2_front/commit/bfb47b4b0c2225d902896b0b4c3972bcb6b4a158))
+* retirer les deux liens casses dont la cible est perdue de la baseline ([#303](https://github.com/SandrineCipolla/stockHub_V2_front/issues/303)) ([b22dde9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/b22dde94060e4fa4132add55811898ae07d27377))
+* supprimer les versions et métriques figées des guides (closes [#278](https://github.com/SandrineCipolla/stockHub_V2_front/issues/278)) ([#291](https://github.com/SandrineCipolla/stockHub_V2_front/issues/291)) ([d75c15b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/d75c15beb5d0475e9bbc7b157cd79b8862b7e5e2))
+
+
+### 🔧 Chores
+
+* **deps-dev:** bump the minor-and-patch group with 5 updates ([#306](https://github.com/SandrineCipolla/stockHub_V2_front/issues/306)) ([cd57cc5](https://github.com/SandrineCipolla/stockHub_V2_front/commit/cd57cc5142b5f7583eb549ec805e7924bb9da8dc))
+* **deps:** bump framer-motion from 12.42.2 to 13.4.0 ([#307](https://github.com/SandrineCipolla/stockHub_V2_front/issues/307)) ([70c10e9](https://github.com/SandrineCipolla/stockHub_V2_front/commit/70c10e9dbbb20c0fc1d091df5ad5f4f109623ac9))
+* **deps:** monter MSAL en v5 avec validation E2E (closes [#289](https://github.com/SandrineCipolla/stockHub_V2_front/issues/289)) ([#302](https://github.com/SandrineCipolla/stockHub_V2_front/issues/302)) ([74c2df6](https://github.com/SandrineCipolla/stockHub_V2_front/commit/74c2df60847e976cc06ca8e9f9c73e7f2900979d))
+* **docs:** badges README et pyramide de tests (closes [#288](https://github.com/SandrineCipolla/stockHub_V2_front/issues/288)) ([#298](https://github.com/SandrineCipolla/stockHub_V2_front/issues/298)) ([8c65316](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8c653169c2cad801b4768e06f1214bf8b4759a70))
+* ranger .claude et archiver les documents de travail (closes [#280](https://github.com/SandrineCipolla/stockHub_V2_front/issues/280)) ([#290](https://github.com/SandrineCipolla/stockHub_V2_front/issues/290)) ([a70d5ab](https://github.com/SandrineCipolla/stockHub_V2_front/commit/a70d5abb39c06fbf99d0c7c6d71c1bfbf0e1d707))
+* **vercel:** [#315](https://github.com/SandrineCipolla/stockHub_V2_front/issues/315) désactiver les déploiements de production Vercel ([#316](https://github.com/SandrineCipolla/stockHub_V2_front/issues/316)) ([90dc244](https://github.com/SandrineCipolla/stockHub_V2_front/commit/90dc24415955db1e3884f8eb0384990e396cd3a3))
+
 ## [1.17.1](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.0...v1.17.1) (2026-09-20)
 
 
