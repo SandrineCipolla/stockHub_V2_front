@@ -1,5 +1,10 @@
 {
   "installCommand": "npm ci --no-optional && npm install --no-save @rollup/rollup-linux-x64-gnu || npm ci",
   "buildCommand": "npm run build",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "git": {
+    "deploymentEnabled": {
+      "main": false
+    }
+  }
 }
