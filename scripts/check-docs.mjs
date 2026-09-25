@@ -5,41 +5,78 @@ import {existsSync, readdirSync, readFileSync, statSync} from 'fs';
 import {dirname, join, normalize, relative, resolve} from 'path';
 
 /**
- * Vérification de la documentation Markdown.
+ * Vérification de la documentation Markdown, commune aux trois repos StockHub.
  *
- * 1. Liens : tout lien relatif doit pointer vers un fichier existant.
- *    Les liens déjà cassés au moment de la mise en place sont listés dans
- *    docs-links-baseline.json et n'échouent pas. Le baseline est fait pour
- *    diminuer, jamais pour grossir.
- * 2. Style : règles fixes de docs/technical/guide-redaction.md
- *    (tiret cadratin, point-virgule en prose, point médian). Appliqué aux
- *    seuls fichiers modifiés par rapport à la branche de base, la règle
- *    étant récente.
+ * 1. Liens : tout lien relatif doit pointer vers un fichier existant, avec la
+ *    casse exacte (un lien faux en casse passe sous Windows et casse sur GitHub).
+ *    Les liens GitHub vers un fichier d'un repo StockHub sont vérifiés contre un
+ *    clone de ce repo, cherché dans DOCS_SIBLINGS_DIR (par défaut le dossier
+ *    parent). Un repo absent est signalé, pas bloquant.
+ *    Les liens déjà cassés à la mise en place sont listés dans un baseline et
+ *    n'échouent pas. Le baseline est fait pour diminuer, jamais pour grossir.
+ * 2. Style : règles fixes du guide de rédaction (tiret cadratin, point-virgule
+ *    en prose, point médian), sur les seuls fichiers modifiés par rapport à la
+ *    branche de base.
  *
- * Usage :
+ * Configuration par repo : fichier .docs-check.json à la racine (chemin du guide,
+ * du baseline, dossiers exclus du contrôle de style).
+ *
+ * Usage, depuis la racine du repo à vérifier :
  *   node scripts/check-docs.mjs              # liens + style sur les fichiers modifiés
  *   node scripts/check-docs.mjs --all        # style sur tous les fichiers (audit)
  *   node scripts/check-docs.mjs --links-only
+ *
+ * Variables d'environnement :
+ *   DOCS_BASE_REF      branche de base (défaut : origin/HEAD, sinon origin/main ou origin/master)
+ *   DOCS_SIBLINGS_DIR  dossier contenant les clones des autres repos (défaut : dossier parent)
  */
 
 const EXCLUDE_DIRS = ['node_modules', 'dist', 'coverage', '.git', 'playwright-report', 'test-results'];
 
-// Documents non réécrits : archives figées, historiques de sessions/planning et fichiers générés
-const STYLE_EXCLUDE = [
-    'docs/archive/',
-    'docs/designV1/',
-    'docs/sessions/',
-    'docs/planning/',
-    'docs/metrics/',
-    'docs/V2/',
-    'docs/E2E_TESTS_GUIDE.md',
-    'docs/7-SESSIONS.md',
-    'docs/9-DASHBOARD-QUALITY.md',
-    'CHANGELOG.md',
-];
+const GITHUB_OWNER = 'sandrinecipolla';
+const STOCKHUB_REPOS = ['stockhub_v2_front', 'stockhub_back', 'stockhub_design_system'];
 
-const BASELINE_PATH = 'scripts/docs-links-baseline.json';
-const BASE_REF = process.env.DOCS_BASE_REF || 'origin/main';
+const root = process.cwd();
+const CONFIG_PATH = '.docs-check.json';
+const config = existsSync(CONFIG_PATH) ? JSON.parse(readFileSync(CONFIG_PATH, 'utf-8')) : {};
+const BASELINE_PATH = config.baseline ?? 'scripts/docs-links-baseline.json';
+const GUIDE_PATH = config.guide ?? 'docs/technical/guide-redaction.md';
+// Documents non réécrits : archives figées, historiques et fichiers générés
+const STYLE_EXCLUDE = config.styleExclude ?? ['CHANGELOG.md'];
+const SIBLINGS_DIR = resolve(process.env.DOCS_SIBLINGS_DIR ?? join(root, '..'));
+
+function detectBaseRef() {
+    if (process.env.DOCS_BASE_REF) return process.env.DOCS_BASE_REF;
+    const candidates = [];
+    try {
+        candidates.push(execSync('git symbolic-ref --short refs/remotes/origin/HEAD', {encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore']}).trim());
+    } catch {
+        // origin/HEAD absent dans un clone CI, on essaie les noms usuels
+    }
+    candidates.push('origin/main', 'origin/master');
+    for (const ref of candidates) {
+        try {
+            execSync(`git rev-parse --verify ${ref}`, {stdio: 'ignore'});
+            return ref;
+        } catch {
+            // référence suivante
+        }
+    }
+    return 'origin/main';
+}
+
+/** Nom du repo courant, déduit de l'URL du remote origin. */
+function currentRepoName() {
+    try {
+        const url = execSync('git remote get-url origin', {encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore']}).trim();
+        return url.replace(/\.git$/, '').split('/').pop().toLowerCase();
+    } catch {
+        return '';
+    }
+}
+
+const BASE_REF = detectBaseRef();
+const CURRENT_REPO = currentRepoName();
 
 const args = process.argv.slice(2);
 const checkAll = args.includes('--all');
@@ -108,6 +145,37 @@ function stripCode(content) {
         .join('\n');
 }
 
+const dirCache = new Map();
+
+/**
+ * Existence avec la casse exacte de chaque segment sous `base`, même sur un
+ * système de fichiers insensible à la casse. Hors de `base`, simple existence.
+ */
+function existsExact(path, base = root) {
+    const absolute = resolve(path);
+    if (!existsSync(absolute)) return false;
+    const rel = relative(base, absolute);
+    if (rel.startsWith('..')) return true;
+    let current = base;
+    for (const part of rel.split(/[\\/]/).filter(Boolean)) {
+        if (!dirCache.has(current)) dirCache.set(current, readdirSync(current));
+        if (!dirCache.get(current).includes(part)) return false;
+        current = join(current, part);
+    }
+    return true;
+}
+
+/** Racine locale d'un repo StockHub : le repo courant, ou un clone dans SIBLINGS_DIR. */
+function repoRoot(repo) {
+    if (repo === CURRENT_REPO) return root;
+    if (!existsSync(SIBLINGS_DIR)) return null;
+    const match = readdirSync(SIBLINGS_DIR).find(name => name.toLowerCase() === repo);
+    return match ? join(SIBLINGS_DIR, match) : null;
+}
+
+const GITHUB_FILE_LINK = /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|tree)\/[^/]+\/([^?#]+)/i;
+const skippedRepos = new Map();
+
 function checkLinks(files, root) {
     const broken = [];
     for (const file of files) {
@@ -119,11 +187,26 @@ function checkLinks(files, root) {
         const references = [...content.matchAll(/^\s{0,3}\[[^\]]+]:\s*<?(\S+)>?/gm)];
         for (const match of [...inline, ...references]) {
             const target = match[1];
+            const github = target.match(GITHUB_FILE_LINK);
+            if (github) {
+                const [, owner, repoRaw, path] = github;
+                const repo = repoRaw.toLowerCase();
+                if (owner.toLowerCase() !== GITHUB_OWNER || !STOCKHUB_REPOS.includes(repo)) continue;
+                const base = repoRoot(repo);
+                if (!base) {
+                    skippedRepos.set(repo, (skippedRepos.get(repo) ?? 0) + 1);
+                    continue;
+                }
+                if (!existsExact(join(base, decodeURIComponent(path).replace(/\/$/, '')), base)) {
+                    broken.push({file: toPosix(relative(root, file)), target});
+                }
+                continue;
+            }
             if (/^(https?:|mailto:|#)/.test(target)) continue;
             const path = target.split('#')[0];
             if (!path) continue;
             const resolved = normalize(join(dirname(file), decodeURIComponent(path)));
-            if (!existsSync(resolved)) {
+            if (!existsExact(resolved)) {
                 broken.push({file: toPosix(relative(root, file)), target});
             }
         }
@@ -182,7 +265,6 @@ function checkStyle(files, root) {
     return violations;
 }
 
-const root = process.cwd();
 const allFiles = findMarkdownFiles(root);
 let failed = false;
 
@@ -195,7 +277,7 @@ const broken = brokenRaw.filter(entry => {
     seen.add(key);
     return true;
 });
-const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf-8')) : {knownBroken: []};
+const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf-8')) : {knownBroken: config.knownBroken ?? []};
 const known = new Set(baseline.knownBroken.map(entry => `${entry.file} -> ${entry.target}`));
 const current = new Set(broken.map(entry => `${entry.file} -> ${entry.target}`));
 
@@ -208,6 +290,10 @@ if (newlyBroken.length > 0) {
     console.error(`\n❌ ${newlyBroken.length} nouveau(x) lien(s) cassé(s) :`);
     for (const entry of newlyBroken) console.error(`   ${entry.file} -> ${entry.target}`);
     console.error(`\n   Corriger le lien, ou l'ajouter à ${BASELINE_PATH} si la cible est perdue.`);
+}
+if (skippedRepos.size > 0) {
+    console.warn(`\n⚠️  Liens vers d'autres repos non vérifiés (clone absent de ${SIBLINGS_DIR}) :`);
+    for (const [repo, count] of skippedRepos) console.warn(`   ${repo} : ${count} lien(s)`);
 }
 if (fixed.length > 0) {
     console.log(`\n✨ ${fixed.length} lien(s) du baseline sont réparés, à retirer de ${BASELINE_PATH} :`);
@@ -225,7 +311,7 @@ if (!linksOnly) {
         const log = checkAll ? console.log : console.error;
         log(`\n${checkAll ? '📋' : '❌'} ${violations.length} occurrence(s) :`);
         for (const v of violations) log(`   ${v.file}:${v.line}  ${v.message}${v.count > 1 ? ` (x${v.count})` : ''}`);
-        log(`\n   Règles : docs/technical/guide-redaction.md`);
+        log(`\n   Règles : ${GUIDE_PATH}`);
     }
 }
 

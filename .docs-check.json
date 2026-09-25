@@ -1,0 +1,16 @@
+{
+  "guide": "docs/technical/guide-redaction.md",
+  "baseline": "scripts/docs-links-baseline.json",
+  "styleExclude": [
+    "docs/archive/",
+    "docs/designV1/",
+    "docs/sessions/",
+    "docs/planning/",
+    "docs/metrics/",
+    "docs/V2/",
+    "docs/E2E_TESTS_GUIDE.md",
+    "docs/7-SESSIONS.md",
+    "docs/9-DASHBOARD-QUALITY.md",
+    "CHANGELOG.md"
+  ]
+}
