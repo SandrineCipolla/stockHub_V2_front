@@ -2,7 +2,7 @@
 
 import {execSync} from 'child_process';
 import {existsSync, readdirSync, readFileSync, statSync} from 'fs';
-import {dirname, join, normalize, relative, resolve} from 'path';
+import {dirname, isAbsolute, join, normalize, relative, resolve} from 'path';
 
 /**
  * Vérification de la documentation Markdown, commune aux trois repos StockHub.
@@ -147,6 +147,15 @@ function stripCode(content) {
 
 const dirCache = new Map();
 
+/** Décode un chemin d'URL, en gardant le texte brut si l'encodage est invalide (ex : un % isolé). */
+function safeDecode(path) {
+    try {
+        return decodeURIComponent(path);
+    } catch {
+        return path;
+    }
+}
+
 /**
  * Existence avec la casse exacte de chaque segment sous `base`, même sur un
  * système de fichiers insensible à la casse. Hors de `base`, simple existence.
@@ -155,7 +164,8 @@ function existsExact(path, base = root) {
     const absolute = resolve(path);
     if (!existsSync(absolute)) return false;
     const rel = relative(base, absolute);
-    if (rel.startsWith('..')) return true;
+    // Hors de base, ou sur un autre disque sous Windows (relative renvoie alors un chemin absolu)
+    if (rel.startsWith('..') || isAbsolute(rel)) return true;
     let current = base;
     for (const part of rel.split(/[\\/]/).filter(Boolean)) {
         if (!dirCache.has(current)) dirCache.set(current, readdirSync(current));
@@ -173,7 +183,21 @@ function repoRoot(repo) {
     return match ? join(SIBLINGS_DIR, match) : null;
 }
 
-const GITHUB_FILE_LINK = /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|tree)\/[^/]+\/([^?#]+)/i;
+// La branche peut contenir des / (feature/login) : branche et chemin sont séparés plus bas
+const GITHUB_FILE_LINK = /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|tree)\/([^?#]+)/i;
+
+/**
+ * Vrai si l'un des découpages « branche / chemin » de `rest` désigne un fichier
+ * existant du clone. Le clone est sur la branche par défaut : un lien vers une
+ * autre branche est vérifié contre elle.
+ */
+function githubTargetExists(base, rest) {
+    const segments = safeDecode(rest).replace(/\/$/, '').split('/');
+    for (let branchLength = 1; branchLength < segments.length; branchLength++) {
+        if (existsExact(join(base, ...segments.slice(branchLength)), base)) return true;
+    }
+    return false;
+}
 const skippedRepos = new Map();
 
 function checkLinks(files, root) {
@@ -189,7 +213,7 @@ function checkLinks(files, root) {
             const target = match[1];
             const github = target.match(GITHUB_FILE_LINK);
             if (github) {
-                const [, owner, repoRaw, path] = github;
+                const [, owner, repoRaw, rest] = github;
                 const repo = repoRaw.toLowerCase();
                 if (owner.toLowerCase() !== GITHUB_OWNER || !STOCKHUB_REPOS.includes(repo)) continue;
                 const base = repoRoot(repo);
@@ -197,7 +221,7 @@ function checkLinks(files, root) {
                     skippedRepos.set(repo, (skippedRepos.get(repo) ?? 0) + 1);
                     continue;
                 }
-                if (!existsExact(join(base, decodeURIComponent(path).replace(/\/$/, '')), base)) {
+                if (!githubTargetExists(base, rest)) {
                     broken.push({file: toPosix(relative(root, file)), target});
                 }
                 continue;
@@ -205,7 +229,7 @@ function checkLinks(files, root) {
             if (/^(https?:|mailto:|#)/.test(target)) continue;
             const path = target.split('#')[0];
             if (!path) continue;
-            const resolved = normalize(join(dirname(file), decodeURIComponent(path)));
+            const resolved = normalize(join(dirname(file), safeDecode(path)));
             if (!existsExact(resolved)) {
                 broken.push({file: toPosix(relative(root, file)), target});
             }
@@ -277,7 +301,7 @@ const broken = brokenRaw.filter(entry => {
     seen.add(key);
     return true;
 });
-const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf-8')) : {knownBroken: config.knownBroken ?? []};
+const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf-8')) : {knownBroken: []};
 const known = new Set(baseline.knownBroken.map(entry => `${entry.file} -> ${entry.target}`));
 const current = new Set(broken.map(entry => `${entry.file} -> ${entry.target}`));
 

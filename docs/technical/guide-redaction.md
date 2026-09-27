@@ -52,3 +52,5 @@ S'applique à toute documentation rédigée pour ce projet : ADR, README, CONTRI
 `npm run check:docs:all` applique les règles de style à tout le dépôt sans faire échouer : c'est la mesure de la dette restante.
 
 Le script (`scripts/check-docs.mjs`) sert aussi au backend et au design system : leur CI le télécharge depuis ce repo. Chaque repo le configure par un fichier `.docs-check.json` à sa racine (chemin du guide, baseline, dossiers exclus du contrôle de style).
+
+Les clones des autres repos sont pris sur leur branche par défaut. Une PR qui ajoute un lien vers un fichier créé par une PR encore ouverte dans un autre repo échoue tant que cette dernière n'est pas fusionnée : fusionner d'abord la PR qui crée le fichier.
