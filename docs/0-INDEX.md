@@ -31,7 +31,7 @@
 
 - [../CONTRIBUTING.md](../CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
 - [../SECURITY.md](../SECURITY.md) : politique de sécurité (versions supportées, signalement)
-- [../CLAUDE.md](../CLAUDE.md) : contexte projet pour sessions IA
+- [../AGENTS.md](../AGENTS.md) : contexte projet pour les agents IA (`CLAUDE.md` l'importe)
 - [../README.md](../README.md) : présentation du projet
 - [../ETAT_DU_PROJET.md](../ETAT_DU_PROJET.md) : tableau de bord de l'état courant et point de reprise
 - [../docs/adr/INDEX.md](../docs/adr/INDEX.md) : Architecture Decision Records (ADR)
