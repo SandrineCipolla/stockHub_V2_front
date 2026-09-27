@@ -153,7 +153,7 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 - [x] ESLint + TypeScript strict (0 erreur, 0 warning)
 - [x] Sécurité HTTPS + Azure AD
 - [x] **GitHub Actions configuré** : pipeline `quality → test → build → lighthouse-ci` sur le front, `continuous-integration → security-audit → e2e-tests → build-and-deploy` sur le back (wiki `CICD-et-Deploiement`)
-- [x] **Tests automatisés intégrés** : 464 tests Vitest (front), 304 tests Jest (back)
+- [x] **Tests automatisés intégrés** : Vitest (front) et Jest (back) dans la CI de chaque repo
 - [x] **Shift-left security** : `security-audit` bloque le merge si vuln high/critical (`npm audit --audit-level=high`), Dependabot actif depuis juin 2026
 
 #### 📋 **Reste à faire**
@@ -185,10 +185,10 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 - [x] Responsive Mobile First
 - [x] Accessibilité RGAA (WAVE: 0 erreur, 94/100 Lighthouse Accessibilité, en amélioration continue)
 - [x] Performance exceptionnelle (Lighthouse 99/100)
-- [x] Éco-conception (EcoIndex A - 88.42)
+- [x] Éco-conception (EcoIndex A)
 - [x] Documentation GitHub niveau professionnel
 - [x] Optimisations modernes (tree shaking, lazy loading)
-- [x] **Tests unitaires sécurisants** : Vitest + React Testing Library, 464 tests, 90-100% sur composants/hooks/pages critiques ([Ce2.3.4](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Qualite-et-Metriques) justifié explicitement dans le wiki)
+- [x] **Tests unitaires sécurisants** : Vitest + React Testing Library, couverture la plus haute sur composants/hooks/pages critiques ([Ce2.3.4](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Qualite-et-Metriques) justifié explicitement dans le wiki)
 
 #### 📋 **Reste à vérifier / faire**
 
@@ -259,8 +259,8 @@ _📝 Instructions : Cochez les cases ☑️ au fur et à mesure de vos réalisa
 
 #### ✅ **Fait, suite de tests réelle et large**
 
-- [x] **Tests unitaires** : 464 tests Vitest (front), 304 tests Jest (back)
-- [x] **Tests End-to-End** : Playwright sur front ([ADR-011](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/adr/ADR-011-playwright-auth-reelle.md), auth Azure B2C réelle, 5/5 verts) et sur back (job `e2e-tests`, cron hebdo)
+- [x] **Tests unitaires** : Vitest (front), Jest (back), nombre à jour : `npm run test:run` dans chaque repo
+- [x] **Tests End-to-End** : Playwright sur front ([ADR-011](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/adr/ADR-011-playwright-auth-reelle.md), auth Azure B2C réelle, verts en CI) et sur back (job `e2e-tests`, cron hebdo)
 
 #### 📋 **À faire**
 
@@ -415,7 +415,7 @@ _Point de départ : Octobre 2025_
   - [x] **Points forts identifiés** : Interface pro, design system mature, performance excellente
   - [ ] **Améliorations créativité** : Différenciation visuelle cartes stocks par statut, non confirmé livré
   - [ ] **Micro-animations** : Ajouter animations sur métriques dashboard, non confirmé livré
-  - [x] **Tests unitaires** : Vitest + React Testing Library, fait (464 tests)
+  - [x] **Tests unitaires** : Vitest + React Testing Library, fait
   - [x] **IA plus concrète** : backend (ADR-013/014/015) + front, avec nuance (StockDetailPage connecté au backend, Dashboard/cartes en calcul local), vérifié 24/09/2026, voir C2.3
 
 - [ ] **Retours encadrant Backend V1**
@@ -470,10 +470,10 @@ _Point de départ : Octobre 2025_
 
 Les valeurs à jour se lisent dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md), les badges du README, et le wiki `Qualite-et-Metriques`.
 
-- [x] **Performance** : Lighthouse 99/100 (objectif >90 dépassé)
-- [ ] **Tests** : 74.97% coverage global (objectif 80%, atteint sur composants critiques à 90-100%, pas encore global)
-- [ ] **Sécurité** : 0 vulnérabilité npm critique (dépendances), mais 4 alertes CodeQL haute sévérité ouvertes non triées (voir C2.2)
-- [x] **Accessibilité** : RGAA, WCAG AA 94/100 (amélioration continue vers 95+)
+- [x] **Performance** : Lighthouse, objectif > 90 atteint
+- [ ] **Tests** : couverture, objectif 80 % atteint sur les composants critiques, pas encore en global
+- [ ] **Sécurité** : `npm audit` high et critical bloquant en CI, mais alertes CodeQL haute sévérité ouvertes non triées (voir C2.2)
+- [x] **Accessibilité** : RGAA, WCAG AA
 - [x] **Éco-conception** : EcoIndex Grade A (objectif dépassé)
 
 ### **📋 Livrables certification**
@@ -520,5 +520,3 @@ Les valeurs à jour se lisent dans [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.
 ---
 
 **🎯 Objectif final : Validation RNCP 7 avec excellence ! (4 × 40min de soutenance)**
-
-_📅 Dernière mise à jour : 23/09/2026_

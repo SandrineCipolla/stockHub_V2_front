@@ -406,6 +406,4 @@ Gain : -41% de temps (1m12s économisé)
 
 ---
 
-**Dernière mise à jour** : 2025-12-08
 **Auteur** : Sandrine Cipolla
-**Contributeurs** : Claude Code (Anthropic)

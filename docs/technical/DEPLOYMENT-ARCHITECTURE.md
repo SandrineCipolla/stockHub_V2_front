@@ -140,7 +140,3 @@ Push sur staging
 ## Variables d'environnement : Référence complète
 
 Voir `.env.example` à la racine du repo pour la liste complète des variables `VITE_*`.
-
----
-
-**Dernière mise à jour** : 2026-03-11

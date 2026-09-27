@@ -123,8 +123,6 @@ EXIT_SCALE: 0.95,           // Scale final
 - `scripts/test-performance-fps.mjs` (Hover test)
 - `scripts/test-reduced-motion.mjs`
 
-**Coverage** : 99.19% (34 tests)
-
 ---
 
 ### 2. StockGrid
@@ -176,8 +174,6 @@ layout={true}  // Active les transitions de position automatiques
 
 - `src/components/dashboard/__tests__/StockGrid.test.tsx`
 - `scripts/test-performance-fps.mjs` (Filtrage test)
-
-**Coverage** : 100% (31 tests)
 
 ---
 
@@ -243,8 +239,6 @@ Supporte :
 - `src/components/dashboard/__tests__/MetricCard.test.tsx`
 - `scripts/test-performance-fps.mjs` (CountUp test)
 - `scripts/test-reduced-motion.mjs`
-
-**Coverage** : 100% (15-20 tests)
 
 ---
 

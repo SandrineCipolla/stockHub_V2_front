@@ -19,7 +19,7 @@
 | **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                             | 🐛 Résolution problèmes web components                                     |
 | **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                                 | 🧪 Pyramide de tests, audits performance et accessibilité                  |
 | **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                                 | ♿ Accessibilité WCAG AA (audit complet)                                   |
-| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                           | 📅 Index sessions développement (11 sessions)                              |
+| **7**  | [7-SESSIONS.md](7-SESSIONS.md)                                           | 📅 Index sessions développement                                            |
 | **8**  | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                               | 🎓 Suivi compétences & livrables RNCP                                      |
 | **9**  | [9-DASHBOARD-QUALITY.md](9-DASHBOARD-QUALITY.md)                         | 📊 **Dashboard Qualité** - Manuel technique UI (`docs/metrics/index.html`) |
 | **14** | [14-CI-CD-WORKFLOWS.md](14-CI-CD-WORKFLOWS.md)                           | 🔄 **CI/CD** - Workflows GitHub Actions                                    |
@@ -116,7 +116,7 @@ Les composants sont répartis en trois catégories, atoms, molecules et organism
 
 ## 📅 Planning & Roadmaps
 
-### Plannings Actifs (Novembre 2025)
+### Plannings de 2025 (historique)
 
 - [planning/planning_ameliorations_v2.md](planning/planning_ameliorations_v2.md) ⭐ **Planning principal** (Octobre → Novembre)
 - [planning/PLANNING-NOVEMBRE-2025-UPDATE.md](planning/PLANNING-NOVEMBRE-2025-UPDATE.md) - Travail réel 13-18/11
@@ -133,24 +133,8 @@ Les composants sont répartis en trois catégories, atoms, molecules et organism
 
 ### Index Sessions
 
-- [7-SESSIONS.md](7-SESSIONS.md) ⭐ **Index chronologique complet** (11 sessions documentées)
-
-### Sessions Récentes (Décembre 2025)
-
-- [sessions/2025-12-08-COPILOT-FEEDBACK-CI-OPTIMIZATION.md](sessions/2025-12-08-COPILOT-FEEDBACK-CI-OPTIMIZATION.md) ⭐ **NEW** - Retours Copilot + Optimisation CI (-41% temps)
-- [sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md](sessions/2025-11-26-LIGHTHOUSE-DYNAMIC-AUDITS.md) - Lighthouse extraction dynamique audits échoués
-- [sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md](sessions/2025-11-26-AUDIT-RNCP-TAB-NAVIGATION.md) - Audit RNCP avec tabs navigation + downloads JSON
-- [sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md](sessions/2025-11-25-DASHBOARD-DATASETS-SCALABILITY.md) - Tests datasets scalabilité
-- [sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md](sessions/2025-11-25-DASHBOARD-A11Y-REDUCED-MOTION.md) - Section Reduced Motion éducative
-- [sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md](sessions/2025-11-24-DASHBOARD-UX-IMPROVEMENTS.md) - Améliorations UX dashboard
-- [sessions/2025-11-24-DASHBOARD-BADGES.md](sessions/2025-11-24-DASHBOARD-BADGES.md) - Badges de statut dashboard (8 badges)
-- [sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md](sessions/2025-11-20-22-DASHBOARD-INTERACTIF.md) - Dashboard qualité interactif (PRs #44-46)
-- [sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md](sessions/2025-11-18-SEARCH-WRAPPER-TESTS.md) - Tests SearchInputWrapper (464 tests, 7/7 wrappers ✅)
-- [sessions/2025-11-13-ANALYTICS-MIGRATION.md](sessions/2025-11-13-ANALYTICS-MIGRATION.md) - Migration Analytics (100% Design System)
-- [sessions/2025-11-12-TESTS-UNITAIRES.md](sessions/2025-11-12-TESTS-UNITAIRES.md) - Correction tests (stratégie Shadow DOM)
-- [sessions/2025-02-08-CLEANUP.md](sessions/2025-02-08-CLEANUP.md) - Cleanup & optimisation
-- [sessions/2025-01-22-FIXES-COPILOT.md](sessions/2025-01-22-FIXES-COPILOT.md) - Corrections Copilot
-- [sessions/RECAP-03-NOVEMBRE.md](sessions/RECAP-03-NOVEMBRE.md) - Migration MetricCard & bug critique
+- [7-SESSIONS.md](7-SESSIONS.md) ⭐ **Index chronologique complet**
+- [sessions/](sessions/) : un fichier par session
 
 ---
 
@@ -160,7 +144,7 @@ Les composants sont répartis en trois catégories, atoms, molecules et organism
 
 - [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md) ⭐ **IMPORTANT** - Suivi compétences et livrables
 - [technical/AI-DECISIONS.md](technical/AI-DECISIONS.md) ⭐ - Décisions architecturales (C2.5)
-- [7-SESSIONS.md](7-SESSIONS.md) ⭐ - Index chronologique sessions (9 sessions)
+- [7-SESSIONS.md](7-SESSIONS.md) ⭐ - Index chronologique sessions
 
 ### Accomplissements de novembre 2025
 
@@ -361,7 +345,7 @@ docs/
 
 ## 📝 Conventions de Documentation
 
-1. **Numérotation** : Fichiers principaux numérotés 0-8 (ordre lecture recommandé)
+1. **Numérotation** : guides principaux numérotés dans l'ordre de lecture recommandé
 2. **Tous les docs en Markdown** (.md)
 3. **Structure claire** avec sommaire
 4. **Exemples de code** avec syntax highlighting
@@ -394,6 +378,4 @@ Créer une issue : https://github.com/SandrineCipolla/stockHub_V2_front/issues
 
 ---
 
-**Dernière mise à jour** : 11 Mars 2026
-**Version Documentation** : 2.6 (Deployment Architecture staging Vercel + prod Azure)
 **Projet** : StockHub V2 - RNCP 7

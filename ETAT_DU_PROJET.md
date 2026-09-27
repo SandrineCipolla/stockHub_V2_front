@@ -2,8 +2,7 @@
 
 > **Date de rédaction** : 22 septembre 2026  
 > **Dernière activité** : 22 septembre 2026  
-> **Branche active** : `main`  
-> **Version** : v1.17.1
+> **Branche active** : `main`
 
 Tableau de bord de l'état courant du frontend et point de reprise. La documentation complète est indexée dans [docs/0-INDEX.md](docs/0-INDEX.md), le suivi des tickets sur le [GitHub Project](https://github.com/users/SandrineCipolla/projects/3).
 
@@ -23,7 +22,7 @@ Un bloc de session bascule dans [docs/sessions/](docs/sessions/) dès qu'il dép
 | **Design System** | `@stockhub/design-system` (Web Components Lit, version dans `package.json`)               |
 | **Auth**          | Azure AD B2C (MSAL React)                                                                 |
 | **Tests**         | Vitest (unitaires et composants), Playwright (E2E), nombre exact : `npm run test:run`     |
-| **Qualité**       | ESLint 0 warning (`--max-warnings 0`), 0 vulnérabilité npm                                |
+| **Qualité**       | ESLint 0 warning (`--max-warnings 0`), `npm audit` high et critical bloquant en CI        |
 | **Prod**          | Azure Static Web Apps (branche `main`)                                                    |
 | **Staging**       | Vercel (branche `staging`)                                                                |
 | **Soutenance**    | RNCP7, mars 2027                                                                          |

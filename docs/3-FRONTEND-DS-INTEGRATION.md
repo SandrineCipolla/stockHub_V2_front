@@ -43,7 +43,7 @@
 
 #### Ce qui appartient au Design System
 
-✅ **Web Components (18 composants)**
+✅ **Web Components**
 
 - Atoms : sh-badge, sh-icon, sh-input, sh-logo, sh-text
 - Molecules : sh-button, sh-card, sh-metric-card, sh-quantity-input, sh-search-input, sh-stat-card, sh-status-badge
@@ -87,11 +87,10 @@ stockhub_design_system/
 
 **URL** : https://github.com/SandrineCipolla/stockHub_V2_front
 **Démo** : https://brave-field-03611eb03.5.azurestaticapps.net/
-**Version** : v1.1.0
 
 #### Ce qui appartient au Frontend
 
-✅ **Wrappers React (7 wrappers)**
+✅ **Wrappers React**
 
 - ButtonWrapper, CardWrapper, MetricCardWrapper
 - StockCardWrapper, AIAlertBannerWrapper
@@ -437,7 +436,5 @@ it('should call onClick when sh-click fires', () => {
 
 ---
 
-**Dernière mise à jour** : 18 Novembre 2025
 **Version Design System** : `@stockhub/design-system` (voir `package.json`)
-**Version Frontend** : v1.1.0
 **Statut** : ✅ Actif et maintenu

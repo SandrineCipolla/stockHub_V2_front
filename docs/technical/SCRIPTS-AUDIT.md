@@ -335,8 +335,6 @@ npm ci
 
 ## 📝 Historique
 
-**Dernière mise à jour** : 08 Novembre 2024
-**Version** : 1.0
 **Status** : Actif - Scripts maintenus
 
 **Changements à venir** : Évaluer l'intégration CI/CD (priorité basse)
