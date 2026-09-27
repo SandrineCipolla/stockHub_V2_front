@@ -50,8 +50,16 @@ jobs:
       - name: 🔍 Detect as const
         run: npm run detect:as-const
 
+      - name: 📥 Clone des autres repos StockHub (liens entre repos)
+        run: |
+          mkdir -p "$RUNNER_TEMP/siblings"
+          git clone --depth 1 https://github.com/SandrineCipolla/stockhub_back.git "$RUNNER_TEMP/siblings/stockhub_back"
+          git clone --depth 1 https://github.com/SandrineCipolla/stockhub_design_system.git "$RUNNER_TEMP/siblings/stockhub_design_system"
+
       - name: 📚 Documentation (liens et guide de rédaction)
         run: npm run check:docs
+        env:
+          DOCS_SIBLINGS_DIR: ${{ runner.temp }}/siblings
 
   test:
     name: 🧪 Tests
