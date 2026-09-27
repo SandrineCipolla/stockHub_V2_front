@@ -96,7 +96,7 @@ Optimisation des images (formats modernes, lazy loading), purge CSS, tree shakin
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) : process de contribution (branches, commits, PR, issues)
 - [SECURITY.md](SECURITY.md) : politique de sécurité et signalement des vulnérabilités
-- [CLAUDE.md](CLAUDE.md) : contexte projet pour sessions IA
+- [AGENTS.md](AGENTS.md) : contexte projet pour les agents IA (`CLAUDE.md` l'importe)
 - [docs/0-INDEX.md](docs/0-INDEX.md) : index complet de la documentation
 - [docs/adr/INDEX.md](docs/adr/INDEX.md) : Architecture Decision Records
 - [CHANGELOG.md](CHANGELOG.md) : journal des changements (généré automatiquement)

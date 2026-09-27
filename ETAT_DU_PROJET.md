@@ -102,4 +102,4 @@ npm run test:run
 npm run check:docs
 ```
 
-Le déploiement est décrit dans le [README.md](README.md), les URL de chaque environnement dans [CLAUDE.md](CLAUDE.md).
+Le déploiement est décrit dans le [README.md](README.md), les URL de chaque environnement dans [AGENTS.md](AGENTS.md).
