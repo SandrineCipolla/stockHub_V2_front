@@ -1222,7 +1222,5 @@ const hasExcellent = avgScore >= 85;
 
 ---
 
-**Dernière mise à jour** : 26 novembre 2025
-**Version** : 1.4.0
 **Projet** : StockHub V2 - Frontend
 **Auteur** : Sandrine Cipolla

@@ -3,9 +3,7 @@
 > **Guide de démarrage rapide** pour développer sur StockHub V2
 > De l'installation à la première contribution
 
-**Version Frontend** : v1.1.0
 **Design System** : `@stockhub/design-system` (voir `package.json`)
-**Date** : 18 Novembre 2025
 
 ---
 
@@ -13,16 +11,16 @@
 
 ### Environnement Requis
 
-- **Node.js** : >= 18.0.0
-- **npm** : >= 9.0.0
+- **Node.js** : version minimale dans le champ `engines` de [`package.json`](../package.json)
+- **npm** : celui fourni avec Node.js
 - **Git** : Pour cloner le repository
 - **IDE recommandé** : VS Code avec extensions (TypeScript, ESLint, Prettier)
 
 ### Vérifier votre environnement
 
 ```bash
-node --version    # v18.0.0 ou supérieur
-npm --version     # v9.0.0 ou supérieur
+node --version    # à comparer au champ engines de package.json
+npm --version
 git --version     # n'importe quelle version récente
 ```
 
@@ -407,7 +405,7 @@ npm run build
 4. **[3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)** - Harmonisation Frontend ↔ DS
 5. **[4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)** - Résolution problèmes
 6. **[5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)** - Guide tests
-7. **[7-SESSIONS.md](7-SESSIONS.md)** - Sessions développement (9 sessions)
+7. **[7-SESSIONS.md](7-SESSIONS.md)** - Sessions développement
 8. **[8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)** - Suivi RNCP
 
 ### Documentation Technique
@@ -458,4 +456,3 @@ npm run ci:check     # Vérifier avant push
 
 **Auteure** : Sandrine Cipolla
 **Projet** : StockHub V2 - RNCP 7
-**Dernière mise à jour** : 18 Novembre 2025

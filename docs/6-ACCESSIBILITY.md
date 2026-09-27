@@ -396,7 +396,5 @@ Indicateurs de focus personnalisés avec contraste suffisant :
 
 ---
 
-**Date de création** : 17 Novembre 2025
-**Dernière mise à jour** : 20 Février 2026
 **Auteure** : Sandrine Cipolla
 **Statut** : ✅ **AUDIT COMPLÉTÉ - CONFORME**

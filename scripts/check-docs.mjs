@@ -129,7 +129,8 @@ function isIndentedCodeStart(lines, index) {
 /** Masque les blocs et spans de code : le guide de rédaction ne s'applique pas au code. */
 function stripCode(content) {
     const masked = content
-        .replace(/^(```|~~~)[\s\S]*?^\1/gm, m => m.replace(/[^\n]/g, ' '))
+        // Blocs délimités, y compris indentés dans une liste
+        .replace(/^[ \t]*(```|~~~)[\s\S]*?^[ \t]*\1/gm, m => m.replace(/[^\n]/g, ' '))
         .replace(/`[^`\n]*`/g, m => ' '.repeat(m.length))
         // Entités HTML : leur point-virgule n'est pas de la ponctuation
         .replace(/&(#\d+|#x[0-9a-fA-F]+|[a-zA-Z]+);/g, m => ' '.repeat(m.length));

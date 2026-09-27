@@ -247,7 +247,7 @@ Script tout-en-un regroupant tous les audits de performance, accessibilité, éc
 #### 4. Qualité Code (💎)
 
 - Vérification TypeScript
-- Tests unitaires (369 tests)
+- Tests unitaires
 - Coverage (info)
 
 ### Rapport JSON

@@ -459,6 +459,4 @@ Actuellement, les algorithmes utilisent des moyennes simulées. Dans une version
 
 ---
 
-**Dernière mise à jour** : 29 Octobre 2024
-**Auteur** : Claude Code Assistant
 **Version** : 2.0 - Option A Implémentée

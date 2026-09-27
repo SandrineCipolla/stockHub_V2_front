@@ -513,6 +513,4 @@ Cette approche démontre :
 
 ---
 
-**Dernière mise à jour** : 8 Décembre 2025
 **Auteur** : Sandrine Cipolla
-**Version** : 1.0

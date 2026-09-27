@@ -593,6 +593,5 @@ Si les performances s'améliorent, augmenter les seuils :
 
 ---
 
-**Dernière mise à jour** : 20/10/2025
 **Développé par** : Sandrine Cipolla
 **Projet** : StockHub V2 - RNCP 7

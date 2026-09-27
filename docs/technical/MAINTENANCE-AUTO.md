@@ -199,13 +199,15 @@ Ajouter dans le pipeline :
 
 ## 🔧 Outils installés
 
-### Knip v5.66.2
+Versions dans [`package.json`](../../package.json).
+
+### Knip
 
 - **Fonction** : Détection du code mort
 - **Config** : `knip.json`
 - **Usage** : `npm run clean:deadcode`
 
-### ESLint v9.38.0 + typescript-eslint v8.46.2
+### ESLint et typescript-eslint
 
 - **Fonction** : Détection des casts TypeScript dangereux
 - **Config** : `eslint.config.js` (stricte)
@@ -216,8 +218,3 @@ Ajouter dans le pipeline :
 - **Fonction** : Détection spécifique des `as const`
 - **Localisation** : `scripts/detect-as-const.mjs`
 - **Usage** : `npm run detect:as-const`
-
----
-
-_Guide mis à jour le 22/01/2025_  
-_Knip v5.66.2 | ESLint v9.38.0 | Script as const personnalisé_

@@ -423,6 +423,4 @@ Aucune valeur n'est recopiée ici, elle serait fausse dès le prochain passage d
 
 ---
 
-**📅 Dernière mise à jour** : 2025-12-05
 **📝 Auteur** : Sandrine Cipolla
-**🤖 Généré avec** : Claude Code
