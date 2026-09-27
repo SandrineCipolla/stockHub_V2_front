@@ -1,6 +1,9 @@
 # Guide de rédaction
 
-Règles d'écriture pour la documentation du projet (ADR, README, CONTRIBUTING, sessions, etc.). Un seul endroit pour ces règles : tout document ou skill qui rédige de la documentation y renvoie plutôt que de les recopier.
+Règles d'écriture pour la documentation du projet (ADR, README, CONTRIBUTING, sessions, etc.). Tout document ou skill qui rédige de la documentation y renvoie plutôt que de recopier ces règles. Les sections entre marqueurs `commun` sont identiques dans les trois repos StockHub, `npm run check:docs` le vérifie.
+
+<!-- commun:debut guide-redaction v1 -->
+<!-- Bloc commun aux trois repos StockHub : le modifier à l'identique dans les trois, en incrémentant la version. Vérifié par check-docs. -->
 
 ## Principes
 
@@ -42,11 +45,14 @@ Chaque entrée illustre une catégorie à reconnaître. Ne garder un terme signa
 
 S'applique à toute documentation rédigée pour ce projet : ADR, README, CONTRIBUTING, sessions de développement, commentaires de PR. Ne s'applique pas au code lui-même (noms de variables, commentaires techniques) sauf pour les commentaires en prose longue.
 
+<!-- commun:fin guide-redaction -->
+
 ## Vérification automatique
 
-`npm run check:docs` vérifie deux choses, et tourne dans `npm run ci:quality` comme dans la CI :
+`npm run check:docs` vérifie trois choses, et tourne dans `npm run ci:quality` comme dans la CI :
 
 - Les liens relatifs de tous les fichiers Markdown pointent vers un fichier existant, avec la casse exacte. Les liens GitHub vers un fichier des autres repos StockHub sont vérifiés contre un clone de ces repos (la CI les clone, en local le script les cherche dans le dossier parent ou dans `DOCS_SIBLINGS_DIR`, et signale sans échouer ceux qu'il n'a pas pu vérifier). Les liens déjà cassés à la mise en place sont listés dans `scripts/docs-links-baseline.json` et n'échouent pas. Cette liste est faite pour diminuer.
+- Les blocs communs aux trois repos, délimités par `<!-- commun:debut <id> v<version> -->` et `<!-- commun:fin <id> -->`, sont identiques à version égale. Pour modifier un bloc : changer le texte, incrémenter la version, puis reporter le même bloc dans les deux autres repos. Le repo modifié en premier affiche un avertissement tant que les autres ne sont pas à jour, un repo resté en retard échoue.
 - Les règles fixes ci-dessus (tiret cadratin, point-virgule en prose, point médian) sur les seuls fichiers modifiés par rapport à la branche de base, la règle étant plus récente que le dépôt. Les blocs et spans de code sont ignorés.
 
 `npm run check:docs:all` applique les règles de style à tout le dépôt sans faire échouer : c'est la mesure de la dette restante.

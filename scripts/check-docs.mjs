@@ -14,7 +14,12 @@ import {dirname, isAbsolute, join, normalize, relative, resolve} from 'path';
  *    parent). Un repo absent est signalé, pas bloquant.
  *    Les liens déjà cassés à la mise en place sont listés dans un baseline et
  *    n'échouent pas. Le baseline est fait pour diminuer, jamais pour grossir.
- * 2. Style : règles fixes du guide de rédaction (tiret cadratin, point-virgule
+ * 2. Blocs communs : un bloc délimité par
+ *    <!-- commun:debut <id> v<version> --> et <!-- commun:fin <id> -->
+ *    doit être identique dans les trois repos à version égale. Un repo en
+ *    retard de version échoue, un repo en avance avertit des repos à mettre
+ *    à jour. Un repo frère absent est signalé, pas bloquant.
+ * 3. Style : règles fixes du guide de rédaction (tiret cadratin, point-virgule
  *    en prose, point médian), sur les seuls fichiers modifiés par rapport à la
  *    branche de base.
  *
@@ -238,6 +243,101 @@ function checkLinks(files, root) {
     return broken;
 }
 
+const BLOCK_START = /<!-- commun:debut ([a-z0-9-]+) v(\d+) -->/g;
+
+/** Fichiers Markdown suivis par git dans un repo donné. */
+function trackedMarkdownFiles(repoDir) {
+    try {
+        return execSync('git ls-files "*.md"', {cwd: repoDir, encoding: 'utf-8'})
+            .split('\n')
+            .map(line => line.trim())
+            .filter(Boolean)
+            .map(line => join(repoDir, line))
+            .filter(existsSync);
+    } catch {
+        return [];
+    }
+}
+
+function normalizeBlock(text) {
+    return text
+        .replace(/\r\n/g, '\n')
+        .split('\n')
+        .map(line => line.trimEnd())
+        .join('\n')
+        .trim();
+}
+
+/** Blocs communs d'une liste de fichiers : id -> liste de {file, version, content}. */
+function collectBlocks(files, baseDir, errors) {
+    const blocks = new Map();
+    for (const file of files) {
+        const content = readFileSync(file, 'utf-8');
+        for (const match of content.matchAll(BLOCK_START)) {
+            const [startTag, id, version] = match;
+            const endTag = `<!-- commun:fin ${id} -->`;
+            const start = match.index + startTag.length;
+            const end = content.indexOf(endTag, start);
+            const relFile = toPosix(relative(baseDir, file));
+            if (end === -1) {
+                errors.push(`${relFile} : bloc « ${id} » sans marqueur de fin ${endTag}`);
+                continue;
+            }
+            if (!blocks.has(id)) blocks.set(id, []);
+            blocks.get(id).push({file: relFile, version: Number(version), content: normalizeBlock(content.slice(start, end))});
+        }
+    }
+    return blocks;
+}
+
+function firstDifferentLine(a, b) {
+    const linesA = a.split('\n');
+    const linesB = b.split('\n');
+    for (let i = 0; i < Math.max(linesA.length, linesB.length); i++) {
+        if (linesA[i] !== linesB[i]) return i + 1;
+    }
+    return 0;
+}
+
+function checkCommonBlocks(files) {
+    const errors = [];
+    const warnings = [];
+    const local = collectBlocks(files, root, errors);
+
+    // Un même bloc répété dans ce repo doit être identique
+    for (const [id, occurrences] of local) {
+        const [first, ...others] = occurrences;
+        for (const other of others) {
+            if (other.version !== first.version || other.content !== first.content) {
+                errors.push(`bloc « ${id} » différent entre ${first.file} et ${other.file} (ligne ${firstDifferentLine(first.content, other.content)} du bloc)`);
+            }
+        }
+    }
+
+    for (const repo of STOCKHUB_REPOS) {
+        if (repo === CURRENT_REPO) continue;
+        const base = repoRoot(repo);
+        if (!base) {
+            if (local.size > 0) warnings.push(`${repo} : clone absent, blocs communs non comparés`);
+            continue;
+        }
+        const remote = collectBlocks(trackedMarkdownFiles(base), base, []);
+        for (const [id, [mine]] of local) {
+            const theirs = remote.get(id)?.[0];
+            if (!theirs) {
+                warnings.push(`${repo} : bloc « ${id} » absent, à ajouter`);
+            } else if (mine.version < theirs.version) {
+                errors.push(`bloc « ${id} » v${mine.version} en retard sur ${repo} v${theirs.version} : recopier ${repo}/${theirs.file}`);
+            } else if (mine.version > theirs.version) {
+                warnings.push(`${repo} : bloc « ${id} » en v${theirs.version}, à mettre à jour en v${mine.version}`);
+            } else if (mine.content !== theirs.content) {
+                errors.push(`bloc « ${id} » v${mine.version} différent de ${repo}/${theirs.file} (ligne ${firstDifferentLine(mine.content, theirs.content)} du bloc) : incrémenter la version si le changement est voulu`);
+            }
+        }
+    }
+    return {count: local.size, errors, warnings};
+}
+
 function changedMarkdownFiles(root) {
     try {
         execSync(`git rev-parse --verify ${BASE_REF}`, {stdio: 'ignore'});
@@ -324,7 +424,22 @@ if (fixed.length > 0) {
     for (const entry of fixed) console.log(`   ${entry}`);
 }
 
-// 2. Style
+// 2. Blocs communs
+if (!linksOnly) {
+    const blocks = checkCommonBlocks(allFiles);
+    console.log(`\n🧩 Blocs communs : ${blocks.count} bloc(s) dans ce repo.`);
+    if (blocks.warnings.length > 0) {
+        console.warn(`\n⚠️  À propager :`);
+        for (const warning of blocks.warnings) console.warn(`   ${warning}`);
+    }
+    if (blocks.errors.length > 0) {
+        failed = true;
+        console.error(`\n❌ ${blocks.errors.length} bloc(s) commun(s) incohérent(s) :`);
+        for (const error of blocks.errors) console.error(`   ${error}`);
+    }
+}
+
+// 3. Style
 if (!linksOnly) {
     const targets = checkAll ? allFiles : changedMarkdownFiles(root);
     const violations = checkStyle(targets, root);
