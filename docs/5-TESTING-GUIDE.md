@@ -58,14 +58,14 @@ npm run audit:full        # Audit complet (recommandé)
 npm run audit:fps         # Tests FPS uniquement
 npm run audit:a11y        # Tests accessibilité uniquement
 npm run audit:datasets    # Tests scalabilité uniquement
-npm run audit:daltonisme  # Tests daltonisme et contraste uniquement
+npm run audit:colorblind  # Tests daltonisme et contraste uniquement
 ```
 
 ---
 
 ## 📊 1. Tests de Performance
 
-### 1.1 Tests FPS (test-performance-fps.mjs)
+### 1.1 Tests FPS (audit-fps.mjs)
 
 **Objectif** : Mesurer les FPS pendant les animations
 
@@ -94,7 +94,7 @@ npm run audit:fps
 
 ---
 
-### 1.2 Tests Scalabilité (test-animations-datasets.mjs)
+### 1.2 Tests Scalabilité (audit-datasets.mjs)
 
 **Objectif** : Mesurer la performance avec différentes tailles de datasets
 
@@ -154,7 +154,7 @@ npx lighthouse http://localhost:4173 --view
 
 ## ♿ 2. Tests d'Accessibilité
 
-### 2.1 Tests prefers-reduced-motion (test-reduced-motion.mjs)
+### 2.1 Tests prefers-reduced-motion (audit-a11y.mjs)
 
 **Objectif** : Vérifier le respect de la préférence utilisateur
 
@@ -204,7 +204,7 @@ npm run audit:a11y
 
 ---
 
-### 2.3 Tests Daltonisme et Contraste (test-daltonisme.mjs)
+### 2.3 Tests Daltonisme et Contraste (audit-colorblind.mjs)
 
 **Objectif** : Vérifier l'accessibilité visuelle des couleurs pour tous les utilisateurs
 
@@ -231,17 +231,10 @@ npm run audit:a11y
 **Commande** :
 
 ```bash
-npm run audit:daltonisme
+npm run audit:colorblind
 ```
 
-**Résultats actuels** :
-
-- Contraste : **8/10 tests passent** ⚠️
-  - Optimal/Low sur fond clair échouent (mais compensés par icônes)
-- Protanopie : **9/10 paires** ✅
-- Deutéranopie : **10/10 paires** ✅
-- Tritanopie : **9/10 paires** ✅
-- Achromatopsie : **4/10 paires** ⚠️
+Les résultats s'affichent à l'exécution de la commande, ils ne sont pas recopiés ici.
 
 **Indicateurs non-couleur** :
 
@@ -371,7 +364,7 @@ npm run test:coverage
 
 ---
 
-## 🔄 Audit Complet (audit-complet.mjs)
+## 🔄 Audit Complet (audit-full.mjs)
 
 ### Fonctionnalités
 
@@ -451,24 +444,21 @@ Les rapports sont sauvegardés dans `docs/metrics/` :
 
 ## 🎯 Objectifs et Seuils
 
-| Catégorie     | Métrique                | Objectif                     | Actuel        | Status |
-| ------------- | ----------------------- | ---------------------------- | ------------- | ------ |
-| Performance   | FPS                     | >55                          | 60.81         | ✅     |
-| Performance   | Lighthouse              | ≥98                          | 99            | ✅     |
-| Performance   | Dégradation             | <10%                         | 0.8%          | ⭐     |
-| Accessibility | Lighthouse              | ≥96                          | 96            | ✅     |
-| Accessibility | Reduced Motion          | Conforme                     | Oui           | ✅     |
-| Accessibility | Contraste WCAG          | ≥3:1 UI                      | 8/10          | ⚠️     |
-| Accessibility | Daltonisme Deutéranopie | Conforme                     | 10/10         | ✅     |
-| Accessibility | Daltonisme Protanopie   | Conforme                     | 9/10          | ✅     |
-| Accessibility | Daltonisme Tritanopie   | Conforme                     | 9/10          | ✅     |
-| Accessibility | Indicateurs non-couleur | Présents                     | Oui           | ✅     |
-| Éco           | Bundle gzippé           | <600KB                       | 113.99KB      | ✅     |
-| Éco           | Requêtes                | <10                          | 3             | ✅     |
-| Éco           | CO2/chargement          | Minimal                      | 0.057g        | ✅     |
-| Qualité       | TypeScript              | 0 erreur                     | 0             | ✅     |
-| Qualité       | Tests                   | tous verts                   | badge CI      | -      |
-| Qualité       | Coverage                | seuils de `vitest.config.ts` | badge Codecov | -      |
+| Catégorie     | Métrique                     | Objectif                           | Mesure                     |
+| ------------- | ---------------------------- | ---------------------------------- | -------------------------- |
+| Performance   | FPS                          | >55                                | `npm run audit:fps`        |
+| Performance   | Lighthouse                   | ≥98                                | job CI Lighthouse          |
+| Performance   | Dégradation                  | <10%                               | `npm run audit:datasets`   |
+| Accessibility | Lighthouse                   | ≥96                                | job CI Lighthouse          |
+| Accessibility | Reduced Motion               | Conforme                           | `npm run audit:a11y`       |
+| Accessibility | Contraste WCAG               | ≥3:1 UI                            | `npm run audit:colorblind` |
+| Accessibility | Daltonisme                   | Couleurs de statut différentiables | `npm run audit:colorblind` |
+| Accessibility | Indicateurs non-couleur      | Présents                           | `npm run audit:colorblind` |
+| Éco           | Bundle gzippé                | <600KB                             | job CI Bundle Size Budget  |
+| Éco           | Requêtes, CO2 par chargement | <10 requêtes                       | `npm run audit:full`       |
+| Qualité       | TypeScript                   | 0 erreur                           | `npm run type-check`       |
+| Qualité       | Tests                        | tous verts                         | badge CI                   |
+| Qualité       | Coverage                     | seuils de `vitest.config.ts`       | badge Codecov              |
 
 ---
 

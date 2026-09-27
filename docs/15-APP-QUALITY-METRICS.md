@@ -296,8 +296,8 @@ Utiliser l'attribut `label` du composant:
 4. **Tester** :
 
 ```bash
-npm run audit:risk-levels  # Vérifie contraste risk levels
-npm run audit:daltonisme   # Vérifie daltonisme
+npm run audit:wcag  # Vérifie contraste risk levels
+npm run audit:colorblind   # Vérifie daltonisme
 ```
 
 #### Fichiers à Corriger
@@ -419,8 +419,8 @@ npm run audit:daltonisme   # Vérifie daltonisme
 - [ ] **Audits spécialisés**
   ```bash
   npm run audit:wcag
-  npm run audit:daltonisme
-  npm run audit:risk-levels
+  npm run audit:colorblind
+  npm run audit:wcag
   ```
 
 ---
@@ -499,8 +499,8 @@ node scripts/generate-lighthouse.mjs http://localhost:4173/
 
 # Audits accessibilité
 npm run audit:wcag
-npm run audit:daltonisme
-npm run audit:risk-levels
+npm run audit:colorblind
+npm run audit:wcag
 
 # Performance
 npm run audit:fps

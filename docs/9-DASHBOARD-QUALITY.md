@@ -996,8 +996,8 @@ npm run audit:datasets
 
 # Accessibilité
 npm run audit:a11y
-npm run audit:risk-levels
-npm run audit:daltonisme
+npm run audit:wcag
+npm run audit:colorblind
 
 # Coverage
 npm run test:coverage

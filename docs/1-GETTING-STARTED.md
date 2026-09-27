@@ -273,7 +273,7 @@ npm run build:with-sitemap  # Build + sitemap.xml
 npm run audit:full       # Audit complet
 npm run audit:a11y       # Accessibilité
 npm run audit:fps        # Performance FPS
-npm run audit:risk-levels # Contraste couleurs
+npm run audit:wcag # Contraste couleurs
 ```
 
 ---

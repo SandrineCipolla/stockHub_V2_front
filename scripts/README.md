@@ -7,7 +7,7 @@
 | `audit-fps.mjs`        | Tests FPS avec animations                  | `npm run audit:fps`        |
 | `audit-a11y.mjs`       | Tests accessibilité prefers-reduced-motion | `npm run audit:a11y`       |
 | `audit-datasets.mjs`   | Tests scalabilité avec différents datasets | `npm run audit:datasets`   |
-| `audit-colorblind.mjs` | Tests contraste et daltonisme (4 types)    | `npm run audit:daltonisme` |
+| `audit-colorblind.mjs` | Tests contraste et daltonisme (4 types)    | `npm run audit:colorblind` |
 | `audit-full.mjs`       | Audit complet (tout-en-un)                 | `npm run audit:full`       |
 | `generate-sitemap.ts`  | Génération sitemap SEO                     | Automatique dans build     |
 
@@ -51,7 +51,7 @@ npm run audit:a11y
 npm run audit:datasets
 
 # Tests daltonisme et contraste (~10s)
-npm run audit:daltonisme
+npm run audit:colorblind
 ```
 
 ### Audit Complet
@@ -155,13 +155,9 @@ Vérifier l'accessibilité visuelle des couleurs de statuts pour tous les utilis
 - Bordures colorées de 4px
 - Attributs ARIA (role="status", aria-label)
 
-### Résultats Actuels
+### Résultats
 
-- Contraste : **8/10 tests passent** (optimal et low échouent sur fond clair)
-- Protanopie : 9/10 paires ✅
-- Deutéranopie : 10/10 paires ✅
-- Tritanopie : 9/10 paires ✅
-- Achromatopsie : 4/10 paires ⚠️ (compensé par icônes)
+Affichés par `npm run audit:colorblind`, ils ne sont pas recopiés ici.
 
 ### Conclusion
 
@@ -329,7 +325,7 @@ docs/metrics/audit-complet-{timestamp}.json
    }
    ```
 
-4. **Intégrer dans audit-complet.mjs**
+4. **Intégrer dans audit-full.mjs**
    ```javascript
    const nouveauResult = runCommand('node scripts/test-nouveau.mjs', 'Nouveau test');
    ```
