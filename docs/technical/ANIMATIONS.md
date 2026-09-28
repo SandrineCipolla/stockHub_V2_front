@@ -120,8 +120,8 @@ EXIT_SCALE: 0.95,           // Scale final
 **Fichiers** :
 
 - `src/components/dashboard/__tests__/StockCard.test.tsx`
-- `scripts/test-performance-fps.mjs` (Hover test)
-- `scripts/test-reduced-motion.mjs`
+- `scripts/audit-fps.mjs` (Hover test)
+- `scripts/audit-a11y.mjs`
 
 ---
 
@@ -173,7 +173,7 @@ layout={true}  // Active les transitions de position automatiques
 **Fichiers** :
 
 - `src/components/dashboard/__tests__/StockGrid.test.tsx`
-- `scripts/test-performance-fps.mjs` (Filtrage test)
+- `scripts/audit-fps.mjs` (Filtrage test)
 
 ---
 
@@ -237,8 +237,8 @@ Supporte :
 **Fichiers** :
 
 - `src/components/dashboard/__tests__/MetricCard.test.tsx`
-- `scripts/test-performance-fps.mjs` (CountUp test)
-- `scripts/test-reduced-motion.mjs`
+- `scripts/audit-fps.mjs` (CountUp test)
+- `scripts/audit-a11y.mjs`
 
 ---
 
@@ -303,35 +303,29 @@ function MyComponent() {
 
 ### Tests automatisés
 
-**Script FPS** : `scripts/test-performance-fps.mjs`
+**Script FPS** : `scripts/audit-fps.mjs`
 
 - Mesure FPS pendant 5 scénarios
 - Seuil : >55 FPS en moyenne
 - **Résultat** : 60.81 FPS ✅
 
-**Script datasets** : `scripts/test-animations-datasets.mjs`
+**Script datasets** : `scripts/audit-datasets.mjs`
 
 - Teste 4 tailles de datasets (5, 50, 200, 500 stocks)
 - Seuil : >55 FPS en moyenne
 - **Résultat** : 60.93 FPS, dégradation 0.8% ✅
 
-**Script reduced motion** : `scripts/test-reduced-motion.mjs`
+**Script reduced motion** : `scripts/audit-a11y.mjs`
 
 - Vérifie le respect de `prefers-reduced-motion`
 - **Résultat** : Tous les tests passent ✅
 
-**Script daltonisme** : `scripts/test-daltonisme.mjs`
+**Script daltonisme** : `scripts/audit-colorblind.mjs`
 
 - Teste contraste WCAG (5 statuts × 2 thèmes)
 - Simule 4 types de daltonisme (Protanopie, Deutéranopie, Tritanopie, Achromatopsie)
 - Vérifie différentiabilité des couleurs (Delta E)
-- **Résultats** :
-  - Contraste : 8/10 tests passent ✅
-  - Deutéranopie : 10/10 paires ⭐
-  - Protanopie : 9/10 paires ✅
-  - Tritanopie : 9/10 paires ✅
-  - Achromatopsie : 4/10 paires (compensé par icônes) ✅
-- **Conclusion** : Application pleinement utilisable en vision monochrome grâce aux indicateurs non-couleur (icônes, labels, bordures, ARIA) ✅
+- **Résultats** : `npm run audit:colorblind`
 
 ### Résultats Lighthouse
 
@@ -352,10 +346,10 @@ function MyComponent() {
 npm run build && npm run preview
 
 # Dans un autre terminal
-node scripts/test-performance-fps.mjs
-node scripts/test-animations-datasets.mjs
-node scripts/test-reduced-motion.mjs
-node scripts/test-daltonisme.mjs
+node scripts/audit-fps.mjs
+node scripts/audit-datasets.mjs
+node scripts/audit-a11y.mjs
+node scripts/audit-colorblind.mjs
 
 # Lighthouse audit
 npx lighthouse http://localhost:4173 \\

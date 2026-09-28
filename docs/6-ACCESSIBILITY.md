@@ -99,10 +99,10 @@ Les résultats analytiques ont été validés par les scripts d'audit du projet 
    - Fichier : `scripts/audit-wcag.mjs`
    - Rapport JSON : `docs/metrics/risk-levels-audit-[timestamp].json`
 
-2. **Script daltonisme général** : `npm run audit:daltonisme` ✅
+2. **Script daltonisme général** : `npm run audit:colorblind` ✅
    - Teste les couleurs de STATUS (optimal, low, critical, outOfStock, overstocked)
    - Note : Différent des RISK LEVELS (critical, high, medium, low)
-   - Fichier : `scripts/test-daltonisme.mjs`
+   - Fichier : `scripts/audit-colorblind.mjs`
 
 3. **Outils externes** (validation manuelle possible)
    - WebAIM Contrast Checker : https://webaim.org/resources/contrastchecker/
@@ -266,16 +266,16 @@ Toutes les couleurs de risk levels respectent déjà les normes WCAG AA avec des
   - Script spécifique pour tester les 4 risk levels
   - Calcule ratios de contraste WCAG
   - Simule 4 types de daltonisme
-  - Commande : `npm run audit:risk-levels`
+  - Commande : `npm run audit:wcag`
   - Génère rapport JSON dans `docs/metrics/`
 
 #### Outils Existants
 
-- **`scripts/test-daltonisme.mjs`**
+- **`scripts/audit-colorblind.mjs`**
   - Teste les couleurs de STATUS (différentes des risk levels)
-  - Commande : `npm run audit:daltonisme`
+  - Commande : `npm run audit:colorblind`
 
-- **`scripts/audit-complet.mjs`**
+- **`scripts/audit-full.mjs`**
   - Audit global (performance + accessibilité + éco-conception)
   - Commande : `npm run audit:full`
 

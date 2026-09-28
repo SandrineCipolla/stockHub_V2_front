@@ -22,7 +22,7 @@ Ces scripts sont situés dans `scripts/` et peuvent être exécutés via npm.
 
 **Objectif** : Tester les performances d'animation et s'assurer que le FPS reste >60
 
-**Fichier** : `scripts/test-performance-fps.mjs`
+**Fichier** : `scripts/audit-fps.mjs`
 
 **Quand l'utiliser** :
 
@@ -54,7 +54,7 @@ npm run audit:fps
 
 **Objectif** : Vérifier le respect de `prefers-reduced-motion` pour l'accessibilité
 
-**Fichier** : `scripts/test-reduced-motion.mjs`
+**Fichier** : `scripts/audit-a11y.mjs`
 
 **Quand l'utiliser** :
 
@@ -88,7 +88,7 @@ npm run audit:a11y
 
 **Objectif** : Vérifier que tous les datasets d'animations sont correctement configurés
 
-**Fichier** : `scripts/test-animations-datasets.mjs`
+**Fichier** : `scripts/audit-datasets.mjs`
 
 **Quand l'utiliser** :
 
@@ -115,11 +115,11 @@ npm run audit:datasets
 
 ---
 
-### 4. `npm run audit:daltonisme`
+### 4. `npm run audit:colorblind`
 
 **Objectif** : Tester l'accessibilité visuelle pour les utilisateurs daltoniens
 
-**Fichier** : `scripts/test-daltonisme.mjs`
+**Fichier** : `scripts/audit-colorblind.mjs`
 
 **Quand l'utiliser** :
 
@@ -137,7 +137,7 @@ npm run audit:datasets
 **Comment l'utiliser** :
 
 ```bash
-npm run audit:daltonisme
+npm run audit:colorblind
 ```
 
 **Interprétation des résultats** :
@@ -156,7 +156,7 @@ npm run audit:daltonisme
 
 **Objectif** : Exécuter TOUS les audits en une seule commande
 
-**Fichier** : `scripts/audit-complet.mjs`
+**Fichier** : `scripts/audit-full.mjs`
 
 **Quand l'utiliser** :
 
@@ -171,7 +171,7 @@ Exécute séquentiellement :
 1. `audit:fps`
 2. `audit:a11y`
 3. `audit:datasets`
-4. `audit:daltonisme`
+4. `audit:colorblind`
 
 **Comment l'utiliser** :
 
@@ -198,7 +198,7 @@ npm run audit:full
 npm run audit:fps
 
 # Après modifications de couleurs/thème
-npm run audit:daltonisme
+npm run audit:colorblind
 ```
 
 **Avant Commit** :
