@@ -157,12 +157,13 @@ pour les champs de formulaire de cette app.
 
 ## 4. Compte de test
 
-Même compte que les tests E2E backend ROPC :
-`sandrine.cipolla@gmail.com`, identifiants documentés dans
-`stockhub_back/docs/technical/azure-ad-setup-detailed.md`. Un compte B2C
-dédié n'a pas pu être provisionné par API (voir
-`stockhub_back/docs/troubleshooting/e2e-azure-ropc-issues.md`), donc ce
-compte réel est réutilisé pour les deux approches.
+Même compte que les tests E2E backend ROPC : un compte dédié aux tests,
+jamais un compte personnel. Il a été créé par l'inscription de
+l'application, seul moyen fiable d'obtenir un mot de passe permanent (voir
+`stockhub_back/docs/troubleshooting/e2e-azure-ropc-issues.md`).
+
+Ses identifiants ne s'écrivent pas dans la documentation : demander à la
+propriétaire du projet pour le `.env.e2e` local (ignoré par git).
 
 Secrets GitHub Actions (repo `stockHub_V2_front`, à ajouter avec
 `gh secret set` si absents) : `AZURE_TEST_USERNAME`, `AZURE_TEST_PASSWORD`.
