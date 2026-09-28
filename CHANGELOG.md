@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.17.4](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.3...v1.17.4) (2026-09-28)
+
+
+### 📚 Documentation
+
+* **adr:** [#336](https://github.com/SandrineCipolla/stockHub_V2_front/issues/336) décider de la source des diagrammes et indexer ceux du frontend ([#348](https://github.com/SandrineCipolla/stockHub_V2_front/issues/348)) ([657bde8](https://github.com/SandrineCipolla/stockHub_V2_front/commit/657bde8dc0cd327d599959a588a1eeee6409bf3b))
+* **diagrams:** [#337](https://github.com/SandrineCipolla/stockHub_V2_front/issues/337) inventorier les acteurs et les cas d'utilisation depuis le code ([#349](https://github.com/SandrineCipolla/stockHub_V2_front/issues/349)) ([32d6445](https://github.com/SandrineCipolla/stockHub_V2_front/commit/32d6445db144e8e630cff557d16188c13f1681d9))
+* **docs:** [#342](https://github.com/SandrineCipolla/stockHub_V2_front/issues/342) archiver les plannings de 2025 et renvoyer au GitHub Project ([#343](https://github.com/SandrineCipolla/stockHub_V2_front/issues/343)) ([8e0dfa2](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8e0dfa212f29023a5891f9747aaa0115c5ab6668))
+* **docs:** [#344](https://github.com/SandrineCipolla/stockHub_V2_front/issues/344) fusionner les guides Design System en un seul guide conforme au code ([#346](https://github.com/SandrineCipolla/stockHub_V2_front/issues/346)) ([06e8cab](https://github.com/SandrineCipolla/stockHub_V2_front/commit/06e8cab7905851d34be36cae44b73f7ce6afe47e))
+* **e2e:** [#291](https://github.com/SandrineCipolla/stockHub_V2_front/issues/291) le compte de test E2E est un compte dédié, sans identifiants dans la doc ([#347](https://github.com/SandrineCipolla/stockHub_V2_front/issues/347)) ([8da2cdc](https://github.com/SandrineCipolla/stockHub_V2_front/commit/8da2cdcd21ae478ed3e2e1ef2251eb1d8e91f3b0))
+
 ## [1.17.3](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.2...v1.17.3) (2026-09-28)
 
 
