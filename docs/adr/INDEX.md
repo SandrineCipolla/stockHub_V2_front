@@ -25,6 +25,7 @@ Une référence croisée entre repos se fait par lien explicite vers le fichier 
 | [ADR-011](./ADR-011-playwright-auth-reelle.md)           | Playwright avec authentification interactive réelle pour les E2E frontend    | 2026-07    | Accepté               |
 | [ADR-012](./ADR-012-fetch-natif-plutot-quaxios.md)       | fetch natif plutôt qu'un client HTTP dédié (Axios / ky)                      | 2026-09-09 | Accepté               |
 | [ADR-013](./ADR-013-production-azure-previews-vercel.md) | Production sur Azure Static Web Apps, Vercel pour les previews et le staging | 2026-09-25 | Accepté               |
+| [ADR-014](./ADR-014-diagrammes-generes-ou-mermaid.md)    | Diagrammes générés depuis le code, Mermaid sinon, draw.io pour le reste      | 2026-09-28 | Accepté               |
 
 ## Créer une nouvelle ADR
 
