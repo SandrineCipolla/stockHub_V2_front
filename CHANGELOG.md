@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.17.3](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.2...v1.17.3) (2026-09-28)
+
+
+### 🐛 Bug Fixes
+
+* **deps:** [#329](https://github.com/SandrineCipolla/stockHub_V2_front/issues/329) passer le design system en v2.0.4 ([#330](https://github.com/SandrineCipolla/stockHub_V2_front/issues/330)) ([493d979](https://github.com/SandrineCipolla/stockHub_V2_front/commit/493d9793a9f265e29c1488f53bf4b2b38090f0ef))
+
+
+### 📚 Documentation
+
+* **docs:** [#332](https://github.com/SandrineCipolla/stockHub_V2_front/issues/332) renvoyer vers la source des versions, nombres et dates au lieu de les recopier ([#333](https://github.com/SandrineCipolla/stockHub_V2_front/issues/333)) ([beedffc](https://github.com/SandrineCipolla/stockHub_V2_front/commit/beedffc8726d7ee225b7cf452ea7578a0ab27403))
+* **docs:** [#334](https://github.com/SandrineCipolla/stockHub_V2_front/issues/334) citer les commandes d'audit renommées et retirer leurs résultats recopiés ([#335](https://github.com/SandrineCipolla/stockHub_V2_front/issues/335)) ([088e41a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/088e41aa42a7fdda908728488965cae36680f402))
+
 ## [1.17.2](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.1...v1.17.2) (2026-09-27)
 
 
