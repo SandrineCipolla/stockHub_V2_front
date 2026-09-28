@@ -101,14 +101,7 @@ Navigation clavier complète, contrastes conformes, attributs ARIA appropriés, 
 
 ## Intégration avec le Design System
 
-Installé via GitHub dans `package.json` (`@stockhub/design-system`), importé une fois dans `main.tsx` ou `App.tsx` (`import '@stockhub/design-system'`), puis utilisé comme balise custom en JSX :
-
-```typescript
-<sh-button variant="primary" iconBefore="Plus">Ajouter</sh-button>
-<sh-card hover clickable>
-  <h3>Mon contenu</h3>
-</sh-card>
-```
+Installé via GitHub dans `package.json` (`@stockhub/design-system`) et chargé dans `src/main.tsx`. Les web components sont utilisés à travers des wrappers React qui appellent `React.createElement('sh-…')`, jamais directement en JSX : pattern, événements, propriétés booléennes et ajout d'un composant dans [docs/2-WEB-COMPONENTS-GUIDE.md](docs/2-WEB-COMPONENTS-GUIDE.md).
 
 Liste des composants disponibles et leur usage : Storybook (lien ci-dessus) ou le README du repo `stockhub_design_system`, pas dupliquée ici.
 

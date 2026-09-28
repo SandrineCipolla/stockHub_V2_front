@@ -14,8 +14,7 @@
 | ------ | ------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
 | **0**  | [0-INDEX.md](0-INDEX.md)                                                 | 📍 Vous êtes ici - Index principal                                         |
 | **1**  | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                             | 🚀 **Démarrage rapide** - Installation, premiers pas                       |
-| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)                   | 🎨 Guide utilisation web components React                                  |
-| **3**  | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)             | 🔗 **Harmonisation Frontend ↔ Design System**                              |
+| **2**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)                   | 🎨 Web components du Design System dans React, évolution du Design System  |
 | **4**  | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                             | 🐛 Résolution problèmes web components                                     |
 | **5**  | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)                                 | 🧪 Pyramide de tests, audits performance et accessibilité                  |
 | **6**  | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                                 | ♿ Accessibilité WCAG AA (audit complet)                                   |
@@ -56,8 +55,7 @@
 
 **Dans ce repository (Frontend)** :
 
-- [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md) ⭐ **Guide harmonisation complète**
-- [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md) ⭐ **Utilisation web components React**
+- [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md) ⭐ **Web components dans React, ajout d'un composant au Design System**
 - [V2/DESIGN-SYSTEM-WRAPPERS.md](V2/DESIGN-SYSTEM-WRAPPERS.md) - Architecture wrappers React
 - [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md) - Résolution problèmes courants
 
@@ -71,8 +69,7 @@
 
 Les composants sont répartis en trois catégories, atoms, molecules et organisms. Leur nombre et leur liste évoluent avec le Design System, le Storybook fait foi.
 
-**Liste complète** : Voir [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md#composants-disponibles)
-**Documentation interactive** : [Storybook](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
+**Liste complète et documentation interactive** : [Storybook](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
 
 **Version actuelle** : Gérée via [`package.json`](../package.json)
 
@@ -190,7 +187,7 @@ Documentation archivée (historique du projet pour RNCP) :
 - [archive/design-system/DESIGN-SYSTEM-LEARNINGS.md](archive/design-system/DESIGN-SYSTEM-LEARNINGS.md)
 - [archive/design-system/DESIGN-SYSTEM-IMPROVEMENTS.md](archive/design-system/DESIGN-SYSTEM-IMPROVEMENTS.md)
 - [archive/design-system/DESIGN-SYSTEM-FEEDBACK.md](archive/design-system/DESIGN-SYSTEM-FEEDBACK.md)
-- [archive/STOCKHUB-V2-INTEGRATION.md](archive/STOCKHUB-V2-INTEGRATION.md) - ⚠️ Remplacé par [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)
+- [archive/STOCKHUB-V2-INTEGRATION.md](archive/STOCKHUB-V2-INTEGRATION.md) - ⚠️ Remplacé par [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)
 
 ### Planning (Archivé)
 
@@ -213,7 +210,6 @@ docs/
 ├── 0-INDEX.md (ce fichier)             # 📍 Point d'entrée
 ├── 1-GETTING-STARTED.md                # 🚀 Démarrage rapide
 ├── 2-WEB-COMPONENTS-GUIDE.md          # 🎨 Guide web components
-├── 3-FRONTEND-DS-INTEGRATION.md       # 🔗 Harmonisation Frontend ↔ DS
 ├── 4-TROUBLESHOOTING.md               # 🐛 Debug
 ├── 5-TESTING-GUIDE.md                 # 🧪 Pyramide de tests & audits
 ├── 6-ACCESSIBILITY.md                 # ♿ Accessibilité
@@ -281,16 +277,15 @@ docs/
 
 ### Par Besoin
 
-| Besoin                       | Document                                                     |
-| ---------------------------- | ------------------------------------------------------------ |
-| **Installer le projet**      | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)                 |
-| **Utiliser web components**  | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)       |
-| **Comprendre Frontend ↔ DS** | [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md) |
-| **Problème technique**       | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)                 |
-| **Écrire des tests**         | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md#pyramide-de-tests)   |
-| **Accessibilité**            | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                     |
-| **Sessions développement**   | [7-SESSIONS.md](7-SESSIONS.md)                               |
-| **Suivi RNCP**               | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                   |
+| Besoin                      | Document                                                   |
+| --------------------------- | ---------------------------------------------------------- |
+| **Installer le projet**     | [1-GETTING-STARTED.md](1-GETTING-STARTED.md)               |
+| **Utiliser web components** | [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)     |
+| **Problème technique**      | [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)               |
+| **Écrire des tests**        | [5-TESTING-GUIDE.md](5-TESTING-GUIDE.md#pyramide-de-tests) |
+| **Accessibilité**           | [6-ACCESSIBILITY.md](6-ACCESSIBILITY.md)                   |
+| **Sessions développement**  | [7-SESSIONS.md](7-SESSIONS.md)                             |
+| **Suivi RNCP**              | [8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)                 |
 
 ### Par Sujet
 
@@ -302,7 +297,6 @@ docs/
 
 **Design System**
 
-- Harmonisation : [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)
 - Guide utilisation : [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)
 - Storybook externe : https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/
 

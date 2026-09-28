@@ -178,7 +178,7 @@ import { ButtonWrapper } from '@/components/common/ButtonWrapper';
 </ButtonWrapper>;
 ```
 
-**Documentation complète** : [3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)
+**Documentation complète** : [2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)
 
 ---
 
@@ -402,11 +402,10 @@ npm run build
 1. **[0-INDEX.md](0-INDEX.md)** - Index principal (structure complète)
 2. **[1-GETTING-STARTED.md](1-GETTING-STARTED.md)** - Ce guide
 3. **[2-WEB-COMPONENTS-GUIDE.md](2-WEB-COMPONENTS-GUIDE.md)** - Utilisation web components
-4. **[3-FRONTEND-DS-INTEGRATION.md](3-FRONTEND-DS-INTEGRATION.md)** - Harmonisation Frontend ↔ DS
-5. **[4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)** - Résolution problèmes
-6. **[5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)** - Guide tests
-7. **[7-SESSIONS.md](7-SESSIONS.md)** - Sessions développement
-8. **[8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)** - Suivi RNCP
+4. **[4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md)** - Résolution problèmes
+5. **[5-TESTING-GUIDE.md](5-TESTING-GUIDE.md)** - Guide tests
+6. **[7-SESSIONS.md](7-SESSIONS.md)** - Sessions développement
+7. **[8-RNCP-CHECKLIST.md](8-RNCP-CHECKLIST.md)** - Suivi RNCP
 
 ### Documentation Technique
 
