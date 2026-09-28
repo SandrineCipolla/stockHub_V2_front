@@ -49,6 +49,10 @@ Les rôles s'appliquent **par stock** : une même personne peut être propriéta
 
 - **UC18 : un éditeur peut supprimer le stock**, alors que le stock appartient à quelqu'un d'autre. La route n'exige que le droit d'écriture, commun à `OWNER` et `EDITOR`. La suppression doit être réservée au propriétaire : correction suivie dans [stockhub_back#313](https://github.com/SandrineCipolla/stockhub_back/issues/313). Une fois corrigé, UC18 passe au Propriétaire.
 
+## Évolution prévue
+
+- **Quitter un stock partagé** : un collaborateur (lecteur, contributeur ou éditeur) ne peut pas se retirer lui-même d'un stock aujourd'hui, seul le propriétaire ou un éditeur peut le retirer. Fonctionnalité prévue dans #351, à ajouter comme cas du Lecteur une fois livrée.
+
 ## Hors périmètre
 
 - **Familles** : la notion existe dans la base (tables `Family` et `FamilyMember`) et le domaine du backend, mais aucune fonctionnalité ne l'expose. Ce n'est pas un acteur de l'application actuelle, seulement une évolution possible.
