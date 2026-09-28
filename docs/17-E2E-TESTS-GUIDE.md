@@ -245,4 +245,4 @@ Déclenchement manuel : `gh workflow run e2e-frontend.yml --ref main`.
 - ✅ Workflow mise à jour de quantité (#66, workflow 3)
 
 Les 4 workflows Must-Have de #66 sont couverts par des tests qui tournent en CI.
-Contexte complet des workflows visés : `docs/planning/ISSUE_E2E_FULL_UI_BACKEND.md`.
+Contexte complet des workflows visés : [`archive/planning/ISSUE_E2E_FULL_UI_BACKEND.md`](archive/planning/ISSUE_E2E_FULL_UI_BACKEND.md).

@@ -180,4 +180,4 @@ npx lighthouse http://localhost:4173 --output=json --output-path=docs/metrics/li
 
 - Les rapports sont datés au format `YYYY-MM-DD` pour suivre l'évolution
 - Chaque rapport JSON est versionné avec Git pour traçabilité
-- Un résumé des audits est disponible dans `docs/planning/planning_ameliorations_v2.md`
+- Un résumé des audits est disponible dans `docs/archive/planning/planning_ameliorations_v2.md`
