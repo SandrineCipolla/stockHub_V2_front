@@ -1,48 +1,66 @@
-# Guide d'Utilisation des Web Components du Design System
+# Guide des Web Components du Design System
 
-> Guide pratique pour intégrer les web components du StockHub Design System dans React
+> Utiliser les web components du StockHub Design System dans React, et faire évoluer le Design System depuis le frontend
 
 ## 📋 Table des matières
 
-- [Introduction](#introduction)
-- [Pattern Recommandé](#pattern-recommandé)
-- [Gestion du Thème](#gestion-du-thème)
-- [Événements Custom](#événements-custom)
-- [Propriétés Booléennes](#propriétés-booléennes)
-- [Exemples Complets](#exemples-complets)
-- [Bonnes Pratiques](#bonnes-pratiques)
+- [Frontend et Design System](#frontend-et-design-system)
+- [Installation](#installation)
+- [Pattern recommandé](#pattern-recommandé)
+- [Gestion du thème](#gestion-du-thème)
+- [Événements custom](#événements-custom)
+- [Propriétés booléennes](#propriétés-booléennes)
+- [Exemples dans le code](#exemples-dans-le-code)
+- [Bonnes pratiques](#bonnes-pratiques)
 - [Troubleshooting](#troubleshooting)
+- [Ajouter ou modifier un composant du Design System](#ajouter-ou-modifier-un-composant-du-design-system)
+- [Ressources](#ressources)
 
 ---
 
-## Introduction
+## Frontend et Design System
 
-Le StockHub Design System est basé sur des **Web Components** construits avec Lit Element. Pour les utiliser dans React, il faut suivre certaines conventions spécifiques.
+Le Design System vit dans son propre dépôt, [stockhub_design_system](https://github.com/SandrineCipolla/stockhub_design_system). Les raisons de cette séparation et du choix de Lit sont dans [ADR-001](adr/ADR-001-separation-design-system.md) et [ADR-002](adr/ADR-002-web-components-lit.md).
 
-### Installation
+| Dépôt         | Contient                                                                           |
+| ------------- | ---------------------------------------------------------------------------------- |
+| Design System | Web components `sh-*` (Lit), design tokens, Storybook, tests d'interaction         |
+| Frontend      | Wrappers React autour des web components, pages, hooks, logique métier, appels API |
+
+Le catalogue des composants, leurs propriétés et leurs événements sont dans le [Storybook](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/), qui fait foi.
+
+### Où créer un nouveau composant
+
+**Dans le Design System** si le composant est de la présentation pure, réutilisable, sans logique métier ni dépendance à React.
+
+**Dans le frontend** s'il porte une logique métier, un état React, des hooks, ou s'il n'a de sens que pour une page.
+
+| Composant       | Où            | Pourquoi                         |
+| --------------- | ------------- | -------------------------------- |
+| `sh-button`     | Design System | Présentation pure, réutilisable  |
+| `sh-stock-card` | Design System | Présentation d'un stock          |
+| `Dashboard.tsx` | Frontend      | Page, logique métier             |
+| `StockForm.tsx` | Frontend      | Formulaire avec validation React |
+
+---
+
+## Installation
 
 ```bash
 npm install github:SandrineCipolla/stockhub_design_system#<tag>
 ```
 
-Le tag à utiliser est la dernière version publiée du Design System, visible dans ses [releases](https://github.com/SandrineCipolla/stockhub_design_system/releases). La version installée dans ce dépôt est celle que porte `package.json`.
+Le tag est la dernière version publiée du Design System, visible dans ses [releases](https://github.com/SandrineCipolla/stockhub_design_system/releases). La version installée dans ce dépôt est celle que porte `package.json`.
 
-### Import Global
-
-Dans `main.tsx` :
-
-```typescript
-import '@stockhub/design-system/dist/index.js';
-import '@stockhub/design-system/dist/tokens/design-tokens.css';
-```
+Le chargement se fait dans [`src/main.tsx`](../src/main.tsx) : les design tokens CSS sont importés au démarrage, les web components sont chargés ensuite par un import dynamique, pour ne pas retarder le premier rendu.
 
 ---
 
-## Pattern Recommandé
+## Pattern recommandé
 
-### ✅ Pattern React.createElement() (RECOMMANDÉ)
+### ✅ React.createElement()
 
-C'est le pattern utilisé par tous les wrappers du projet. Il garantit un fonctionnement optimal.
+C'est le pattern de tous les wrappers du projet.
 
 ```typescript
 import React, { useRef, useEffect } from 'react';
@@ -84,10 +102,10 @@ export const MyComponent: React.FC<Props> = ({ theme, selected, onClick }) => {
 };
 ```
 
-### ❌ Pattern JSX (NON RECOMMANDÉ)
+### ❌ JSX
 
 ```typescript
-// ❌ Ne pas faire - peut causer des problèmes de rendu
+// ❌ Ne pas faire
 return (
   <sh-component-name
     data-theme={theme}
@@ -96,19 +114,21 @@ return (
 );
 ```
 
-**Problèmes rencontrés avec JSX :**
+Problèmes rencontrés avec JSX :
 
 - Les propriétés booléennes ne passent pas correctement
 - Le thème peut ne pas s'appliquer
 - Comportement incohérent avec les événements custom
 
+Pourquoi passer par des wrappers plutôt que d'utiliser les web components directement dans les pages : [V2/DESIGN-SYSTEM-WRAPPERS.md](V2/DESIGN-SYSTEM-WRAPPERS.md).
+
 ---
 
-## Gestion du Thème
+## Gestion du thème
 
 ### Attribut data-theme
 
-Tous les composants du Design System supportent le thème via l'attribut `data-theme`.
+Tous les composants du Design System reçoivent le thème par l'attribut `data-theme`.
 
 ```typescript
 import { useTheme } from '@/hooks/useTheme';
@@ -118,50 +138,22 @@ export const MyComponent: React.FC = () => {
 
   return React.createElement('sh-component-name', {
     'data-theme': theme,
-    // ... autres props
   });
 };
 ```
 
-### Hook useTheme
-
-```typescript
-// src/hooks/useTheme.tsx
-export const useTheme = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
-
-  return { theme, toggleTheme };
-};
-```
+Le hook est dans [`src/hooks/useTheme.ts`](../src/hooks/useTheme.ts).
 
 ---
 
-## Événements Custom
+## Événements custom
 
-Les web components émettent des événements custom qu'il faut écouter avec `addEventListener`.
-
-### Pattern d'Écoute
+Les web components émettent des événements custom, préfixés `sh-`, qu'il faut écouter avec `addEventListener`.
 
 ```typescript
 useEffect(() => {
   const handleEvent = (e: Event) => {
-    const customEvent = e as CustomEvent;
-    const { detail } = customEvent;
-
-    console.log('Event detail:', detail);
+    const { detail } = e as CustomEvent;
     onCustomAction?.(detail);
   };
 
@@ -173,21 +165,13 @@ useEffect(() => {
 }, [onCustomAction]);
 ```
 
-### Événements Disponibles
-
-| Composant                  | Événement             | Detail                                  |
-| -------------------------- | --------------------- | --------------------------------------- |
-| `sh-stat-card`             | `sh-stat-click`       | `{ label, value, riskLevel, selected }` |
-| `sh-stock-prediction-card` | `sh-prediction-click` | `{ stockId, stockName, riskLevel }`     |
-| `sh-button`                | `sh-click`            | `{ disabled, loading }`                 |
+La liste des événements de chaque composant est dans le Storybook. Les types TypeScript de leurs `detail` sont dans [`src/types/web-component-events.ts`](../src/types/web-component-events.ts).
 
 ---
 
-## Propriétés Booléennes
+## Propriétés booléennes
 
-Les propriétés booléennes (comme `selected`, `disabled`, `loading`) doivent être assignées via JavaScript, pas comme attributs HTML.
-
-### Pattern avec customElements.whenDefined
+Les propriétés booléennes (`selected`, `disabled`, `loading`) s'assignent en JavaScript, pas comme attributs HTML.
 
 ```typescript
 useEffect(() => {
@@ -202,171 +186,32 @@ useEffect(() => {
 }, [selected]);
 ```
 
-### ❌ Ne pas faire
-
 ```typescript
 // ❌ Ne fonctionne pas correctement
 return React.createElement('sh-component-name', {
-  selected: selected, // Sera converti en string "true"/"false"
+  selected: selected, // Converti en chaîne "true" ou "false"
 });
 ```
 
 ---
 
-## Exemples Complets
+## Exemples dans le code
 
-### Exemple 1 : StatCard avec Filtre
-
-**Fichier :** `src/components/analytics/StatCard.tsx`
-
-```typescript
-import React, { useEffect, useRef } from 'react';
-import { useTheme } from '@/hooks/useTheme';
-
-export interface StatCardProps {
-  value: number;
-  label: string;
-  riskLevel?: 'default' | 'critical' | 'high' | 'medium' | 'low';
-  selected?: boolean;
-  onClick?: () => void;
-  className?: string;
-}
-
-export const StatCard: React.FC<StatCardProps> = ({
-  value,
-  label,
-  riskLevel = 'default',
-  selected = false,
-  onClick,
-  className = '',
-}) => {
-  const { theme } = useTheme();
-  const cardRef = useRef<HTMLElement>(null);
-
-  // Écouter l'événement sh-stat-click
-  useEffect(() => {
-    const handleClick = () => {
-      onClick?.();
-    };
-
-    const card = cardRef.current;
-    if (card) {
-      card.addEventListener('sh-stat-click', handleClick);
-      return () => card.removeEventListener('sh-stat-click', handleClick);
-    }
-  }, [onClick]);
-
-  // Assigner la propriété selected via JavaScript
-  useEffect(() => {
-    if (cardRef.current) {
-      customElements.whenDefined('sh-stat-card').then(() => {
-        if (cardRef.current) {
-          // @ts-expect-error - propriété native du web component
-          cardRef.current.selected = selected;
-        }
-      });
-    }
-  }, [selected]);
-
-  return React.createElement('sh-stat-card', {
-    ref: cardRef,
-    label: label,
-    value: value.toString(),
-    'risk-level': riskLevel,
-    'data-theme': theme,
-    className: className,
-  });
-};
-```
-
-**Utilisation :**
-
-```typescript
-const [filter, setFilter] = useState<string | null>(null);
-
-<StatCard
-  value={15}
-  label="Critique (≤3j)"
-  riskLevel="critical"
-  selected={filter === 'critical'}
-  onClick={() => setFilter('critical')}
-/>
-```
-
-### Exemple 2 : StockPrediction Card
-
-**Fichier :** `src/components/ai/StockPrediction.tsx`
-
-```typescript
-import React from 'react';
-import { useTheme } from '@/hooks/useTheme';
-import type { StockPrediction as StockPredictionData } from '@/utils/mlSimulation';
-
-export interface StockPredictionProps {
-  prediction: StockPredictionData;
-  className?: string;
-  showDetails?: boolean;
-}
-
-export const StockPrediction: React.FC<StockPredictionProps> = ({
-  prediction,
-  className = '',
-  showDetails = true,
-}) => {
-  const { theme } = useTheme();
-
-  const {
-    stockId,
-    stockName,
-    riskLevel,
-    daysUntilRupture,
-    dateOfRupture,
-    confidence,
-    dailyConsumptionRate,
-    currentQuantity,
-    daysUntilRupturePessimistic,
-    daysUntilRuptureOptimistic,
-    recommendedReorderDate,
-    recommendedReorderQuantity,
-  } = prediction;
-
-  return React.createElement('sh-stock-prediction-card', {
-    'stock-id': stockId,
-    'stock-name': stockName,
-    'risk-level': riskLevel,
-    'days-until-rupture': daysUntilRupture !== null ? daysUntilRupture : undefined,
-    'date-of-rupture': dateOfRupture ? dateOfRupture.toISOString() : undefined,
-    confidence: confidence,
-    'daily-consumption-rate': dailyConsumptionRate,
-    'current-quantity': currentQuantity,
-    'days-until-rupture-pessimistic': daysUntilRupturePessimistic,
-    'days-until-rupture-optimistic': daysUntilRuptureOptimistic,
-    'recommended-reorder-date': recommendedReorderDate
-      ? recommendedReorderDate.toISOString()
-      : undefined,
-    'recommended-reorder-quantity': recommendedReorderQuantity,
-    'show-details': showDetails ? '' : undefined,
-    'data-theme': theme,
-    className: className,
-  });
-};
-```
+- [`src/components/analytics/StatCard.tsx`](../src/components/analytics/StatCard.tsx) : événement de sélection, propriété booléenne `selected`, thème
+- [`src/components/ai/StockPrediction.tsx`](../src/components/ai/StockPrediction.tsx) : carte de prédiction
+- Les wrappers de `src/components/*/*Wrapper.tsx`, par exemple [`ButtonWrapper.tsx`](../src/components/common/ButtonWrapper.tsx)
 
 ---
 
-## Bonnes Pratiques
+## Bonnes pratiques
 
-### 1. Toujours Utiliser des Refs
+### 1. Toujours utiliser des refs
 
 ```typescript
 const componentRef = useRef<HTMLElement>(null);
 ```
 
-Les refs permettent d'accéder à l'instance réelle du web component pour :
-
-- Écouter les événements
-- Assigner des propriétés JavaScript
-- Appeler des méthodes publiques
+Les refs donnent accès à l'instance réelle du web component pour écouter les événements, assigner des propriétés JavaScript et appeler ses méthodes publiques.
 
 ### 2. Attendre customElements.whenDefined
 
@@ -376,9 +221,9 @@ customElements.whenDefined('sh-component-name').then(() => {
 });
 ```
 
-Cela garantit que le web component est enregistré avant d'interagir avec lui.
+Le web component est ainsi enregistré avant toute interaction. C'est nécessaire ici, puisque le Design System est chargé après le premier rendu.
 
-### 3. Nettoyer les Event Listeners
+### 3. Nettoyer les event listeners
 
 ```typescript
 useEffect(() => {
@@ -389,12 +234,12 @@ useEffect(() => {
 
   if (element) {
     element.addEventListener('event', handler);
-    return () => element.removeEventListener('event', handler); // ✅ Cleanup
+    return () => element.removeEventListener('event', handler);
   }
 }, []);
 ```
 
-### 4. Conventions de Nommage
+### 4. Conventions de nommage
 
 | Type         | Convention              | Exemple         |
 | ------------ | ----------------------- | --------------- |
@@ -405,121 +250,59 @@ useEffect(() => {
 
 ### 5. TypeScript
 
-```typescript
-// Déclarer les types globaux (déjà fait dans src/types/web-components.d.ts)
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'sh-stat-card': any;
-    }
-  }
-}
-```
+Les déclarations des web components pour TypeScript sont dans [`src/types/web-components.d.ts`](../src/types/web-components.d.ts). Un nouveau composant utilisé dans le frontend y est déclaré avec ses propriétés.
 
 ---
 
 ## Troubleshooting
 
-### Problème : Le web component ne s'affiche pas
+### Le web component ne s'affiche pas
 
-**Causes possibles :**
+Causes possibles :
 
-1. Import manquant dans `main.tsx`
-2. CSS du Design System non importé
-3. Mauvais nom de composant
+1. Chargement du Design System en échec : voir la console, [`src/main.tsx`](../src/main.tsx) y journalise l'erreur
+2. Design tokens CSS non importés
+3. Nom de composant erroné
 
-**Solution :**
+### Le thème ne s'applique pas
 
-```typescript
-// main.tsx
-import '@stockhub/design-system/dist/index.js';
-import '@stockhub/design-system/dist/tokens/design-tokens.css';
-```
-
-### Problème : Le thème ne s'applique pas
-
-**Cause :** Attribut `data-theme` manquant ou mal passé
-
-**Solution :**
+L'attribut `data-theme` est absent ou mal nommé.
 
 ```typescript
 return React.createElement('sh-component', {
-  'data-theme': theme, // ✅ Kebab-case avec guillemets
+  'data-theme': theme, // kebab-case, entre guillemets
 });
 ```
 
-### Problème : La propriété `selected` ne fonctionne pas
+### La propriété `selected` ne fonctionne pas
 
-**Cause :** Tentative d'assigner via attribut HTML au lieu de propriété JS
+Elle est passée comme attribut HTML au lieu d'être assignée en JavaScript. Voir [Propriétés booléennes](#propriétés-booléennes).
 
-**Solution :**
+### Les événements ne sont pas reçus
 
-```typescript
-// ❌ Ne fonctionne pas
-<sh-stat-card selected={true} />
+`onClick` ne fonctionne pas avec les événements des web components : utiliser `addEventListener` sur l'événement `sh-*` du composant. Voir [Événements custom](#événements-custom).
 
-// ✅ Fonctionne
-useEffect(() => {
-  if (ref.current) {
-    customElements.whenDefined('sh-stat-card').then(() => {
-      ref.current.selected = selected;
-    });
-  }
-}, [selected]);
-```
+### Erreur TypeScript « Property does not exist »
 
-### Problème : Les événements ne sont pas reçus
+Le composant n'est pas déclaré dans [`src/types/web-components.d.ts`](../src/types/web-components.d.ts). Les autres erreurs TypeScript liées aux web components sont dans [4-TROUBLESHOOTING.md](4-TROUBLESHOOTING.md).
 
-**Cause :** Utilisation de `onClick` au lieu d'`addEventListener`
+---
 
-**Solution :**
+## Ajouter ou modifier un composant du Design System
 
-```typescript
-// ❌ Ne fonctionne pas avec web components
-<sh-button onClick={handleClick} />
+1. **Dans le Design System** : issue, branche, composant, story Storybook, tests, PR. Le processus est dans le [CONTRIBUTING du Design System](https://github.com/SandrineCipolla/stockhub_design_system/blob/master/CONTRIBUTING.md).
+2. **Publication** : à la fusion sur `master`, Release Please ouvre une PR de release. Sa fusion crée le tag de la nouvelle version.
+3. **Dans le frontend** : installer le nouveau tag (voir [Installation](#installation)). Une nouvelle version majeure du Design System signale un changement incompatible : lire son CHANGELOG avant de mettre à jour.
+4. **Wrapper React** si le composant est utilisé à plusieurs endroits, selon le [pattern recommandé](#pattern-recommandé), et déclaration dans `src/types/web-components.d.ts`.
+5. **Vérification** : `npm run ci:check`, puis un test visuel avec `npm run dev`.
 
-// ✅ Fonctionne
-useEffect(() => {
-  const element = ref.current;
-  if (element) {
-    element.addEventListener('sh-button-click', handleClick);
-    return () => element.removeEventListener('sh-button-click', handleClick);
-  }
-}, [handleClick]);
-```
-
-### Problème : Erreur TypeScript "Property does not exist"
-
-**Cause :** Déclarations TypeScript manquantes
-
-**Solution :**
-Vérifier que `src/types/web-components.d.ts` contient les déclarations :
-
-```typescript
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'sh-stat-card': any;
-      'sh-stock-prediction-card': any;
-      // ...
-    }
-  }
-}
-```
+Un besoin découvert dans le frontend (nouveau composant, bug, accessibilité) fait l'objet d'une issue dans le dépôt du Design System, pas d'un contournement dans le frontend.
 
 ---
 
 ## Ressources
 
-- [Design System Repository](https://github.com/SandrineCipolla/stockhub_design_system)
-- [Storybook Documentation](https://SandrineCipolla.github.io/stockhub_design_system/)
-- [Lit Element Documentation](https://lit.dev/)
-- [Web Components MDN](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
-
----
-
-## Changelog
-
-| Date       | Version | Changements               |
-| ---------- | ------- | ------------------------- |
-| 2025-11-17 | 1.0.0   | Création du guide initial |
+- [Storybook du Design System](https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/)
+- [Dépôt du Design System](https://github.com/SandrineCipolla/stockhub_design_system)
+- [Documentation Lit](https://lit.dev/)
+- [Web Components sur MDN](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
