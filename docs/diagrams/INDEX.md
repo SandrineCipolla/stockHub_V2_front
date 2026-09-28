@@ -17,12 +17,12 @@ Règle de source des diagrammes (généré depuis le code, Mermaid, draw.io) : [
 
 ## Transverses
 
-| Diagramme                          | Emplacement                                                                                                  | Source          |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------- |
-| Architecture des trois dépôts (C4) | [Wiki, Architecture-Globale](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Globale) | Mermaid, manuel |
-| Cas d'utilisation                  | À produire (#337)                                                                                            | draw.io         |
-| Séquences des flux clés            | À produire (#338)                                                                                            | Mermaid, manuel |
-| Schéma général de la sécurité      | À produire (#339)                                                                                            | Mermaid, manuel |
+| Diagramme                          | Emplacement                                                                                                                                              | Source          |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| Architecture des trois dépôts (C4) | [Wiki, Architecture-Globale](https://github.com/SandrineCipolla/stockHub_V2_front/wiki/Architecture-Globale)                                             | Mermaid, manuel |
+| Cas d'utilisation                  | [cas-utilisation.md](cas-utilisation.md) (acteurs et cas), [cas-utilisation.drawio](cas-utilisation.drawio) (diagramme UML, à exporter en `.drawio.svg`) | draw.io         |
+| Séquences des flux clés            | À produire (#338)                                                                                                                                        | Mermaid, manuel |
+| Schéma général de la sécurité      | À produire (#339)                                                                                                                                        | Mermaid, manuel |
 
 ## Autres dépôts
 
