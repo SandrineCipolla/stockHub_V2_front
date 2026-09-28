@@ -45,7 +45,10 @@ Les rôles s'appliquent **par stock** : une même personne peut être propriéta
 | UC22 | Gérer les lecteurs et les contributeurs                         | Éditeur                     | `POST`, `PATCH`, `DELETE` collaborateur, `canActOnRole`                  |
 | UC23 | Gérer les éditeurs                                              | Propriétaire                | `canActOnRole` : seul `OWNER` agit sur `EDITOR`                          |
 
-## Points à trancher
+## Écart connu
 
-- **UC18 : un éditeur peut supprimer le stock.** La route n'exige que le droit d'écriture, commun à `OWNER` et `EDITOR`. Si la suppression doit être réservée au propriétaire, c'est une correction du backend, et UC18 passe au Propriétaire.
-- **Familles** : les tables `Family` et `FamilyMember` existent en base, mais aucune route ne les expose. Il n'y a donc pas de cas d'utilisation ni d'acteur « membre d'une famille » à ce jour.
+- **UC18 : un éditeur peut supprimer le stock**, alors que le stock appartient à quelqu'un d'autre. La route n'exige que le droit d'écriture, commun à `OWNER` et `EDITOR`. La suppression doit être réservée au propriétaire : correction suivie dans [stockhub_back#313](https://github.com/SandrineCipolla/stockhub_back/issues/313). Une fois corrigé, UC18 passe au Propriétaire.
+
+## Hors périmètre
+
+- **Familles** : la notion existe dans la base (tables `Family` et `FamilyMember`) et le domaine du backend, mais aucune fonctionnalité ne l'expose. Ce n'est pas un acteur de l'application actuelle, seulement une évolution possible.
