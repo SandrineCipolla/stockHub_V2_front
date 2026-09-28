@@ -116,16 +116,7 @@ Les composants sont répartis en trois catégories, atoms, molecules et organism
 
 ## 📅 Planning & Roadmaps
 
-### Plannings de 2025 (historique)
-
-- [planning/planning_ameliorations_v2.md](planning/planning_ameliorations_v2.md) ⭐ **Planning principal** (Octobre → Novembre)
-- [planning/PLANNING-NOVEMBRE-2025-UPDATE.md](planning/PLANNING-NOVEMBRE-2025-UPDATE.md) - Travail réel 13-18/11
-- [planning/PLANNING-FINALISATION-NOVEMBRE-2025.md](planning/PLANNING-FINALISATION-NOVEMBRE-2025.md) - Priorités immédiates
-
-### Roadmaps & Stratégies
-
-- [planning/ROADMAP-ARCHITECTURE-EVOLUTION.md](planning/ROADMAP-ARCHITECTURE-EVOLUTION.md) - Évolution architecture
-- [planning/STORYBOOK-ARCHITECTURE-STRATEGY.md](planning/STORYBOOK-ARCHITECTURE-STRATEGY.md) - Stratégie Storybook (historique)
+Le suivi courant est sur le [GitHub Project](https://github.com/users/SandrineCipolla/projects/3) et dans les issues. Les plannings et roadmaps de 2025 sont archivés dans [archive/planning/](archive/planning/).
 
 ---
 
@@ -160,7 +151,6 @@ Les composants sont répartis en trois catégories, atoms, molecules et organism
 
 ### Améliorations & Issues
 
-- [Améliorations Futures](planning/AMELIORATIONS-FUTURES.md) - Améliorations planifiées
 - [GitHub Issues](https://github.com/SandrineCipolla/stockHub_V2_front/issues) - Suivi actif des tâches
 
 ---
@@ -267,13 +257,6 @@ docs/
 │   ├── AI-AGENT.md
 │   └── DESIGN-SYSTEM-WRAPPERS.md
 │
-├── planning/                           # Plannings & roadmaps
-│   ├── planning_ameliorations_v2.md
-│   ├── PLANNING-NOVEMBRE-2025-UPDATE.md
-│   ├── PLANNING-FINALISATION-NOVEMBRE-2025.md
-│   ├── ROADMAP-ARCHITECTURE-EVOLUTION.md
-│   └── STORYBOOK-ARCHITECTURE-STRATEGY.md
-│
 ├── features/                           # Documentation fonctionnalités
 │   └── MODE-LOISIRS-CREATIF.md
 │
@@ -286,7 +269,7 @@ docs/
 └── archive/                            # Archives (historique RNCP)
     ├── recaps/                         # Sessions anciennes
     ├── design-system/                  # Docs DS archivées
-    ├── planning/                       # Planning ancien
+    ├── planning/                       # Plannings et roadmaps 2025
     ├── status/                         # Status docs complétés
     ├── pr-analyses/                    # Analyses PR archivées
     └── STOCKHUB-V2-INTEGRATION.md     # Intégration DS (obsolète)
@@ -351,7 +334,7 @@ docs/
 4. **Exemples de code** avec syntax highlighting
 5. **Références croisées** entre documents
 6. **Archivage** plutôt que suppression (historique RNCP)
-7. **Organisation thématique** (sessions/, technical/, planning/, etc.)
+7. **Organisation thématique** (sessions/, technical/, archive/, etc.)
 
 ---
 
