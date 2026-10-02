@@ -21,7 +21,7 @@ export default defineConfig({
       '**/node_modules/**',
       '**/dist/**',
       '**/.{idea,git,cache,output,temp}/**',
-      'tests/e2e-frontend/**',
+      'tests/e2e-frontend/**/*.e2e.test.ts',
     ],
     poolOptions: {
       threads: {

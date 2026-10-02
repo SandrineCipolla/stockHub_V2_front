@@ -1,4 +1,8 @@
 import { defineConfig } from '@playwright/test';
+import { assertNotProduction } from './tests/e2e-frontend/production-guard';
+
+const baseURL = process.env.E2E_BASE_URL ?? 'http://localhost:5173';
+assertNotProduction(baseURL);
 
 export default defineConfig({
   testDir: './tests/e2e-frontend',
@@ -12,7 +16,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: [['html', { open: 'never' }], ['list']],
   use: {
-    baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:5173',
+    baseURL,
     trace: 'on-first-retry',
     // Contourne le mur Vercel Deployment Protection sur les URLs de preview
     // (ex. le staging git-branch) — sans ce header, toute requête est
