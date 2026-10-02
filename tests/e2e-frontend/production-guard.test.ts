@@ -19,4 +19,16 @@ describe('production-guard', () => {
     expect(isProductionUrl(url)).toBe(false);
     expect(() => assertNotProduction(url)).not.toThrow();
   });
+
+  it.each([
+    'brave-field-03611eb03.5.azurestaticapps.net',
+    'brave-field-03611eb03.5.azurestaticapps.net:443',
+    'localhost:5173',
+    '',
+  ])('refuse une URL sans http:// ni https:// : %s', url => {
+    expect(() => assertNotProduction(url)).toThrow(/URL complète/);
+  });
+  it('accepte le schéma en majuscules', () => {
+    expect(isProductionUrl('HTTPS://brave-field-03611eb03.5.azurestaticapps.net')).toBe(true);
+  });
 });
