@@ -33,6 +33,10 @@ cp .env.e2e.example .env.e2e
 
 ## 2. Utilisation en local (pas à pas)
 
+`playwright.config.ts` refuse de démarrer si `E2E_BASE_URL` pointe vers la production
+(hôtes `*.azurestaticapps.net`, `*.azurewebsites.net` et l'ancien déploiement Vercel de production), voir
+`tests/e2e-frontend/production-guard.ts`.
+
 **Par défaut, cible le staging** (`stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app`,
 backend Render + base Aiven, isolée de la prod), **jamais**
 la production Azure (voir §CI plus bas et [[Environnements]] du
