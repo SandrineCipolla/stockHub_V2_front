@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.17.5](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.4...v1.17.5) (2026-10-02)
+
+
+### 🐛 Bug Fixes
+
+* **e2e:** [#317](https://github.com/SandrineCipolla/stockHub_V2_front/issues/317) refuser de lancer les tests E2E contre la production ([#355](https://github.com/SandrineCipolla/stockHub_V2_front/issues/355)) ([0975f3a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/0975f3a3155394dd50e088b72a27be4cffe4262a))
+* **privacy:** [#350](https://github.com/SandrineCipolla/stockHub_V2_front/issues/350) corriger les emplacements de stockage annoncés sur la page de confidentialité ([#354](https://github.com/SandrineCipolla/stockHub_V2_front/issues/354)) ([1c3b3e6](https://github.com/SandrineCipolla/stockHub_V2_front/commit/1c3b3e6cc6cc025f4d112ee3f06f850f94b032ea))
+
+
+### 🔧 Chores
+
+* **deps:** bump the minor-and-patch group across 1 directory with 13 updates ([#352](https://github.com/SandrineCipolla/stockHub_V2_front/issues/352)) ([34f3541](https://github.com/SandrineCipolla/stockHub_V2_front/commit/34f35418d84c39f698c36de84dceb01d956b1827))
+
 ## [1.17.4](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.3...v1.17.4) (2026-09-28)
 
 
