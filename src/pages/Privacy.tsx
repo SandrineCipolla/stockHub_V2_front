@@ -122,14 +122,32 @@ export const Privacy: React.FC = () => {
               </thead>
               <tbody>
                 <tr className={`border-t ${themeClasses.tableRow}`}>
-                  <td className="px-4 py-2">Token Azure B2C (localStorage)</td>
+                  <td className="px-4 py-2">Jetons Azure B2C (sessionStorage)</td>
                   <td className={`px-4 py-2 ${themeClasses.textMuted}`}>Authentification</td>
                   <td className={`px-4 py-2 ${themeClasses.textMuted}`}>Strictement nécessaire</td>
                   <td className="px-4 py-2 text-emerald-500 font-medium">Non</td>
                 </tr>
                 <tr className={`border-t ${themeClasses.tableRow}`}>
-                  <td className="px-4 py-2">stockhub_consent (localStorage)</td>
-                  <td className={`px-4 py-2 ${themeClasses.textMuted}`}>Mémorisation du choix</td>
+                  <td className="px-4 py-2">stockhub_consent (sessionStorage)</td>
+                  <td className={`px-4 py-2 ${themeClasses.textMuted}`}>
+                    Mémorisation du choix pour l'onglet en cours
+                  </td>
+                  <td className={`px-4 py-2 ${themeClasses.textMuted}`}>Strictement nécessaire</td>
+                  <td className="px-4 py-2 text-emerald-500 font-medium">Non</td>
+                </tr>
+                <tr className={`border-t ${themeClasses.tableRow}`}>
+                  <td className="px-4 py-2">stockhub_username (localStorage)</td>
+                  <td className={`px-4 py-2 ${themeClasses.textMuted}`}>
+                    Affichage de votre nom dans l'en-tête
+                  </td>
+                  <td className={`px-4 py-2 ${themeClasses.textMuted}`}>Strictement nécessaire</td>
+                  <td className="px-4 py-2 text-emerald-500 font-medium">Non</td>
+                </tr>
+                <tr className={`border-t ${themeClasses.tableRow}`}>
+                  <td className="px-4 py-2">stockhub-theme (localStorage)</td>
+                  <td className={`px-4 py-2 ${themeClasses.textMuted}`}>
+                    Mémorisation du thème clair ou sombre
+                  </td>
                   <td className={`px-4 py-2 ${themeClasses.textMuted}`}>Strictement nécessaire</td>
                   <td className="px-4 py-2 text-emerald-500 font-medium">Non</td>
                 </tr>
@@ -156,8 +174,16 @@ export const Privacy: React.FC = () => {
             Durée de conservation
           </h2>
           <ul className={`text-sm space-y-2 list-disc list-inside ${themeClasses.textMuted}`}>
-            <li>Tokens Azure B2C : durée de la session (expiration automatique, max 1 heure)</li>
-            <li>Préférence de consentement (localStorage) : jusqu'à effacement du navigateur</li>
+            <li>
+              Jetons Azure B2C (sessionStorage) : durée de l'onglet (expiration automatique, max 1
+              heure)
+            </li>
+            <li>Choix de consentement (sessionStorage) : durée de l'onglet</li>
+            <li>
+              Nom affiché dans l'en-tête (localStorage) : jusqu'à la déconnexion ou l'effacement du
+              navigateur
+            </li>
+            <li>Thème (localStorage) : jusqu'à l'effacement du navigateur</li>
             <li>Données Application Insights : 90 jours (politique Microsoft par défaut)</li>
           </ul>
         </section>
@@ -194,9 +220,10 @@ export const Privacy: React.FC = () => {
             >
               créer une issue sur GitHub
             </a>
-            . Pour retirer votre consentement Analytics, effacez la clé{' '}
+            . Votre choix n'est gardé que pour l'onglet en cours. Pour retirer votre consentement
+            Analytics, fermez l'onglet ou effacez la clé{' '}
             <code className="font-mono text-xs bg-slate-700 px-1 rounded">stockhub_consent</code>{' '}
-            dans le localStorage de votre navigateur.
+            dans le sessionStorage de votre navigateur.
           </p>
         </section>
       </main>
