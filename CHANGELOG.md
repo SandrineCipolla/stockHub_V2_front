@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.18.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.5...v1.18.0) (2026-10-04)
+
+
+### ✨ Features
+
+* **ci:** [#314](https://github.com/SandrineCipolla/stockHub_V2_front/issues/314) déployer l'environnement feature sur Azure Static Web Apps ([#360](https://github.com/SandrineCipolla/stockHub_V2_front/issues/360)) ([3c78e9b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/3c78e9b4ead89233a97ff5aef7309aee77a31177))
+
+
+### 📚 Documentation
+
+* **adr:** [#314](https://github.com/SandrineCipolla/stockHub_V2_front/issues/314) proposer ADR-015 staging et feature sur Azure Static Web Apps ([#356](https://github.com/SandrineCipolla/stockHub_V2_front/issues/356)) ([728e7b6](https://github.com/SandrineCipolla/stockHub_V2_front/commit/728e7b6632228bfd46e3601e61feb3cd2fc2df16))
+
+
+### 🔧 Chores
+
+* **ci:** [#357](https://github.com/SandrineCipolla/stockHub_V2_front/issues/357) limiter le blocage de npm audit aux dépendances de production ([#358](https://github.com/SandrineCipolla/stockHub_V2_front/issues/358)) ([504e8ba](https://github.com/SandrineCipolla/stockHub_V2_front/commit/504e8ba76e17844d1d978e1782ce4bffc57d1348))
+
 ## [1.17.5](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.4...v1.17.5) (2026-10-02)
 
 
