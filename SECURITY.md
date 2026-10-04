@@ -32,7 +32,7 @@ Aucun délai de réponse n'est garanti. Vous serez tenu informé de l'avancement
 
 ### Contrôles automatiques
 
-`security-audit.yml` exécute `npm audit --audit-level=high` : les vulnérabilités HIGH et CRITICAL bloquent le build. Les vulnérabilités MODERATE et LOW sont remontées à titre informatif.
+`security-audit.yml` exécute `npm audit --omit=dev --audit-level=high` : les vulnérabilités HIGH et CRITICAL des dépendances de production bloquent le build. Celles des dépendances de développement, ainsi que les vulnérabilités MODERATE et LOW, sont remontées à titre informatif.
 
 Le workflow s'exécute sur chaque pull request vers `main`, sur chaque push sur `main`, chaque lundi à 5h00 UTC, et sur déclenchement manuel.
 

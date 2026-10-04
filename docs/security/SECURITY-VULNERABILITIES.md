@@ -4,6 +4,26 @@ Ce document trace toutes les vulnérabilités de sécurité découvertes et corr
 
 ---
 
+## 🟠 Avis `braces` (GHSA-vfj7-8cjw-p6xm) : risque accepté, en attente de correctif
+
+**Date de découverte :** 2026-10-04
+**Sévérité :** HIGH
+**Statut :** non corrigée, aucune version corrigée de `braces` n'existe
+
+### Description
+
+`braces <= 3.0.3` est vulnérable à un déni de service par épuisement de pile sur des motifs très imbriqués. Il est atteint par `tailwindcss` 3, `chokidar`, `micromatch` et `fast-glob`, des outils de build.
+
+### Impact sur StockHub Frontend
+
+Aucun sur le bundle livré aux navigateurs : `npm audit --omit=dev` ne trouve aucune vulnérabilité. Le contrôle de sécurité bloque désormais uniquement les dépendances de production (#357), l'avis reste visible dans l'étape informative.
+
+### Suite
+
+La migration vers Tailwind v4 (#209) retire cette chaîne de dépendances. Cette entrée sera complétée à la résolution.
+
+---
+
 ## 🟡 Lot de septembre 2026 : 37 vulnérabilités npm résolues en un lot
 
 **Date de découverte :** 2026-09-20
