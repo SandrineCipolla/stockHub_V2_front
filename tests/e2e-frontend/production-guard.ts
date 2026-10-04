@@ -1,6 +1,12 @@
 // Les tests E2E créent et suppriment des stocks avec un vrai compte : ils ne
 // doivent jamais viser la production (#317). Production = Azure Static Web Apps
-// (frontend) et Azure App Service (backend), plus l'ancien déploiement Vercel.
+// (frontend de production) et Azure App Service (backend), plus l'ancien déploiement Vercel.
+// Les environnements de test nommés sur Azure SWA (staging, feature) sont autorisés (#314, ADR-015).
+const ALLOWED_TEST_HOSTS = [
+  'brave-field-03611eb03-staging.5.azurestaticapps.net',
+  'brave-field-03611eb03-feature.5.azurestaticapps.net',
+];
+
 const PRODUCTION_HOST_SUFFIXES = ['.azurestaticapps.net', '.azurewebsites.net'];
 const PRODUCTION_HOSTS = ['stock-hub-v2-front.vercel.app'];
 
@@ -22,6 +28,9 @@ const parseBaseUrl = (url: string): URL => {
 
 export const isProductionUrl = (url: string): boolean => {
   const { hostname } = parseBaseUrl(url);
+  if (ALLOWED_TEST_HOSTS.includes(hostname)) {
+    return false;
+  }
   return (
     PRODUCTION_HOSTS.includes(hostname) ||
     PRODUCTION_HOST_SUFFIXES.some(suffix => hostname.endsWith(suffix))
