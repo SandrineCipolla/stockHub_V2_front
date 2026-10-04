@@ -15,6 +15,9 @@ describe('production-guard', () => {
   it.each([
     'http://localhost:5173',
     'https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app',
+    'https://brave-field-03611eb03-staging.5.azurestaticapps.net',
+    'https://brave-field-03611eb03-staging.5.azurestaticapps.net/dashboard',
+    'https://brave-field-03611eb03-feature.5.azurestaticapps.net',
   ])('laisse passer : %s', url => {
     expect(isProductionUrl(url)).toBe(false);
     expect(() => assertNotProduction(url)).not.toThrow();
