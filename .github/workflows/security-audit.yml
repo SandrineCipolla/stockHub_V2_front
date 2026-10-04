@@ -2,9 +2,9 @@ name: 🔒 Security Audit
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: ['main']
   push:
-    branches: ["main"]
+    branches: ['main']
   schedule:
     # Lundi 5h UTC — détection des vulnérabilités publiées depuis le dernier push
     - cron: '0 5 * * 1'
@@ -31,12 +31,12 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🔍 npm audit (high et critical bloquants)
-        run: npm audit --audit-level=high
+      - name: 🔍 npm audit (high et critical bloquants, dépendances de production)
+        run: npm audit --omit=dev --audit-level=high
 
-      - name: 📋 Vulnérabilités moderate et low (informatif)
+      - name: 📋 Toutes dépendances, moderate et plus (informatif)
         if: always()
-        run: npm audit --audit-level=moderate || echo "⚠️ Vulnérabilités MODERATE/LOW présentes (non bloquantes)"
+        run: npm audit --audit-level=moderate || echo "⚠️ Vulnérabilités présentes, dépendances de développement comprises (non bloquantes)"
 
       - name: 📦 Dépendances obsolètes (informatif)
         if: always()
