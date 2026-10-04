@@ -34,16 +34,20 @@ cp .env.e2e.example .env.e2e
 ## 2. Utilisation en local (pas à pas)
 
 `playwright.config.ts` refuse de démarrer si `E2E_BASE_URL` pointe vers la production
-(l'hôte Azure SWA `brave-field-03611eb03.5.azurestaticapps.net`, `*.azurewebsites.net` et l'ancien déploiement Vercel de production), voir
-`tests/e2e-frontend/production-guard.ts`. Les environnements de test nommés sur Azure SWA (`staging`, `feature`) sont autorisés (#314, ADR-015).
+(hôtes `*.azurestaticapps.net`, `*.azurewebsites.net` et l'ancien déploiement Vercel de production), voir
+`tests/e2e-frontend/production-guard.ts`. Deux hôtes de test restent autorisés sous `*.azurestaticapps.net` : ceux des environnements `staging` et `feature` de l'ADR-015.
 
-**Par défaut, cible le staging** (`https://brave-field-03611eb03-staging.5.azurestaticapps.net`,
+**Par défaut, cible le staging** (`stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app`,
 backend Render + base Aiven, isolée de la prod), **jamais**
 la production Azure (voir §CI plus bas et [[Environnements]] du
-wiki) :
+wiki). Le staging est protégé par le mur Vercel Authentication, d'où le
+`VERCEL_AUTOMATION_BYPASS_SECRET` en plus des identifiants B2C (valeur
+dans Vercel → Project Settings → Deployment Protection → "Protection
+Bypass for Automation") :
 
 ```bash
-E2E_BASE_URL=https://brave-field-03611eb03-staging.5.azurestaticapps.net \
+E2E_BASE_URL=https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app \
+VERCEL_AUTOMATION_BYPASS_SECRET=<valeur du dashboard Vercel> \
 npx dotenv-cli -e .env.e2e -- npx playwright test --ui
 ```
 
@@ -57,10 +61,10 @@ Sans `dotenv-cli`, exporter les variables manuellement :
 
 ```bash
 # PowerShell
-$env:E2E_BASE_URL="https://brave-field-03611eb03-staging.5.azurestaticapps.net"; $env:AZURE_TEST_USERNAME="..."; $env:AZURE_TEST_PASSWORD="..."; npx playwright test --ui
+$env:E2E_BASE_URL="https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app"; $env:VERCEL_AUTOMATION_BYPASS_SECRET="..."; $env:AZURE_TEST_USERNAME="..."; $env:AZURE_TEST_PASSWORD="..."; npx playwright test --ui
 
 # bash
-E2E_BASE_URL=https://brave-field-03611eb03-staging.5.azurestaticapps.net AZURE_TEST_USERNAME=... AZURE_TEST_PASSWORD=... npx playwright test --ui
+E2E_BASE_URL=https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app VERCEL_AUTOMATION_BYPASS_SECRET=... AZURE_TEST_USERNAME=... AZURE_TEST_PASSWORD=... npx playwright test --ui
 ```
 
 ### Ce qui se passe au lancement
@@ -220,16 +224,21 @@ manuellement (`workflow_dispatch`) ou chaque lundi 6h UTC, **pas** sur
 chaque push/PR, pour ne pas rendre la CI principale dépendante d'un vrai
 login réseau contre Azure AD B2C.
 
-**Cible le staging** (`https://brave-field-03611eb03-staging.5.azurestaticapps.net`,
+**Cible le staging** (`https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app`,
 backend Render + base Aiven MySQL, isolée de la prod), **jamais**
 la production Azure. Un test E2E crée/modifie/supprime des
 données réelles à chaque run : voir [[Environnements]] du wiki pour le
 détail des environnements.
 
-L'environnement de staging sur Azure Static Web Apps ne nécessite aucun mur
-d'authentification de type Vercel ni de secret de contournement (ADR-015).
+Le staging Vercel est protégé par le mur "Vercel Authentication" (SSO),
+actif par défaut sur les déploiements Preview de l'équipe. La CI le
+contourne via le secret `VERCEL_AUTOMATION_BYPASS_SECRET` (généré dans
+Vercel → Project Settings → Deployment Protection → "Protection Bypass
+for Automation", stocké comme secret GitHub), envoyé en header
+`x-vercel-protection-bypass` sur chaque requête (`playwright.config.ts`).
 
-Secrets repo requis : `AZURE_TEST_USERNAME`, `AZURE_TEST_PASSWORD`.
+Secrets repo requis : `AZURE_TEST_USERNAME`, `AZURE_TEST_PASSWORD`,
+`VERCEL_AUTOMATION_BYPASS_SECRET`.
 
 Déclenchement manuel : `gh workflow run e2e-frontend.yml --ref main`.
 
