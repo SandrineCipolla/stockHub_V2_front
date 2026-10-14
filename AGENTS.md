@@ -6,7 +6,7 @@ Process de contribution (branches, commits, PR, workflow par ticket, gestion des
 
 Règles pour tout agent IA travaillant sur ce repo (Claude Code, Cursor, etc.). `CLAUDE.md` importe ce fichier.
 
-<!-- commun:debut repositories v1 -->
+<!-- commun:debut repositories v2 -->
 <!-- Bloc commun aux trois repos StockHub : le modifier à l'identique dans les trois, en incrémentant la version. Vérifié par check-docs. -->
 
 ## Repositories du projet StockHub
