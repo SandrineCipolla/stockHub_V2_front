@@ -18,12 +18,6 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
-    // Contourne le mur Vercel Deployment Protection sur les URLs de preview
-    // (ex. le staging git-branch) — sans ce header, toute requête est
-    // redirigée vers vercel.com/sso-api avant même d'atteindre l'app.
-    extraHTTPHeaders: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-      ? { 'x-vercel-protection-bypass': process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
-      : undefined,
   },
   projects: [
     {

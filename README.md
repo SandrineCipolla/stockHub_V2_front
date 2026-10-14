@@ -64,13 +64,14 @@ Bypass en cas d'urgence uniquement : `git commit --no-verify`, `git push --no-ve
 
 ## Déploiement
 
-| Environnement | Plateforme                             | Déclenchement               |
-| ------------- | -------------------------------------- | --------------------------- |
-| Local         | `npm run dev`                          | manuel                      |
-| Staging       | Vercel (branche `staging`)             | preview automatique par PR  |
-| Production    | Azure Static Web Apps (branche `main`) | automatique sur push `main` |
+| Environnement | Plateforme                             | Déclenchement                 |
+| ------------- | -------------------------------------- | ----------------------------- |
+| Local         | `npm run dev`                          | manuel                        |
+| Staging       | Azure Static Web Apps (`staging`)      | automatique sur push `main`   |
+| Feature       | Azure Static Web Apps (`feature`)      | manuel, une branche à la fois |
+| Production    | Azure Static Web Apps (branche `main`) | automatique sur push `main`   |
 
-Déploiement manuel Vercel : `vercel --prod`.
+Tester une branche en ligne : lancer le workflow `azure-swa-test-envs-deploy.yml` avec l'environnement `feature`. Détail : [docs/technical/DEPLOYMENT-ARCHITECTURE.md](docs/technical/DEPLOYMENT-ARCHITECTURE.md).
 
 ## Design System
 
