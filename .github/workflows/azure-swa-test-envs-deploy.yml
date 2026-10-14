@@ -1,16 +1,35 @@
-name: 🧪 Azure Static Web Apps — Deploy Feature
+name: 🧪 Azure Static Web Apps — Deploy staging / feature
 
+# staging : miroir de `main`, déployé à chaque push sur `main`.
+# feature : déploiement manuel d'une branche pour la tester en ligne (une à la fois).
+# Les deux appellent le backend de test (Render), jamais celui de la production. Voir ADR-015.
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environnement cible'
+        type: choice
+        options:
+          - feature
+          - staging
+        default: feature
 
 permissions:
   contents: read
   pull-requests: write
 
+# Un seul déploiement à la fois par environnement.
+concurrency:
+  group: azure-swa-${{ github.event_name == 'push' && 'staging' || inputs.environment }}
+  cancel-in-progress: false
+
 jobs:
-  deploy_feature:
+  deploy_test_env:
     runs-on: ubuntu-latest
-    name: 🏗️ Deploy Feature
+    name: 🏗️ Deploy ${{ github.event_name == 'push' && 'staging' || inputs.environment }}
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -27,7 +46,7 @@ jobs:
         run: |
           npm ci --no-optional && npm install --no-save @rollup/rollup-linux-x64-gnu || npm ci
 
-      - name: 🏗️ Build (feature -> backend Render de test)
+      - name: 🏗️ Build (backend Render de test)
         env:
           VITE_API_SERVER_URL: https://stockhub-back.onrender.com/api
           VITE_API_V1: /v1
@@ -46,7 +65,7 @@ jobs:
       - name: 🧪 Tests
         run: npm run test:run
 
-      - name: 🚀 Deploy to Azure Static Web Apps (Feature)
+      - name: 🚀 Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BRAVE_FIELD_03611EB03 }}
@@ -57,4 +76,4 @@ jobs:
           app_location: 'dist'
           api_location: ''
           output_location: ''
-          deployment_environment: 'feature'
+          deployment_environment: ${{ github.event_name == 'push' && 'staging' || inputs.environment }}

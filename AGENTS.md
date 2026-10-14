@@ -19,13 +19,14 @@ Règles pour tout agent IA travaillant sur ce repo (Claude Code, Cursor, etc.). 
 
 ### Environnements
 
-| Env        | Frontend                                                                                                 | Backend                                                                                             | Base de données             |
-| ---------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------- |
-| Local      | `localhost:5173`                                                                                         | `localhost:3006` (Docker)                                                                           | MySQL Docker, port 3308     |
-| Staging    | Vercel, branche `staging` : https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app/ | Render.com, suit `main` : https://stockhub-back.onrender.com/api                                    | Aiven MySQL                 |
-| Production | Azure Static Web Apps, branche `main` : https://brave-field-03611eb03.5.azurestaticapps.net              | Azure App Service, plan F1 : https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net | Azure MySQL Flexible Server |
+| Env        | Frontend                                                                                                                       | Backend                                                                                             | Base de données             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | --------------------------- |
+| Local      | `localhost:5173`                                                                                                               | `localhost:3006` (Docker)                                                                           | MySQL Docker, port 3308     |
+| Staging    | Azure Static Web Apps, environnement `staging`, miroir de `main` : https://brave-field-03611eb03-staging.5.azurestaticapps.net | Render.com, suit `main` : https://stockhub-back.onrender.com/api                                    | Aiven MySQL                 |
+| Feature    | Azure Static Web Apps, environnement `feature`, branche à tester : https://brave-field-03611eb03-feature.5.azurestaticapps.net | Render.com, suit `main` : https://stockhub-back.onrender.com/api                                    | Aiven MySQL                 |
+| Production | Azure Static Web Apps, branche `main` : https://brave-field-03611eb03.5.azurestaticapps.net                                    | Azure App Service, plan F1 : https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net | Azure MySQL Flexible Server |
 
-- Répartition des hébergeurs : [ADR-013 du frontend](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/adr/ADR-013-production-azure-previews-vercel.md). Le staging est en réparation (frontend #314).
+- Répartition des hébergeurs : [ADR-015 du frontend](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/adr/ADR-015-staging-feature-azure-static-web-apps.md), proposée, qui supplante l'[ADR-013](https://github.com/SandrineCipolla/stockHub_V2_front/blob/main/docs/adr/ADR-013-production-azure-previews-vercel.md) une fois acceptée (#314). Détail : [DEPLOYMENT-ARCHITECTURE.md](docs/technical/DEPLOYMENT-ARCHITECTURE.md).
 - Le plan F1 d'Azure App Service a un quota CPU journalier : `npm run azure:start` avant de tester en production, `npm run azure:stop` après (repo backend).
 - Design System : Storybook sur https://68f5fbe10f495706cb168751-nufqfdjaoc.chromatic.com/, package `@stockhub/design-system` installé depuis GitHub (version dans le `package.json` du frontend).
 
@@ -38,8 +39,8 @@ Règles pour tout agent IA travaillant sur ce repo (Claude Code, Cursor, etc.). 
 
 ## Branches et déploiements
 
-- `main` : production Azure, automatiquement (frontend et backend)
-- `staging` : environnement de test à URL fixe. Pour tester une branche, la pousser sur `staging` (`git push -f origin <branche>:staging`), sans changer la branche dans les réglages Vercel. Voir l'ADR-013 et #314.
+- `main` : production Azure, automatiquement (frontend et backend), et mise à jour de l'environnement `staging`
+- `feature` : pour tester une branche en ligne avant son merge, lancer `gh workflow run azure-swa-test-envs-deploy.yml --ref <branche> -f environment=feature`, une branche à la fois. Voir l'ADR-015 et #314.
 - Les previews Vercel par branche s'ouvrent, mais la connexion B2C y échoue : leurs URL ne sont pas déclarées dans les redirect URIs.
 
 ## Piège `.env.local` (dev local)

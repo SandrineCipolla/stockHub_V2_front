@@ -1,71 +1,50 @@
 # Architecture de Déploiement : StockHub V2
 
-> Documentation de l'architecture de déploiement staging (Vercel) et production (Azure).
+> Documentation de l'architecture de déploiement : production, `staging` et `feature` sur Azure Static Web Apps.
 
 ---
 
 ## Vue d'ensemble
 
-| Environnement  | Hébergement           | Branche   | Backend                                                                              |
-| -------------- | --------------------- | --------- | ------------------------------------------------------------------------------------ |
-| **Production** | Azure Static Web Apps | `main`    | Azure App Service (`stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net`) |
-| **Staging**    | Vercel                | `staging` | Render.com (`stockhub-back.onrender.com`)                                            |
+| Environnement  | Hébergement                                    | Déclenchement                 | Backend                                                                              |
+| -------------- | ---------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------ |
+| **Production** | Azure Static Web Apps                          | push sur `main`               | Azure App Service (`stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net`) |
+| **Staging**    | Azure Static Web Apps, environnement `staging` | push sur `main`               | Render.com (`stockhub-back.onrender.com`)                                            |
+| **Feature**    | Azure Static Web Apps, environnement `feature` | manuel, une branche à la fois | Render.com (`stockhub-back.onrender.com`)                                            |
+
+Les URL des trois environnements sont dans le tableau des environnements de [AGENTS.md](../../AGENTS.md). Décision et alternatives : [ADR-015](../adr/ADR-015-staging-feature-azure-static-web-apps.md).
 
 ---
 
-## Staging : Vercel
+## Staging et feature : Azure Static Web Apps
 
-### Configuration
+`staging` et `feature` sont des environnements nommés de la ressource de production. Ils partagent son jeton de déploiement, ses secrets `VITE_*` B2C et son quota gratuit.
 
-- **Intégration** : GitHub native (pas de workflow GitHub Actions)
-- **Branche déployée** : `staging`
-- **URL fixe** : `https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app/`
-- **Preview deployments** : activés automatiquement sur chaque PR
+### Workflow
 
-### Fichiers de configuration
+`.github/workflows/azure-swa-test-envs-deploy.yml` :
 
-- `vercel.json` : commandes build + rewrite SPA
-- `.env.staging.example` : variables de référence pour le dashboard Vercel
-- `.env.staging` : valeurs réelles (gitignorées, configurées dans Vercel dashboard)
+- **`staging`** : se lance à chaque push sur `main`. C'est la cible des E2E hebdomadaires ([guide E2E](../17-E2E-TESTS-GUIDE.md))
+- **`feature`** : se lance à la main sur la branche à tester, une à la fois. Le test suivant, ou un déploiement de `main` dans `feature`, la remplace
 
-### `vercel.json`
-
-```json
-{
-  "installCommand": "npm ci --no-optional && npm install --no-save @rollup/rollup-linux-x64-gnu || npm ci",
-  "buildCommand": "npm run build",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "git": {
-    "deploymentEnabled": {
-      "main": false
-    }
-  }
-}
+```bash
+gh workflow run azure-swa-test-envs-deploy.yml --ref <branche> -f environment=feature
 ```
 
-> Le rewrite SPA est obligatoire pour `BrowserRouter` : sans lui, toute URL directe retourne 404.
+Le build appelle le backend Render, dont l'URL est écrite dans le workflow, et non celui de la production. Le déploiement de la production est un workflow à part (voir plus bas) : un échec de `staging` ne le bloque pas.
 
-> `deploymentEnabled.main: false` empêche Vercel de construire la branche `main`. La production est publiée uniquement sur Azure Static Web Apps. Les previews des autres branches restent actives.
+### Azure AD B2C et CORS
 
-### Variables d'environnement (Vercel dashboard)
+Chaque URL d'environnement est à enregistrer une fois, à la main :
 
-| Variable                      | Valeur staging                                                     |
-| ----------------------------- | ------------------------------------------------------------------ |
-| `VITE_API_SERVER_URL`         | `https://stockhub-back.onrender.com/api`                           |
-| `VITE_API_V1`                 | `/v1`                                                              |
-| `VITE_API_V2`                 | `/v2`                                                              |
-| `VITE_CLIENT_ID`              | `0dc4acfb-ecde-4f9b-81eb-9af050fb52d9`                             |
-| `VITE_TENANT_NAME`            | `stockhubb2c`                                                      |
-| `VITE_AUTHORITY_DOMAIN`       | `stockhubb2c.b2clogin.com`                                         |
-| `VITE_SIGN_UP_SIGN_IN_POLICY` | `B2C_1_signupsignin`                                               |
-| `VITE_FORGOT_PASSWORD_POLICY` | `B2C_1_passwordreset`                                              |
-| `VITE_EDIT_PROFILE_POLICY`    | `B2C_1_edit_profile` (policy à créer dans Azure B2C si nécessaire) |
-| `VITE_SCOPE_READ`             | `https://stockhubb2c.onmicrosoft.com/dc30ef57-.../FilesRead`       |
-| `VITE_SCOPE_WRITE`            | `https://stockhubb2c.onmicrosoft.com/dc30ef57-.../FilesWrite`      |
+- dans les redirect URIs de l'application B2C (type Single-page application), sans joker
+- dans `ALLOWED_ORIGINS` du backend Render
 
-### Azure AD B2C : Redirect URIs autorisées (Single-page application)
+Sans ces deux enregistrements, la connexion échoue (redirect URI inconnue) ou l'API répond une erreur CORS.
 
-- `https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app/` ✅ configuré
+### Previews Vercel
+
+Les previews Vercel par PR subsistent, sans backend ni connexion B2C : elles ne servent pas à tester. `vercel.json` reste en place (rewrite SPA, `deploymentEnabled.main: false`).
 
 ---
 
@@ -119,20 +98,18 @@ Azure Static Web Apps ne renvoie pas les routes inconnues vers `index.html` sans
 ```
 PR ouverte
     │
-    ├─→ CI GitHub Actions (quality + tests + build)
-    ├─→ Vercel Preview deployment (URL de preview par PR)
-    │
-    ▼
+    └─→ CI GitHub Actions (quality + tests + build)
+
 Merge dans main
     │
-    ├─→ Azure SWA deploy (prod)
+    ├─→ Azure SWA deploy (production, backend Azure)
+    ├─→ Azure SWA deploy (staging, backend Render)
     ├─→ Release Please (PR de release)
     └─→ Deploy Metrics Dashboard (GitHub Pages)
 
-Push sur staging
+Déclenchement manuel (workflow_dispatch)
     │
-    └─→ Vercel staging deployment
-        (https://stock-hub-v2-front-git-staging-...)
+    └─→ Azure SWA deploy (feature, backend Render) : branche à tester
 ```
 
 ---
