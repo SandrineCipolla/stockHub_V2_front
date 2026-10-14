@@ -95,7 +95,7 @@ Déclenché sur :
 
 ### SPA routing sur Azure SWA
 
-Azure Static Web Apps gère automatiquement le fallback sur `index.html` : **aucune configuration supplémentaire requise** (contrairement à Vercel).
+Azure Static Web Apps ne renvoie pas les routes inconnues vers `index.html` sans règle explicite : sans elle, recharger ou ouvrir directement `/dashboard` affiche un 404 d'Azure. La règle `navigationFallback` est dans `public/staticwebapp.config.json`, copié dans `dist/` par Vite et publié avec le reste. Elle s'applique à la production et aux environnements nommés (`feature`, `staging`).
 
 ### Secrets GitHub requis (à configurer manuellement)
 
