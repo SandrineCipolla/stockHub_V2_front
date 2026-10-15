@@ -2,9 +2,13 @@
 // doivent jamais viser la production (#317). Production = Azure Static Web Apps
 // (frontend de production) et Azure App Service (backend), plus l'ancien déploiement Vercel.
 // Les environnements de test nommés sur Azure SWA (staging, feature) sont autorisés (#314, ADR-015).
+// Chaque environnement a une URL courte, servie via Traffic Manager, et une URL longue à DNS
+// fixe sur la région de la ressource. Depuis GitHub Actions seule l'URL longue répond (#372).
 const ALLOWED_TEST_HOSTS = [
   'brave-field-03611eb03-staging.5.azurestaticapps.net',
+  'brave-field-03611eb03-staging.westeurope.5.azurestaticapps.net',
   'brave-field-03611eb03-feature.5.azurestaticapps.net',
+  'brave-field-03611eb03-feature.westeurope.5.azurestaticapps.net',
 ];
 
 const PRODUCTION_HOST_SUFFIXES = ['.azurestaticapps.net', '.azurewebsites.net'];

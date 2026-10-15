@@ -22,7 +22,7 @@ Trois contraintes pèsent sur le choix :
 - Le mur d'authentification de Vercel sur les déploiements de preview impose un secret de contournement. Envoyé en en-tête global par Playwright, il part aussi vers le backend Render, dont le CORS le refuse (détail dans #314).
 - Les previews Vercel par branche n'ont pas de backend, et leur URL n'est pas déclarée dans B2C.
 
-Azure Static Web Apps publie des environnements nommés à URL stable, en plus de la production et dans la même ressource. Au 2026-10-04, le plan gratuit en autorise 3.
+Azure Static Web Apps publie des environnements nommés à URL stable, en plus de la production et dans la même ressource. Au 2026-10-04, le plan gratuit en autorise 3 en plus de la production. Au 2026-10-14, deux emplacements étaient pris par d'anciennes previews de PR de 2024, supprimées pour déployer `staging`.
 
 ## Décision
 
@@ -58,6 +58,7 @@ Raisons :
 - **Négatif** : les deux URL sont à enregistrer à la main dans B2C et dans `ALLOWED_ORIGINS` de Render, une fois chacune
 - **Négatif** : `feature` ne teste que le frontend. Le backend de test suit `main`, donc le code backend ne se teste qu'après son merge
 - **Négatif** : une seule branche à la fois dans `feature`
+- **Négatif** : l'URL courte d'un environnement nommé répond 404 depuis les runners GitHub (nœud Traffic Manager qui ne la sert pas, #372). Les E2E de la CI visent l'URL longue, à enregistrer elle aussi dans B2C et Render
 - **Négatif** : les deux environnements sont publics, avec des comptes et des données de test uniquement
 - **Négatif** : le garde-fou qui refuse de lancer les E2E contre la production (#317) bloque `*.azurestaticapps.net` et doit accepter ces deux hôtes
 - **Négatif** : la documentation de déploiement décrit encore le staging Vercel et est à réécrire
@@ -72,7 +73,7 @@ Avant de passer l'ADR à `ACCEPTÉ` :
 - Un push sur `main` met à jour `staging`, et la production appelle toujours le backend Azure alors que `staging` appelle celui de Render
 - Les URL réelles des deux environnements sont inscrites dans B2C et la connexion aboutit sur chacune
 - Le backend Render accepte les deux origines, la production Azure aucune des deux
-- Les E2E hebdomadaires passent contre `staging`
+- Les E2E hebdomadaires passent contre `staging`, lancés depuis GitHub Actions
 
 Ensuite :
 

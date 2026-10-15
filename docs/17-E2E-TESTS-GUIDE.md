@@ -230,6 +230,9 @@ détail des environnements.
 Le `staging` suit `main` : il est mis à jour à chaque merge par
 `.github/workflows/azure-swa-test-envs-deploy.yml`.
 
+La CI vise l'URL longue (`https://brave-field-03611eb03-staging.westeurope.5.azurestaticapps.net`) : depuis GitHub Actions, l'URL courte répond un 404
+d'Azure. En local, depuis un poste en France, l'URL courte fonctionne aussi. Détail : [DEPLOYMENT-ARCHITECTURE.md](technical/DEPLOYMENT-ARCHITECTURE.md#url-courte-et-url-longue).
+
 Secrets repo requis : `AZURE_TEST_USERNAME`, `AZURE_TEST_PASSWORD`.
 
 Déclenchement manuel : `gh workflow run e2e-frontend.yml --ref main`.

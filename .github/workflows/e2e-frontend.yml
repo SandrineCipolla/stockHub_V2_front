@@ -33,8 +33,9 @@ jobs:
         run: npm run test:e2e
         env:
           # Staging (Azure Static Web Apps + backend Render + Aiven MySQL)
-          # — jamais la prod. Voir docs/17-E2E-TESTS-GUIDE.md.
-          E2E_BASE_URL: https://brave-field-03611eb03-staging.5.azurestaticapps.net
+          # — jamais la prod. URL longue : depuis GitHub Actions, l'URL courte répond 404.
+          # Voir docs/17-E2E-TESTS-GUIDE.md.
+          E2E_BASE_URL: https://brave-field-03611eb03-staging.westeurope.5.azurestaticapps.net
           AZURE_TEST_USERNAME: ${{ secrets.AZURE_TEST_USERNAME }}
           AZURE_TEST_PASSWORD: ${{ secrets.AZURE_TEST_PASSWORD }}
 
