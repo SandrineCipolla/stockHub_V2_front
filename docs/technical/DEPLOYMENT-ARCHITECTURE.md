@@ -33,12 +33,21 @@ gh workflow run azure-swa-test-envs-deploy.yml --ref <branche> -f environment=fe
 
 Le build appelle le backend Render, dont l'URL est écrite dans le workflow, et non celui de la production. Le déploiement de la production est un workflow à part (voir plus bas) : un échec de `staging` ne le bloque pas.
 
+### URL courte et URL longue
+
+Chaque environnement nommé a deux URL :
+
+- **courte** (`<ressource>-<env>.5.azurestaticapps.net`) : passe par Traffic Manager, qui oriente chaque client vers un nœud proche. Elle répond depuis un poste en France, mais pas depuis les runners GitHub, qui reçoivent un 404 d'Azure (#372)
+- **longue** (`<ressource>-<env>.westeurope.5.azurestaticapps.net`) : DNS fixe vers la région de la ressource. C'est celle que visent les E2E de la CI
+
+Les deux sont à enregistrer dans B2C et Render, avec le même format que les autres. La production n'a pas ce problème, car son contenu est répliqué sur tous les nœuds.
+
 ### Azure AD B2C et CORS
 
 Chaque URL d'environnement est à enregistrer une fois, à la main :
 
-- dans les redirect URIs de l'application B2C (type Single-page application), sans joker
-- dans `ALLOWED_ORIGINS` du backend Render
+- dans les redirect URIs de l'application B2C (type Single-page application), sans joker, avec le `/` final comme les autres entrées
+- dans `ALLOWED_ORIGINS` du backend Render, sans `/` final
 
 Sans ces deux enregistrements, la connexion échoue (redirect URI inconnue) ou l'API répond une erreur CORS.
 

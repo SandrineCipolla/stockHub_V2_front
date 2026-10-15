@@ -15,7 +15,9 @@ setup('authenticate via Azure AD B2C', async ({ page }) => {
   await page.goto('/');
   const appHostname = new URL(page.url()).hostname;
 
-  await page.getByRole('button', { name: 'Se connecter' }).click();
+  // La landing page affiche plusieurs boutons « Se connecter » (hero et appel à l'action final) :
+  // tous lancent la même connexion, le premier suffit.
+  await page.getByRole('button', { name: 'Se connecter' }).first().click();
 
   await page.waitForURL(url => url.hostname.endsWith('.b2clogin.com'));
   await page.getByPlaceholder('Email Address').fill(username);

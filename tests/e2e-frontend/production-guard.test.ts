@@ -5,6 +5,7 @@ describe('production-guard', () => {
   it.each([
     'https://brave-field-03611eb03.5.azurestaticapps.net',
     'https://brave-field-03611eb03.5.azurestaticapps.net/dashboard',
+    'https://brave-field-03611eb03.westeurope.5.azurestaticapps.net',
     'https://stockhub-back-bqf8e6fbf6dzd6gs.westeurope-01.azurewebsites.net/api',
     'https://stock-hub-v2-front.vercel.app',
   ])('reconnaît la production : %s', url => {
@@ -17,7 +18,9 @@ describe('production-guard', () => {
     'https://stock-hub-v2-front-git-staging-sandrinecipollas-projects.vercel.app',
     'https://brave-field-03611eb03-staging.5.azurestaticapps.net',
     'https://brave-field-03611eb03-staging.5.azurestaticapps.net/dashboard',
+    'https://brave-field-03611eb03-staging.westeurope.5.azurestaticapps.net',
     'https://brave-field-03611eb03-feature.5.azurestaticapps.net',
+    'https://brave-field-03611eb03-feature.westeurope.5.azurestaticapps.net',
   ])('laisse passer : %s', url => {
     expect(isProductionUrl(url)).toBe(false);
     expect(() => assertNotProduction(url)).not.toThrow();
