@@ -1,12 +1,14 @@
 ---
 author: Sandrine Cipolla
-status: ACCEPTÉ
+status: SUPPLANTÉ PAR ADR-015
 related: ./ADR-005-deploiement-vercel.md
 ---
 
 # ADR-013 - Production sur Azure Static Web Apps, Vercel pour les previews et le staging
 
 **Date** : 2026-09-25
+
+> Supplantée par [ADR-015](./ADR-015-staging-feature-azure-static-web-apps.md) : le staging passe sur Azure Static Web Apps, Vercel n'héberge plus d'environnement stable. La production reste celle décrite ici.
 
 ---
 

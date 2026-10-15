@@ -1,6 +1,6 @@
 ---
 author: Sandrine Cipolla
-status: PROPOSÉ
+status: ACCEPTÉ
 related: ./ADR-013-production-azure-previews-vercel.md
 ---
 
@@ -31,7 +31,7 @@ Deux environnements nommés sont ajoutés à la ressource Azure Static Web Apps 
 - **`staging`** : miroir de `main`, mis à jour à chaque push sur `main`. Il sert de cible aux E2E hebdomadaires et à la vérification avant une démonstration.
 - **`feature`** : déploiement manuel d'une branche pour la tester en ligne avant son merge, une branche à la fois. Le test suivant, ou un redéploiement de `main`, la remplace.
 
-Les deux se construisent avec l'URL du backend de test (Render, base Aiven) et non celle de la production. La production reste celle de l'ADR-013 : Azure Static Web Apps, branche `main`, backend et base sur Azure. Vercel n'héberge plus d'environnement stable. Une fois acceptée, cette ADR supplante l'ADR-013.
+Les deux se construisent avec l'URL du backend de test (Render, base Aiven) et non celle de la production. La production reste celle de l'ADR-013 : Azure Static Web Apps, branche `main`, backend et base sur Azure. Vercel n'héberge plus d'environnement stable. Cette ADR supplante l'ADR-013.
 
 Raisons :
 
@@ -67,7 +67,7 @@ Raisons :
 
 ## Critères de vérification
 
-Avant de passer l'ADR à `ACCEPTÉ` :
+Vérifiés le 2026-10-15, avant de passer l'ADR à `ACCEPTÉ` :
 
 - Un déploiement manuel de `feature` depuis une branche autre que `main` laisse la production inchangée
 - Un push sur `main` met à jour `staging`, et la production appelle toujours le backend Azure alors que `staging` appelle celui de Render
@@ -83,7 +83,7 @@ Ensuite :
 
 - Issue GitHub : #314
 - Garde-fou des E2E : `tests/e2e-frontend/production-guard.ts`, #317
-- ADR supplantée une fois celle-ci acceptée : [ADR-013](./ADR-013-production-azure-previews-vercel.md)
+- ADR supplantée : [ADR-013](./ADR-013-production-azure-previews-vercel.md)
 - Documentation externe : [Environnements nommés d'Azure Static Web Apps](https://learn.microsoft.com/en-us/azure/static-web-apps/named-environments), [Quotas d'Azure Static Web Apps](https://learn.microsoft.com/en-us/azure/static-web-apps/quotas)
 
 ---
