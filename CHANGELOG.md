@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.18.0](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.5...v1.18.0) (2026-10-15)
+
+
+### ✨ Features
+
+* **ci:** [#314](https://github.com/SandrineCipolla/stockHub_V2_front/issues/314) déployer l'environnement feature sur Azure Static Web Apps ([#360](https://github.com/SandrineCipolla/stockHub_V2_front/issues/360)) ([3c78e9b](https://github.com/SandrineCipolla/stockHub_V2_front/commit/3c78e9b4ead89233a97ff5aef7309aee77a31177))
+
+
+### 🐛 Bug Fixes
+
+* **deploy:** [#365](https://github.com/SandrineCipolla/stockHub_V2_front/issues/365) renvoyer les routes inconnues vers index.html sur Azure Static Web Apps ([#366](https://github.com/SandrineCipolla/stockHub_V2_front/issues/366)) ([e0fe382](https://github.com/SandrineCipolla/stockHub_V2_front/commit/e0fe38251068faf4b7c6fd830380871160dad811))
+* **e2e:** [#372](https://github.com/SandrineCipolla/stockHub_V2_front/issues/372) viser l'URL longue de staging depuis GitHub Actions ([#373](https://github.com/SandrineCipolla/stockHub_V2_front/issues/373)) ([c72f74a](https://github.com/SandrineCipolla/stockHub_V2_front/commit/c72f74ac78905fbf75e807946b09d71a7e268cdb))
+
+
+### 📚 Documentation
+
+* **adr:** [#314](https://github.com/SandrineCipolla/stockHub_V2_front/issues/314) proposer ADR-015 staging et feature sur Azure Static Web Apps ([#356](https://github.com/SandrineCipolla/stockHub_V2_front/issues/356)) ([728e7b6](https://github.com/SandrineCipolla/stockHub_V2_front/commit/728e7b6632228bfd46e3601e61feb3cd2fc2df16))
+
+
+### 🔧 Chores
+
+* **ci:** [#357](https://github.com/SandrineCipolla/stockHub_V2_front/issues/357) limiter le blocage de npm audit aux dépendances de production ([#358](https://github.com/SandrineCipolla/stockHub_V2_front/issues/358)) ([504e8ba](https://github.com/SandrineCipolla/stockHub_V2_front/commit/504e8ba76e17844d1d978e1782ce4bffc57d1348))
+* **ci:** [#369](https://github.com/SandrineCipolla/stockHub_V2_front/issues/369) déployer staging à chaque push sur main et viser staging dans les E2E ([#370](https://github.com/SandrineCipolla/stockHub_V2_front/issues/370)) ([19f8c45](https://github.com/SandrineCipolla/stockHub_V2_front/commit/19f8c45c07b90503b390dd78f1a2b0242948469e))
+* **deps:** bump framer-motion from 13.4.6 to 14.1.0 ([#362](https://github.com/SandrineCipolla/stockHub_V2_front/issues/362)) ([5a16dd2](https://github.com/SandrineCipolla/stockHub_V2_front/commit/5a16dd2ad088ea7cd1556dd679d86b56ff161c31))
+* **deps:** bump the minor-and-patch group with 11 updates ([#361](https://github.com/SandrineCipolla/stockHub_V2_front/issues/361)) ([e0bbf2c](https://github.com/SandrineCipolla/stockHub_V2_front/commit/e0bbf2ce14f67b911d6ee0ac7b93181d06383f49))
+* **deps:** bump the minor-and-patch group with 12 updates ([#371](https://github.com/SandrineCipolla/stockHub_V2_front/issues/371)) ([651c318](https://github.com/SandrineCipolla/stockHub_V2_front/commit/651c318d740e70bcddff305e8fb24e1804b668b3))
+
 ## [1.17.5](https://github.com/SandrineCipolla/stockHub_V2_front/compare/v1.17.4...v1.17.5) (2026-10-02)
 
 
